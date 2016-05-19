@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xmlns="http://appconfig.aura.nav.no"
+			 xsi:schemaLocation="http://appconfig.aura.nav.no http://maven.adeo.no/xsd/appconfig.xsd">
+
+	<name>Varsel</name>
+
+	<selftest>
+		<path>/varsel/internal/selftest?status</path>
+		<humanReadablePath>/varsel/internal/selftest</humanReadablePath>
+	</selftest>
+
+	<artifacts>
+		<ear groupId="no.nav.varsel" artifactId="varsel-jee"/>
+	</artifacts>
+
+	<resources>
+		<datasource alias="varselDS" jndi="java:/jboss/datasources/varselDS" type="ORACLE">
+			<pool maxPoolSize="50"/>
+		</datasource>
+		<queueManager alias="mqGateway01" jndi="java:/jboss/mqConnectionFactory" xaEnabled="false"
+					  unifiedConnectionFactory="true">
+		</queueManager>
+		<ldap alias="ldap" mapToProperty="ldap"/>
+	</resources>
+
+	<security serviceUserResourceAlias="srvVarsel"/>
+
+	<loadBalancer>
+		<contextRoot>dokkonv</contextRoot>
+		<lbHealthMonitor type="HTTPS" interval="15" timeout="15" isAliveUrl="internal/isAlive"/>
+	</loadBalancer>
+
+	<monitoring>
+		<metric path="/varsel/internal/metrics"/>
+	</monitoring>
+
+</application>
