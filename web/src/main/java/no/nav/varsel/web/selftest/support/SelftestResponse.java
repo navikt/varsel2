@@ -3,8 +3,8 @@ package no.nav.varsel.web.selftest.support;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Lists;
-import org.joda.time.LocalDateTime;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**

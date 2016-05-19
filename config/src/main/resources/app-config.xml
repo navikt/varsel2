@@ -27,7 +27,7 @@
 	<security serviceUserResourceAlias="srvVarsel"/>
 
 	<loadBalancer>
-		<contextRoot>dokkonv</contextRoot>
+		<contextRoot>varsel</contextRoot>
 		<lbHealthMonitor type="HTTPS" interval="15" timeout="15" isAliveUrl="internal/isAlive"/>
 	</loadBalancer>
 
