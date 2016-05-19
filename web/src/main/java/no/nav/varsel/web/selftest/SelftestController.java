@@ -2,7 +2,6 @@ package no.nav.varsel.web.selftest;
 
 import no.nav.varsel.web.selftest.support.SelftestResponse;
 import no.nav.varsel.web.selftest.test.DbSelftest;
-import no.nav.varsel.web.selftest.test.HttpSelftest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -45,7 +44,7 @@ public class SelftestController {
 	 */
 	@RequestMapping(value = "/internal/selftest", produces = MediaType.TEXT_HTML_VALUE)
 	public String selftest(@RequestParam(value = "status", required = false) String status,
-	                       HttpServletResponse httpServletResponse, Model model) throws IOException {
+						   HttpServletResponse httpServletResponse, Model model) throws IOException {
 		SelftestResponse response = performSelftest();
 
 		if (status != null && response.isError()) {
@@ -85,10 +84,6 @@ public class SelftestController {
 		response.setNode(getServerAddress());
 
 		response.addCheck(dbSelftest.check());
-		response.addCheck(new HttpSelftest("DokCache_v1", "Self RestService",
-				"http://localhost:8080/dokkonv/rest/dokcache/v1/ping").check());
-		response.addCheck(new HttpSelftest("SanntidPdfKonverterer_v1", "Self WebService",
-				"http://localhost:8080/dokkonv/ws/SanntidPdfKonverterer/v1?wsdl").check());
 
 		return response;
 	}

@@ -221,7 +221,7 @@
 					<groupId>no.nav.maven.plugins</groupId>
 					<artifactId>aura-maven-plugin</artifactId>
 					<configuration>
-						<apps>dokkonv:${project.version}</apps>
+						<apps>varsel:${project.version}</apps>
 					</configuration>
 				</plugin>
 				<plugin>
