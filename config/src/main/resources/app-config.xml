@@ -26,10 +26,7 @@
 
 	<security serviceUserResourceAlias="srvVarsel"/>
 
-	<loadBalancer>
-		<contextRoot>varsel</contextRoot>
-		<lbHealthMonitor type="HTTPS" interval="15" timeout="15" isAliveUrl="internal/isAlive"/>
-	</loadBalancer>
+	<loadBalancer isAlive="varsel/internal/isAlive"/>
 
 	<monitoring>
 		<metric path="/varsel/internal/metrics"/>
