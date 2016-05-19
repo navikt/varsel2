@@ -1,7 +1,7 @@
 package no.nav.varsel;
 
 import com.codahale.metrics.servlets.MetricsServlet;
-import no.nav.varsel.config.AppConfig;
+import no.nav.varsel.repo.config.AppConfig;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;

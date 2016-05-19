@@ -1,8 +1,8 @@
-package no.nav.varsel.config;
+package no.nav.varsel.repo.config;
 
 import no.nav.varsel.ProviderConfig;
 import no.nav.varsel.ServiceConfig;
-import no.nav.varsel.config.local.LocalTomcatConfiguration;
+import no.nav.varsel.repo.config.local.LocalTomcatConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 

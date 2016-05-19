@@ -1,4 +1,4 @@
-package no.nav.varsel.config;
+package no.nav.varsel.repo.config;
 
 
 import com.codahale.metrics.MetricRegistry;

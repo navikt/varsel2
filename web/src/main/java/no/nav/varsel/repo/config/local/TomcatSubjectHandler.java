@@ -1,4 +1,4 @@
-package no.nav.varsel.config.local;
+package no.nav.varsel.repo.config.local;
 
 import no.nav.modig.core.context.SubjectHandler;
 import org.apache.catalina.realm.GenericPrincipal;

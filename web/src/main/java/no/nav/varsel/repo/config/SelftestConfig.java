@@ -1,4 +1,4 @@
-package no.nav.varsel.config;
+package no.nav.varsel.repo.config;
 
 import no.nav.varsel.web.selftest.SelftestController;
 import no.nav.varsel.web.selftest.test.DbSelftest;

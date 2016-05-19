@@ -1,9 +1,8 @@
-package no.nav.varsel.config.local;
+package no.nav.varsel.repo.config.local;
 
 import no.nav.modig.testcertificates.TestCertificates;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 
