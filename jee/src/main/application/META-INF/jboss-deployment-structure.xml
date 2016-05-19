@@ -1,0 +1,24 @@
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2">
+	<deployment>
+		<exclude-subsystems>
+			<subsystem name="jpa"/>
+			<subsystem name="webservices"/>
+			<subsystem name="jaxrs"/>
+		</exclude-subsystems>
+		<exclusions>
+			<module name="javaee.api"/>
+		</exclusions>
+	</deployment>
+
+	<sub-deployment name="varsel-web.war">
+		<exclude-subsystems>
+			<subsystem name="jpa"/>
+			<subsystem name="webservices"/>
+			<subsystem name="jaxrs"/>
+		</exclude-subsystems>
+		<exclusions>
+			<module name="javaee.api"/>
+		</exclusions>
+	</sub-deployment>
+
+</jboss-deployment-structure>
