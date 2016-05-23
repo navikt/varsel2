@@ -1,6 +1,6 @@
 package no.nav.varsel.repo.config;
 
-import no.nav.varsel.ProviderConfig;
+import no.nav.varsel.config.JmsConfig;
 import no.nav.varsel.ServiceConfig;
 import no.nav.varsel.repo.config.local.LocalTomcatConfiguration;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Import;
 @Import({LocalTomcatConfiguration.class,
 		MetricsConfig.class,
 		ServiceConfig.class,
-		ProviderConfig.class,
+		JmsConfig.class,
 		SelftestConfig.class
 })
 public class AppConfig {

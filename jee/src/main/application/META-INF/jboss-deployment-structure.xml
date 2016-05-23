@@ -1,4 +1,6 @@
 <jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2">
+	<!-- exclude java ee to be able to use javaee7, jpa2.1 in hibernate.
+	But include javax.jms to use exposed jndi connection factory from jboss -->
 	<deployment>
 		<exclude-subsystems>
 			<subsystem name="jpa"/>
@@ -8,6 +10,9 @@
 		<exclusions>
 			<module name="javaee.api"/>
 		</exclusions>
+		<dependencies>
+			<module name="javax.jms.api"/>
+		</dependencies>
 	</deployment>
 
 	<sub-deployment name="varsel-web.war">
@@ -19,6 +24,9 @@
 		<exclusions>
 			<module name="javaee.api"/>
 		</exclusions>
+		<dependencies>
+			<module name="javax.jms.api"/>
+		</dependencies>
 	</sub-deployment>
 
 </jboss-deployment-structure>

@@ -15,11 +15,13 @@
 	</artifacts>
 
 	<resources>
-		<datasource alias="varselDS" jndi="java:/jboss/datasources/varselDS" type="ORACLE">
+		<datasource alias="varselDS" jndi="java:/jboss/datasources/varselDS" type="ORACLE" xaEnabled="true">
 			<pool maxPoolSize="50"/>
 		</datasource>
-		<queueManager alias="mqGateway01" jndi="java:/jboss/mqConnectionFactory" xaEnabled="false"
+		<queueManager alias="mqGateway01" jndi="java:/jboss/mqConnectionFactory" xaEnabled="true"
 					  unifiedConnectionFactory="true">
+			<queue alias="varsel_bestill_servicemelding" jndi="java:/jboss/bestillServicemelding"/>
+			<queue alias="varsel_varsel_kvittering" jndi="java:/jboss/varselKvittering"/>
 		</queueManager>
 		<ldap alias="ldap" mapToProperty="ldap"/>
 	</resources>
