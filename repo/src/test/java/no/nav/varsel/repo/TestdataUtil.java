@@ -10,6 +10,8 @@ import no.nav.varsel.domain.object.Varselbestilling;
 import java.time.LocalDateTime;
 
 /**
+ * Test data utility class
+ *
  * @author Andreas Skomedal, Visma Consulting.
  */
 public class TestdataUtil {
@@ -33,15 +35,17 @@ public class TestdataUtil {
 	public static final StatusCode STATUS_CODE = StatusCode.FERDIGBEHANDLET;
 	public static final String FEILBESKRIVELSE = "ikke veldig feil";
 	public static final String VARSEL_TITTEL = "Du har fått svar på din søknad om rosa takvifte";
-	public static final String VARSEL_TEKST = "Sjekk Ditt NAV på www.nav.no for å se hva som har blitt vedtatt.";
+	public static final String VARSEL_TEKST = "Sjekk Ditt NAV på www.nav.no for å se hva som har blitt vedtatt " +
+			"anngående din søknad om :antall takvifter.";
 	public static final String VARSEL_URL = "http://www.nav.no/dittnav/takvifte/rosa/1212aeg23g";
+	public static final String PARAMETERVALUE = "antall";
+	public static final String PARAMETERKEY = "17";
 
 	public static Varselbestilling createVarselbestilling() {
 		return aVarselbestilling()
 				.varselbestillingId(VARSELBESTILLING_ID)
 				.varslingstype(VARSLINGSTYPE)
 				.preferertKanal(PREFERERT_KANAL)
-				.bestillendeFagsystem(BESTILLENDE_FAGSYSTEM)
 				.utlopTidspunkt(UTLOP_TIDSPUNKT)
 				.fnr(FNR)
 				.aktorId(AKTOR_ID)
@@ -49,6 +53,7 @@ public class TestdataUtil {
 				.revarslingIntervall(REVARSLING_INTERVALL)
 				.antallRevarslinger(ANTALL_REVARSLINGER)
 				.nesteVarslingstidspunkt(NESTE_VARSLINGSTIDSPUNKT)
+				.parameter(PARAMETERKEY, PARAMETERVALUE)
 				.varsel(aVarsel()
 						.varselId(VARSEL_ID)
 						.kanal(KANAL_CODE)
