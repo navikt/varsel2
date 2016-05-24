@@ -1,6 +1,7 @@
 package no.nav.varsel.jms.consumer.config;
 
-import no.nav.varsel.jms.consumer.config.tvarsel001.BestillServicemeldingConsumer;
+import no.nav.varsel.jms.consumer.tvarsel001.BestillServicemeldingConsumer;
+import no.nav.varsel.jms.consumer.tvarsel002.VarselKvitteringConsumer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -9,7 +10,7 @@ import org.springframework.context.annotation.Import;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@Import(BestillServicemeldingConsumer.class)
+@Import({BestillServicemeldingConsumer.class, VarselKvitteringConsumer.class})
 @Configuration
 public class ConsumerConfig {
 }

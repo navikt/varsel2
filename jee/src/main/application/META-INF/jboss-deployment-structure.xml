@@ -12,6 +12,7 @@
 		</exclusions>
 		<dependencies>
 			<module name="javax.jms.api"/>
+			<module name="javax.xml.bind.api"/>
 		</dependencies>
 	</deployment>
 
@@ -26,6 +27,7 @@
 		</exclusions>
 		<dependencies>
 			<module name="javax.jms.api"/>
+			<module name="javax.xml.bind.api"/>
 		</dependencies>
 	</sub-deployment>
 

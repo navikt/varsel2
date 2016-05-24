@@ -2,22 +2,31 @@ package no.nav.varsel.config;
 
 import static no.nav.varsel.ServiceConfig.getJndiObject;
 
+import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
+import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
+import no.nav.melding.virksomhet.varselutsending.v1.varselutsending.Varselutsending;
 import no.nav.varsel.ServiceConfig;
+import no.nav.varsel.jms.consumer.ConsumerManager;
 import no.nav.varsel.jms.consumer.config.ConsumerConfig;
 import no.nav.varsel.jms.producer.config.ProducerConfig;
+import no.nav.varsel.jms.to.JmsReply;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
-import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.support.converter.MarshallingMessageConverter;
+import org.springframework.jms.support.converter.MessageConverter;
+import org.springframework.jms.support.converter.MessageType;
 import org.springframework.jms.support.destination.BeanFactoryDestinationResolver;
 import org.springframework.jms.support.destination.DestinationResolver;
+import org.springframework.oxm.Marshaller;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import javax.jms.ConnectionFactory;
-import javax.jms.Queue;
 
 /**
  * Spring config for JMS
@@ -25,9 +34,19 @@ import javax.jms.Queue;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @EnableJms
-@Import({ServiceConfig.class, ProducerConfig.class, ConsumerConfig.class})
+@Import({QueueConfig.class, ServiceConfig.class, ProducerConfig.class, ConsumerConfig.class})
 @Configuration
 public class JmsConfig {
+
+	@Bean
+	public JmsTemplate jmsTemplate(DestinationResolver destinationResolver) {
+		JmsTemplate jmsTemplate = new JmsTemplate(mqConnectionFactory());
+		jmsTemplate.setReceiveTimeout(10_000);
+		jmsTemplate.setMessageConverter(converter());
+		jmsTemplate.setConnectionFactory(mqConnectionFactory());
+		jmsTemplate.setDestinationResolver(destinationResolver);
+		return jmsTemplate;
+	}
 
 	@Bean
 	public BeanFactoryDestinationResolver destinationResolver(BeanFactory beanFactory) {
@@ -35,14 +54,35 @@ public class JmsConfig {
 	}
 
 	@Bean
-	public JmsListenerContainerFactory jmsListenerContainerFactory(DestinationResolver destinationResolver) {
+	public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(DestinationResolver destinationResolver) {
 		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 		factory.setConnectionFactory(mqConnectionFactory());
 		factory.setDestinationResolver(destinationResolver);
+		factory.setMessageConverter(converter());
 		return factory;
 	}
 
-	private UserCredentialsConnectionFactoryAdapter mqConnectionFactory() {
+	@Bean
+	public MessageConverter converter() {
+		MarshallingMessageConverter converter = new MarshallingMessageConverter(marshaller());
+		converter.setTargetType(MessageType.TEXT);
+		return converter;
+	}
+
+	@Bean
+	public Marshaller marshaller() {
+		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+		marshaller.setPackagesToScan(
+				Varsel.class.getPackage().getName(),
+				Varselutsending.class.getPackage().getName(),
+				VarselKvittering.class.getPackage().getName(),
+				JmsReply.class.getPackage().getName()
+		);
+		return marshaller;
+	}
+
+	@Bean
+	public ConnectionFactory mqConnectionFactory() {
 		ConnectionFactory connectionFactory = getJndiObject("java:/jboss/mqConnectionFactory", ConnectionFactory.class);
 		UserCredentialsConnectionFactoryAdapter adapter = new UserCredentialsConnectionFactoryAdapter();
 		adapter.setTargetConnectionFactory(connectionFactory);
@@ -52,12 +92,7 @@ public class JmsConfig {
 	}
 
 	@Bean
-	public Queue bestillServiceMelding() {
-		return getJndiObject("java:/jboss/bestillServicemelding", Queue.class);
-	}
-
-	@Bean
-	public Queue varselKvittering() {
-		return getJndiObject("java:/jboss/varselKvittering", Queue.class);
+	public ConsumerManager queueManager() {
+		return new ConsumerManager();
 	}
 }
