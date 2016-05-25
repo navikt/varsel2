@@ -10,7 +10,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import no.nav.varsel.jms.AbstractJmsTest;
-import no.nav.varsel.jms.to.JmsReply;
+import no.nav.varsel.jms.to.xml.JmsReply;
 import org.junit.Before;
 import org.junit.Test;
 

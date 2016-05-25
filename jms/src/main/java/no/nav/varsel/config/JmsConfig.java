@@ -9,7 +9,7 @@ import no.nav.varsel.ServiceConfig;
 import no.nav.varsel.jms.consumer.ConsumerManager;
 import no.nav.varsel.jms.consumer.config.ConsumerConfig;
 import no.nav.varsel.jms.producer.config.ProducerConfig;
-import no.nav.varsel.jms.to.JmsReply;
+import no.nav.varsel.jms.to.xml.JmsReply;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,14 +19,17 @@ import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MarshallingMessageConverter;
+import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 import org.springframework.jms.support.destination.BeanFactoryDestinationResolver;
 import org.springframework.jms.support.destination.DestinationResolver;
-import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
 
 /**
  * Spring config for JMS
@@ -54,11 +57,12 @@ public class JmsConfig {
 	}
 
 	@Bean
-	public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(DestinationResolver destinationResolver) {
+	public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(DestinationResolver destinationResolver,
+																		  MessageConverter converter) {
 		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 		factory.setConnectionFactory(mqConnectionFactory());
 		factory.setDestinationResolver(destinationResolver);
-		factory.setMessageConverter(converter());
+		factory.setMessageConverter(new ToMessageConverter(converter));
 		return factory;
 	}
 
@@ -70,7 +74,7 @@ public class JmsConfig {
 	}
 
 	@Bean
-	public Marshaller marshaller() {
+	public Jaxb2Marshaller marshaller() {
 		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
 		marshaller.setPackagesToScan(
 				Varsel.class.getPackage().getName(),
@@ -94,5 +98,26 @@ public class JmsConfig {
 	@Bean
 	public ConsumerManager queueManager() {
 		return new ConsumerManager();
+	}
+
+	/**
+	 * Only convert to message, not from Message, used for replies in jms
+	 */
+	private static class ToMessageConverter implements MessageConverter {
+		private final MessageConverter converter;
+
+		ToMessageConverter(MessageConverter converter) {
+			this.converter = converter;
+		}
+
+		@Override
+		public Message toMessage(Object object, Session session) throws JMSException, MessageConversionException {
+			return converter.toMessage(object, session);
+		}
+
+		@Override
+		public Object fromMessage(Message message) throws JMSException, MessageConversionException {
+			return message;
+		}
 	}
 }

@@ -2,7 +2,7 @@ package no.nav.varsel.jms;
 
 import no.nav.varsel.jms.consumer.ConsumerManager;
 import no.nav.varsel.jms.consumer.config.JmsTestConfig;
-import no.nav.varsel.jms.to.JmsReply;
+import no.nav.varsel.jms.to.xml.JmsReply;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.jms.core.JmsTemplate;

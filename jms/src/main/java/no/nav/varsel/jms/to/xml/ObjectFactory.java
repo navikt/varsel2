@@ -1,10 +1,15 @@
-package no.nav.varsel.jms.to;
+package no.nav.varsel.jms.to.xml;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
+/**
+ * Object factory for {@link JmsReply}
+ *
+ * @author Andreas Skomedal, Visma Consulting.
+ */
 @XmlRegistry
 public class ObjectFactory {
 

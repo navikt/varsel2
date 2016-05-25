@@ -4,15 +4,14 @@ import static org.junit.Assert.assertTrue;
 
 import no.nav.melding.virksomhet.varsel.v1.varsel.ObjectFactory;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
-import no.nav.melding.virksomhet.varsel.v1.varsel.Varslingstyper;
 import no.nav.varsel.jms.AbstractJmsTest;
-import no.nav.varsel.jms.to.JmsReply;
+import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
+import no.nav.varsel.jms.to.xml.JmsReply;
 import org.junit.Test;
 
 import javax.inject.Inject;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
-import java.util.HashMap;
 
 /**
  * Itste for {@link BestillServicemeldingConsumer}
@@ -24,14 +23,10 @@ public class BestillServicemeldingConsumerTest extends AbstractJmsTest {
 	@Inject
 	private Queue bestillServicemelding;
 
-	private BestillServicemeldingConsumer consumer = new BestillServicemeldingConsumer();
+	@Inject
+	private BestillServicemeldingConsumer consumer;
 
-	@Test
-	public void shouldAcceptJAXBElement() throws Exception {
-		JAXBElement<Varsel> varselJAXBElement = createVarsel();
-		consumer.bestillServicemelding(varselJAXBElement, new HashMap<>());
-//		new JmsConfig().marshaller().marshal(varselJAXBElement, new StreamResult(System.out));
-	}
+	//		new JmsConfig().marshaller().marshal(varselJAXBElement, new StreamResult(System.out));
 
 	@Test
 	public void shouldReceieveJms() throws Exception {
@@ -41,10 +36,6 @@ public class BestillServicemeldingConsumerTest extends AbstractJmsTest {
 	}
 
 	public static JAXBElement<Varsel> createVarsel() {
-		Varsel varsel = new Varsel();
-		Varslingstyper varslingstype = new Varslingstyper();
-		varslingstype.setValue("hei");
-		varsel.setVarslingstype(varslingstype);
-		return new ObjectFactory().createVarsel(varsel);
+		return new ObjectFactory().createVarsel(BestillServicemeldingMapperTest.createVarsel());
 	}
 }

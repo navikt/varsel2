@@ -1,7 +1,8 @@
-package no.nav.varsel.jms.to;
+package no.nav.varsel.jms.to.xml;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,9 +13,7 @@ import java.util.Map;
  */
 @XmlRootElement
 @XmlType(name = "JmsReply")
-public class JmsReply {
-
-	public static final String JMS_REPLY_TO = "jms_replyTo";
+public class JmsReply implements Serializable {
 
 	private Map<String, String> params = new HashMap<>();
 
@@ -37,10 +36,4 @@ public class JmsReply {
 		return params.get("result").equals("ok");
 	}
 
-	public static JmsReply reply(Map headers) {
-		if (headers.containsKey(JMS_REPLY_TO)) {
-			return new JmsReply("ok");
-		}
-		return null;
-	}
 }
