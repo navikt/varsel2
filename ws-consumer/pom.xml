@@ -13,6 +13,12 @@
 	<name>Varsel :: WebService Consumer</name>
 
 	<dependencies>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>varsel-domain</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!--Tjenestespesifikasjoner-->
 		<dependency>
 			<groupId>no.nav.tjenester.fim</groupId>
