@@ -17,6 +17,8 @@
 		<module>repo</module>
 		<module>service</module>
 		<module>jms</module>
+		<module>jms-consumer</module>
+		<module>jms-producer</module>
 		<module>ws-consumer</module>
 	</modules>
 

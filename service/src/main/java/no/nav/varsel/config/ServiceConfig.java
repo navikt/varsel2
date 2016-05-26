@@ -1,0 +1,37 @@
+package no.nav.varsel.config;
+
+import no.nav.varsel.jms.producer.config.JmsProducerConfig;
+import no.nav.varsel.repo.config.RepoConfig;
+import no.nav.varsel.service.ServicemeldingService;
+import no.nav.varsel.service.VarselFletter;
+import no.nav.varsel.service.tvarsel001.support.ServicemeldingDomainMapper;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.jndi.JndiObjectFactoryBean;
+
+import javax.naming.NamingException;
+
+/**
+ * @author Andreas Skomedal, Visma Consulting.
+ */
+@Configuration
+@Import({RepoConfig.class, WsConsumerConfig.class, JmsProducerConfig.class})
+public class ServiceConfig {
+
+	@Bean
+	public ServicemeldingService servicemeldingService() {
+		return new ServicemeldingService();
+	}
+
+	@Bean
+	public ServicemeldingDomainMapper servicemeldingDomainMapper() {
+		return new ServicemeldingDomainMapper();
+	}
+
+	@Bean
+	public VarselFletter varselFletter() {
+		return new VarselFletter();
+	}
+
+}

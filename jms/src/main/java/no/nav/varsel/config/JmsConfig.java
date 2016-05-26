@@ -1,14 +1,8 @@
 package no.nav.varsel.config;
 
-import static no.nav.varsel.ServiceConfig.getJndiObject;
-
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
 import no.nav.melding.virksomhet.varselutsending.v1.varselutsending.Varselutsending;
-import no.nav.varsel.ServiceConfig;
-import no.nav.varsel.jms.consumer.ConsumerManager;
-import no.nav.varsel.jms.consumer.config.ConsumerConfig;
-import no.nav.varsel.jms.producer.config.ProducerConfig;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -24,12 +18,14 @@ import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 import org.springframework.jms.support.destination.BeanFactoryDestinationResolver;
 import org.springframework.jms.support.destination.DestinationResolver;
+import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
+import javax.naming.NamingException;
 
 /**
  * Spring config for JMS
@@ -37,7 +33,7 @@ import javax.jms.Session;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @EnableJms
-@Import({QueueConfig.class, ServiceConfig.class, ProducerConfig.class, ConsumerConfig.class})
+@Import({QueueConfig.class})
 @Configuration
 public class JmsConfig {
 
@@ -62,7 +58,7 @@ public class JmsConfig {
 		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 		factory.setConnectionFactory(mqConnectionFactory());
 		factory.setDestinationResolver(destinationResolver);
-		factory.setMessageConverter(new ToMessageConverter(converter));
+		factory.setMessageConverter(new ConsumerMessageConverter(converter));
 		return factory;
 	}
 
@@ -95,29 +91,37 @@ public class JmsConfig {
 		return adapter;
 	}
 
-	@Bean
-	public ConsumerManager queueManager() {
-		return new ConsumerManager();
-	}
-
 	/**
 	 * Only convert to message, not from Message, used for replies in jms
 	 */
-	private static class ToMessageConverter implements MessageConverter {
-		private final MessageConverter converter;
+	private static class ConsumerMessageConverter implements MessageConverter {
+		private final MessageConverter replyConverter;
 
-		ToMessageConverter(MessageConverter converter) {
-			this.converter = converter;
+		ConsumerMessageConverter(MessageConverter replyConverter) {
+			this.replyConverter = replyConverter;
 		}
 
 		@Override
 		public Message toMessage(Object object, Session session) throws JMSException, MessageConversionException {
-			return converter.toMessage(object, session);
+			return replyConverter.toMessage(object, session);
 		}
 
 		@Override
 		public Object fromMessage(Message message) throws JMSException, MessageConversionException {
 			return message;
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T getJndiObject(String jndiName, Class<T> expectedType) {
+		JndiObjectFactoryBean factory = new JndiObjectFactoryBean();
+		factory.setJndiName(jndiName);
+		factory.setExpectedType(expectedType);
+		try {
+			factory.afterPropertiesSet();
+		} catch (IllegalArgumentException | NamingException e) {
+			throw new RuntimeException(e);
+		}
+		return (T) factory.getObject();
 	}
 }

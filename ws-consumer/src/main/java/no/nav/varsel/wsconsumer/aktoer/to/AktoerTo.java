@@ -12,6 +12,14 @@ public class AktoerTo {
 	private String ident;
 	private MottakerType mottakerType;
 
+	public AktoerTo() {
+	}
+
+	public AktoerTo(String ident, MottakerType mottakerType) {
+		this.ident = ident;
+		this.mottakerType = mottakerType;
+	}
+
 	public String getIdent() {
 		return ident;
 	}

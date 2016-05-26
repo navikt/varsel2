@@ -1,6 +1,10 @@
 package no.nav.varsel.wsconsumer.dkif.to;
 
+import no.nav.varsel.domain.code.KanalCode;
 import org.joda.time.LocalDateTime;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * To for DigitalKontaktinformasjon
@@ -17,6 +21,8 @@ public class DigitalKontaktinfoTo {
 	private String mobiltelefonnummer;
 	private LocalDateTime mobiltelefonSistOppdatert;
 	private LocalDateTime mobiltelefonSistVerifisert;
+	private String kontaktInfo;
+	private Collection<KanalCode> kanaler;
 
 	public String getPersonident() {
 		return personident;
@@ -80,5 +86,21 @@ public class DigitalKontaktinfoTo {
 
 	public void setMobiltelefonSistVerifisert(LocalDateTime mobiltelefonSistVerifisert) {
 		this.mobiltelefonSistVerifisert = mobiltelefonSistVerifisert;
+	}
+
+	public String getKontaktInfo() {
+		return kontaktInfo;
+	}
+
+	public void setKontaktInfo(String kontaktInfo) {
+		this.kontaktInfo = kontaktInfo;
+	}
+
+	public Collection<KanalCode> getKanaler() {
+		return kanaler;
+	}
+
+	public void setKanaler(Collection<KanalCode> kanaler) {
+		this.kanaler = kanaler;
 	}
 }

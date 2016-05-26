@@ -9,30 +9,30 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>varsel-service</artifactId>
-	<name>Varsel :: Service</name>
+	<artifactId>varsel-jms-consumer</artifactId>
+	<name>Varsel :: JMS Consumer</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-repo</artifactId>
+			<artifactId>varsel-jms</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-ws-consumer</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-jms-producer</artifactId>
+			<artifactId>varsel-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>com.ryantenney.metrics</groupId>
-			<artifactId>metrics-spring</artifactId>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-core</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.jms</groupId>
+			<artifactId>jboss-jms-api_1.1_spec</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
@@ -53,6 +53,19 @@
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>varsel-jms</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-core</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
+
 
 </project>

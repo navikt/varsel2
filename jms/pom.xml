@@ -15,12 +15,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-service</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-ws-consumer</artifactId>
+			<artifactId>varsel-domain</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -89,5 +84,19 @@
 		</dependency>
 	</dependencies>
 
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

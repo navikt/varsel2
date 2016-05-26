@@ -21,7 +21,7 @@
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-jms</artifactId>
+			<artifactId>varsel-jms-consumer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
