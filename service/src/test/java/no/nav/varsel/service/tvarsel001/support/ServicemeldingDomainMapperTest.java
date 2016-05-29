@@ -13,7 +13,7 @@ import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.VarselFletter;
 import no.nav.varsel.service.tvarsel001.to.BestillServicemeldingTo;
-import no.nav.varsel.wsconsumer.dkif.to.DigitalKontaktinfoTo;
+import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
 import org.junit.Test;
@@ -118,8 +118,8 @@ public class ServicemeldingDomainMapperTest {
 		return to;
 	}
 
-	private DigitalKontaktinfoTo createDigitalKontaktinfoTo() {
-		DigitalKontaktinfoTo to = new DigitalKontaktinfoTo();
+	private KontaktregisterTo createDigitalKontaktinfoTo() {
+		KontaktregisterTo to = new KontaktregisterTo();
 		to.setKanaler(KANALER);
 		to.setMobiltelefonnummer(MOBILTELEFONNUMMER);
 		to.setEpostadresse(EPOSTADRESSE);

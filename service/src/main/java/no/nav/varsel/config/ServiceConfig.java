@@ -4,15 +4,16 @@ import no.nav.varsel.jms.producer.config.JmsProducerConfig;
 import no.nav.varsel.repo.config.RepoConfig;
 import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.VarselFletter;
+import no.nav.varsel.service.VarslelKanalDecider;
+import no.nav.varsel.service.support.VarselutsendingMapper;
 import no.nav.varsel.service.tvarsel001.support.ServicemeldingDomainMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.jndi.JndiObjectFactoryBean;
-
-import javax.naming.NamingException;
 
 /**
+ * Spring config for Service
+ *
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration
@@ -32,6 +33,16 @@ public class ServiceConfig {
 	@Bean
 	public VarselFletter varselFletter() {
 		return new VarselFletter();
+	}
+
+	@Bean
+	public VarslelKanalDecider varslelKanalDecider() {
+		return new VarslelKanalDecider();
+	}
+
+	@Bean
+	public VarselutsendingMapper varselutsendingMapper() {
+		return new VarselutsendingMapper();
 	}
 
 }

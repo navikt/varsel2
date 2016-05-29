@@ -3,7 +3,13 @@ package no.nav.varsel.jms.config;
 import static no.nav.varsel.config.QueueConfig.getQueue;
 
 import no.nav.varsel.config.JmsConfig;
+import no.nav.varsel.repo.config.RepoTestConfig;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.RedeliveryPolicy;
+import org.apache.activemq.broker.BrokerService;
+import org.apache.activemq.broker.region.policy.PolicyEntry;
+import org.apache.activemq.broker.region.policy.PolicyMap;
+import org.apache.activemq.broker.region.policy.SharedDeadLetterStrategy;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +20,8 @@ import javax.jms.Queue;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Test Config for JMS
@@ -21,11 +29,13 @@ import javax.naming.NamingException;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @EnableAutoConfiguration
-@Import(JmsConfig.class)
+@Import({RepoTestConfig.class, JmsConfig.class})
 @Configuration
 public class JmsTestConfig {
 
-	public static void mockJndi() throws NamingException {
+	private static final String VM_LOCALHOST = "vm://localhost";
+
+	public static void mockJndi() throws Exception {
 		System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.apache.naming.java.javaURLContextFactory");
 		System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
 		InitialContext ctx = new InitialContext();
@@ -37,15 +47,50 @@ public class JmsTestConfig {
 
 		ctx.createSubcontext("java:");
 		ctx.createSubcontext("java:/jboss");
-		ctx.bind("java:/jboss/mqConnectionFactory", new ActiveMQConnectionFactory("vm://localhost?broker.persistent=false"));
+		ctx.bind("java:/jboss/mqConnectionFactory", mqConnectionFactory());
+
+		// Queue mocks
 		ctx.bind("java:/jboss/bestillServicemelding", new ActiveMQQueue("bestillServicemelding"));
 		ctx.bind("java:/jboss/varselKvittering", new ActiveMQQueue("varselKvittering"));
+		ctx.bind("java:/jboss/varselutsending", new ActiveMQQueue("varselutsending"));
+
+		// Test queues
+		ctx.bind("java:/jboss/backout", new ActiveMQQueue("backout"));
 		ctx.bind("java:/jboss/reply", new ActiveMQQueue("reply"));
+	}
+
+	@Bean(initMethod = "start", destroyMethod = "stop")
+	public BrokerService broker(ActiveMQQueue backout) throws URISyntaxException {
+		BrokerService broker = new BrokerService();
+		broker.setVmConnectorURI(new URI(VM_LOCALHOST));
+		SharedDeadLetterStrategy deadLetterStrategy = new SharedDeadLetterStrategy();
+		deadLetterStrategy.setDeadLetterQueue(backout);
+		PolicyMap policyMap = new PolicyMap();
+		PolicyEntry defaultEntry = new PolicyEntry();
+		defaultEntry.setDeadLetterStrategy(deadLetterStrategy);
+		policyMap.setDefaultEntry(defaultEntry);
+		broker.setDestinationPolicy(policyMap);
+		broker.setUseJmx(false);
+		broker.setPersistent(false);
+		return broker;
+	}
+
+	private static ActiveMQConnectionFactory mqConnectionFactory() {
+		ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(VM_LOCALHOST + "?create=false");
+		RedeliveryPolicy redeliveryPolicy = new RedeliveryPolicy();
+		redeliveryPolicy.setMaximumRedeliveries(1);
+		factory.setRedeliveryPolicy(redeliveryPolicy);
+		return factory;
 	}
 
 	@Bean
 	public Queue reply() {
 		return getQueue("java:/jboss/reply");
+	}
+
+	@Bean
+	public ActiveMQQueue backout() {
+		return (ActiveMQQueue) getQueue("java:/jboss/backout");
 	}
 
 }

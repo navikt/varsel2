@@ -24,7 +24,7 @@ public class VarselbestillingRepoTest extends AbstractRepoTest {
 
 	@Test
 	public void shouldFindyByVarselbestillingId() throws Exception {
-		varselbestillingRepo.save(createVarselbestilling());
+		varselbestillingRepo.saveAndFlush(createVarselbestilling());
 
 		assertThat(varselbestillingRepo.findByVarselbestillingId(VARSELBESTILLING_ID), notNullValue());
 	}

@@ -20,6 +20,7 @@ import org.springframework.jms.support.destination.BeanFactoryDestinationResolve
 import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
@@ -40,6 +41,7 @@ public class JmsConfig {
 	@Bean
 	public JmsTemplate jmsTemplate(DestinationResolver destinationResolver) {
 		JmsTemplate jmsTemplate = new JmsTemplate(mqConnectionFactory());
+		jmsTemplate.setSessionTransacted(true);
 		jmsTemplate.setReceiveTimeout(10_000);
 		jmsTemplate.setMessageConverter(converter());
 		jmsTemplate.setConnectionFactory(mqConnectionFactory());
@@ -54,11 +56,15 @@ public class JmsConfig {
 
 	@Bean
 	public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(DestinationResolver destinationResolver,
-																		  MessageConverter converter) {
+																		  MessageConverter converter,
+																		  PlatformTransactionManager transactionManager) {
 		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 		factory.setConnectionFactory(mqConnectionFactory());
 		factory.setDestinationResolver(destinationResolver);
 		factory.setMessageConverter(new ConsumerMessageConverter(converter));
+		factory.setSessionTransacted(true);
+		factory.setTransactionManager(transactionManager);
+		factory.setConcurrency("2-4");
 		return factory;
 	}
 

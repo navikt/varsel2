@@ -1,6 +1,8 @@
 package no.nav.varsel.wsconsumer.dkif;
 
-import no.nav.varsel.wsconsumer.dkif.to.DigitalKontaktinfoTo;
+import static no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo.KontaktregisterToBuilder.aKontaktregisterTo;
+
+import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import org.joda.time.LocalDateTime;
 
 /**
@@ -10,15 +12,18 @@ import org.joda.time.LocalDateTime;
  */
 public class HentDigitalKontaktinformasjonConsumer {
 
-	public DigitalKontaktinfoTo hentDigitalKontaktinformasjon(String personIdent) {
-		DigitalKontaktinfoTo digitalKontaktinfoTo = new DigitalKontaktinfoTo();
-		digitalKontaktinfoTo.setPersonident("***gammelt_fnr***");
-		digitalKontaktinfoTo.setEpostadresse("epost@epost.no");
-		digitalKontaktinfoTo.setEpostSistOppdatert(LocalDateTime.now());
-		digitalKontaktinfoTo.setEpostSistVerifisert(LocalDateTime.now());
-		digitalKontaktinfoTo.setMobiltelefonnummer("12345678");
-		digitalKontaktinfoTo.setMobiltelefonSistOppdatert(LocalDateTime.now());
-		digitalKontaktinfoTo.setMobiltelefonSistVerifisert(LocalDateTime.now());
-		return digitalKontaktinfoTo;
+	public KontaktregisterTo hentDigitalKontaktinformasjon(String personIdent) {
+		KontaktregisterTo kontaktregisterTo = aKontaktregisterTo()
+				.personIdent("***gammelt_fnr***")
+				.reservasjon(false)
+				.epostadresse("epost@epost.no")
+				.epostSistOppdatert(LocalDateTime.now())
+				.epostSistVerifisert(LocalDateTime.now())
+				.mobiltelefonnummer("12345678")
+				.mobiltelefonSistOppdatert(LocalDateTime.now())
+				.mobiltelefonSistVerifisert(LocalDateTime.now())
+				.build();
+		kontaktregisterTo.cleanExpiredInfo();
+		return kontaktregisterTo;
 	}
 }

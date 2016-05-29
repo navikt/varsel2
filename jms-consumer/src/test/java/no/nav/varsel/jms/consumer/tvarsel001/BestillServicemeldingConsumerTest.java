@@ -1,5 +1,8 @@
 package no.nav.varsel.jms.consumer.tvarsel001;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import no.nav.melding.virksomhet.varsel.v1.varsel.ObjectFactory;
@@ -7,9 +10,12 @@ import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
 import no.nav.varsel.jms.to.xml.JmsReply;
+import no.nav.varsel.repo.VarselbestillingRepo;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import javax.inject.Inject;
+import javax.jms.Message;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
 
@@ -22,17 +28,35 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	@Inject
 	private Queue bestillServicemelding;
-
 	@Inject
-	private BestillServicemeldingConsumer consumer;
-
-	//		new JmsConfig().marshaller().marshal(varselJAXBElement, new StreamResult(System.out));
+	private VarselbestillingRepo varselbestillingRepo;
 
 	@Test
 	public void shouldReceieveJms() throws Exception {
 		JmsReply response = sendMessage(bestillServicemelding, createVarsel());
+//		new JmsConfig().marshaller().marshal(createVarsel(), new StreamResult(System.out));
 
-		assertTrue(response.isOk());
+		assertTrue(response != null && response.isOk());
+		assertThat(varselbestillingRepo.findAll(), hasSize(1));
+	}
+
+	@Test
+	public void shouldPutOnBackoutIfFailedWs() throws Exception {
+		JAXBElement<Varsel> varsel = createVarsel();
+		varsel.getValue().getVarslingstype().setValue("feil");
+		Message response = sendMessageListenBoq(bestillServicemelding, varsel);
+
+		assertThat(response, notNullValue());
+	}
+
+	@Test
+	public void shouldPutOnBackoutAndRollbackIfFailedAfterDbSave() throws Exception {
+		JAXBElement<Varsel> varsel = createVarsel();
+		varsel.getValue().getVarslingstype().setValue("feilMqUt");
+		Message response = sendMessageListenBoq(bestillServicemelding, varsel);
+
+		assertThat(response, notNullValue());
+		assertThat(varselbestillingRepo.findAll(), hasSize(0));
 	}
 
 	public static JAXBElement<Varsel> createVarsel() {

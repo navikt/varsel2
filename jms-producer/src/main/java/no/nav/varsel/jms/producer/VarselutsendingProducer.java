@@ -11,6 +11,8 @@ import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 public class VarselutsendingProducer {
 
 	public void produce(VarselutsendingTo varselutsendingTo) {
-
+		if ("feilMqUt".equals(varselutsendingTo.getVarslingstype())) {
+			throw new RuntimeException("mq ut feil");
+		}
 	}
 }

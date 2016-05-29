@@ -29,13 +29,13 @@ public abstract class AbstractRepoTest {
 	protected VarselRepo varselRepo;
 
 	@Before
-	public final void setUp() throws Exception {
+	public void setUpAbstract() throws Exception {
 		MDC.put(Constants.USER_ID, "itest");
 		varselbestillingRepo.deleteAll();
 	}
 
 	@After
-	public final void tearDown() throws Exception {
+	public void tearDownAbstract() throws Exception {
 		MDC.remove(Constants.USER_ID);
 		varselbestillingRepo.deleteAll();
 	}

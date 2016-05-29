@@ -25,6 +25,11 @@ public class QueueConfig {
 		return getQueue("java:/jboss/varselKvittering");
 	}
 
+	@Bean
+	public Queue varselutsending() {
+		return getQueue("java:/jboss/varselutsending");
+	}
+
 	public static Queue getQueue(String jndi) {
 		return getJndiObject(jndi, Queue.class);
 	}

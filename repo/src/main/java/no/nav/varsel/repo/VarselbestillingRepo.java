@@ -12,6 +12,7 @@ public interface VarselbestillingRepo extends JpaRepository<Varselbestilling, Lo
 
 	/**
 	 * Find {@link Varselbestilling} by varselbestillingId
+	 *
 	 * @param id the varselbestillingId
 	 * @return the {@link Varselbestilling} or null if not found
 	 */
