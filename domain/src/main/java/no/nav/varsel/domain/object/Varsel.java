@@ -56,7 +56,11 @@ public class Varsel extends AbstractDomainObject {
 	@Column(name = "distribusjon_tidspunkt", columnDefinition = "TIMESTAMP")
 	private LocalDateTime distribusjonTidspunkt;
 
-	@Column(name = "kontakt_info", nullable = false)
+	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
+	@Column(name = "kvittering_tidspunkt", columnDefinition = "TIMESTAMP")
+	private LocalDateTime kvitteringTidspunkt;
+
+	@Column(name = "kontakt_info")
 	private String kontaktInfo;
 
 	@Enumerated(EnumType.STRING)
@@ -74,6 +78,10 @@ public class Varsel extends AbstractDomainObject {
 
 	@Column(name = "varsel_url")
 	private String varselUrl;
+
+	@Column(name = "er_revarsel")
+	private Boolean erRevarsel;
+
 
 	public Varsel(Long id, Long versjon) {
 		this.id = id;
@@ -177,5 +185,21 @@ public class Varsel extends AbstractDomainObject {
 
 	public void setVarselUrl(String varselUrl) {
 		this.varselUrl = varselUrl;
+	}
+
+	public LocalDateTime getKvitteringTidspunkt() {
+		return kvitteringTidspunkt;
+	}
+
+	public void setKvitteringTidspunkt(LocalDateTime kvitteringTidspunkt) {
+		this.kvitteringTidspunkt = kvitteringTidspunkt;
+	}
+
+	public Boolean getErRevarsel() {
+		return erRevarsel;
+	}
+
+	public void setErRevarsel(Boolean erRevarsel) {
+		this.erRevarsel = erRevarsel;
 	}
 }

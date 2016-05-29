@@ -63,7 +63,7 @@ public class Varselbestilling extends AbstractDomainObject {
 	private String aktorId;
 
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
-	@Column(name = "bestillings_tidspunkt", nullable = false, columnDefinition = "TIMESTAMP")
+	@Column(name = "bestilling_tidspunkt", nullable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime bestillingTidspunkt;
 
 	@Column(name = "revarsling_intervall")
@@ -83,7 +83,7 @@ public class Varselbestilling extends AbstractDomainObject {
 	@CollectionTable(name = "PARAMETER", joinColumns = @JoinColumn(name = "FK_VARSELBESTILLING_ID"))
 	@MapKeyColumn(name = "KEY")
 	@Column(name = "VALUE")
-	private Map<String, String> parameters = new HashMap<>();
+	private Map<String, String> fletteparametere = new HashMap<>();
 
 	public Varselbestilling(Long id, Long versjon) {
 		this.id = id;
@@ -192,11 +192,11 @@ public class Varselbestilling extends AbstractDomainObject {
 		}
 	}
 
-	public Map<String, String> getParameters() {
-		return parameters;
+	public Map<String, String> getFletteParametere() {
+		return fletteparametere;
 	}
 
-	public void addParameter(String key, String value) {
-		parameters.put(key, value);
+	public void addFletteParameter(String key, String value) {
+		fletteparametere.put(key, value);
 	}
 }

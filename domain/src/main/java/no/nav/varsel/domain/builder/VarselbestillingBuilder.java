@@ -129,7 +129,7 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 		varselbestilling.setAntallRevarslinger(antallRevarslinger);
 		varselbestilling.setNesteVarslingstidspunkt(nesteVarslingstidspunkt);
 		varsels.forEach(varselbestilling::addVarsel);
-		parameters.forEach(varselbestilling::addParameter);
+		parameters.forEach(varselbestilling::addFletteParameter);
 		return varselbestilling;
 	}
 }
