@@ -3,7 +3,7 @@ package no.nav.varsel.service.tvarsel001.to;
 import static no.nav.varsel.service.support.ValueValidator.hasText;
 
 import no.nav.varsel.domain.to.MottakerType;
-import no.nav.varsel.wsconsumer.aktoer.to.AktoerTo;
+import no.nav.varsel.domain.to.AktoerTo;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

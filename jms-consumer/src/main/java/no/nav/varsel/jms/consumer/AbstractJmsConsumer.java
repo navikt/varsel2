@@ -1,9 +1,12 @@
 package no.nav.varsel.jms.consumer;
 
+import no.nav.varsel.domain.Constants;
+import no.nav.varsel.exception.NoJmsBackoutException;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jms.core.JmsTemplate;
+import org.slf4j.MDC;
+import org.springframework.jms.annotation.JmsListener;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import javax.inject.Inject;
@@ -21,17 +24,54 @@ import java.io.StringReader;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public abstract class AbstractJmsConsumer {
+public abstract class AbstractJmsConsumer<T> {
 
-	private static final Logger LOGG = LoggerFactory.getLogger(AbstractJmsConsumer.class);
-
-	@Inject
-	private JmsTemplate jmsTemplate;
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractJmsConsumer.class);
 	@Inject
 	private Jaxb2Marshaller marshaller;
 
+	protected abstract Class<T> getClazz();
+
+	protected abstract String getServiceName();
+
+	protected abstract void handleMessage(T message);
+
+	/**
+	 * Listener annotate with @{@link JmsListener}.
+	 * destination must be spring bean name of the queue to listen to.
+	 * id should be from {@link JmsConsumer.ConsumerNames}.
+	 * <p>
+	 * Method should call {@link AbstractJmsConsumer#doListen(TextMessage)}
+	 *
+	 * @param message the message to be received
+	 * @return JmsReply if a replyto was specified
+	 */
+	public abstract JmsReply listen(TextMessage message);
+
+	protected JmsReply doListen(TextMessage message) {
+		MDC.put(Constants.USER_ID, getServiceName());
+		unmarshalAndHandle(message);
+		return reply(message);
+	}
+
+	private T unmarshalAndHandle(TextMessage message) {
+		T unmarshalledObject = null;
+		try {
+			unmarshalledObject = unmarshal(message);
+			handleMessage(unmarshalledObject);
+		} catch (Exception e) {
+			String errorMessage = "Error during processing of message: " + messageToString(message);
+			if (e instanceof NoJmsBackoutException) {
+				LOG.warn(errorMessage, e);
+			} else {
+				throw new RuntimeException(errorMessage, e);
+			}
+		}
+		return unmarshalledObject;
+	}
+
 	@SuppressWarnings("unchecked")
-	protected <T> T unmarshal(TextMessage message, Class<T> clazz) {
+	private T unmarshal(TextMessage message) {
 		try {
 			String text = message.getText();
 			Source source = new StreamSource(new StringReader(text));
@@ -42,10 +82,11 @@ public abstract class AbstractJmsConsumer {
 			} else {
 				object = unmarshal;
 			}
-			if (clazz.isAssignableFrom(object.getClass())) {
+			if (getClazz().isAssignableFrom(object.getClass())) {
 				return (T) object;
+			} else {
+				throw new RuntimeException("Object is not expected class: " + getClazz().getName() + " found " + object.getClass());
 			}
-			throw new RuntimeException("Object is not expected class: " + clazz.getName() + " found " + object.getClass());
 		} catch (Exception e) {
 			throw new RuntimeException("Invalid message, cannot be unmarshalled: " + messageToString(message), e);
 		}
@@ -59,7 +100,7 @@ public abstract class AbstractJmsConsumer {
 		}
 	}
 
-	protected JmsReply reply(Message message) {
+	private JmsReply reply(Message message) {
 		try {
 			Destination replyTo = message.getJMSReplyTo();
 			if (replyTo != null) {

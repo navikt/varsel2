@@ -72,10 +72,11 @@ public class ServicemeldingDomainMapperTest {
 		assertThat(UUID.fromString(smsVarsel.getVarselId()).toString(), is(smsVarsel.getVarselId()));
 		assertThat(smsVarsel.getKanal(), is(KanalCode.SMS));
 		assertThat(smsVarsel.getKontaktInfo(), is(MOBILTELEFONNUMMER));
-		assertThat(smsVarsel.getStatus(), is(StatusCode.OPPRETTET));
+		assertThat(smsVarsel.getStatus(), is(StatusCode.SENDT));
 		assertThat(smsVarsel.getVarselTittel(), is(TITTEL));
 		assertThat(smsVarsel.getVarselTekst(), is(FOERSTEGANGS_TEKST.replace(":" + KEY, VALUE)));
 		assertThat(smsVarsel.getVarselUrl(), is(URL));
+		assertThat(smsVarsel.getSendtTidspunkt(), aboutNow());
 
 		assertThat(epostVarsel.getKanal(), is(KanalCode.EPOST));
 		assertThat(epostVarsel.getKontaktInfo(), is(EPOSTADRESSE));

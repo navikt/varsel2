@@ -26,7 +26,7 @@ public class ConsumerManagerTest extends AbstractConsumerJmsTest {
 	@Inject
 	protected ConsumerManager consumerManager;
 	@Inject
-	private Queue bestillServicemelding;
+	private Queue bestillServicemeldingQueue;
 
 	@Before
 	public void setUp() throws Exception {
@@ -40,14 +40,14 @@ public class ConsumerManagerTest extends AbstractConsumerJmsTest {
 
 		assertFalse(consumerManager.getListener(BESTILL_SERVICEMELDING).isRunning());
 		assertTrue(consumerManager.getListener(VARSEL_KVITTERING).isRunning());
-		JmsReply jmsReply = sendMessage(bestillServicemelding, BestillServicemeldingConsumerTest.createVarsel());
+		JmsReply jmsReply = sendMessage(bestillServicemeldingQueue, BestillServicemeldingConsumerTest.createVarsel());
 		assertThat(jmsReply, nullValue());
 
 		consumerManager.start(BESTILL_SERVICEMELDING);
 
 		assertTrue(consumerManager.getListener(BESTILL_SERVICEMELDING).isRunning());
 		assertTrue(consumerManager.getListener(VARSEL_KVITTERING).isRunning());
-		jmsReply = sendMessage(bestillServicemelding, BestillServicemeldingConsumerTest.createVarsel());
+		jmsReply = sendMessage(bestillServicemeldingQueue, BestillServicemeldingConsumerTest.createVarsel());
 		assertThat(jmsReply, notNullValue());
 	}
 

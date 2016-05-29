@@ -1,4 +1,4 @@
-package no.nav.varsel.wsconsumer.aktoer.to;
+package no.nav.varsel.domain.to;
 
 import no.nav.varsel.domain.to.MottakerType;
 

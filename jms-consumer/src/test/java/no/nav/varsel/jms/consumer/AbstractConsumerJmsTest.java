@@ -3,6 +3,9 @@ package no.nav.varsel.jms.consumer;
 import no.nav.varsel.jms.config.JmsConsumerTestConfig;
 import no.nav.varsel.jms.config.JmsTestConfig;
 import no.nav.varsel.jms.to.xml.JmsReply;
+import no.nav.varsel.repo.VarselbestillingRepo;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -34,20 +37,33 @@ public abstract class AbstractConsumerJmsTest {
 	@Inject
 	protected JmsTemplate jmsTemplate;
 	@Inject
-	protected Queue reply;
+	protected Queue replyQueue;
 	@Inject
-	private Queue backout;
+	protected Queue backoutQueue;
+
+	@Inject
+	protected VarselbestillingRepo varselbestillingRepo;
+
+	@Before
+	public void setUpAbstract() throws Exception {
+		varselbestillingRepo.deleteAll();
+	}
+
+	@After
+	public void tearDownAbstract() throws Exception {
+		varselbestillingRepo.deleteAll();
+	}
 
 	protected JmsReply sendMessage(Queue queue, Object message) {
 		jmsTemplate.convertAndSend(queue, message, message1 -> {
-			message1.setJMSReplyTo(reply);
+			message1.setJMSReplyTo(replyQueue);
 			return message1;
 		});
-		return (JmsReply) jmsTemplate.receiveAndConvert(reply);
+		return (JmsReply) jmsTemplate.receiveAndConvert(replyQueue);
 	}
 
 	protected Message sendMessageListenBoq(Queue queue, Object message) {
 		jmsTemplate.convertAndSend(queue, message);
-		return jmsTemplate.receive(backout);
+		return jmsTemplate.receive(backoutQueue);
 	}
 }

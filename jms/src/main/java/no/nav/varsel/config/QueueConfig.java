@@ -16,17 +16,17 @@ import javax.jms.Queue;
 public class QueueConfig {
 
 	@Bean
-	public Queue bestillServicemelding() {
+	public Queue bestillServicemeldingQueue() {
 		return getQueue("java:/jboss/bestillServicemelding");
 	}
 
 	@Bean
-	public Queue varselKvittering() {
+	public Queue varselKvitteringQueue() {
 		return getQueue("java:/jboss/varselKvittering");
 	}
 
 	@Bean
-	public Queue varselutsending() {
+	public Queue varselutsendingQueue() {
 		return getQueue("java:/jboss/varselutsending");
 	}
 

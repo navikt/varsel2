@@ -10,8 +10,6 @@ import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
 import no.nav.varsel.jms.to.xml.JmsReply;
-import no.nav.varsel.repo.VarselbestillingRepo;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -27,13 +25,11 @@ import javax.xml.bind.JAXBElement;
 public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	@Inject
-	private Queue bestillServicemelding;
-	@Inject
-	private VarselbestillingRepo varselbestillingRepo;
+	private Queue bestillServicemeldingQueue;
 
 	@Test
 	public void shouldReceieveJms() throws Exception {
-		JmsReply response = sendMessage(bestillServicemelding, createVarsel());
+		JmsReply response = sendMessage(bestillServicemeldingQueue, createVarsel());
 //		new JmsConfig().marshaller().marshal(createVarsel(), new StreamResult(System.out));
 
 		assertTrue(response != null && response.isOk());
@@ -44,7 +40,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	public void shouldPutOnBackoutIfFailedWs() throws Exception {
 		JAXBElement<Varsel> varsel = createVarsel();
 		varsel.getValue().getVarslingstype().setValue("feil");
-		Message response = sendMessageListenBoq(bestillServicemelding, varsel);
+		Message response = sendMessageListenBoq(bestillServicemeldingQueue, varsel);
 
 		assertThat(response, notNullValue());
 	}
@@ -53,7 +49,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	public void shouldPutOnBackoutAndRollbackIfFailedAfterDbSave() throws Exception {
 		JAXBElement<Varsel> varsel = createVarsel();
 		varsel.getValue().getVarslingstype().setValue("feilMqUt");
-		Message response = sendMessageListenBoq(bestillServicemelding, varsel);
+		Message response = sendMessageListenBoq(bestillServicemeldingQueue, varsel);
 
 		assertThat(response, notNullValue());
 		assertThat(varselbestillingRepo.findAll(), hasSize(0));

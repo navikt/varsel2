@@ -4,7 +4,6 @@ package no.nav.varsel.jms.consumer.tvarsel001;
 import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_SERVICEMELDING_NAME;
 
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
-import no.nav.varsel.domain.Constants;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapper;
 import no.nav.varsel.jms.to.xml.JmsReply;
@@ -12,7 +11,6 @@ import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.tvarsel001.to.BestillServicemeldingTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
@@ -25,27 +23,40 @@ import javax.jms.TextMessage;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Component
-public class BestillServicemeldingConsumer extends AbstractJmsConsumer {
-	private static final String BESTILL_SERVICEMELDING_QUEUE = "bestillServicemelding";
+public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
+
 	private static final Logger LOGG = LoggerFactory.getLogger(BestillServicemeldingConsumer.class);
+
+	private static final String BESTILL_SERVICEMELDING_QUEUE = "bestillServicemeldingQueue";
+	private static final String TVARSEL_001 = "tvarsel001";
 
 	@Inject
 	private BestillServicemeldingMapper bestillServicemeldingMapper;
 	@Inject
 	private ServicemeldingService servicemeldingService;
 
+	@Override
 	@JmsListener(destination = BESTILL_SERVICEMELDING_QUEUE, id = BESTILL_SERVICEMELDING_NAME)
-	public JmsReply bestillServicemelding(TextMessage message) {
-		MDC.put(Constants.USER_ID, "TVARSEL001");
-		handleVarsel(unmarshal(message, Varsel.class));
-		return reply(message);
+	public JmsReply listen(TextMessage message) {
+		return doListen(message);
 	}
 
-	private void handleVarsel(Varsel varsel) {
+	@Override
+	protected void handleMessage(Varsel varsel) {
 		LOGG.debug("Mottat varsel " + varsel.getVarslingstype().getValue());
 		BestillServicemeldingTo to = bestillServicemeldingMapper.map(varsel);
 		to.validateTvarsel001Input();
 
 		servicemeldingService.bestillServicemelding(to);
+	}
+
+	@Override
+	protected Class<Varsel> getClazz() {
+		return Varsel.class;
+	}
+
+	@Override
+	protected String getServiceName() {
+		return TVARSEL_001;
 	}
 }

@@ -1,7 +1,7 @@
 package no.nav.varsel.wsconsumer.aktoer;
 
+import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.domain.to.MottakerType;
-import no.nav.varsel.wsconsumer.aktoer.to.AktoerTo;
 
 /**
  * Aktoer Stub

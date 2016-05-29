@@ -9,7 +9,6 @@ import no.nav.varsel.jms.consumer.tvarsel001.BestillServicemeldingConsumer;
 import no.nav.varsel.service.tvarsel001.to.BestillServicemeldingTo;
 import org.springframework.util.Assert;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +28,7 @@ public class BestillServicemeldingMapper {
 		to.setVarslingstype(varsel.getVarslingstype() == null ? null :
 				varsel.getVarslingstype().getValue());
 		to.setUtloepstidspunkt(varsel.getUtloepstidspunkt() == null ? null :
-				LocalDateTime.from(varsel.getUtloepstidspunkt().toGregorianCalendar().toZonedDateTime().toLocalDateTime()));
+				varsel.getUtloepstidspunkt().toGregorianCalendar().toZonedDateTime().toLocalDateTime());
 		to.setParameters(map(varsel.getParameterListe()));
 
 		return to;

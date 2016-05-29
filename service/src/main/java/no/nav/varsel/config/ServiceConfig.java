@@ -5,7 +5,7 @@ import no.nav.varsel.repo.config.RepoConfig;
 import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.VarselFletter;
 import no.nav.varsel.service.VarslelKanalDecider;
-import no.nav.varsel.service.support.VarselutsendingMapper;
+import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.tvarsel001.support.ServicemeldingDomainMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,8 +41,8 @@ public class ServiceConfig {
 	}
 
 	@Bean
-	public VarselutsendingMapper varselutsendingMapper() {
-		return new VarselutsendingMapper();
+	public VarselutsendingToMapper varselutsendingToMapper() {
+		return new VarselutsendingToMapper();
 	}
 
 }

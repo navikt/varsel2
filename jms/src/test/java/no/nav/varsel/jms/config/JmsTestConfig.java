@@ -59,12 +59,20 @@ public class JmsTestConfig {
 		ctx.bind("java:/jboss/reply", new ActiveMQQueue("reply"));
 	}
 
+	private static ActiveMQConnectionFactory mqConnectionFactory() {
+		ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(VM_LOCALHOST + "?create=false");
+		RedeliveryPolicy redeliveryPolicy = new RedeliveryPolicy();
+		redeliveryPolicy.setMaximumRedeliveries(1);
+		factory.setRedeliveryPolicy(redeliveryPolicy);
+		return factory;
+	}
+
 	@Bean(initMethod = "start", destroyMethod = "stop")
-	public BrokerService broker(ActiveMQQueue backout) throws URISyntaxException {
+	public BrokerService broker(ActiveMQQueue backoutQueue) throws URISyntaxException {
 		BrokerService broker = new BrokerService();
 		broker.setVmConnectorURI(new URI(VM_LOCALHOST));
 		SharedDeadLetterStrategy deadLetterStrategy = new SharedDeadLetterStrategy();
-		deadLetterStrategy.setDeadLetterQueue(backout);
+		deadLetterStrategy.setDeadLetterQueue(backoutQueue);
 		PolicyMap policyMap = new PolicyMap();
 		PolicyEntry defaultEntry = new PolicyEntry();
 		defaultEntry.setDeadLetterStrategy(deadLetterStrategy);
@@ -75,21 +83,13 @@ public class JmsTestConfig {
 		return broker;
 	}
 
-	private static ActiveMQConnectionFactory mqConnectionFactory() {
-		ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(VM_LOCALHOST + "?create=false");
-		RedeliveryPolicy redeliveryPolicy = new RedeliveryPolicy();
-		redeliveryPolicy.setMaximumRedeliveries(1);
-		factory.setRedeliveryPolicy(redeliveryPolicy);
-		return factory;
-	}
-
 	@Bean
-	public Queue reply() {
+	public Queue replyQueue() {
 		return getQueue("java:/jboss/reply");
 	}
 
 	@Bean
-	public ActiveMQQueue backout() {
+	public ActiveMQQueue backoutQueue() {
 		return (ActiveMQQueue) getQueue("java:/jboss/backout");
 	}
 

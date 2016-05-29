@@ -3,7 +3,7 @@ package no.nav.varsel.service.tvarsel001.to;
 import static org.hamcrest.Matchers.is;
 
 import no.nav.varsel.domain.to.MottakerType;
-import no.nav.varsel.wsconsumer.aktoer.to.AktoerTo;
+import no.nav.varsel.domain.to.AktoerTo;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
