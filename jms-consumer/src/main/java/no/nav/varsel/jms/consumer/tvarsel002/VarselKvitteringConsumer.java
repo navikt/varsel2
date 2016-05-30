@@ -25,6 +25,10 @@ public class VarselKvitteringConsumer extends AbstractJmsConsumer<VarselKvitteri
 	private static final String VARSEL_KVITTERING_QUEUE = "varselKvitteringQueue";
 	private static final String TVARSEL002 = "tvarsel002";
 
+	public VarselKvitteringConsumer() {
+		super(TVARSEL002, VarselKvittering.class);
+	}
+
 	@Override
 	@JmsListener(destination = VARSEL_KVITTERING_QUEUE, id = VARSEL_KVITTERING_NAME)
 	public JmsReply listen(TextMessage message) {
@@ -34,15 +38,5 @@ public class VarselKvitteringConsumer extends AbstractJmsConsumer<VarselKvitteri
 	@Override
 	protected void handleMessage(VarselKvittering kvittering) {
 		LOGG.info("Mottat varsel " + kvittering.getStatus());
-	}
-
-	@Override
-	protected Class<VarselKvittering> getClazz() {
-		return VarselKvittering.class;
-	}
-
-	@Override
-	protected String getServiceName() {
-		return TVARSEL002;
 	}
 }

@@ -77,6 +77,7 @@ public class ServicemeldingDomainMapperTest {
 		assertThat(smsVarsel.getVarselTekst(), is(FOERSTEGANGS_TEKST.replace(":" + KEY, VALUE)));
 		assertThat(smsVarsel.getVarselUrl(), is(URL));
 		assertThat(smsVarsel.getSendtTidspunkt(), aboutNow());
+		assertThat(smsVarsel.getErRevarsel(), is(false));
 
 		assertThat(epostVarsel.getKanal(), is(KanalCode.EPOST));
 		assertThat(epostVarsel.getKontaktInfo(), is(EPOSTADRESSE));

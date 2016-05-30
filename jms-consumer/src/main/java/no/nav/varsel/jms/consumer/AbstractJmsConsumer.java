@@ -27,12 +27,15 @@ import java.io.StringReader;
 public abstract class AbstractJmsConsumer<T> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractJmsConsumer.class);
+	private final String serviceName;
+	private final Class<T> inputType;
 	@Inject
 	private Jaxb2Marshaller marshaller;
 
-	protected abstract Class<T> getClazz();
-
-	protected abstract String getServiceName();
+	public AbstractJmsConsumer(String serviceName, Class<T> inputType) {
+		this.serviceName = serviceName;
+		this.inputType = inputType;
+	}
 
 	protected abstract void handleMessage(T message);
 
@@ -49,7 +52,7 @@ public abstract class AbstractJmsConsumer<T> {
 	public abstract JmsReply listen(TextMessage message);
 
 	protected JmsReply doListen(TextMessage message) {
-		MDC.put(Constants.USER_ID, getServiceName());
+		MDC.put(Constants.USER_ID, serviceName);
 		unmarshalAndHandle(message);
 		return reply(message);
 	}
@@ -60,7 +63,8 @@ public abstract class AbstractJmsConsumer<T> {
 			unmarshalledObject = unmarshal(message);
 			handleMessage(unmarshalledObject);
 		} catch (Exception e) {
-			String errorMessage = "Error during processing of message: " + messageToString(message);
+			String errorMessage = String.format("Error in service=%s during processing of message: %s",
+					serviceName, messageToString(message));
 			if (e instanceof NoJmsBackoutException) {
 				LOG.warn(errorMessage, e);
 			} else {
@@ -82,13 +86,13 @@ public abstract class AbstractJmsConsumer<T> {
 			} else {
 				object = unmarshal;
 			}
-			if (getClazz().isAssignableFrom(object.getClass())) {
+			if (inputType.isAssignableFrom(object.getClass())) {
 				return (T) object;
 			} else {
-				throw new RuntimeException("Object is not expected class: " + getClazz().getName() + " found " + object.getClass());
+				throw new RuntimeException("Object is not expected class: " + inputType.getName() + " found " + object.getClass());
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("Invalid message, cannot be unmarshalled: " + messageToString(message), e);
+			throw new NoJmsBackoutException("Invalid message, cannot be unmarshalled", e);
 		}
 	}
 

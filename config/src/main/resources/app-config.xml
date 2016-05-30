@@ -10,6 +10,8 @@
 		<humanReadablePath>/varsel/internal/selftest</humanReadablePath>
 	</selftest>
 
+	<loadBalancer isAlive="/varsel/internal/isAlive"/>
+
 	<artifacts>
 		<ear groupId="no.nav.varsel" artifactId="varsel-jee"/>
 	</artifacts>
@@ -25,11 +27,16 @@
 			<queue alias="varselutsending" jndi="java:/jboss/varselutsending"/>
 		</queueManager>
 		<ldap alias="ldap" mapToProperty="ldap"/>
+		<webservice mapToProperty="aktoerid.ws" alias="Aktoer_v2"/>
+		<webservice mapToProperty="dkif.ws" alias="virksomhet:DigitalKontakinformasjon_v1"/>
 	</resources>
 
-	<security serviceUserResourceAlias="srvVarsel"/>
+	<exposed-services>
+		<exposedQueue name="varsel_bestill_servicemelding"/>
+		<exposedQueue name="varsel_varsel_kvittering"/>
+	</exposed-services>
 
-	<loadBalancer isAlive="/varsel/internal/isAlive"/>
+	<security serviceUserResourceAlias="srvVarsel"/>
 
 	<monitoring>
 		<metric path="/varsel/internal/metrics"/>

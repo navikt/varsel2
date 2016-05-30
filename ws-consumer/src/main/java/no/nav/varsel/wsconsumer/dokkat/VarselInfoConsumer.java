@@ -22,7 +22,7 @@ public class VarselInfoConsumer {
 		varselInfoTo.setVarselURL("URL");
 		VarselMalTo varselMalTo = new VarselMalTo();
 		varselMalTo.setKanal(KanalCode.DITTNAV);
-		varselMalTo.setTittel("Varsel Titte");
+		varselMalTo.setTittel("Varsel Tittel");
 		varselMalTo.setFoerstegangsTekst("Første gang tekst til :mottaker");
 		varselMalTo.setRevarslingTekst("Revarsling tekst til :mottaker");
 		varselInfoTo.setMaler(Sets.newHashSet(varselMalTo));

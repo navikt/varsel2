@@ -1,7 +1,7 @@
 package no.nav.varsel.jms.consumer.tvarsel001;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -33,7 +33,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 //		new JmsConfig().marshaller().marshal(createVarsel(), new StreamResult(System.out));
 
 		assertTrue(response != null && response.isOk());
-		assertThat(varselbestillingRepo.findAll(), hasSize(1));
+		assertThat(varselbestillingRepo.count(), is(1L));
 	}
 
 	@Test
@@ -52,7 +52,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		Message response = sendMessageListenBoq(bestillServicemeldingQueue, varsel);
 
 		assertThat(response, notNullValue());
-		assertThat(varselbestillingRepo.findAll(), hasSize(0));
+		assertThat(varselbestillingRepo.count(), is(0L));
 	}
 
 	public static JAXBElement<Varsel> createVarsel() {

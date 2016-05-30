@@ -77,6 +77,7 @@ public class ServicemeldingDomainMapper {
 				.varselTittel(mal.getTittel())
 				.varselTekst(varselFletter.flettVarsel(mal.getFoerstegangsTekst(), bestillServicemeldingTo.getParameters()))
 				.varselUrl(varselInfoTo.getVarselURL())
+				.erRevarsel(false)
 				.build();
 	}
 

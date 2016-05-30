@@ -35,6 +35,10 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 	@Inject
 	private ServicemeldingService servicemeldingService;
 
+	public BestillServicemeldingConsumer() {
+		super(TVARSEL_001, Varsel.class);
+	}
+
 	@Override
 	@JmsListener(destination = BESTILL_SERVICEMELDING_QUEUE, id = BESTILL_SERVICEMELDING_NAME)
 	public JmsReply listen(TextMessage message) {
@@ -48,15 +52,5 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 		to.validateTvarsel001Input();
 
 		servicemeldingService.bestillServicemelding(to);
-	}
-
-	@Override
-	protected Class<Varsel> getClazz() {
-		return Varsel.class;
-	}
-
-	@Override
-	protected String getServiceName() {
-		return TVARSEL_001;
 	}
 }

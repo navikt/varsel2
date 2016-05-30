@@ -2,8 +2,9 @@ package no.nav.varsel.service.tvarsel001.to;
 
 import static no.nav.varsel.service.support.ValueValidator.hasText;
 
-import no.nav.varsel.domain.to.MottakerType;
 import no.nav.varsel.domain.to.AktoerTo;
+import no.nav.varsel.domain.to.MottakerType;
+import no.nav.varsel.exception.NoJmsBackoutException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -64,12 +65,16 @@ public class BestillServicemeldingTo {
 	}
 
 	public void validateTvarsel001Input() {
-		hasText(personIdent == null ? aktoerId : personIdent, "mottaker");
-		hasText(varslingstype, "varslingstype");
-		parameters.forEach((key, val) -> {
-			hasText(key, "parameter.key");
-			hasText(val, "parameter.value");
-		});
+		try {
+			hasText(personIdent == null ? aktoerId : personIdent, "mottaker");
+			hasText(varslingstype, "varslingstype");
+			parameters.forEach((key, val) -> {
+				hasText(key, "parameter.key");
+				hasText(val, "parameter.value");
+			});
+		} catch (Exception e) {
+			throw new NoJmsBackoutException("Validation failed for input, " + e.getMessage(), e);
+		}
 	}
 
 	public AktoerTo craeteAktoerTo() {
@@ -84,8 +89,7 @@ public class BestillServicemeldingTo {
 		if (aktoer == null) {
 			setAktoerId(null);
 			setPersonIdent(null);
-		}
-		else if (aktoer.getMottakerType() == MottakerType.AKTOER) {
+		} else if (aktoer.getMottakerType() == MottakerType.AKTOER) {
 			setAktoerId(aktoer.getIdent());
 		} else {
 			setPersonIdent(aktoer.getIdent());

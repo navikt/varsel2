@@ -26,8 +26,8 @@ import java.time.LocalDateTime;
 public class BestillServicemeldingMapperTest {
 
 	public static final String UTLOEPSTIDSPUNKT = "2016-04-24T15:22:45";
-	public static final String MOTTAKER = "mottaker";
-	public static final String KEY = "key";
+	public static final String MOTTAKER = "mottakeren";
+	public static final String KEY = "mottaker";
 	public static final String VAL = "val";
 	private static DatatypeFactory datatypeFactory;
 

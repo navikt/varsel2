@@ -4,6 +4,8 @@ import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
 import no.nav.melding.virksomhet.varselutsending.v1.varselutsending.Varselutsending;
 import no.nav.varsel.jms.to.xml.JmsReply;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +14,7 @@ import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.listener.adapter.ListenerExecutionFailedException;
 import org.springframework.jms.support.converter.MarshallingMessageConverter;
 import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.jms.support.converter.MessageConverter;
@@ -37,6 +40,8 @@ import javax.naming.NamingException;
 @Import({QueueConfig.class})
 @Configuration
 public class JmsConfig {
+
+	private static final Logger LOG = LoggerFactory.getLogger(JmsConfig.class);
 
 	@Bean
 	public JmsTemplate jmsTemplate(DestinationResolver destinationResolver) {
@@ -65,6 +70,13 @@ public class JmsConfig {
 		factory.setSessionTransacted(true);
 		factory.setTransactionManager(transactionManager);
 		factory.setConcurrency("2-4");
+		factory.setErrorHandler(t -> {
+			Throwable throwable = t;
+			if (t instanceof ListenerExecutionFailedException) {
+				throwable = t.getCause();
+			}
+			LOG.error("Execution of JMS message failed", throwable);
+		});
 		return factory;
 	}
 

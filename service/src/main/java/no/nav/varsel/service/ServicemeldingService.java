@@ -63,7 +63,7 @@ public class ServicemeldingService {
 
 		Varselbestilling varselbestilling = domainMapper.mapToDomain(bestillServicemeldingTo, varselInfoTo, kontaktregisterTo);
 
-		varselbestillingRepo.save(varselbestilling);
+		varselbestillingRepo.saveAndFlush(varselbestilling);
 
 		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper.map(varselbestilling, origAktoer);
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
