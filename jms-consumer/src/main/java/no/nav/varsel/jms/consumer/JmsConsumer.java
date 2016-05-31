@@ -22,7 +22,7 @@ public enum JmsConsumer {
 		return consumerName;
 	}
 
-	public class ConsumerNames {
+	public static class ConsumerNames {
 		public static final String BESTILL_SERVICEMELDING_NAME = "bestillServicemeldingConsumer";
 		public static final String VARSEL_KVITTERING_NAME = "varselKvitteringConsumer";
 	}

@@ -62,16 +62,17 @@ public abstract class AbstractJmsConsumer<T> {
 		try {
 			unmarshalledObject = unmarshal(message);
 			handleMessage(unmarshalledObject);
+		} catch (NoJmsBackoutException e) {
+			LOG.warn(errorFor(message), e);
 		} catch (Exception e) {
-			String errorMessage = String.format("Error in service=%s during processing of message: %s",
-					serviceName, messageToString(message));
-			if (e instanceof NoJmsBackoutException) {
-				LOG.warn(errorMessage, e);
-			} else {
-				throw new RuntimeException(errorMessage, e);
-			}
+			throw new RuntimeException(errorFor(message), e);
 		}
 		return unmarshalledObject;
+	}
+
+	private String errorFor(TextMessage message) {
+		return String.format("Error in service=%s during processing of message: %s",
+				serviceName, messageToString(message));
 	}
 
 	@SuppressWarnings("unchecked")

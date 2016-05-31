@@ -13,7 +13,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-	final static QName _JmsReply_QNAME = new QName("http://nav.no/varsel/jms/reply", "JmsReply");
+	static final QName JMS_REPLY_QNAME = new QName("http://nav.no/varsel/jms/reply", "JmsReply");
 
 	public JmsReply createJmsReply() {
 		return new JmsReply();
@@ -21,7 +21,7 @@ public class ObjectFactory {
 
 	@XmlElementDecl(namespace = "http://nav.no/varsel/jms/reply", name = "JmsReply")
 	public JAXBElement<JmsReply> createJmsReply(JmsReply value) {
-		return new JAXBElement<>(_JmsReply_QNAME, JmsReply.class, value);
+		return new JAXBElement<>(JMS_REPLY_QNAME, JmsReply.class, value);
 	}
 
 }
