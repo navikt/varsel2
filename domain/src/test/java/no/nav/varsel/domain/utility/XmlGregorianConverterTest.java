@@ -3,6 +3,7 @@ package no.nav.varsel.domain.utility;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.DATATYPE_FACTORY;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import org.hamcrest.Matchers;
@@ -30,9 +31,19 @@ public class XmlGregorianConverterTest {
 	}
 
 	@Test
+	public void shouldConvertToXmlGregorianCalendarFromNull() throws Exception {
+		assertThat(toXmlGregorianCalendar(null), nullValue());
+	}
+
+	@Test
 	public void shouldConvertToLocalDateTime() throws Exception {
 		LocalDateTime localDateTime = toLocalDateTime(DATATYPE_FACTORY.newXMLGregorianCalendar(TIME_TEXT));
 		assertThat(localDateTime.toString(), Matchers.is(TIME_TEXT));
+	}
+
+	@Test
+	public void shouldConvertToLocalDateTimeFromNull() throws Exception {
+		assertThat(toLocalDateTime(null), nullValue());
 	}
 
 }

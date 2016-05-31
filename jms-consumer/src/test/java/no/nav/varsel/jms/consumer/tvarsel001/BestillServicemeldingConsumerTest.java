@@ -27,6 +27,7 @@ import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
+import no.nav.varsel.jms.consumer.JmsConsumer;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.mock.AktoerV2Mock;
@@ -67,6 +68,9 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestilling.getRevarslingIntervall(), nullValue());
 		assertThat(varselbestilling.getAntallRevarslinger(), nullValue());
 		assertThat(varselbestilling.getNesteVarslingstidspunkt(), nullValue());
+		assertThat(varselbestilling.getChangeStamp().getOpprettetAv(), is(JmsConsumer.BESTILL_SERVICEMELDING.getServiceName()));
+		assertThat(varselbestilling.getChangeStamp().getOpprettetDato(), aboutNow());
+
 		assertThat(varselbestilling.getVarsels(), hasSize(1));
 
 		no.nav.varsel.domain.object.Varsel varsel = varselbestilling.getVarsels().iterator().next();
@@ -81,6 +85,8 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varsel.getVarselTekst(), is(FØRSTE_GANG_TEKST_TIL_MOTTAKER.replace(":mottaker", VAL)));
 		assertThat(varsel.getVarselUrl(), is(VARSEL_URL));
 		assertThat(varsel.getErRevarsel(), is(false));
+		assertThat(varsel.getChangeStamp().getOpprettetAv(), is(JmsConsumer.BESTILL_SERVICEMELDING.getServiceName()));
+		assertThat(varsel.getChangeStamp().getOpprettetDato(), aboutNow());
 	}
 
 	@Test
