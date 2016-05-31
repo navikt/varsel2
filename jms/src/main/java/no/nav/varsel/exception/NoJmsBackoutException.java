@@ -14,4 +14,8 @@ public class NoJmsBackoutException extends RuntimeException {
 	public NoJmsBackoutException(String message, Throwable cause) {
 		super(message, cause);
 	}
+
+	public NoJmsBackoutException(Throwable cause) {
+		super(cause);
+	}
 }

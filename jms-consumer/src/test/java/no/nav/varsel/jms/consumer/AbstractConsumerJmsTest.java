@@ -3,6 +3,7 @@ package no.nav.varsel.jms.consumer;
 import no.nav.varsel.jms.config.JmsConsumerTestConfig;
 import no.nav.varsel.jms.config.JmsTestConfig;
 import no.nav.varsel.jms.to.xml.JmsReply;
+import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import org.junit.After;
 import org.junit.Before;
@@ -15,8 +16,16 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
+import javax.jms.Connection;
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Queue;
+import javax.jms.QueueBrowser;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * Abstract Test for JMS
@@ -43,6 +52,8 @@ public abstract class AbstractConsumerJmsTest {
 
 	@Inject
 	protected VarselbestillingRepo varselbestillingRepo;
+	@Inject
+	protected VarselRepo varselRepo;
 
 	@Before
 	public void setUpAbstract() throws Exception {
@@ -66,4 +77,5 @@ public abstract class AbstractConsumerJmsTest {
 		jmsTemplate.convertAndSend(queue, message);
 		return jmsTemplate.receive(backoutQueue);
 	}
+
 }
