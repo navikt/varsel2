@@ -4,6 +4,7 @@ import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldin
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.UTLOEPSTIDSPUNKT;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VAL;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VARSLINGSTYPE;
+import static no.nav.varsel.mock.AktoerV2Mock.PERSON_IDENT;
 import static no.nav.varsel.repo.TestdataUtil.FUNKSJONELL_FEIL;
 import static no.nav.varsel.repo.TestdataUtil.TEKNISK_FEIL;
 import static no.nav.varsel.test.TestUtils.aboutNow;
@@ -28,6 +29,7 @@ import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
 import no.nav.varsel.jms.to.xml.JmsReply;
+import no.nav.varsel.mock.AktoerV2Mock;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -59,7 +61,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestilling.getVarslingstype(), is(VARSLINGSTYPE));
 		assertThat(varselbestilling.getPreferertKanal(), is(PREFERERT_KANAL));
 		assertThat(varselbestilling.getUtlopTidspunkt(), is(equalTo(LocalDateTime.parse(UTLOEPSTIDSPUNKT))));
-		assertThat(varselbestilling.getFnr(), is(MOTTAKER + "p"));
+		assertThat(varselbestilling.getFnr(), is(PERSON_IDENT));
 		assertThat(varselbestilling.getAktorId(), is(MOTTAKER));
 		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
 		assertThat(varselbestilling.getRevarslingIntervall(), nullValue());

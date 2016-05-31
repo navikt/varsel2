@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public class ConsumerManager {
+public class JmsConsumerManager {
 
 	// Number of errors needed to stop a consumer
 	public static final int DEFAULT_CONTEXT_SIZE = 20;
@@ -30,7 +30,7 @@ public class ConsumerManager {
 	private int contextTimeSeconds;
 	private int restartTimeSeconds;
 
-	public ConsumerManager() {
+	public JmsConsumerManager() {
 		contextSize = DEFAULT_CONTEXT_SIZE;
 		contextTimeSeconds = DEFAULT_CONTEXT_TIME_SECONDS;
 		restartTimeSeconds = DEFAULT_RESTART_TIME_SECONDS;

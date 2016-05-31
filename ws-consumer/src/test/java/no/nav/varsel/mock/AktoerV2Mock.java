@@ -28,6 +28,10 @@ import javax.jws.WebService;
 		portName = "Aktoer_v2Port"
 )
 public class AktoerV2Mock implements AktoerV2 {
+
+	public static final String PERSON_IDENT = "personIdentMocked";
+	public static final String AKTOER_ID = "aktoerIdMocked";
+
 	@Override
 	public HentIdentForAktoerIdResponse hentIdentForAktoerId(HentIdentForAktoerIdRequest hentIdentForAktoerIdRequest) throws HentIdentForAktoerIdPersonIkkeFunnet {
 		String aktoerId = hentIdentForAktoerIdRequest.getAktoerId();
@@ -37,14 +41,14 @@ public class AktoerV2Mock implements AktoerV2 {
 			throw new HentIdentForAktoerIdPersonIkkeFunnet("ikke funnet", new PersonIkkeFunnet());
 		}
 		HentIdentForAktoerIdResponse response = new HentIdentForAktoerIdResponse();
-		response.setIdent(aktoerId + "p");
+		response.setIdent(PERSON_IDENT);
 		return response;
 	}
 
 	@Override
 	public HentAktoerIdForIdentResponse hentAktoerIdForIdent(HentAktoerIdForIdentRequest hentAktoerIdForIdentRequest) throws HentAktoerIdForIdentPersonIkkeFunnet {
 		HentAktoerIdForIdentResponse response = new HentAktoerIdForIdentResponse();
-		response.setAktoerId(hentAktoerIdForIdentRequest.getIdent() + "a");
+		response.setAktoerId(AKTOER_ID);
 		return response;
 	}
 

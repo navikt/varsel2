@@ -33,7 +33,7 @@ public abstract class AbstractJmsConsumer<T> {
 	@Inject
 	private Jaxb2Marshaller marshaller;
 	@Inject
-	private ConsumerManager consumerManager;
+	private JmsConsumerManager jmsConsumerManager;
 
 	public AbstractJmsConsumer(JmsConsumer jmsConsumer, Class<T> inputType) {
 		this.jmsConsumer = jmsConsumer;
@@ -69,7 +69,7 @@ public abstract class AbstractJmsConsumer<T> {
 			LOG.warn(errorFor(message), e);
 		} catch (WebServiceException e) {
 			// Technical errors occurring on out stage of CXF
-			consumerManager.registerError(jmsConsumer);
+			jmsConsumerManager.registerError(jmsConsumer);
 			throw e;
 		} catch (Exception e) {
 			throw new RuntimeException(errorFor(message), e);

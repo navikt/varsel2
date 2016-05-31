@@ -33,7 +33,7 @@ public class XmlGregorianConverter {
 	}
 
 	public static LocalDateTime toLocalDateTime(XMLGregorianCalendar xmlGregorianCalendar) {
-		return  xmlGregorianCalendar== null ? null :
+		return xmlGregorianCalendar == null ? null :
 				xmlGregorianCalendar.toGregorianCalendar().toZonedDateTime().toLocalDateTime();
 	}
 }

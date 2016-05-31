@@ -61,12 +61,11 @@ public class JmsConfig {
 
 	@Bean
 	public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(DestinationResolver destinationResolver,
-																		  MessageConverter converter,
 																		  PlatformTransactionManager transactionManager) {
 		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 		factory.setConnectionFactory(mqConnectionFactory());
 		factory.setDestinationResolver(destinationResolver);
-		factory.setMessageConverter(new ConsumerMessageConverter(converter));
+		factory.setMessageConverter(new ConsumerMessageConverter(converter()));
 		factory.setSessionTransacted(true);
 		factory.setTransactionManager(transactionManager);
 		factory.setConcurrency("2-4");
@@ -110,7 +109,7 @@ public class JmsConfig {
 	}
 
 	/**
-	 * Only convert to message, not from Message, used for replies in jms
+	 * Only convert to Message, not from Message, used for replies in jms
 	 */
 	private static class ConsumerMessageConverter implements MessageConverter {
 		private final MessageConverter replyConverter;

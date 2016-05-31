@@ -1,7 +1,7 @@
 package no.nav.varsel.domain.exception;
 
 /**
- * Exception noting that the mssage should not fail and therefore not be placed on backout queue
+ * Exception noting that the message should not fail and therefore not be placed on backout queue
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
