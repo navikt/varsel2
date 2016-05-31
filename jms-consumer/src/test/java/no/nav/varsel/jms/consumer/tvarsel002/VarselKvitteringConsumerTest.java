@@ -53,13 +53,7 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 		JmsReply response = sendMessage(varselKvitteringQueue, varselKvittering);
 		assertThat(response.isOk(), is(true));
 
-		no.nav.varsel.domain.object.Varsel varsel = varselRepo.findByVarselId(varselId);
-		assertThat(varsel.getStatus(), is(StatusCode.FERDIGBEHANDLET));
-		assertThat(varsel.getDistribusjonTidspunkt(), is(DATE_UTSENDINGSSTIDSPUNKT));
-		assertThat(varsel.getKvitteringTidspunkt(), is(aboutNow()));
-		assertThat(varsel.getFeilbeskrivelse(), is(nullValue()));
-		assertThat(varsel.getChangeStamp().getEndretAv(), is(TVARSEL002));
-		assertThat(varsel.getChangeStamp().getEndretDato(), is(aboutNow()));
+		assertPlukketVarselScenario(varselId);
 	}
 
 	@Test
@@ -99,6 +93,7 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 
 		response = sendMessage(varselKvitteringQueue, varselKvittering);
 		assertMessageNotOnBq(response);
+		assertPlukketVarselScenario(varselId);
 	}
 
 	@Test
@@ -119,6 +114,16 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 		JAXBElement<VarselKvittering> varselKvittering = createVarselKvitteringJaxBElement(kvittering);
 		JmsReply response = sendMessage(varselKvitteringQueue, varselKvittering);
 		assertMessageNotOnBq(response);
+	}
+
+	private void assertPlukketVarselScenario(String varselId) {
+		no.nav.varsel.domain.object.Varsel varsel = varselRepo.findByVarselId(varselId);
+		assertThat(varsel.getStatus(), is(StatusCode.FERDIGBEHANDLET));
+		assertThat(varsel.getDistribusjonTidspunkt(), is(DATE_UTSENDINGSSTIDSPUNKT));
+		assertThat(varsel.getKvitteringTidspunkt(), is(aboutNow()));
+		assertThat(varsel.getFeilbeskrivelse(), is(nullValue()));
+		assertThat(varsel.getChangeStamp().getEndretAv(), is(TVARSEL002));
+		assertThat(varsel.getChangeStamp().getEndretDato(), is(aboutNow()));
 	}
 
 	private void assertMessageNotOnBq(JmsReply response) {
