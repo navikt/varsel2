@@ -12,12 +12,15 @@ import org.junit.Test;
 import java.util.Collection;
 
 /**
+ * Unit test for {@link VarslelKanalDecider}
+ *
  * @author Andreas Skomedal, Visma Consulting.
  */
 public class VarslelKanalDeciderTest {
 
-	public static final String EPOST = "epost@epost.no";
-	public static final String MOBIL = "12345678";
+	private static final String EPOST = "epost@epost.no";
+	private static final String MOBIL = "12345678";
+
 	private VarslelKanalDecider decider = new VarslelKanalDecider();
 
 	@Test
@@ -93,7 +96,7 @@ public class VarslelKanalDeciderTest {
 		assertThat(kanaler, containsInAnyOrder(KanalCode.DITTNAV));
 	}
 
-	public static KontaktregisterTo createKontaktTo(String epost, String mobil) {
+	private static KontaktregisterTo createKontaktTo(String epost, String mobil) {
 		return aKontaktregisterTo()
 				.epostadresse(epost)
 				.mobiltelefonnummer(mobil)

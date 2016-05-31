@@ -56,8 +56,8 @@ public class ServicemeldingService {
 
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestillServicemeldingTo.getVarslingstype());
 		KontaktregisterTo kontaktregisterTo = digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(bestillServicemeldingTo.getPersonIdent());
+		kontaktregisterTo = kontaktregisterTo == null ? new KontaktregisterTo() : kontaktregisterTo;
 
-		// Move to dki consumer?
 		Collection<KanalCode> kanaler = varslelKanalDecider.decideKanaler(kontaktregisterTo, varselInfoTo.getPreferertKanal());
 		kontaktregisterTo.setKanaler(kanaler);
 

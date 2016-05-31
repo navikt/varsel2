@@ -1,10 +1,10 @@
 package no.nav.varsel.wsconsumer.dkif.to;
 
 import no.nav.varsel.domain.code.KanalCode;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 /**
@@ -117,7 +117,7 @@ public class KontaktregisterTo implements Serializable {
 	}
 
 	private boolean isInvalid(LocalDateTime dateTime) {
-		return dateTime == null || DateTime.now().minusMonths(DATE_VALID_MONTHS).isAfter(dateTime.toDateTime());
+		return dateTime == null || LocalDate.now().minusMonths(DATE_VALID_MONTHS).isAfter(dateTime.toLocalDate());
 	}
 
 	public void cleanExpiredInfo() {

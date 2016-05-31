@@ -1,7 +1,5 @@
 package no.nav.varsel.config;
 
-import no.nav.varsel.jms.producer.config.JmsProducerConfig;
-import no.nav.varsel.repo.config.RepoConfig;
 import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.VarselFletter;
 import no.nav.varsel.service.VarslelKanalDecider;

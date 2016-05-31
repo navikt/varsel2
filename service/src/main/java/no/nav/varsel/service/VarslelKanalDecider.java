@@ -1,5 +1,7 @@
 package no.nav.varsel.service;
 
+import static no.nav.varsel.domain.code.KanalCode.DITTNAV;
+import static no.nav.varsel.domain.code.KanalCode.EPOST;
 import static no.nav.varsel.domain.code.KanalCode.SMS;
 
 import no.nav.varsel.domain.code.KanalCode;
@@ -22,14 +24,14 @@ public class VarslelKanalDecider {
 		Set<KanalCode> kanaler = new HashSet<>();
 		preferertKanal = preferertKanal == null ? SMS_EPOST : preferertKanal;
 
-		if (preferertKanal.equals(SMS_EPOST)) {
+		if (SMS_EPOST.equals(preferertKanal)) {
 			prefSmsEpost(kanaler, kontaktregisterTo);
-		} else if (preferertKanal.equals(KanalCode.EPOST.toString())) {
+		} else if (EPOST.toString().equals(preferertKanal)) {
 			tryEpost(kanaler, kontaktregisterTo);
 			if (kanaler.size() == 0) {
 				trySms(kanaler, kontaktregisterTo);
 			}
-		} else if (preferertKanal.equals(KanalCode.SMS.toString())) {
+		} else if (SMS.toString().equals(preferertKanal)) {
 			trySms(kanaler, kontaktregisterTo);
 			if (kanaler.size() == 0) {
 				tryEpost(kanaler, kontaktregisterTo);
@@ -37,7 +39,7 @@ public class VarslelKanalDecider {
 		}
 
 		if (kanaler.size() == 0) {
-			kanaler.add(KanalCode.DITTNAV);
+			kanaler.add(DITTNAV);
 		}
 		return kanaler;
 	}
@@ -49,7 +51,7 @@ public class VarslelKanalDecider {
 
 	private void tryEpost(Set<KanalCode> kanaler, KontaktregisterTo kontaktregisterTo) {
 		if (kontaktregisterTo.getEpostadresse() != null) {
-			kanaler.add(KanalCode.EPOST);
+			kanaler.add(EPOST);
 		}
 	}
 

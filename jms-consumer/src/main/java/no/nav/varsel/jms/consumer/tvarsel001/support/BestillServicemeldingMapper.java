@@ -1,5 +1,7 @@
 package no.nav.varsel.jms.consumer.tvarsel001.support;
 
+import static no.nav.varsel.domain.auxillary.XmlGregorianConverter.toLocalDateTime;
+
 import no.nav.melding.virksomhet.varsel.v1.varsel.Aktoer;
 import no.nav.melding.virksomhet.varsel.v1.varsel.AktoerId;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Parameter;
@@ -27,8 +29,7 @@ public class BestillServicemeldingMapper {
 		map(varsel.getMottaker(), to);
 		to.setVarslingstype(varsel.getVarslingstype() == null ? null :
 				varsel.getVarslingstype().getValue());
-		to.setUtloepstidspunkt(varsel.getUtloepstidspunkt() == null ? null :
-				varsel.getUtloepstidspunkt().toGregorianCalendar().toZonedDateTime().toLocalDateTime());
+		to.setUtloepstidspunkt(toLocalDateTime(varsel.getUtloepstidspunkt()));
 		to.setParameters(map(varsel.getParameterListe()));
 
 		return to;
