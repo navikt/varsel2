@@ -3,10 +3,9 @@ package no.nav.varsel.domain.utility;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.DATATYPE_FACTORY;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import no.nav.varsel.domain.utility.XmlGregorianConverter;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -26,14 +25,14 @@ public class XmlGregorianConverterTest {
 	@Test
 	public void shouldConvertToXmlGregorianCalendar() throws Exception {
 		XMLGregorianCalendar xmlGregorianCalendar = toXmlGregorianCalendar(TIME);
-		Assert.assertThat(xmlGregorianCalendar.toString(), Matchers.is(TIME_TEXT + ".000" +
+		assertThat(xmlGregorianCalendar.toString(), Matchers.is(TIME_TEXT + ".000" +
 				ZoneId.systemDefault().getRules().getOffset(TIME).toString()));
 	}
 
 	@Test
 	public void shouldConvertToLocalDateTime() throws Exception {
 		LocalDateTime localDateTime = toLocalDateTime(DATATYPE_FACTORY.newXMLGregorianCalendar(TIME_TEXT));
-		Assert.assertThat(localDateTime.toString(), Matchers.is(TIME_TEXT));
+		assertThat(localDateTime.toString(), Matchers.is(TIME_TEXT));
 	}
 
 }
