@@ -83,4 +83,75 @@ public class VarselutsendingTo {
 	public void setVarselTittel(String varselTittel) {
 		this.varselTittel = varselTittel;
 	}
+
+	public static final class VarselutsendingToBuilder {
+		private LocalDateTime utloepstidspunkt;
+		private String varslingstype;
+		private KanalCode kanal;
+		private AktoerTo mottaker;
+		private String varselId;
+		private String varselUrl;
+		private String varselTekst;
+		private String varselTittel;
+
+		private VarselutsendingToBuilder() {
+		}
+
+		public static VarselutsendingToBuilder aVarselutsendingTo() {
+			return new VarselutsendingToBuilder();
+		}
+
+		public VarselutsendingToBuilder utloepstidspunkt(LocalDateTime utloepstidspunkt) {
+			this.utloepstidspunkt = utloepstidspunkt;
+			return this;
+		}
+
+		public VarselutsendingToBuilder varslingstype(String varslingstype) {
+			this.varslingstype = varslingstype;
+			return this;
+		}
+
+		public VarselutsendingToBuilder kanal(KanalCode kanal) {
+			this.kanal = kanal;
+			return this;
+		}
+
+		public VarselutsendingToBuilder mottaker(AktoerTo mottaker) {
+			this.mottaker = mottaker;
+			return this;
+		}
+
+		public VarselutsendingToBuilder varselId(String varselId) {
+			this.varselId = varselId;
+			return this;
+		}
+
+		public VarselutsendingToBuilder varselUrl(String varselUrl) {
+			this.varselUrl = varselUrl;
+			return this;
+		}
+
+		public VarselutsendingToBuilder varselTekst(String varselTekst) {
+			this.varselTekst = varselTekst;
+			return this;
+		}
+
+		public VarselutsendingToBuilder varselTittel(String varselTittel) {
+			this.varselTittel = varselTittel;
+			return this;
+		}
+
+		public VarselutsendingTo build() {
+			VarselutsendingTo varselutsendingTo = new VarselutsendingTo();
+			varselutsendingTo.setUtloepstidspunkt(utloepstidspunkt);
+			varselutsendingTo.setVarslingstype(varslingstype);
+			varselutsendingTo.setKanal(kanal);
+			varselutsendingTo.setMottaker(mottaker);
+			varselutsendingTo.setVarselId(varselId);
+			varselutsendingTo.setVarselUrl(varselUrl);
+			varselutsendingTo.setVarselTekst(varselTekst);
+			varselutsendingTo.setVarselTittel(varselTittel);
+			return varselutsendingTo;
+		}
+	}
 }

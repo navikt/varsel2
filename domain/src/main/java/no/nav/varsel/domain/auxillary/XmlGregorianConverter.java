@@ -14,7 +14,7 @@ import java.util.GregorianCalendar;
  */
 public class XmlGregorianConverter {
 
-	public static final DatatypeFactory DATATYPE_FACTORY;
+	static final DatatypeFactory DATATYPE_FACTORY;
 
 	static {
 		try {
