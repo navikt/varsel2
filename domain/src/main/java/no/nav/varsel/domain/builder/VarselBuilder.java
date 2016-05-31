@@ -1,6 +1,6 @@
 package no.nav.varsel.domain.builder;
 
-import no.nav.varsel.domain.auxillary.Builder;
+import no.nav.varsel.domain.auxiliary.Builder;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;

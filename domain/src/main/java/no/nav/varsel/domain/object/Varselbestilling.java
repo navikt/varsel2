@@ -1,6 +1,6 @@
 package no.nav.varsel.domain.object;
 
-import no.nav.varsel.domain.auxillary.AbstractDomainObject;
+import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
@@ -13,7 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.MapKey;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;

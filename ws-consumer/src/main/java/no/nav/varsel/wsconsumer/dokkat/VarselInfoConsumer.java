@@ -13,7 +13,7 @@ import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
 public class VarselInfoConsumer {
 
 	public VarselInfoTo hentVarselInfo(String varseltype) {
-		if (varseltype.equals("feil")) {
+		if ("feil".equals(varseltype)) {
 			throw new RuntimeException("boo");
 		}
 		// TODO PK-31739

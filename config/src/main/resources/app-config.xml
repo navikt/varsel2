@@ -27,7 +27,7 @@
 			<queue alias="varselutsending" jndi="java:/jboss/varselutsending"/>
 		</queueManager>
 		<ldap alias="ldap" mapToProperty="ldap"/>
-		<webservice mapToProperty="aktoerid.ws" alias="Aktoer_v2"/>
+		<webservice mapToProperty="aktoerv2.ws" alias="Aktoer_v2"/>
 		<webservice mapToProperty="dkif.ws" alias="virksomhet:DigitalKontakinformasjon_v1"/>
 	</resources>
 

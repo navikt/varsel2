@@ -1,7 +1,7 @@
 package no.nav.varsel.jms.consumer;
 
-import no.nav.varsel.jms.config.JmsConsumerTestConfig;
-import no.nav.varsel.jms.config.JmsTestConfig;
+import no.nav.varsel.config.JmsConsumerTestConfig;
+import no.nav.varsel.config.JmsTestConfig;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.repo.VarselbestillingRepo;
@@ -34,7 +34,7 @@ import java.util.List;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = JmsConsumerTestConfig.class)
-@ActiveProfiles("local")
+@ActiveProfiles({"itest"})
 @DirtiesContext
 public abstract class AbstractConsumerJmsTest {
 

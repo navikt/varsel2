@@ -1,7 +1,5 @@
 package no.nav.varsel.domain.to;
 
-import no.nav.varsel.domain.to.MottakerType;
-
 /**
  * To for Aktoer
  *

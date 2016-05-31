@@ -1,5 +1,7 @@
 package no.nav.varsel.jms.producer.varselutsending.support;
 
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
+
 import no.nav.melding.virksomhet.varselutsending.v1.varselutsending.Aktoer;
 import no.nav.melding.virksomhet.varselutsending.v1.varselutsending.AktoerId;
 import no.nav.melding.virksomhet.varselutsending.v1.varselutsending.Kommunikasjonskanaler;
@@ -10,13 +12,6 @@ import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.domain.to.MottakerType;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.GregorianCalendar;
-
 /**
  * Mapper for Varselutsending
  *
@@ -24,19 +19,13 @@ import java.util.GregorianCalendar;
  */
 public class VarselutsendingMapper {
 
-	private DatatypeFactory datatypeFactory;
-
-	public VarselutsendingMapper() throws DatatypeConfigurationException {
-		this.datatypeFactory = DatatypeFactory.newInstance();
-	}
-
 	public Varselutsending map(VarselutsendingTo to) {
 		Varselutsending varselutsending = new Varselutsending();
 		Kommunikasjonskanaler kommunikasjonskanaler = new Kommunikasjonskanaler();
 		kommunikasjonskanaler.setValue(to.getKanal().toString());
 		varselutsending.setKanal(kommunikasjonskanaler);
 
-		varselutsending.setUtloepstidspunkt(convert(to.getUtloepstidspunkt()));
+		varselutsending.setUtloepstidspunkt(toXmlGregorianCalendar(to.getUtloepstidspunkt()));
 		Varslingstyper varslingstype = new Varslingstyper();
 		varslingstype.setValue(to.getVarslingstype());
 		varselutsending.setVarslingstype(varslingstype);
@@ -59,8 +48,4 @@ public class VarselutsendingMapper {
 		return personIdent;
 	}
 
-	private XMLGregorianCalendar convert(LocalDateTime localDateTime) {
-		GregorianCalendar calendar = GregorianCalendar.from(localDateTime.atZone(ZoneId.systemDefault()));
-		return datatypeFactory.newXMLGregorianCalendar(calendar);
-	}
 }
