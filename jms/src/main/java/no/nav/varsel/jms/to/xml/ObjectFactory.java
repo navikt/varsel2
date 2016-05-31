@@ -1,0 +1,27 @@
+package no.nav.varsel.jms.to.xml;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.annotation.XmlElementDecl;
+import javax.xml.bind.annotation.XmlRegistry;
+import javax.xml.namespace.QName;
+
+/**
+ * Object factory for {@link JmsReply}
+ *
+ * @author Andreas Skomedal, Visma Consulting.
+ */
+@XmlRegistry
+public class ObjectFactory {
+
+	final static QName _JmsReply_QNAME = new QName("http://nav.no/varsel/jms/reply", "JmsReply");
+
+	public JmsReply createJmsReply() {
+		return new JmsReply();
+	}
+
+	@XmlElementDecl(namespace = "http://nav.no/varsel/jms/reply", name = "JmsReply")
+	public JAXBElement<JmsReply> createJmsReply(JmsReply value) {
+		return new JAXBElement<>(_JmsReply_QNAME, JmsReply.class, value);
+	}
+
+}

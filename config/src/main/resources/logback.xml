@@ -53,4 +53,8 @@
 		<appender-ref ref="SYSLOG"/>
 	</logger>
 
+	<logger name="org.springframework.jms" level="DEBUG">
+		<appender-ref ref="debuglog"/>
+	</logger>
+
 </configuration>

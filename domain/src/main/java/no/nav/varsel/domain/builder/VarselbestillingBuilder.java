@@ -7,7 +7,9 @@ import no.nav.varsel.domain.object.Varselbestilling;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -21,7 +23,6 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 	private String varselbestillingId;
 	private String varslingstype;
 	private String preferertKanal;
-	private String bestillendeFagsystem;
 	private LocalDateTime utlopTidspunkt;
 	private String fnr;
 	private String aktorId;
@@ -30,6 +31,7 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 	private Integer antallRevarslinger;
 	private LocalDateTime nesteVarslingstidspunkt;
 	private Set<Varsel> varsels = new HashSet<>();
+	private Map<String, String> parameters = new HashMap<>();
 
 	private VarselbestillingBuilder() {
 	}
@@ -55,11 +57,6 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 
 	public VarselbestillingBuilder preferertKanal(String preferertKanal) {
 		this.preferertKanal = preferertKanal;
-		return this;
-	}
-
-	public VarselbestillingBuilder bestillendeFagsystem(String bestillendeFagsystem) {
-		this.bestillendeFagsystem = bestillendeFagsystem;
 		return this;
 	}
 
@@ -108,13 +105,22 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 		return this;
 	}
 
+	public VarselbestillingBuilder parameters(Map<String, String> parameters) {
+		this.parameters.putAll(parameters);
+		return this;
+	}
+
+	public VarselbestillingBuilder parameter(String key, String value) {
+		parameters.put(key, value);
+		return this;
+	}
+
 	public Varselbestilling build() {
 		Varselbestilling varselbestilling = new Varselbestilling();
 		varselbestilling.setId(id);
 		varselbestilling.setVarselbestillingId(varselbestillingId);
 		varselbestilling.setVarslingstype(varslingstype);
 		varselbestilling.setPreferertKanal(preferertKanal);
-		varselbestilling.setBestillendeFagsystem(bestillendeFagsystem);
 		varselbestilling.setUtlopTidspunkt(utlopTidspunkt);
 		varselbestilling.setFnr(fnr);
 		varselbestilling.setAktorId(aktorId);
@@ -123,6 +129,7 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 		varselbestilling.setAntallRevarslinger(antallRevarslinger);
 		varselbestilling.setNesteVarslingstidspunkt(nesteVarslingstidspunkt);
 		varsels.forEach(varselbestilling::addVarsel);
+		parameters.forEach(varselbestilling::addFletteParameter);
 		return varselbestilling;
 	}
 }

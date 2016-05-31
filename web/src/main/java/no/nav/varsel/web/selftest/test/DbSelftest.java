@@ -1,5 +1,6 @@
 package no.nav.varsel.web.selftest.test;
 
+import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.web.selftest.support.AbstractSelftest;
 
 import javax.inject.Inject;
@@ -10,9 +11,9 @@ import javax.inject.Inject;
  * @author Andreas Skomedal, Visma Consulting.
  */
 public class DbSelftest extends AbstractSelftest {
-//
-//	@Inject
-//	private DokumentCacheRepo dokumentCacheRepo;
+
+	@Inject
+	private VarselbestillingRepo varselbestillingRepo;
 
 	public DbSelftest() {
 		super("varselDS", "Varsel Oracle Database");
@@ -20,6 +21,6 @@ public class DbSelftest extends AbstractSelftest {
 
 	@Override
 	protected void doCheck() {
-		//TODO;
+		varselbestillingRepo.count();
 	}
 }

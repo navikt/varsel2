@@ -21,12 +21,14 @@ public final class VarselBuilder extends Builder<Varsel> {
 	private KanalCode kanal;
 	private LocalDateTime sendtTidspunkt;
 	private LocalDateTime distribusjonTidspunkt;
+	private LocalDateTime kvitteringTidspunkt;
 	private String kontaktInfo;
 	private StatusCode status;
 	private String feilbeskrivelse;
 	private String varselTittel;
 	private String varselTekst;
 	private String varselUrl;
+	private Boolean erRevarsel;
 
 	private VarselBuilder() {
 	}
@@ -65,6 +67,11 @@ public final class VarselBuilder extends Builder<Varsel> {
 		return this;
 	}
 
+	public VarselBuilder kvitteringTidspunkt(LocalDateTime kvitteringTidspunkt) {
+		this.kvitteringTidspunkt = kvitteringTidspunkt;
+		return this;
+	}
+
 	public VarselBuilder kontaktInfo(String kontaktInfo) {
 		this.kontaktInfo = kontaktInfo;
 		return this;
@@ -95,6 +102,11 @@ public final class VarselBuilder extends Builder<Varsel> {
 		return this;
 	}
 
+	public VarselBuilder erRevarsel(Boolean erRevarsel) {
+		this.erRevarsel = erRevarsel;
+		return this;
+	}
+
 	public Varsel build() {
 		Varsel varsel = new Varsel();
 		varsel.setId(id);
@@ -103,12 +115,14 @@ public final class VarselBuilder extends Builder<Varsel> {
 		varsel.setKanal(kanal);
 		varsel.setSendtTidspunkt(sendtTidspunkt);
 		varsel.setDistribusjonTidspunkt(distribusjonTidspunkt);
+		varsel.setKvitteringTidspunkt(kvitteringTidspunkt);
 		varsel.setKontaktInfo(kontaktInfo);
 		varsel.setStatus(status);
 		varsel.setFeilbeskrivelse(feilbeskrivelse);
 		varsel.setVarselTittel(varselTittel);
 		varsel.setVarselTekst(varselTekst);
 		varsel.setVarselUrl(varselUrl);
+		varsel.setErRevarsel(erRevarsel);
 		return varsel;
 	}
 }

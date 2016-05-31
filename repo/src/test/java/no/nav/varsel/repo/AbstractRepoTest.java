@@ -1,7 +1,7 @@
 package no.nav.varsel.repo;
 
 import no.nav.varsel.domain.Constants;
-import no.nav.varsel.repo.config.RepoTestConfig;
+import no.nav.varsel.config.RepoTestConfig;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -20,7 +20,7 @@ import javax.inject.Inject;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = RepoTestConfig.class)
-@ActiveProfiles("local")
+@ActiveProfiles({"itest"})
 public abstract class AbstractRepoTest {
 
 	@Inject
@@ -29,13 +29,13 @@ public abstract class AbstractRepoTest {
 	protected VarselRepo varselRepo;
 
 	@Before
-	public final void setUp() throws Exception {
+	public void setUpAbstract() throws Exception {
 		MDC.put(Constants.USER_ID, "itest");
 		varselbestillingRepo.deleteAll();
 	}
 
 	@After
-	public final void tearDown() throws Exception {
+	public void tearDownAbstract() throws Exception {
 		MDC.remove(Constants.USER_ID);
 		varselbestillingRepo.deleteAll();
 	}

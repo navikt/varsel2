@@ -21,7 +21,7 @@
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-provider</artifactId>
+			<artifactId>varsel-jms-consumer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -39,27 +39,9 @@
 			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
 
-		<!--spring-->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-tomcat</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
-
-		<!-- for local tomcat -->
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-core</artifactId>
-			<scope>provided</scope>
 		</dependency>
 
 		<!-- web -->
@@ -89,11 +71,6 @@
 			<groupId>no.nav.modig</groupId>
 			<artifactId>modig-security-core</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>no.nav.modig</groupId>
-			<artifactId>modig-testcertificates</artifactId>
-		</dependency>
-
 	</dependencies>
 
 

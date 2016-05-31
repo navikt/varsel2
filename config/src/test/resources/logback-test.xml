@@ -3,7 +3,7 @@
 
 	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>[%t, %d, %-5p, %C:%L] - [%X{brevOgArkivUserId}] - %.-1000m%n</pattern>
+			<pattern>[%t, %d, %-5p, %C:%L] - [%X{brevOgArkivUserId}] - %.-100000m%n</pattern>
 		</encoder>
 	</appender>
 
@@ -11,8 +11,14 @@
 		<!--<appender-ref ref="CONSOLE"/>-->
 	</root>
 
-	<logger name="no.nav.varsel" level="INFO"/>
+	<logger name="no.nav.varsel" level="DEBUG"/>
 	<logger name="org.springframework" level="INFO"/>
+	<logger name="org.apache.cxf" level="INFO"/>
+	<!--<logger name="org.apache.tomcat.jdbc" level="DEBUG"/>-->
+	<!--<logger name="com.atomikos" level="INFO"/>-->
+	<!--<logger name="com.atomikos.jdbc" level="DEBUG"/>-->
+	<!--<logger name="com.atomikos.datasource" level="DEBUG"/>-->
+	<!--<logger name="org.h2" level="TRACE"/>-->
 	<!--<logger name="org.hibernate" level="DEBUG"/>-->
 	<logger name="org.apache.catalina" level="INFO">
 		<!--<appender-ref ref="debuglog"/>-->

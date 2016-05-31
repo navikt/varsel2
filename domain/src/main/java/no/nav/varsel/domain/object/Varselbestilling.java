@@ -4,17 +4,24 @@ import no.nav.varsel.domain.auxillary.AbstractDomainObject;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapKey;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -45,9 +52,6 @@ public class Varselbestilling extends AbstractDomainObject {
 	@Column(name = "preferert_kanal")
 	private String preferertKanal;
 
-	@Column(name = "bestillende_fagsystem")
-	private String bestillendeFagsystem;
-
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
 	@Column(name = "utlop_tidspunkt", columnDefinition = "TIMESTAMP")
 	private LocalDateTime utlopTidspunkt;
@@ -59,7 +63,7 @@ public class Varselbestilling extends AbstractDomainObject {
 	private String aktorId;
 
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
-	@Column(name = "bestillings_tidspunkt", nullable = false, columnDefinition = "TIMESTAMP")
+	@Column(name = "bestilling_tidspunkt", nullable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime bestillingTidspunkt;
 
 	@Column(name = "revarsling_intervall")
@@ -74,6 +78,12 @@ public class Varselbestilling extends AbstractDomainObject {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "varselbestilling")
 	private Set<Varsel> varsels = new HashSet<>();
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "PARAMETER", joinColumns = @JoinColumn(name = "FK_VARSELBESTILLING_ID"))
+	@MapKeyColumn(name = "KEY")
+	@Column(name = "VALUE")
+	private Map<String, String> fletteparametere = new HashMap<>();
 
 	public Varselbestilling(Long id, Long versjon) {
 		this.id = id;
@@ -113,14 +123,6 @@ public class Varselbestilling extends AbstractDomainObject {
 
 	public void setPreferertKanal(String preferertKanal) {
 		this.preferertKanal = preferertKanal;
-	}
-
-	public String getBestillendeFagsystem() {
-		return bestillendeFagsystem;
-	}
-
-	public void setBestillendeFagsystem(String bestillendeFagsystem) {
-		this.bestillendeFagsystem = bestillendeFagsystem;
 	}
 
 	public LocalDateTime getUtlopTidspunkt() {
@@ -188,5 +190,13 @@ public class Varselbestilling extends AbstractDomainObject {
 			varsels.add(varsel);
 			varsel.setVarselbestilling(this);
 		}
+	}
+
+	public Map<String, String> getFletteParametere() {
+		return fletteparametere;
+	}
+
+	public void addFletteParameter(String key, String value) {
+		fletteparametere.put(key, value);
 	}
 }

@@ -10,23 +10,33 @@
 		<humanReadablePath>/varsel/internal/selftest</humanReadablePath>
 	</selftest>
 
+	<loadBalancer isAlive="/varsel/internal/isAlive"/>
+
 	<artifacts>
 		<ear groupId="no.nav.varsel" artifactId="varsel-jee"/>
 	</artifacts>
 
 	<resources>
-		<datasource alias="varselDS" jndi="java:/jboss/datasources/varselDS" type="ORACLE">
+		<datasource alias="varselDS" jndi="java:/jboss/datasources/varselDS" type="ORACLE" xaEnabled="true">
 			<pool maxPoolSize="50"/>
 		</datasource>
-		<queueManager alias="mqGateway01" jndi="java:/jboss/mqConnectionFactory" xaEnabled="false"
+		<queueManager alias="mqGateway01" jndi="java:/jboss/mqConnectionFactory" xaEnabled="true"
 					  unifiedConnectionFactory="true">
+			<queue alias="varsel_bestill_servicemelding" jndi="java:/jboss/bestillServicemelding"/>
+			<queue alias="varsel_varsel_kvittering" jndi="java:/jboss/varselKvittering"/>
+			<queue alias="varselutsending" jndi="java:/jboss/varselutsending"/>
 		</queueManager>
 		<ldap alias="ldap" mapToProperty="ldap"/>
+		<webservice mapToProperty="aktoerv2.ws" alias="Aktoer_v2"/>
+		<webservice mapToProperty="dkif.ws" alias="virksomhet:DigitalKontakinformasjon_v1"/>
 	</resources>
 
-	<security serviceUserResourceAlias="srvVarsel"/>
+	<exposed-services>
+		<exposedQueue name="varsel_bestill_servicemelding"/>
+		<exposedQueue name="varsel_varsel_kvittering"/>
+	</exposed-services>
 
-	<loadBalancer isAlive="/varsel/internal/isAlive"/>
+	<security serviceUserResourceAlias="srvVarsel"/>
 
 	<monitoring>
 		<metric path="/varsel/internal/metrics"/>
