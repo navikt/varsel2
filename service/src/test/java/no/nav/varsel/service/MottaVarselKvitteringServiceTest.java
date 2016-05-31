@@ -1,5 +1,6 @@
 package no.nav.varsel.service;
 
+import static no.nav.varsel.service.MottaVarselKvitteringService.MAX_LENGTH_FEILMELDING;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -100,7 +101,7 @@ public class MottaVarselKvitteringServiceTest {
 	public void shouldCropFeilmeldingWhenTooLong() throws Exception {
 		MottaVarselKvitteringTo to = MottaVarselKvitteringToTest.createTo();
 		to.setStatus(MottaVarselKvitteringStatusTo.FEILET);
-		to.setFeilmelding(StringUtils.repeat("a", 1001));
+		to.setFeilmelding(StringUtils.repeat("a", MAX_LENGTH_FEILMELDING + 1));
 
 		Varsel varsel = createVarsel(to.getVarselId());
 		when(varselRepo.findByVarselId(to.getVarselId())).thenReturn(varsel);
@@ -108,7 +109,7 @@ public class MottaVarselKvitteringServiceTest {
 		mottaVarselKvitteringService.behandleKvitteringsmelding(to);
 
 		assertThat(varsel.getStatus(), equalTo(StatusCode.FEILET));
-		assertThat(varsel.getFeilbeskrivelse().length(), equalTo(1000));
+		assertThat(varsel.getFeilbeskrivelse().length(), equalTo(MAX_LENGTH_FEILMELDING));
 		assertThat(varsel.getFeilbeskrivelse().endsWith("..."), is(true));
 
 	}
@@ -117,7 +118,7 @@ public class MottaVarselKvitteringServiceTest {
 	public void shouldOnlyCropFeilmeldingWhenTooLong() throws Exception {
 		MottaVarselKvitteringTo to = MottaVarselKvitteringToTest.createTo();
 		to.setStatus(MottaVarselKvitteringStatusTo.FEILET);
-		to.setFeilmelding(StringUtils.repeat("a", 1000));
+		to.setFeilmelding(StringUtils.repeat("a", MAX_LENGTH_FEILMELDING));
 
 		Varsel varsel = createVarsel(to.getVarselId());
 		when(varselRepo.findByVarselId(to.getVarselId())).thenReturn(varsel);
@@ -125,7 +126,7 @@ public class MottaVarselKvitteringServiceTest {
 		mottaVarselKvitteringService.behandleKvitteringsmelding(to);
 
 		assertThat(varsel.getStatus(), equalTo(StatusCode.FEILET));
-		assertThat(varsel.getFeilbeskrivelse().length(), equalTo(1000));
+		assertThat(varsel.getFeilbeskrivelse().length(), equalTo(MAX_LENGTH_FEILMELDING));
 		assertThat(varsel.getFeilbeskrivelse().endsWith("..."), is(false));
 	}
 

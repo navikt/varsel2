@@ -8,6 +8,8 @@ import no.nav.varsel.service.support.exception.VarselNotExistException;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringStatusTo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringTo;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
@@ -18,6 +20,9 @@ import java.time.LocalDateTime;
  * @author Roar Bjurstrom, Visma Consulting.
  */
 public class MottaVarselKvitteringService {
+
+	private static final Logger LOG = LoggerFactory.getLogger(MottaVarselKvitteringService.class);
+	static final int MAX_LENGTH_FEILMELDING = 1000;
 
 	@Inject
 	private VarselRepo varselRepo;
@@ -49,7 +54,13 @@ public class MottaVarselKvitteringService {
 			varsel.setDistribusjonTidspunkt(mottaVarselKvitteringTo.getUtsendingstidspunkt());
 		} else if (mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.FEILET) {
 			varsel.setStatus(StatusCode.FEILET);
-			varsel.setFeilbeskrivelse(StringUtils.abbreviate(mottaVarselKvitteringTo.getFeilmelding(), 1000));
+			varsel.setFeilbeskrivelse(StringUtils.abbreviate(mottaVarselKvitteringTo.getFeilmelding(),
+					MAX_LENGTH_FEILMELDING));
+			if (StringUtils.length(mottaVarselKvitteringTo.getFeilmelding()) > MAX_LENGTH_FEILMELDING) {
+				LOG.warn("Kvittering with varselId=" + mottaVarselKvitteringTo.getVarselId() + " , " +
+						"has Feilmelding with length longer than 1000. " +
+						"feilmelding=" + mottaVarselKvitteringTo.getFeilmelding());
+			}
 		}
 	}
 }
