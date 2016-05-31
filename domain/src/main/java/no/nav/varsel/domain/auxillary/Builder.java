@@ -13,7 +13,6 @@ import javax.persistence.EntityManager;
  * @author Thomas Eugen Bjørge, Visma Consulting
  */
 public abstract class Builder<T extends AbstractDomainObject> {
-	private ChangeStamp changeStamp;
 
 	protected abstract T build();
 

@@ -1,6 +1,6 @@
 package no.nav.varsel.jms.to.xml;
 
-import static no.nav.varsel.jms.to.xml.ObjectFactory._JmsReply_QNAME;
+import static no.nav.varsel.jms.to.xml.ObjectFactory.JMS_REPLY_QNAME;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -32,7 +32,7 @@ public class ObjectFactoryTest {
 	public void shouldCreateJmsReplyJaxbElement() throws Exception {
 		JAXBElement<JmsReply> replyJAXBElement = objectFactory.createJmsReply(this.jmsReply);
 		assertThat(replyJAXBElement.getValue(), is(jmsReply));
-		assertThat(replyJAXBElement.getName(), is(_JmsReply_QNAME));
+		assertThat(replyJAXBElement.getName(), is(JMS_REPLY_QNAME));
 
 		assertThat(jmsReply.getParams().get("key"), is("val"));
 	}
@@ -43,7 +43,7 @@ public class ObjectFactoryTest {
 		XmlElementDecl xmlElementDecl = ObjectFactory.class.getMethod("createJmsReply", JmsReply.class)
 				.getAnnotation(XmlElementDecl.class);
 		assertThat(xmlElementDecl, notNullValue());
-		assertThat(xmlElementDecl.name(), is(_JmsReply_QNAME.getLocalPart()));
-		assertThat(xmlElementDecl.namespace(), is(_JmsReply_QNAME.getNamespaceURI()));
+		assertThat(xmlElementDecl.name(), is(JMS_REPLY_QNAME.getLocalPart()));
+		assertThat(xmlElementDecl.namespace(), is(JMS_REPLY_QNAME.getNamespaceURI()));
 	}
 }

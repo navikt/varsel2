@@ -28,17 +28,17 @@ public class VarslelKanalDecider {
 			prefSmsEpost(kanaler, kontaktregisterTo);
 		} else if (EPOST.toString().equals(preferertKanal)) {
 			tryEpost(kanaler, kontaktregisterTo);
-			if (kanaler.size() == 0) {
+			if (kanaler.isEmpty()) {
 				trySms(kanaler, kontaktregisterTo);
 			}
 		} else if (SMS.toString().equals(preferertKanal)) {
 			trySms(kanaler, kontaktregisterTo);
-			if (kanaler.size() == 0) {
+			if (kanaler.isEmpty()) {
 				tryEpost(kanaler, kontaktregisterTo);
 			}
 		}
 
-		if (kanaler.size() == 0) {
+		if (kanaler.isEmpty()) {
 			kanaler.add(DITTNAV);
 		}
 		return kanaler;
