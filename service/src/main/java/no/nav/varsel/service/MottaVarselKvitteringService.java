@@ -4,7 +4,7 @@ import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.service.support.exception.InvalidVarselStatusException;
-import no.nav.varsel.service.support.exception.NoVarselVarselException;
+import no.nav.varsel.service.support.exception.VarselNotExistException;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringStatusTo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringTo;
 
@@ -30,7 +30,7 @@ public class MottaVarselKvitteringService {
 	private Varsel findVarsel(MottaVarselKvitteringTo mottaVarselKvitteringTo) {
 		Varsel varsel = varselRepo.findByVarselId(mottaVarselKvitteringTo.getVarselId());
 		if (varsel == null) {
-			throw new NoVarselVarselException(mottaVarselKvitteringTo.getVarselId());
+			throw new VarselNotExistException(mottaVarselKvitteringTo.getVarselId());
 		}
 		return varsel;
 	}

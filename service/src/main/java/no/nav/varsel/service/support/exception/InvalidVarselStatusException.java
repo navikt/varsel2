@@ -10,6 +10,7 @@ import no.nav.varsel.domain.object.Varsel;
 public class InvalidVarselStatusException extends FunctionalException {
 
 	public InvalidVarselStatusException(Varsel varsel) {
-		super("Varsel with varselId=" + varsel.getVarselId() + " has invalid statusCode=" + varsel.getStatus());
+		super("Varsel with varselId=" + (varsel != null ? varsel.getVarselId() : null) +
+				" has invalid statusCode=" + (varsel != null ? varsel.getStatus() : null));
 	}
 }
