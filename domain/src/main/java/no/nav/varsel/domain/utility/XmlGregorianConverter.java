@@ -1,4 +1,4 @@
-package no.nav.varsel.domain.auxillary;
+package no.nav.varsel.domain.utility;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;

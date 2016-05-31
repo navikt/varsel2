@@ -1,6 +1,6 @@
 package no.nav.varsel.jms.producer.varselutsending.support;
 
-import static no.nav.varsel.domain.auxillary.XmlGregorianConverter.toXmlGregorianCalendar;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo.VarselutsendingToBuilder.aVarselutsendingTo;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;

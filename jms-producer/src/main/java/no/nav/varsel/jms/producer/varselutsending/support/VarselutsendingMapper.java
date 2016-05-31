@@ -1,6 +1,6 @@
 package no.nav.varsel.jms.producer.varselutsending.support;
 
-import static no.nav.varsel.domain.auxillary.XmlGregorianConverter.toXmlGregorianCalendar;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 
 import no.nav.melding.virksomhet.varselutsending.v1.varselutsending.Aktoer;
 import no.nav.melding.virksomhet.varselutsending.v1.varselutsending.AktoerId;
