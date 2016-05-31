@@ -9,17 +9,23 @@ import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.VARSEL_KVITTE
  * @author Andreas Skomedal, Visma Consulting.
  */
 public enum JmsConsumer {
-	BESTILL_SERVICEMELDING(BESTILL_SERVICEMELDING_NAME),
-	VARSEL_KVITTERING(VARSEL_KVITTERING_NAME);
+	BESTILL_SERVICEMELDING(BESTILL_SERVICEMELDING_NAME, "tvarsel001"),
+	VARSEL_KVITTERING(VARSEL_KVITTERING_NAME, "tvarsel002");
 
 	private final String consumerName;
+	private final String serviceName;
 
-	JmsConsumer(String name) {
-		consumerName = name;
+	JmsConsumer(String name, String serviceName) {
+		this.consumerName = name;
+		this.serviceName = serviceName;
 	}
 
 	public String getConsumerName() {
 		return consumerName;
+	}
+
+	public String getServiceName() {
+		return serviceName;
 	}
 
 	public static class ConsumerNames {

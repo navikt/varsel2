@@ -28,7 +28,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class AktoerConsumerTest {
 
 	private static final String PERSON_ID = "id";
-	private static final String AKTOER_ID = "aktoerID";
+	private static final String AKTOER_ID = "aktoerId";
 
 	@Mock
 	private AktoerV2 aktoerV2Mock;

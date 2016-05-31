@@ -1,6 +1,7 @@
 package no.nav.varsel.jms.consumer.tvarsel002;
 
 import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.VARSEL_KVITTERING_NAME;
+import static no.nav.varsel.jms.consumer.JmsConsumer.VARSEL_KVITTERING;
 
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
@@ -23,10 +24,9 @@ public class VarselKvitteringConsumer extends AbstractJmsConsumer<VarselKvitteri
 	private static final Logger LOGG = LoggerFactory.getLogger(VarselKvitteringConsumer.class);
 
 	private static final String VARSEL_KVITTERING_QUEUE = "varselKvitteringQueue";
-	private static final String TVARSEL002 = "tvarsel002";
 
 	public VarselKvitteringConsumer() {
-		super(TVARSEL002, VarselKvittering.class);
+		super(VARSEL_KVITTERING, VarselKvittering.class);
 	}
 
 	@Override

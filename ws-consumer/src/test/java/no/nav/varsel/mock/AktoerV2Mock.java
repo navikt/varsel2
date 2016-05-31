@@ -1,8 +1,12 @@
 package no.nav.varsel.mock;
 
+import static no.nav.varsel.repo.TestdataUtil.FUNKSJONELL_FEIL;
+import static no.nav.varsel.repo.TestdataUtil.TEKNISK_FEIL;
+
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentIdentForAktoerIdPersonIkkeFunnet;
+import no.nav.tjeneste.virksomhet.aktoer.v2.feil.PersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentAktoerIdForIdentListeRequest;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentAktoerIdForIdentListeResponse;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentAktoerIdForIdentRequest;
@@ -26,8 +30,14 @@ import javax.jws.WebService;
 public class AktoerV2Mock implements AktoerV2 {
 	@Override
 	public HentIdentForAktoerIdResponse hentIdentForAktoerId(HentIdentForAktoerIdRequest hentIdentForAktoerIdRequest) throws HentIdentForAktoerIdPersonIkkeFunnet {
+		String aktoerId = hentIdentForAktoerIdRequest.getAktoerId();
+		if (TEKNISK_FEIL.equals(aktoerId)) {
+			throw new RuntimeException("feil i aktoer");
+		} else if (FUNKSJONELL_FEIL.equals(aktoerId)) {
+			throw new HentIdentForAktoerIdPersonIkkeFunnet("ikke funnet", new PersonIkkeFunnet());
+		}
 		HentIdentForAktoerIdResponse response = new HentIdentForAktoerIdResponse();
-		response.setIdent(hentIdentForAktoerIdRequest.getAktoerId() + "p");
+		response.setIdent(aktoerId + "p");
 		return response;
 	}
 

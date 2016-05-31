@@ -66,6 +66,15 @@
 			<artifactId>modig-security-ws</artifactId>
 			<version>${modig-security.version}</version>
 		</dependency>
+
+		<!--test-->
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>varsel-repo</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

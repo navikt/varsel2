@@ -1,7 +1,7 @@
 package no.nav.varsel.jms.consumer;
 
 import no.nav.varsel.domain.Constants;
-import no.nav.varsel.exception.NoJmsBackoutException;
+import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +17,7 @@ import javax.jms.TextMessage;
 import javax.xml.bind.JAXBElement;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.ws.WebServiceException;
 import java.io.StringReader;
 
 /**
@@ -27,13 +28,15 @@ import java.io.StringReader;
 public abstract class AbstractJmsConsumer<T> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractJmsConsumer.class);
-	private final String serviceName;
+	private final JmsConsumer jmsConsumer;
 	private final Class<T> inputType;
 	@Inject
 	private Jaxb2Marshaller marshaller;
+	@Inject
+	private ConsumerManager consumerManager;
 
-	public AbstractJmsConsumer(String serviceName, Class<T> inputType) {
-		this.serviceName = serviceName;
+	public AbstractJmsConsumer(JmsConsumer jmsConsumer, Class<T> inputType) {
+		this.jmsConsumer = jmsConsumer;
 		this.inputType = inputType;
 	}
 
@@ -52,7 +55,7 @@ public abstract class AbstractJmsConsumer<T> {
 	public abstract JmsReply listen(TextMessage message);
 
 	protected JmsReply doListen(TextMessage message) {
-		MDC.put(Constants.USER_ID, serviceName);
+		MDC.put(Constants.USER_ID, jmsConsumer.getServiceName());
 		unmarshalAndHandle(message);
 		return reply(message);
 	}
@@ -64,6 +67,10 @@ public abstract class AbstractJmsConsumer<T> {
 			handleMessage(unmarshalledObject);
 		} catch (NoJmsBackoutException e) {
 			LOG.warn(errorFor(message), e);
+		} catch (WebServiceException e) {
+			// Technical errors occurring on out stage of CXF
+			consumerManager.registerError(jmsConsumer);
+			throw e;
 		} catch (Exception e) {
 			throw new RuntimeException(errorFor(message), e);
 		}
@@ -72,7 +79,7 @@ public abstract class AbstractJmsConsumer<T> {
 
 	private String errorFor(TextMessage message) {
 		return String.format("Error in service=%s during processing of message: %s",
-				serviceName, messageToString(message));
+				jmsConsumer.getServiceName(), messageToString(message));
 	}
 
 	@SuppressWarnings("unchecked")

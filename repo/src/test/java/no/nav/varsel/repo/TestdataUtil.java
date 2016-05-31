@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
  */
 public class TestdataUtil {
 
+	public static final String TEKNISK_FEIL = "tekniskfeil";
+	public static final String FUNKSJONELL_FEIL = "funksjonellfeil";
+
 	public static final String VARSELBESTILLING_ID = "d9f8f75e-13cb-4766-81c8-306d9d9385b2";
 	public static final String VARSLINGSTYPE = "UT";
 	public static final String PREFERERT_KANAL = "SMS";

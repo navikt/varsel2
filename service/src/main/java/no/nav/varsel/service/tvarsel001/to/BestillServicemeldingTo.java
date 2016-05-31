@@ -4,7 +4,7 @@ import static no.nav.varsel.service.support.ValueValidator.hasText;
 
 import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.domain.to.MottakerType;
-import no.nav.varsel.exception.NoJmsBackoutException;
+import no.nav.varsel.domain.exception.NoJmsBackoutException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

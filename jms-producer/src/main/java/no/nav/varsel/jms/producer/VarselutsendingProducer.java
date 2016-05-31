@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import javax.jms.Queue;
 
 /**
- * Varselutsending Stub
+ * Varselutsending JMS Producer
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
@@ -27,7 +27,7 @@ public class VarselutsendingProducer {
 	private ObjectFactory objectFactory = new ObjectFactory();
 
 	public void produce(VarselutsendingTo varselutsendingTo) {
-		// TODO replace
+		// TODO replace with better mocking
 		if ("feilMqUt".equals(varselutsendingTo.getVarslingstype())) {
 			throw new RuntimeException("mq ut feil");
 		}
