@@ -21,4 +21,8 @@ public class VarselRepoTest extends AbstractRepoTest {
 		assertThat(varselRepo.findByVarselId(VARSEL_ID), notNullValue());
 	}
 
+	@Test
+	public void shouldPing() throws Exception {
+		varselRepo.ping();
+	}
 }

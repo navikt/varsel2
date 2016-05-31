@@ -64,7 +64,7 @@ public class ServicemeldingDomainMapper {
 		String kontaktInfo =
 				kanalCode == KanalCode.SMS ? kontaktregisterTo.getMobiltelefonnummer() :
 						kanalCode == KanalCode.EPOST ? kontaktregisterTo.getEpostadresse() :
-								"DITTNAV";
+								null;
 
 		return aVarsel()
 				.varselId(UUID.randomUUID().toString())

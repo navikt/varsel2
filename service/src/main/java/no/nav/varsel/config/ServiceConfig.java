@@ -1,5 +1,6 @@
 package no.nav.varsel.config;
 
+import no.nav.varsel.service.MottaVarselKvitteringService;
 import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.VarselFletter;
 import no.nav.varsel.service.VarslelKanalDecider;
@@ -43,4 +44,8 @@ public class ServiceConfig {
 		return new VarselutsendingToMapper();
 	}
 
+	@Bean
+	public MottaVarselKvitteringService mottaVarselKvitteringService() {
+	 	return new MottaVarselKvitteringService();
+	}
 }

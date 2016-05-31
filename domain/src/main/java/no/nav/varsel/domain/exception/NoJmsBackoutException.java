@@ -1,7 +1,7 @@
-package no.nav.varsel.exception;
+package no.nav.varsel.domain.exception;
 
 /**
- * Exception noting that the mssage should not fail and be placed on backout queue
+ * Exception noting that the message should not fail and therefore not be placed on backout queue
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
@@ -13,5 +13,9 @@ public class NoJmsBackoutException extends RuntimeException {
 
 	public NoJmsBackoutException(String message, Throwable cause) {
 		super(message, cause);
+	}
+
+	public NoJmsBackoutException(Throwable cause) {
+		super(cause);
 	}
 }

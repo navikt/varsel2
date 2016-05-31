@@ -8,6 +8,9 @@ import org.springframework.transaction.annotation.TransactionManagementConfigure
 import org.springframework.transaction.jta.JtaTransactionManager;
 
 /**
+ * Spring config for TransactionManager.
+ * For test and local, the transaction manager is created by autoconfig by spring boot as atomikos is on the classpath.
+ *
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Profile("remote")

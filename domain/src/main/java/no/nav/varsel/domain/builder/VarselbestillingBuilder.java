@@ -1,6 +1,6 @@
 package no.nav.varsel.domain.builder;
 
-import no.nav.varsel.domain.auxillary.Builder;
+import no.nav.varsel.domain.auxiliary.Builder;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 

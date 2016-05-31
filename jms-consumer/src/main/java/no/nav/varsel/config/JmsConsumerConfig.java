@@ -1,9 +1,10 @@
 package no.nav.varsel.config;
 
-import no.nav.varsel.jms.consumer.ConsumerManager;
+import no.nav.varsel.jms.consumer.JmsConsumerManager;
 import no.nav.varsel.jms.consumer.tvarsel001.BestillServicemeldingConsumer;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapper;
 import no.nav.varsel.jms.consumer.tvarsel002.VarselKvitteringConsumer;
+import no.nav.varsel.jms.consumer.tvarsel002.support.MottaVarselKvitteringMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -18,13 +19,18 @@ import org.springframework.context.annotation.Import;
 public class JmsConsumerConfig {
 
 	@Bean
-	public ConsumerManager queueManager() {
-		return new ConsumerManager();
+	public JmsConsumerManager jmsConsumerManager() {
+		return new JmsConsumerManager();
 	}
 
 	@Bean
 	public BestillServicemeldingMapper bestillServicemeldingMapper() {
 		return new BestillServicemeldingMapper();
+	}
+
+	@Bean
+	public MottaVarselKvitteringMapper mottaVarselKvitteringMapper() {
+		return new MottaVarselKvitteringMapper();
 	}
 
 }

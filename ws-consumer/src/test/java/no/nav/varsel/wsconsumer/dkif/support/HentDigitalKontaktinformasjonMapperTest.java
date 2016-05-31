@@ -1,7 +1,7 @@
 package no.nav.varsel.wsconsumer.dkif.support;
 
-import static no.nav.varsel.domain.auxillary.XmlGregorianConverter.toLocalDateTime;
-import static no.nav.varsel.domain.auxillary.XmlGregorianConverter.toXmlGregorianCalendar;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;

@@ -1,6 +1,6 @@
 package no.nav.varsel.domain.object;
 
-import no.nav.varsel.domain.auxillary.AbstractDomainObject;
+import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
@@ -79,7 +79,7 @@ public class Varselbestilling extends AbstractDomainObject {
 	private Set<Varsel> varsels = new HashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "PARAMETER", joinColumns = @JoinColumn(name = "FK_VARSELBESTILLING_ID"))
+	@CollectionTable(name = "FLETTE_PARAMETER", joinColumns = @JoinColumn(name = "FK_VARSELBESTILLING_ID"))
 	@MapKeyColumn(name = "KEY")
 	@Column(name = "VALUE")
 	private Map<String, String> fletteparametere = new HashMap<>();

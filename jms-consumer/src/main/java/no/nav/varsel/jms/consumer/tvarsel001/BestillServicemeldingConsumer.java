@@ -1,6 +1,7 @@
 package no.nav.varsel.jms.consumer.tvarsel001;
 
 
+import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING;
 import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_SERVICEMELDING_NAME;
 
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
@@ -28,7 +29,6 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 	private static final Logger LOGG = LoggerFactory.getLogger(BestillServicemeldingConsumer.class);
 
 	private static final String BESTILL_SERVICEMELDING_QUEUE = "bestillServicemeldingQueue";
-	private static final String TVARSEL_001 = "tvarsel001";
 
 	@Inject
 	private BestillServicemeldingMapper bestillServicemeldingMapper;
@@ -36,7 +36,7 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 	private ServicemeldingService servicemeldingService;
 
 	public BestillServicemeldingConsumer() {
-		super(TVARSEL_001, Varsel.class);
+		super(BESTILL_SERVICEMELDING, Varsel.class);
 	}
 
 	@Override

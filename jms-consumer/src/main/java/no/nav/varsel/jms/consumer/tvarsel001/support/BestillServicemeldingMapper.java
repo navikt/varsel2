@@ -1,6 +1,6 @@
 package no.nav.varsel.jms.consumer.tvarsel001.support;
 
-import static no.nav.varsel.domain.auxillary.XmlGregorianConverter.toLocalDateTime;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
 
 import no.nav.melding.virksomhet.varsel.v1.varsel.Aktoer;
 import no.nav.melding.virksomhet.varsel.v1.varsel.AktoerId;

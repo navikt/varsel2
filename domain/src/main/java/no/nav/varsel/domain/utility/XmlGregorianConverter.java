@@ -1,4 +1,4 @@
-package no.nav.varsel.domain.auxillary;
+package no.nav.varsel.domain.utility;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -33,7 +33,7 @@ public class XmlGregorianConverter {
 	}
 
 	public static LocalDateTime toLocalDateTime(XMLGregorianCalendar xmlGregorianCalendar) {
-		return  xmlGregorianCalendar== null ? null :
+		return xmlGregorianCalendar == null ? null :
 				xmlGregorianCalendar.toGregorianCalendar().toZonedDateTime().toLocalDateTime();
 	}
 }

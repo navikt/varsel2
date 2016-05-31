@@ -60,7 +60,7 @@ public class JmsTestConfig {
 	private static ActiveMQConnectionFactory mqConnectionFactory() {
 		ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(VM_LOCALHOST + "?create=false");
 		RedeliveryPolicy redeliveryPolicy = new RedeliveryPolicy();
-		redeliveryPolicy.setMaximumRedeliveries(1);
+		redeliveryPolicy.setMaximumRedeliveries(0);
 		factory.setRedeliveryPolicy(redeliveryPolicy);
 		return factory;
 	}

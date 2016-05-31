@@ -2,6 +2,8 @@ package no.nav.varsel.service;
 
 import static javax.transaction.Transactional.TxType.MANDATORY;
 
+import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
+import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentIdentForAktoerIdPersonIkkeFunnet;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.to.AktoerTo;
@@ -12,6 +14,7 @@ import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.tvarsel001.support.ServicemeldingDomainMapper;
 import no.nav.varsel.service.tvarsel001.to.BestillServicemeldingTo;
 import no.nav.varsel.wsconsumer.aktoer.AktoerConsumer;
+import no.nav.varsel.wsconsumer.aktoer.support.AktoerIkkeFunnetException;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
@@ -48,10 +51,14 @@ public class ServicemeldingService {
 	@Inject
 	private VarselbestillingRepo varselbestillingRepo;
 
-	@Transactional(MANDATORY)
 	public void bestillServicemelding(BestillServicemeldingTo bestillServicemeldingTo) {
 		AktoerTo origAktoer = bestillServicemeldingTo.craeteAktoerTo();
-		AktoerTo fetchedAktoer = aktoerConsumer.hentIdent(origAktoer);
+		AktoerTo fetchedAktoer;
+		try {
+			fetchedAktoer = aktoerConsumer.hentIdent(origAktoer);
+		} catch (HentIdentForAktoerIdPersonIkkeFunnet | HentAktoerIdForIdentPersonIkkeFunnet e) {
+			throw new AktoerIkkeFunnetException("Kunne ikke hente manglende ident", e);
+		}
 		bestillServicemeldingTo.setMottaker(fetchedAktoer);
 
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestillServicemeldingTo.getVarslingstype());

@@ -1,6 +1,6 @@
 package no.nav.varsel.wsconsumer.dkif.support;
 
-import static no.nav.varsel.domain.auxillary.XmlGregorianConverter.toLocalDateTime;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
 import static no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo.KontaktregisterToBuilder.aKontaktregisterTo;
 
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.Kontaktinformasjon;
