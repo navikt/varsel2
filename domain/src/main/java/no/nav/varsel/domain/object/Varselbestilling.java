@@ -1,6 +1,6 @@
 package no.nav.varsel.domain.object;
 
-import no.nav.varsel.domain.auxillary.AbstractDomainObject;
+import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;

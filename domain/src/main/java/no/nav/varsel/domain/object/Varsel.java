@@ -1,6 +1,6 @@
 package no.nav.varsel.domain.object;
 
-import no.nav.varsel.domain.auxillary.AbstractDomainObject;
+import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
 import org.hibernate.annotations.Type;

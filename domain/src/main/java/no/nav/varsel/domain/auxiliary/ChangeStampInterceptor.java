@@ -1,4 +1,4 @@
-package no.nav.varsel.domain.auxillary;
+package no.nav.varsel.domain.auxiliary;
 
 import no.nav.varsel.domain.Constants;
 import org.hibernate.EmptyInterceptor;
