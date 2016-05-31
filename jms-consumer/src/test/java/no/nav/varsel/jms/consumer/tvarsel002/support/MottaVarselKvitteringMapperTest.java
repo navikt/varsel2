@@ -1,5 +1,6 @@
 package no.nav.varsel.jms.consumer.tvarsel002.support;
 
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -11,8 +12,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -23,26 +22,16 @@ import java.util.UUID;
  */
 public class MottaVarselKvitteringMapperTest {
 
-	private static final String UTSENDINGSSTIDSPUNKT = "2016-04-24T15:22:45";
-	public  static final LocalDateTime DATE_UTSENDINGSSTIDSPUNKT = LocalDateTime.parse(UTSENDINGSSTIDSPUNKT);
+	public static final LocalDateTime DATE_UTSENDINGSSTIDSPUNKT = LocalDateTime.parse("2016-04-24T15:22:45");
 	public static final String VARSEL_ID = UUID.randomUUID().toString();
 	public static final String MOTTAKERINFORMASJON = "0000000000";
 	public static final String STATUS = "plukket";
 	public static final String FEILMELDING = "feilmelding";
-	private static DatatypeFactory datatypeFactory;
 
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
 
 	private MottaVarselKvitteringMapper mapper = new MottaVarselKvitteringMapper();
-
-	static {
-		try {
-			datatypeFactory = DatatypeFactory.newInstance();
-		} catch (DatatypeConfigurationException e) {
-			throw new RuntimeException(e);
-		}
-	}
 
 	@Test
 	public void shouldMap() throws Exception {
@@ -99,7 +88,7 @@ public class MottaVarselKvitteringMapperTest {
 		VarselKvittering kvittering = new VarselKvittering();
 		kvittering.setVarselId(VARSEL_ID);
 		kvittering.setMottakerinformasjon(MOTTAKERINFORMASJON);
-		kvittering.setUtsendingstidspunkt(datatypeFactory.newXMLGregorianCalendar(UTSENDINGSSTIDSPUNKT));
+		kvittering.setUtsendingstidspunkt(toXmlGregorianCalendar(DATE_UTSENDINGSSTIDSPUNKT));
 		kvittering.setStatus(STATUS);
 		kvittering.setFeilmelding(FEILMELDING);
 		return kvittering;

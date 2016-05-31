@@ -1,8 +1,14 @@
 package no.nav.varsel.jms.consumer.tvarsel002.support;
 
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
+
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
+import no.nav.varsel.domain.utility.XmlGregorianConverter;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringStatusTo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringTo;
+import org.springframework.util.Assert;
+
+import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * Mapper for {@link no.nav.varsel.jms.consumer.tvarsel002.VarselKvitteringConsumer}
@@ -22,8 +28,7 @@ public class MottaVarselKvitteringMapper {
 		MottaVarselKvitteringTo to = new MottaVarselKvitteringTo();
 		to.setVarselId(varselKvittering.getVarselId());
 		to.setMottakerInformasjon(varselKvittering.getMottakerinformasjon());
-		to.setUtsendingstidspunkt(varselKvittering.getUtsendingstidspunkt() == null ? null :
-				varselKvittering.getUtsendingstidspunkt().toGregorianCalendar().toZonedDateTime().toLocalDateTime());
+		to.setUtsendingstidspunkt(toLocalDateTime(varselKvittering.getUtsendingstidspunkt()));
 		to.setStatus(varselKvittering.getStatus() == null ? null :
 				MottaVarselKvitteringStatusTo.valueOf(varselKvittering.getStatus().toUpperCase()));
 		to.setFeilmelding(varselKvittering.getFeilmelding());

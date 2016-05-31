@@ -11,9 +11,10 @@ import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.service.support.exception.InvalidVarselStatusException;
 import no.nav.varsel.service.support.exception.VarselNotExistException;
+import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringStatusTo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringTo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringToTest;
-import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringStatusTo;
+import org.apache.commons.lang.StringUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -93,6 +94,39 @@ public class MottaVarselKvitteringServiceTest {
 		assertThat(varsel.getStatus(), equalTo(StatusCode.FEILET));
 		assertThat(varsel.getFeilbeskrivelse(), equalTo(to.getFeilmelding()));
 		assertThat(varsel.getKvitteringTidspunkt(), aboutNow());
+	}
+
+	@Test
+	public void shouldCropFeilmeldingWhenTooLong() throws Exception {
+		MottaVarselKvitteringTo to = MottaVarselKvitteringToTest.createTo();
+		to.setStatus(MottaVarselKvitteringStatusTo.FEILET);
+		to.setFeilmelding(StringUtils.repeat("a", 1001));
+
+		Varsel varsel = createVarsel(to.getVarselId());
+		when(varselRepo.findByVarselId(to.getVarselId())).thenReturn(varsel);
+
+		mottaVarselKvitteringService.behandleKvitteringsmelding(to);
+
+		assertThat(varsel.getStatus(), equalTo(StatusCode.FEILET));
+		assertThat(varsel.getFeilbeskrivelse().length(), equalTo(1000));
+		assertThat(varsel.getFeilbeskrivelse().endsWith("..."), is(true));
+
+	}
+
+	@Test
+	public void shouldOnlyCropFeilmeldingWhenTooLong() throws Exception {
+		MottaVarselKvitteringTo to = MottaVarselKvitteringToTest.createTo();
+		to.setStatus(MottaVarselKvitteringStatusTo.FEILET);
+		to.setFeilmelding(StringUtils.repeat("a", 1000));
+
+		Varsel varsel = createVarsel(to.getVarselId());
+		when(varselRepo.findByVarselId(to.getVarselId())).thenReturn(varsel);
+
+		mottaVarselKvitteringService.behandleKvitteringsmelding(to);
+
+		assertThat(varsel.getStatus(), equalTo(StatusCode.FEILET));
+		assertThat(varsel.getFeilbeskrivelse().length(), equalTo(1000));
+		assertThat(varsel.getFeilbeskrivelse().endsWith("..."), is(false));
 	}
 
 	private Varsel createVarsel(String varselId) {

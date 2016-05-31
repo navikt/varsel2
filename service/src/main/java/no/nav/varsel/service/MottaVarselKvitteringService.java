@@ -7,6 +7,7 @@ import no.nav.varsel.service.support.exception.InvalidVarselStatusException;
 import no.nav.varsel.service.support.exception.VarselNotExistException;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringStatusTo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringTo;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
@@ -48,7 +49,7 @@ public class MottaVarselKvitteringService {
 			varsel.setDistribusjonTidspunkt(mottaVarselKvitteringTo.getUtsendingstidspunkt());
 		} else if (mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.FEILET) {
 			varsel.setStatus(StatusCode.FEILET);
-			varsel.setFeilbeskrivelse(mottaVarselKvitteringTo.getFeilmelding());
+			varsel.setFeilbeskrivelse(StringUtils.abbreviate(mottaVarselKvitteringTo.getFeilmelding(), 1000));
 		}
 	}
 }

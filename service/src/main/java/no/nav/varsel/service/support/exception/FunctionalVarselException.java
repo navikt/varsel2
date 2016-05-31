@@ -5,13 +5,13 @@ package no.nav.varsel.service.support.exception;
  *
  * @author Roar Bjurstrom, Visma Consulting.
  */
-public abstract class FunctionalException extends RuntimeException {
+public abstract class FunctionalVarselException extends RuntimeException {
 
-	public FunctionalException(String message) {
+	public FunctionalVarselException(String message) {
 		super(message);
 	}
 
-	public FunctionalException(String message, Throwable cause) {
+	public FunctionalVarselException(String message, Throwable cause) {
 		super(message, cause);
 	}
 }

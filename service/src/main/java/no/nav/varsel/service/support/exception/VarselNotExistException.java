@@ -5,7 +5,7 @@ package no.nav.varsel.service.support.exception;
  *
  * @author Roar Bjurstrom, Visma Consulting.
  */
-public class VarselNotExistException extends FunctionalException {
+public class VarselNotExistException extends FunctionalVarselException {
 
 	public VarselNotExistException(String varselId) {
 		super("Varsel with varselId=" + varselId + " does not exist");

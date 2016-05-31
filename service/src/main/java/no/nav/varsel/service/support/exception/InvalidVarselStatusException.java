@@ -7,7 +7,7 @@ import no.nav.varsel.domain.object.Varsel;
  *
  * @author Roar Bjurstrom, Visma Consulting.
  */
-public class InvalidVarselStatusException extends FunctionalException {
+public class InvalidVarselStatusException extends FunctionalVarselException {
 
 	public InvalidVarselStatusException(Varsel varsel) {
 		super("Varsel with varselId=" + (varsel != null ? varsel.getVarselId() : null) +
