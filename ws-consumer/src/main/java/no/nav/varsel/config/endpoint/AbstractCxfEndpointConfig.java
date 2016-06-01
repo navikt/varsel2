@@ -1,11 +1,13 @@
 package no.nav.varsel.config.endpoint;
 
+import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.message.Message;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 
 /**
@@ -15,12 +17,16 @@ import java.util.HashMap;
  */
 public abstract class AbstractCxfEndpointConfig {
 
+	@Inject
+	private SpringBus bus;
+
 	private final JaxWsProxyFactoryBean factoryBean = new JaxWsProxyFactoryBean();
 
 	public AbstractCxfEndpointConfig() {
 		factoryBean.getOutInterceptors().add(new LoggingOutInterceptor());
 		factoryBean.getInInterceptors().add(new LoggingInInterceptor());
 		factoryBean.setProperties(new HashMap<>());
+		factoryBean.setBus(bus);
 	}
 
 	void setAdress(String aktoerUrl) {

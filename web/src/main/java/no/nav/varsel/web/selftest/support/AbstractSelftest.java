@@ -1,6 +1,7 @@
 package no.nav.varsel.web.selftest.support;
 
 import com.google.common.base.Throwables;
+import no.nav.varsel.domain.to.Ping;
 import org.springframework.util.StopWatch;
 
 /**
@@ -12,16 +13,34 @@ public abstract class AbstractSelftest {
 
 	private String name;
 	private String description;
+	private String address;
+	private Ping.Type type;
 
-	public AbstractSelftest(String name, String description) {
+	public AbstractSelftest(Ping.Type type, String name, String description) {
+		this.type = type;
 		this.name = name;
+		this.description = description;
+	}
+
+	public AbstractSelftest(Ping.Type type, String name, String address, String description) {
+		this.type = type;
+		this.name = name;
+		this.address = address;
 		this.description = description;
 	}
 
 	protected abstract void doCheck() throws Exception;
 
+	protected Ping.Type getType() {
+		return type;
+	}
+
 	protected String getName() {
 		return name;
+	}
+
+	protected String getAddress() {
+		return address;
 	}
 
 	protected String getDescription() {
@@ -57,6 +76,8 @@ public abstract class AbstractSelftest {
 		check.setResponseTime(stopWatch.getTotalTimeMillis());
 		check.setDescription(getDescription());
 		check.setEndpoint(getName());
+		check.setAddress(getAddress());
+		check.setType(getType());
 		return check;
 	}
 }

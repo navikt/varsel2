@@ -2,6 +2,7 @@ package no.nav.varsel.web.selftest.support;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import no.nav.varsel.domain.to.Ping;
 
 /**
  * Json response for selftest and TO object for thymeleaf page for individual check
@@ -11,11 +12,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SelftestCheck {
 
 	private String endpoint;
+	private String address;
 	private String description;
 	private String errorMessage;
 	private String stackTrace;
 	private Result result = Result.OK;
 	private Long responseTime;
+	private Ping.Type type;
 
 	public String getEndpoint() {
 		return endpoint;
@@ -23,6 +26,14 @@ public class SelftestCheck {
 
 	public void setEndpoint(String endpoint) {
 		this.endpoint = endpoint;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getDescription() {
@@ -75,6 +86,14 @@ public class SelftestCheck {
 	@JsonProperty("responseTime")
 	public String getResponseTimeString() {
 		return responseTime + " ms";
+	}
+
+	public Ping.Type getType() {
+		return type;
+	}
+
+	public void setType(Ping.Type type) {
+		this.type = type;
 	}
 
 	@Override

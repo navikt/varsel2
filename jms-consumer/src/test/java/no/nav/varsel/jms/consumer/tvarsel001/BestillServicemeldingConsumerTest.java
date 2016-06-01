@@ -15,10 +15,8 @@ import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.VARSEL_URL;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 import no.nav.melding.virksomhet.varsel.v1.varsel.AktoerId;
 import no.nav.melding.virksomhet.varsel.v1.varsel.ObjectFactory;
@@ -30,7 +28,6 @@ import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.JmsConsumer;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
 import no.nav.varsel.jms.to.xml.JmsReply;
-import no.nav.varsel.mock.AktoerV2Mock;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -54,7 +51,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	public void shouldReceieveJms() throws Exception {
 		JmsReply response = sendMessage(bestillServicemeldingQueue, createVarsel());
 
-		assertTrue(response != null && response.isOk());
+		isOk(response);
 		assertThat(varselbestillingRepo.count(), is(1L));
 
 		Varselbestilling varselbestilling = varselbestillingRepo.findAll().iterator().next();
@@ -95,7 +92,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		((AktoerId) varsel.getValue().getMottaker()).setAktoerId(TEKNISK_FEIL);
 		Message response = sendMessageListenBoq(bestillServicemeldingQueue, varsel);
 
-		assertThat(response, notNullValue());
+		isOk(response);
 	}
 
 	@Test
@@ -104,7 +101,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		((AktoerId) varsel.getValue().getMottaker()).setAktoerId(FUNKSJONELL_FEIL);
 		JmsReply response = sendMessage(bestillServicemeldingQueue, varsel);
 
-		assertTrue(response != null && response.isOk());
+		isOk(response);
 	}
 
 	@Test
@@ -113,7 +110,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		varsel.getValue().getVarslingstype().setValue("feilMqUt");
 		Message response = sendMessageListenBoq(bestillServicemeldingQueue, varsel);
 
-		assertThat(response, notNullValue());
+		isOk(response);
 		assertThat(varselbestillingRepo.count(), is(0L));
 	}
 

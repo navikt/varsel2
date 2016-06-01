@@ -4,8 +4,6 @@
 	<deployment>
 		<exclude-subsystems>
 			<subsystem name="jpa"/>
-			<subsystem name="webservices"/>
-			<subsystem name="jaxrs"/>
 		</exclude-subsystems>
 		<exclusions>
 			<module name="javaee.api"/>
@@ -13,14 +11,15 @@
 		<dependencies>
 			<module name="javax.jms.api"/>
 			<module name="javax.xml.bind.api"/>
+			<module name="javax.xml.ws.api"/>
+			<module name="javax.jws.api"/>
+			<module name="javax.annotation.api"/>
 		</dependencies>
 	</deployment>
 
 	<sub-deployment name="varsel-web.war">
 		<exclude-subsystems>
 			<subsystem name="jpa"/>
-			<subsystem name="webservices"/>
-			<subsystem name="jaxrs"/>
 		</exclude-subsystems>
 		<exclusions>
 			<module name="javaee.api"/>
@@ -28,6 +27,9 @@
 		<dependencies>
 			<module name="javax.jms.api"/>
 			<module name="javax.xml.bind.api"/>
+			<module name="javax.xml.ws.api"/>
+			<module name="javax.jws.api"/>
+			<module name="javax.annotation.api"/>
 		</dependencies>
 	</sub-deployment>
 

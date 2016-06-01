@@ -1,5 +1,6 @@
 package no.nav.varsel.web.selftest.test;
 
+import no.nav.varsel.domain.to.Ping;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.web.selftest.support.AbstractSelftest;
 
@@ -16,7 +17,7 @@ public class DbSelftest extends AbstractSelftest {
 	private VarselRepo varselRepo;
 
 	public DbSelftest() {
-		super("varselDS", "Varsel Oracle Database");
+		super(Ping.Type.Datasource, "varselDS", "Varsel Oracle Database");
 	}
 
 	@Override

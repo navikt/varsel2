@@ -27,7 +27,8 @@ public class Application extends SpringBootServletInitializer {
 			@Override
 			public void addResourceHandlers(ResourceHandlerRegistry registry) {
 				// static content for selftest etc
-				registry.addResourceHandler("/internal/*");
+				registry.addResourceHandler("/internal/*")
+						.addResourceLocations("classpath:/web/static/css/");
 			}
 		};
 	}

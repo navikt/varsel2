@@ -1,5 +1,9 @@
 package no.nav.varsel.jms.consumer;
 
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import no.nav.varsel.config.JmsConsumerTestConfig;
 import no.nav.varsel.config.JmsTestConfig;
 import no.nav.varsel.jms.to.xml.JmsReply;
@@ -76,6 +80,14 @@ public abstract class AbstractConsumerJmsTest {
 	protected Message sendMessageListenBoq(Queue queue, Object message) {
 		jmsTemplate.convertAndSend(queue, message);
 		return jmsTemplate.receive(backoutQueue);
+	}
+
+	protected void isOk(JmsReply response) {
+		assertTrue(response != null && response.isOk());
+	}
+
+	protected void isOk(Message response) {
+		assertThat(response, notNullValue());
 	}
 
 }

@@ -1,5 +1,6 @@
 package no.nav.varsel.web.selftest.test;
 
+import no.nav.varsel.domain.to.Ping;
 import no.nav.varsel.web.selftest.support.AbstractSelftest;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
@@ -18,7 +19,7 @@ public class HttpSelftest extends AbstractSelftest {
 	private final String url;
 
 	public HttpSelftest(String name, String description, String url) {
-		super(name, description);
+		super(Ping.Type.Rest, name, description);
 		this.url = url;
 	}
 

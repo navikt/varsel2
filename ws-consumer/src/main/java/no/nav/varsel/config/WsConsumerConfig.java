@@ -1,5 +1,6 @@
 package no.nav.varsel.config;
 
+import no.nav.varsel.wsconsumer.WsPingProvider;
 import no.nav.varsel.wsconsumer.aktoer.AktoerConsumer;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapper;
@@ -35,5 +36,10 @@ public class WsConsumerConfig {
 	@Bean
 	public VarselInfoConsumer varselInfoConsumer() {
 		return new VarselInfoConsumer();
+	}
+
+	@Bean
+	public WsPingProvider wsPingProvider() {
+		return new WsPingProvider();
 	}
 }

@@ -1,7 +1,10 @@
 package no.nav.varsel.web.selftest;
 
+import no.nav.varsel.jms.JmsPingProvider;
 import no.nav.varsel.web.selftest.support.SelftestResponse;
 import no.nav.varsel.web.selftest.test.DbSelftest;
+import no.nav.varsel.web.selftest.test.PingSelftest;
+import no.nav.varsel.wsconsumer.WsPingProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -38,6 +41,10 @@ public class SelftestController {
 
 	@Inject
 	private DbSelftest dbSelftest;
+	@Inject
+	private JmsPingProvider jmsPingProvider;
+	@Inject
+	private WsPingProvider wsPingProvider;
 
 	/**
 	 * Thymeleaf view
@@ -82,10 +89,20 @@ public class SelftestController {
 		response.setApplication(applicationName);
 		response.setVersion(applicationVersion);
 		response.setNode(getServerAddress());
+		addChecks(response);
+		return response;
+	}
 
+	private void addChecks(SelftestResponse response) {
+		// Datasource
 		response.addCheck(dbSelftest.check());
 
-		return response;
+		// Webservice
+		response.addCheck(new PingSelftest(wsPingProvider.pingAktoerV2()).check());
+		response.addCheck(new PingSelftest(wsPingProvider.pingDigitalKontaktinformasjonV1()).check());
+
+		// Jms
+		jmsPingProvider.ping().forEach(p -> response.addCheck(new PingSelftest(p).check()));
 	}
 
 	private String getServerAddress() {
@@ -95,4 +112,5 @@ public class SelftestController {
 			return "N/A";
 		}
 	}
+
 }
