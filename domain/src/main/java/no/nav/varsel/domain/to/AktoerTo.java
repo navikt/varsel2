@@ -33,4 +33,12 @@ public class AktoerTo {
 	public void setMottakerType(MottakerType mottakerType) {
 		this.mottakerType = mottakerType;
 	}
+
+	@Override
+	public String toString() {
+		return "AktoerTo{" +
+				"ident='" + ident + '\'' +
+				", mottakerType=" + mottakerType +
+				'}';
+	}
 }

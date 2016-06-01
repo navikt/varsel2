@@ -57,7 +57,7 @@ public class ServicemeldingService {
 		try {
 			fetchedAktoer = aktoerConsumer.hentIdent(origAktoer);
 		} catch (HentIdentForAktoerIdPersonIkkeFunnet | HentAktoerIdForIdentPersonIkkeFunnet e) {
-			throw new AktoerIkkeFunnetException("Kunne ikke hente manglende ident", e);
+			throw new AktoerIkkeFunnetException("Kunne ikke hente manglende ident for " + origAktoer, e);
 		}
 		bestillServicemeldingTo.setMottaker(fetchedAktoer);
 

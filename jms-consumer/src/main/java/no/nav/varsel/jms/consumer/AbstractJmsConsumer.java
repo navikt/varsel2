@@ -66,7 +66,7 @@ public abstract class AbstractJmsConsumer<T> {
 			unmarshalledObject = unmarshal(message);
 			handleMessage(unmarshalledObject);
 		} catch (NoJmsBackoutException e) {
-			LOG.warn(errorFor(message), e);
+			LOG.warn("Nonbackout " + errorFor(message), e);
 		} catch (WebServiceException e) {
 			// Technical errors occurring on out stage of CXF
 			jmsConsumerManager.registerError(jmsConsumer);
