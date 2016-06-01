@@ -1,11 +1,14 @@
 package no.nav.varsel.jms.consumer.tvarsel001;
 
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.MOTTAKER;
-import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.UTLOEPSTIDSPUNKT;
+import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.UTLOEPSTIDSPUNKT_LDT;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VAL;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VARSLINGSTYPE;
+import static no.nav.varsel.jms.producer.VarselutsendingProducer.FEIL_MQ_UT;
 import static no.nav.varsel.mock.AktoerV2Mock.PERSON_IDENT;
 import static no.nav.varsel.repo.TestdataUtil.FUNKSJONELL_FEIL;
+import static no.nav.varsel.repo.TestdataUtil.KANAL_CODE;
 import static no.nav.varsel.repo.TestdataUtil.TEKNISK_FEIL;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.FØRSTE_GANG_TEKST_TIL_MOTTAKER;
@@ -21,12 +24,14 @@ import static org.junit.Assert.assertThat;
 import no.nav.melding.virksomhet.varsel.v1.varsel.AktoerId;
 import no.nav.melding.virksomhet.varsel.v1.varsel.ObjectFactory;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
+import no.nav.melding.virksomhet.varselutsending.v1.varselutsending.Varselutsending;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.JmsConsumer;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
+import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import org.junit.Test;
 
@@ -34,7 +39,6 @@ import javax.inject.Inject;
 import javax.jms.Message;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -46,6 +50,8 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	@Inject
 	private Queue bestillServicemeldingQueue;
+	@Inject
+	private Queue varselutsendingQueue;
 
 	@Test
 	public void shouldReceieveJms() throws Exception {
@@ -54,36 +60,9 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		isOk(response);
 		assertThat(varselbestillingRepo.count(), is(1L));
 
-		Varselbestilling varselbestilling = varselbestillingRepo.findAll().iterator().next();
-		assertThat(UUID.fromString(varselbestilling.getVarselbestillingId()).toString(), is(varselbestilling.getVarselbestillingId()));
-		assertThat(varselbestilling.getVarslingstype(), is(VARSLINGSTYPE));
-		assertThat(varselbestilling.getPreferertKanal(), is(PREFERERT_KANAL));
-		assertThat(varselbestilling.getUtlopTidspunkt(), is(equalTo(LocalDateTime.parse(UTLOEPSTIDSPUNKT))));
-		assertThat(varselbestilling.getFnr(), is(PERSON_IDENT));
-		assertThat(varselbestilling.getAktorId(), is(MOTTAKER));
-		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
-		assertThat(varselbestilling.getRevarslingIntervall(), nullValue());
-		assertThat(varselbestilling.getAntallRevarslinger(), nullValue());
-		assertThat(varselbestilling.getNesteVarslingstidspunkt(), nullValue());
-		assertThat(varselbestilling.getChangeStamp().getOpprettetAv(), is(JmsConsumer.BESTILL_SERVICEMELDING.getServiceName()));
-		assertThat(varselbestilling.getChangeStamp().getOpprettetDato(), aboutNow());
-
-		assertThat(varselbestilling.getVarsels(), hasSize(1));
-
-		no.nav.varsel.domain.object.Varsel varsel = varselbestilling.getVarsels().iterator().next();
-		assertThat(UUID.fromString(varsel.getVarselId()).toString(), is(varsel.getVarselId()));
-		assertThat(varsel.getKanal(), is(KanalCode.DITTNAV));
-		assertThat(varsel.getSendtTidspunkt(), aboutNow());
-		assertThat(varsel.getDistribusjonTidspunkt(), nullValue());
-		assertThat(varsel.getKontaktInfo(), nullValue());
-		assertThat(varsel.getStatus(), is(StatusCode.SENDT));
-		assertThat(varsel.getFeilbeskrivelse(), nullValue());
-		assertThat(varsel.getVarselTittel(), is(VARSEL_TITTEL));
-		assertThat(varsel.getVarselTekst(), is(FØRSTE_GANG_TEKST_TIL_MOTTAKER.replace(":mottaker", VAL)));
-		assertThat(varsel.getVarselUrl(), is(VARSEL_URL));
-		assertThat(varsel.getErRevarsel(), is(false));
-		assertThat(varsel.getChangeStamp().getOpprettetAv(), is(JmsConsumer.BESTILL_SERVICEMELDING.getServiceName()));
-		assertThat(varsel.getChangeStamp().getOpprettetDato(), aboutNow());
+		String varselTekst = FØRSTE_GANG_TEKST_TIL_MOTTAKER.replace(":mottaker", VAL);
+		String varselId = assertDb(varselTekst).getVarselId();
+		assertVarselutsendingQueue(varselTekst, varselId);
 	}
 
 	@Test
@@ -107,7 +86,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	@Test
 	public void shouldPutOnBackoutAndRollbackIfFailedAfterDbSave() throws Exception {
 		JAXBElement<Varsel> varsel = createVarsel();
-		varsel.getValue().getVarslingstype().setValue("feilMqUt");
+		varsel.getValue().getVarslingstype().setValue(FEIL_MQ_UT);
 		Message response = sendMessageListenBoq(bestillServicemeldingQueue, varsel);
 
 		isOk(response);
@@ -117,4 +96,54 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	public static JAXBElement<Varsel> createVarsel() {
 		return new ObjectFactory().createVarsel(BestillServicemeldingMapperTest.createVarsel());
 	}
+
+
+	private no.nav.varsel.domain.object.Varsel assertDb(String varselTekst) {
+		Varselbestilling varselbestilling = varselbestillingRepo.findAll().iterator().next();
+		assertThat(UUID.fromString(varselbestilling.getVarselbestillingId()).toString(), is(varselbestilling.getVarselbestillingId()));
+		assertThat(varselbestilling.getVarslingstype(), is(VARSLINGSTYPE));
+		assertThat(varselbestilling.getPreferertKanal(), is(PREFERERT_KANAL));
+		assertThat(varselbestilling.getUtlopTidspunkt(), is(equalTo(UTLOEPSTIDSPUNKT_LDT)));
+		assertThat(varselbestilling.getFnr(), is(PERSON_IDENT));
+		assertThat(varselbestilling.getAktorId(), is(MOTTAKER));
+		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
+		assertThat(varselbestilling.getRevarslingIntervall(), nullValue());
+		assertThat(varselbestilling.getAntallRevarslinger(), nullValue());
+		assertThat(varselbestilling.getNesteVarslingstidspunkt(), nullValue());
+		assertThat(varselbestilling.getChangeStamp().getOpprettetAv(), is(JmsConsumer.BESTILL_SERVICEMELDING.getServiceName()));
+		assertThat(varselbestilling.getChangeStamp().getOpprettetDato(), aboutNow());
+
+		assertThat(varselbestilling.getVarsels(), hasSize(1));
+
+		no.nav.varsel.domain.object.Varsel varsel = varselbestilling.getVarsels().iterator().next();
+		assertThat(UUID.fromString(varsel.getVarselId()).toString(), is(varsel.getVarselId()));
+		assertThat(varsel.getKanal(), is(KanalCode.DITTNAV));
+		assertThat(varsel.getSendtTidspunkt(), aboutNow());
+		assertThat(varsel.getDistribusjonTidspunkt(), nullValue());
+		assertThat(varsel.getKontaktInfo(), nullValue());
+		assertThat(varsel.getStatus(), is(StatusCode.SENDT));
+		assertThat(varsel.getFeilbeskrivelse(), nullValue());
+		assertThat(varsel.getVarselTittel(), is(VARSEL_TITTEL));
+		assertThat(varsel.getVarselTekst(), is(varselTekst));
+		assertThat(varsel.getVarselUrl(), is(VARSEL_URL));
+		assertThat(varsel.getErRevarsel(), is(false));
+		assertThat(varsel.getChangeStamp().getOpprettetAv(), is(JmsConsumer.BESTILL_SERVICEMELDING.getServiceName()));
+		assertThat(varsel.getChangeStamp().getOpprettetDato(), aboutNow());
+		return varsel;
+	}
+
+	private void assertVarselutsendingQueue(String varselTekst, String varselId) {
+		Varselutsending varselutsending = receive(varselutsendingQueue);
+
+		assertThat(varselutsending.getVarselId(), is(varselId));
+		assertThat(((no.nav.melding.virksomhet.varselutsending.v1.varselutsending.AktoerId)
+				varselutsending.getMottaker()).getAktoerId(), is(MOTTAKER));
+		assertThat(varselutsending.getUtloepstidspunkt(), equalTo(toXmlGregorianCalendar(UTLOEPSTIDSPUNKT_LDT)));
+		assertThat(varselutsending.getKanal().getValue(), is(KANAL_CODE.toString()));
+		assertThat(varselutsending.getVarslingstype().getValue(), is(VARSLINGSTYPE));
+		assertThat(varselutsending.getVarselTittel(), is(VARSEL_TITTEL));
+		assertThat(varselutsending.getVarselTekst(), is(varselTekst));
+		assertThat(varselutsending.getVarselURL(), is(VARSEL_URL));
+	}
+
 }

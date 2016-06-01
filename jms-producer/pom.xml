@@ -32,6 +32,15 @@
 			<groupId>org.jboss.spec.javax.jms</groupId>
 			<artifactId>jboss-jms-api_1.1_spec</artifactId>
 		</dependency>
+
+		<!-- test -->
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>varsel-config</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 

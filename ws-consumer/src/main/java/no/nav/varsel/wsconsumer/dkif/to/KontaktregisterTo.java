@@ -27,7 +27,6 @@ public class KontaktregisterTo implements Serializable {
 	private String kontaktInfo;
 	private Collection<KanalCode> kanaler;
 
-
 	public String getPersonIdent() {
 		return personIdent;
 	}

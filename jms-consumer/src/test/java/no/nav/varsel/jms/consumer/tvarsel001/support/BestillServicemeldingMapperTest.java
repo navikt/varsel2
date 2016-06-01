@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 public class BestillServicemeldingMapperTest {
 
 	public static final String UTLOEPSTIDSPUNKT = "2016-04-24T15:22:45";
+	public static final LocalDateTime UTLOEPSTIDSPUNKT_LDT = LocalDateTime.parse(UTLOEPSTIDSPUNKT);
 	public static final String MOTTAKER = "mottakeren";
 	public static final String KEY = "mottaker";
 	public static final String VAL = "val";
@@ -50,7 +51,7 @@ public class BestillServicemeldingMapperTest {
 		assertThat(to.getAktoerId(), is(MOTTAKER));
 		assertThat(to.getPersonIdent(), nullValue());
 		assertThat(to.getVarslingstype(), is(VARSLINGSTYPE));
-		assertThat(to.getUtloepstidspunkt(), equalTo(LocalDateTime.parse(UTLOEPSTIDSPUNKT)));
+		assertThat(to.getUtloepstidspunkt(), equalTo(UTLOEPSTIDSPUNKT_LDT));
 		assertThat(to.getParameters().keySet(), hasSize(1));
 		assertThat(to.getParameters().get(KEY), is(VAL));
 	}

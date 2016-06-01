@@ -52,21 +52,10 @@ public class ServicemeldingService {
 	private VarselbestillingRepo varselbestillingRepo;
 
 	public void bestillServicemelding(BestillServicemeldingTo bestillServicemeldingTo) {
-		AktoerTo origAktoer = bestillServicemeldingTo.craeteAktoerTo();
-		AktoerTo fetchedAktoer;
-		try {
-			fetchedAktoer = aktoerConsumer.hentIdent(origAktoer);
-		} catch (HentIdentForAktoerIdPersonIkkeFunnet | HentAktoerIdForIdentPersonIkkeFunnet e) {
-			throw new AktoerIkkeFunnetException("Kunne ikke hente manglende ident for " + origAktoer, e);
-		}
-		bestillServicemeldingTo.setMottaker(fetchedAktoer);
+		AktoerTo origAktoer = completeAktoerPersonIdent(bestillServicemeldingTo);
 
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestillServicemeldingTo.getVarslingstype());
-		KontaktregisterTo kontaktregisterTo = digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(bestillServicemeldingTo.getPersonIdent());
-		kontaktregisterTo = kontaktregisterTo == null ? new KontaktregisterTo() : kontaktregisterTo;
-
-		Collection<KanalCode> kanaler = varslelKanalDecider.decideKanaler(kontaktregisterTo, varselInfoTo.getPreferertKanal());
-		kontaktregisterTo.setKanaler(kanaler);
+		KontaktregisterTo kontaktregisterTo = hentKontaktregisterAndDecideKanal(bestillServicemeldingTo, varselInfoTo);
 
 		Varselbestilling varselbestilling = domainMapper.mapToDomain(bestillServicemeldingTo, varselInfoTo, kontaktregisterTo);
 
@@ -76,6 +65,27 @@ public class ServicemeldingService {
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
 			varselutsendingProducer.produce(varselutsendingTo);
 		}
+	}
+
+	private AktoerTo completeAktoerPersonIdent(BestillServicemeldingTo bestillServicemeldingTo) {
+		AktoerTo origAktoer = bestillServicemeldingTo.craeteAktoerTo();
+		AktoerTo fetchedAktoer;
+		try {
+			fetchedAktoer = aktoerConsumer.hentIdent(origAktoer);
+		} catch (HentIdentForAktoerIdPersonIkkeFunnet | HentAktoerIdForIdentPersonIkkeFunnet e) {
+			throw new AktoerIkkeFunnetException("Kunne ikke hente manglende ident for " + origAktoer, e);
+		}
+		bestillServicemeldingTo.setMottaker(fetchedAktoer);
+		return origAktoer;
+	}
+
+	private KontaktregisterTo hentKontaktregisterAndDecideKanal(BestillServicemeldingTo bestillServicemeldingTo, VarselInfoTo varselInfoTo) {
+		KontaktregisterTo kontaktregisterTo = digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(bestillServicemeldingTo.getPersonIdent());
+		kontaktregisterTo = kontaktregisterTo == null ? new KontaktregisterTo() : kontaktregisterTo;
+
+		Collection<KanalCode> kanaler = varslelKanalDecider.decideKanaler(kontaktregisterTo, varselInfoTo.getPreferertKanal());
+		kontaktregisterTo.setKanaler(kanaler);
+		return kontaktregisterTo;
 	}
 
 }

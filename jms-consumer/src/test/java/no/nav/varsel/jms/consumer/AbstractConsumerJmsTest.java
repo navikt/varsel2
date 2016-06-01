@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.inject.Inject;
 import javax.jms.Message;
 import javax.jms.Queue;
+import javax.xml.bind.JAXBElement;
 
 /**
  * Abstract Test for JMS
@@ -66,7 +67,16 @@ public abstract class AbstractConsumerJmsTest {
 			message1.setJMSReplyTo(replyQueue);
 			return message1;
 		});
-		return (JmsReply) jmsTemplate.receiveAndConvert(replyQueue);
+		return receive(replyQueue);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected  <T> T receive(Queue queue) {
+		Object response = jmsTemplate.receiveAndConvert(queue);
+		if (response instanceof JAXBElement) {
+			response = ((JAXBElement) response).getValue();
+		}
+		return (T) response;
 	}
 
 	protected Message sendMessageListenBoq(Queue queue, Object message) {

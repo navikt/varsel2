@@ -17,6 +17,8 @@ import javax.jms.Queue;
  */
 public class VarselutsendingProducer {
 
+	public static final String FEIL_MQ_UT = "varsel_test_feil";
+
 	@Inject
 	private JmsTemplate jmsTemplate;
 	@Inject
@@ -28,7 +30,7 @@ public class VarselutsendingProducer {
 
 	public void produce(VarselutsendingTo varselutsendingTo) {
 		// TODO replace with better mocking
-		if ("feilMqUt".equals(varselutsendingTo.getVarslingstype())) {
+		if (FEIL_MQ_UT.equals(varselutsendingTo.getVarslingstype())) {
 			throw new RuntimeException("mq ut feil");
 		}
 		Varselutsending varselutsending = mapper.map(varselutsendingTo);

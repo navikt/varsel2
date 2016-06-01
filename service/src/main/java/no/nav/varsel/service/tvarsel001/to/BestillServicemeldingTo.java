@@ -2,9 +2,9 @@ package no.nav.varsel.service.tvarsel001.to;
 
 import static no.nav.varsel.service.support.ValueValidator.hasText;
 
+import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.domain.to.MottakerType;
-import no.nav.varsel.domain.exception.NoJmsBackoutException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -17,7 +17,6 @@ import java.util.Map;
  */
 public class BestillServicemeldingTo {
 
-	// Input
 	private String personIdent;
 	private String aktoerId;
 	private String varslingstype;
@@ -87,9 +86,9 @@ public class BestillServicemeldingTo {
 
 	public void setMottaker(AktoerTo aktoer) {
 		if (aktoer == null) {
-			setAktoerId(null);
-			setPersonIdent(null);
-		} else if (aktoer.getMottakerType() == MottakerType.AKTOER) {
+			return;
+		}
+		if (aktoer.getMottakerType() == MottakerType.AKTOER) {
 			setAktoerId(aktoer.getIdent());
 		} else {
 			setPersonIdent(aktoer.getIdent());

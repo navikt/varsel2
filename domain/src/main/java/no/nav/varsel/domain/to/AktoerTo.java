@@ -41,4 +41,22 @@ public class AktoerTo {
 				", mottakerType=" + mottakerType +
 				'}';
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		AktoerTo aktoerTo = (AktoerTo) o;
+
+		if (ident != null ? !ident.equals(aktoerTo.ident) : aktoerTo.ident != null) return false;
+		return mottakerType == aktoerTo.mottakerType;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = ident != null ? ident.hashCode() : 0;
+		result = 31 * result + (mottakerType != null ? mottakerType.hashCode() : 0);
+		return result;
+	}
 }

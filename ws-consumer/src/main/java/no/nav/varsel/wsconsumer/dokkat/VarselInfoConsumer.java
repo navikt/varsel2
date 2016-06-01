@@ -16,9 +16,15 @@ public class VarselInfoConsumer {
 	public static final String VARSEL_URL = "URL";
 	public static final String VARSEL_TITTEL = "Varsel Tittel";
 	public static final String FØRSTE_GANG_TEKST_TIL_MOTTAKER = "Første gang tekst til :mottaker";
+	public static final String REVARSLING_TEKST_TIL_MOTTAKER = "Revarsling tekst til :mottaker";
 
 	public VarselInfoTo hentVarselInfo(String varseltype) {
 		// TODO PK-31739
+		return createVarselInfoTo();
+	}
+
+	// Move to test class when implemented
+	public static VarselInfoTo createVarselInfoTo() {
 		VarselInfoTo varselInfoTo = new VarselInfoTo();
 		varselInfoTo.setPreferertKanal(PREFERERT_KANAL);
 		varselInfoTo.setVarselURL(VARSEL_URL);
@@ -26,7 +32,7 @@ public class VarselInfoConsumer {
 		varselMalTo.setKanal(KanalCode.DITTNAV);
 		varselMalTo.setTittel(VARSEL_TITTEL);
 		varselMalTo.setFoerstegangsTekst(FØRSTE_GANG_TEKST_TIL_MOTTAKER);
-		varselMalTo.setRevarslingTekst("Revarsling tekst til :mottaker");
+		varselMalTo.setRevarslingTekst(REVARSLING_TEKST_TIL_MOTTAKER);
 		varselInfoTo.setMaler(Sets.newHashSet(varselMalTo));
 		return varselInfoTo;
 	}
