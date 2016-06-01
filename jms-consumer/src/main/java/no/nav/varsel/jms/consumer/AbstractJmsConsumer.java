@@ -27,7 +27,8 @@ import java.io.StringReader;
  */
 public abstract class AbstractJmsConsumer<T> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(AbstractJmsConsumer.class);
+	private static final Logger NO_BACKOUTLOG = LoggerFactory.getLogger("no.nav.varsel.jms.nobackoutlog");
+
 	private final JmsConsumer jmsConsumer;
 	private final Class<T> inputType;
 	@Inject
@@ -66,7 +67,7 @@ public abstract class AbstractJmsConsumer<T> {
 			unmarshalledObject = unmarshal(message);
 			handleMessage(unmarshalledObject);
 		} catch (NoJmsBackoutException e) {
-			LOG.warn("Nonbackout " + errorFor(message), e);
+			NO_BACKOUTLOG.warn("Nonbackout " + errorFor(message), e);
 		} catch (WebServiceException e) {
 			// Technical errors occurring on out stage of CXF
 			jmsConsumerManager.registerError(jmsConsumer);

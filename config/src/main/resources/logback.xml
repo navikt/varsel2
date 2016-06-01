@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
 
+	<appender name="nobackoutlog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<Append>true</Append>
+		<File>${APP_LOG_HOME}/nobackoutlog.log</File>
+		<encoder>
+			<pattern>[%d, %-5p, %C:%L] - [%X{consumerId}, %X{callId}, %X{userId}] - %m%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${APP_LOG_HOME}/nobackoutlog.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+			<maxHistory>45</maxHistory>
+		</rollingPolicy>
+	</appender>
+
 	<appender name="debuglog" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<Append>true</Append>
 		<File>${APP_LOG_HOME}/debug.log</File>
@@ -50,6 +62,11 @@
 
 	<logger name="no.nav.varsel" level="INFO">
 		<appender-ref ref="debuglog"/>
+		<appender-ref ref="SYSLOG"/>
+	</logger>
+
+	<logger name="no.nav.varsel.jms.nobackoutlog" level="INFO" additivity="false">
+		<appender-ref ref="nobackoutlog"/>
 		<appender-ref ref="SYSLOG"/>
 	</logger>
 

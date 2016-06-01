@@ -13,6 +13,7 @@ import static org.junit.Assert.assertTrue;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.ObjectFactory;
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
+import no.nav.varsel.config.JmsConfig;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
@@ -26,6 +27,7 @@ import org.junit.rules.ExpectedException;
 import javax.inject.Inject;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
+import javax.xml.transform.stream.StreamResult;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,6 +52,7 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 		String varselId = varselbestilling.getVarsels().iterator().next().getVarselId();
 
 		JAXBElement<VarselKvittering> varselKvittering = createVarselKvitteringJaxBElement(varselId);
+		new JmsConfig().marshaller().marshal(varselKvittering, new StreamResult(System.out));
 		JmsReply response = sendMessage(varselKvitteringQueue, varselKvittering);
 		assertThat(response.isOk(), is(true));
 

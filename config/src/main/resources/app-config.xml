@@ -24,7 +24,7 @@
 					  unifiedConnectionFactory="true">
 			<queue alias="varsel_bestill_servicemelding" jndi="java:/jboss/bestillServicemelding"/>
 			<queue alias="varsel_varsel_kvittering" jndi="java:/jboss/varselKvittering"/>
-			<queue alias="varselutsending" jndi="java:/jboss/varselutsending"/>
+			<queue alias="VARSEL_INN" jndi="java:/jboss/varselutsending"/>
 		</queueManager>
 		<ldap alias="ldap" mapToProperty="ldap"/>
 		<webservice mapToProperty="aktoerv2.ws" alias="Aktoer_v2"/>
