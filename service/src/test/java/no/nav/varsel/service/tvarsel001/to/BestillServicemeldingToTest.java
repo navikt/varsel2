@@ -33,7 +33,8 @@ public class BestillServicemeldingToTest {
 	public void shouldValidateMissingMottaker() throws Exception {
 		expectedException.expectMessage("mottaker cannot be empty or missing");
 		BestillServicemeldingTo to = createTo();
-		to.setMottaker(null);
+		to.setPersonIdent(null);
+		to.setAktoerId(null);
 		to.validateTvarsel001Input();
 	}
 
