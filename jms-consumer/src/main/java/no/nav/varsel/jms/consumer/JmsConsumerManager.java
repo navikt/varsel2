@@ -2,6 +2,7 @@ package no.nav.varsel.jms.consumer;
 
 import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.Queues;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.config.JmsListenerEndpointRegistry;
 import org.springframework.jms.listener.MessageListenerContainer;
 
@@ -19,22 +20,12 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class JmsConsumerManager {
 
-	// Number of errors needed to stop a consumer
-	public static final int DEFAULT_CONTEXT_SIZE = 20;
-	// Number of seconds the "number of errors" defined in CONTEXT_SIZE needs to be within to stop a consumer
-	public static final int DEFAULT_CONTEXT_TIME_SECONDS = 60 * 10;
-	// Number of seconds to wait before restarting consumber
-	public static final int DEFAULT_RESTART_TIME_SECONDS = 60 * 10;
-
-	private int contextSize;
-	private int contextTimeSeconds;
-	private int restartTimeSeconds;
-
-	public JmsConsumerManager() {
-		contextSize = DEFAULT_CONTEXT_SIZE;
-		contextTimeSeconds = DEFAULT_CONTEXT_TIME_SECONDS;
-		restartTimeSeconds = DEFAULT_RESTART_TIME_SECONDS;
-	}
+	@Value("${varsel.jms.consumer.error.context.size}")
+	private Integer contextSize;
+	@Value("${varsel.jms.consumer.error.context.time.seconds}")
+	private Integer contextTimeSeconds;
+	@Value("${varsel.jms.consumer.error.restart.delay.seconds}")
+	private Integer restartTimeSeconds;
 
 	private Map<JmsConsumer, Queue<LocalDateTime>> recentErrors = new ConcurrentHashMap<>();
 
@@ -100,15 +91,15 @@ public class JmsConsumerManager {
 		}
 	}
 
-	public void setContextSize(int contextSize) {
+	void setContextSize(int contextSize) {
 		this.contextSize = contextSize;
 	}
 
-	public void setContextTimeSeconds(int contextTimeSeconds) {
+	void setContextTimeSeconds(int contextTimeSeconds) {
 		this.contextTimeSeconds = contextTimeSeconds;
 	}
 
-	public void setRestartTimeSeconds(int restartTimeSeconds) {
+	void setRestartTimeSeconds(int restartTimeSeconds) {
 		this.restartTimeSeconds = restartTimeSeconds;
 	}
 }

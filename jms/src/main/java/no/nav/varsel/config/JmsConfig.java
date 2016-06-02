@@ -8,6 +8,7 @@ import no.nav.varsel.jms.to.xml.JmsReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -42,6 +43,11 @@ import javax.naming.NamingException;
 @Configuration
 public class JmsConfig {
 
+	@Value("${varsel.jms.consumer.min}")
+	private Integer minimumConsumers;
+	@Value("${varsel.jms.consumer.max}")
+	private Integer maximumConsumers;
+
 	private static final Logger LOG = LoggerFactory.getLogger(JmsConfig.class);
 
 	@Bean
@@ -69,7 +75,7 @@ public class JmsConfig {
 		factory.setMessageConverter(new ConsumerMessageConverter(converter()));
 		factory.setSessionTransacted(true);
 		factory.setTransactionManager(transactionManager);
-		factory.setConcurrency("2-4");
+		factory.setConcurrency(String.format("%d-%d", minimumConsumers, maximumConsumers));
 		factory.setErrorHandler(t -> {
 			Throwable throwable = t;
 			if (t instanceof ListenerExecutionFailedException) {
