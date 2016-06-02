@@ -33,4 +33,8 @@ public enum JmsConsumer {
 		public static final String VARSEL_KVITTERING_NAME = "varselKvitteringConsumer";
 	}
 
+	@Override
+	public String toString() {
+		return String.format("consumerName=%s serviceName=%s", consumerName, serviceName);
+	}
 }

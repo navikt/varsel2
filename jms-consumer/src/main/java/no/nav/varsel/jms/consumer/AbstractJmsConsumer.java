@@ -17,7 +17,6 @@ import javax.jms.TextMessage;
 import javax.xml.bind.JAXBElement;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.ws.WebServiceException;
 import java.io.StringReader;
 
 /**
@@ -68,11 +67,8 @@ public abstract class AbstractJmsConsumer<T> {
 			handleMessage(unmarshalledObject);
 		} catch (NoJmsBackoutException e) {
 			NO_BACKOUTLOG.warn("Nonbackout " + errorFor(message), e);
-		} catch (WebServiceException e) {
-			// Technical errors occurring on out stage of CXF
-			jmsConsumerManager.registerError(jmsConsumer);
-			throw e;
 		} catch (Exception e) {
+			jmsConsumerManager.registerError(jmsConsumer);
 			throw new RuntimeException(errorFor(message), e);
 		}
 		return unmarshalledObject;

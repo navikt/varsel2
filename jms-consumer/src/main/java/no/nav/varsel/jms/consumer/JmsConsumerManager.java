@@ -2,12 +2,15 @@ package no.nav.varsel.jms.consumer;
 
 import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.Queues;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.config.JmsListenerEndpointRegistry;
 import org.springframework.jms.listener.MessageListenerContainer;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Queue;
@@ -19,6 +22,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Andreas Skomedal, Visma Consulting.
  */
 public class JmsConsumerManager {
+
+	public static final Logger LOG = LoggerFactory.getLogger(JmsConsumerManager.class);
 
 	@Value("${varsel.jms.consumer.error.context.size}")
 	private Integer contextSize;
@@ -67,7 +72,7 @@ public class JmsConsumerManager {
 		return endpointRegistry.getListenerContainers();
 	}
 
-	public void registerError(JmsConsumer jmsConsumer) {
+	public synchronized void registerError(JmsConsumer jmsConsumer) {
 		Queue<LocalDateTime> errorsFor = getErrorsFor(jmsConsumer);
 		errorsFor.add(LocalDateTime.now());
 		if (errorsFor.size() == contextSize) {
@@ -76,7 +81,10 @@ public class JmsConsumerManager {
 	}
 
 	private void checkErrorStatus(LocalDateTime oldest, JmsConsumer jmsConsumer) {
-		if (oldest.isAfter(LocalDateTime.now().minusSeconds(contextTimeSeconds))) {
+		LocalDateTime now = LocalDateTime.now();
+		if (oldest.isAfter(now.minusSeconds(contextTimeSeconds))) {
+			LOG.warn("Shutting down Jms Consumer {} for {} seconds based on {} errors in the last {}",
+					jmsConsumer, restartTimeSeconds, contextSize, diff(oldest, now));
 			stop(jmsConsumer);
 			new Thread(() -> {
 				try {
@@ -85,6 +93,7 @@ public class JmsConsumerManager {
 					// ignore
 				} finally {
 					start(jmsConsumer);
+					LOG.info("Starting {} after {} seconds downtime", jmsConsumer, restartTimeSeconds);
 					getErrorsFor(jmsConsumer).clear();
 				}
 			}).start();
@@ -101,5 +110,11 @@ public class JmsConsumerManager {
 
 	void setRestartTimeSeconds(int restartTimeSeconds) {
 		this.restartTimeSeconds = restartTimeSeconds;
+	}
+
+	private String diff(LocalDateTime from, LocalDateTime to) {
+		long mins = ChronoUnit.MINUTES.between(from, to);
+		long seconds = ChronoUnit.SECONDS.between(from, to.minusMinutes(mins));
+		return String.format("%d minutes %d seconds", mins, seconds);
 	}
 }
