@@ -11,10 +11,10 @@ import org.springframework.util.StopWatch;
  */
 public abstract class AbstractSelftest {
 
-	private String name;
-	private String description;
-	private String address;
-	private Ping.Type type;
+	protected String name;
+	protected String description;
+	protected String address;
+	protected Ping.Type type;
 
 	public AbstractSelftest(Ping.Type type, String name, String description) {
 		this.type = type;

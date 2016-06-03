@@ -1,12 +1,11 @@
 package no.nav.varsel.jms;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import no.nav.varsel.config.support.QueueInfo;
 import no.nav.varsel.domain.to.Ping;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jms.UncategorizedJmsException;
 import org.springframework.jms.core.JmsTemplate;
 
@@ -17,39 +16,42 @@ import javax.jms.Queue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Jms Ping Provider
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public class JmsPingProvider implements InitializingBean {
+public class JmsPingProvider {
 
 	private static final Logger LOG = LoggerFactory.getLogger(JmsPingProvider.class);
 
 	@Resource
 	private Map<QueueInfo, Queue> queueOverview;
-	private Map<QueueInfo, Queue> filteredQueueOverview;
+	private Set<QueueInfo> remoteQueues = Sets.newHashSet(QueueInfo.VARSELUTSENDING);
 
 	@Inject
 	private JmsTemplate jmsTemplate;
 
 	public List<Ping> ping() {
-		Map<QueueInfo, Queue> map = filteredQueueOverview;
+		Map<QueueInfo, Queue> map = queueOverview;
 
 		LOG.debug("tester køer {}", map.size());
 		List<Ping> pings = new ArrayList<>();
 		for (final QueueInfo queueInfo : map.keySet()) {
 			Queue queue = map.get(queueInfo);
 			final String queueName = getQueueName(queue);
-			pings.add(new Ping(Ping.Type.Queue, queueInfo.getInternalName(), queueInfo.getDescription() ,queueName, () -> {
+			Runnable pinger = () -> {
 				try {
 					checkQueue(queue);
 				} catch (Exception e) {
 					String errorMsg = "JMS Queue Browser failed to get queue: " + queueName;
 					throw new UncategorizedJmsException(errorMsg, e);
 				}
-			}));
+			};
+			pinger = remoteQueues.contains(queueInfo) ? null : pinger;
+			pings.add(new Ping(Ping.Type.Queue, queueInfo.getInternalName(), queueInfo.getDescription(), queueName, pinger));
 		}
 		return pings;
 	}
@@ -75,17 +77,6 @@ public class JmsPingProvider implements InitializingBean {
 					return null;
 				}
 		);
-	}
-
-	private Map<QueueInfo, Queue> removeForeignQueueManagerQueues(Map<QueueInfo, Queue> queueMap) {
-		Map<QueueInfo, Queue> mqGateway01Queues = Maps.newHashMap(queueMap);
-//		mqGateway01Queues.remove(FAGSYSTEM_STATUS_ENDRING_QUEUE);
-		return mqGateway01Queues;
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		filteredQueueOverview = removeForeignQueueManagerQueues(queueOverview);
 	}
 
 }
