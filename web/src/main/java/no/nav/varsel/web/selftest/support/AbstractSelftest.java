@@ -54,23 +54,31 @@ public abstract class AbstractSelftest {
 		return true;
 	}
 
+	protected boolean canPing() {
+		return true;
+	}
+
 	public SelftestCheck check() {
 		SelftestCheck check = new SelftestCheck();
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 
-		try {
-			doCheck();
-		} catch (Exception e) {
-			@SuppressWarnings("ThrowableResultOfMethodCallIgnored")
-			Throwable rootCause = Throwables.getRootCause(e);
-			if (rootCause != null) {
-				check.setErrorMessage(rootCause.getMessage());
-			} else {
-				check.setErrorMessage(e.getMessage());
+		if (canPing()) {
+			try {
+				doCheck();
+			} catch (Exception e) {
+				@SuppressWarnings("ThrowableResultOfMethodCallIgnored")
+				Throwable rootCause = Throwables.getRootCause(e);
+				if (rootCause != null) {
+					check.setErrorMessage(rootCause.getMessage());
+				} else {
+					check.setErrorMessage(e.getMessage());
+				}
+				check.setStackTrace(Throwables.getStackTraceAsString(e));
+				check.setResult(isVital() ? Result.ERROR : Result.WARNING);
 			}
-			check.setStackTrace(Throwables.getStackTraceAsString(e));
-			check.setResult(isVital() ? Result.ERROR : Result.WARNING);
+		} else {
+			check.setResult(Result.UNPINGABLE);
 		}
 		stopWatch.stop();
 		check.setResponseTime(stopWatch.getTotalTimeMillis());

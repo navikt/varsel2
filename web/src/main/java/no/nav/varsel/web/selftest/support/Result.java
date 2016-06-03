@@ -7,7 +7,7 @@ package no.nav.varsel.web.selftest.support;
  */
 public enum Result {
 
-	OK(0, "success"), WARNING(2, "warning"), ERROR(1, "danger");
+	UNPINGABLE(0, ""), OK(0, "success"), WARNING(2, "warning"), ERROR(1, "danger");
 
 	public final int auraCode;
 	private String cssClass;

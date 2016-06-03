@@ -42,16 +42,20 @@ public class JmsPingProvider {
 		for (final QueueInfo queueInfo : map.keySet()) {
 			Queue queue = map.get(queueInfo);
 			final String queueName = getQueueName(queue);
-			Runnable pinger = () -> {
-				try {
-					checkQueue(queue);
-				} catch (Exception e) {
-					String errorMsg = "JMS Queue Browser failed to get queue: " + queueName;
-					throw new UncategorizedJmsException(errorMsg, e);
-				}
-			};
-			pinger = remoteQueues.contains(queueInfo) ? null : pinger;
-			pings.add(new Ping(Ping.Type.Queue, queueInfo.getInternalName(), queueInfo.getDescription(), queueName, pinger));
+			boolean isRemoteQueue = remoteQueues.contains(queueInfo);
+			Runnable pinger = null;
+			if (!isRemoteQueue) {
+				pinger = () -> {
+					try {
+						checkQueue(queue);
+					} catch (Exception e) {
+						String errorMsg = "JMS Queue Browser failed to get queue: " + queueName;
+						throw new UncategorizedJmsException(errorMsg, e);
+					}
+				};
+			}
+			Ping.Type type = isRemoteQueue ? Ping.Type.RemoteQueue : Ping.Type.Queue;
+			pings.add(new Ping(type, queueInfo.getInternalName(), queueInfo.getDescription(), queueName, pinger));
 		}
 		return pings;
 	}

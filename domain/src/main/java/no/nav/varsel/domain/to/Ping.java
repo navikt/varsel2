@@ -14,6 +14,7 @@ public class Ping {
 
 	public enum Type {
 		Queue("Jms Queue"),
+		RemoteQueue("Remote Queuemanager Queue"),
 		Soap("Soap WebService"),
 		Rest("Rest"),
 		Datasource("Oracle datasource"),

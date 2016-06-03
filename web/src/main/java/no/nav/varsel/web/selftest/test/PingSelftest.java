@@ -18,10 +18,11 @@ public class PingSelftest extends AbstractSelftest {
 
 	@Override
 	protected void doCheck() throws Exception {
-		if (pinger != null) {
-			pinger.run();
-		} else {
-			description += " - NB unpingable";
-		}
+		pinger.run();
+	}
+
+	@Override
+	protected boolean canPing() {
+		return pinger != null;
 	}
 }
