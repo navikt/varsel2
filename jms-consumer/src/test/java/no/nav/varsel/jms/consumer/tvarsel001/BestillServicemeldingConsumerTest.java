@@ -11,7 +11,7 @@ import static no.nav.varsel.repo.TestdataUtil.FUNKSJONELL_FEIL;
 import static no.nav.varsel.repo.TestdataUtil.KANAL_CODE;
 import static no.nav.varsel.repo.TestdataUtil.TEKNISK_FEIL;
 import static no.nav.varsel.test.TestUtils.aboutNow;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.FØRSTE_GANG_TEKST_TIL_MOTTAKER;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.FOERSTE_GANG_TEKST_TIL_MOTTAKER;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.PREFERERT_KANAL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.VARSEL_TITTEL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.VARSEL_URL;
@@ -31,7 +31,6 @@ import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.JmsConsumer;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
-import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import org.junit.Test;
 
@@ -60,7 +59,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		isOk(response);
 		assertThat(varselbestillingRepo.count(), is(1L));
 
-		String varselTekst = FØRSTE_GANG_TEKST_TIL_MOTTAKER.replace(":mottaker", VAL);
+		String varselTekst = FOERSTE_GANG_TEKST_TIL_MOTTAKER.replace(":mottaker", VAL);
 		String varselId = assertDb(varselTekst).getVarselId();
 		assertVarselutsendingQueue(varselTekst, varselId);
 	}

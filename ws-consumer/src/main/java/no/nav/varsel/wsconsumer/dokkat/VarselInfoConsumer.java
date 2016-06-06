@@ -15,7 +15,7 @@ public class VarselInfoConsumer {
 	public static final String PREFERERT_KANAL = "DITTNAV";
 	public static final String VARSEL_URL = "URL";
 	public static final String VARSEL_TITTEL = "Varsel Tittel";
-	public static final String FØRSTE_GANG_TEKST_TIL_MOTTAKER = "Første gang tekst til :mottaker";
+	public static final String FOERSTE_GANG_TEKST_TIL_MOTTAKER = "Første gang tekst til :mottaker";
 	public static final String REVARSLING_TEKST_TIL_MOTTAKER = "Revarsling tekst til :mottaker";
 
 	public VarselInfoTo hentVarselInfo(String varseltype) {
@@ -31,7 +31,7 @@ public class VarselInfoConsumer {
 		VarselMalTo varselMalTo = new VarselMalTo();
 		varselMalTo.setKanal(KanalCode.DITTNAV);
 		varselMalTo.setTittel(VARSEL_TITTEL);
-		varselMalTo.setFoerstegangsTekst(FØRSTE_GANG_TEKST_TIL_MOTTAKER);
+		varselMalTo.setFoerstegangsTekst(FOERSTE_GANG_TEKST_TIL_MOTTAKER);
 		varselMalTo.setRevarslingTekst(REVARSLING_TEKST_TIL_MOTTAKER);
 		varselInfoTo.setMaler(Sets.newHashSet(varselMalTo));
 		return varselInfoTo;

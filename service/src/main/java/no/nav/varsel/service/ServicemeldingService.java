@@ -1,7 +1,5 @@
 package no.nav.varsel.service;
 
-import static javax.transaction.Transactional.TxType.MANDATORY;
-
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentIdentForAktoerIdPersonIkkeFunnet;
 import no.nav.varsel.domain.code.KanalCode;
@@ -21,7 +19,6 @@ import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
 
