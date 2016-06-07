@@ -1,6 +1,7 @@
 package no.nav.varsel.config;
 
 import no.nav.varsel.service.MottaVarselKvitteringService;
+import no.nav.varsel.service.StoppReVarselService;
 import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.VarselFletter;
 import no.nav.varsel.service.VarslelKanalDecider;
@@ -47,5 +48,10 @@ public class ServiceConfig {
 	@Bean
 	public MottaVarselKvitteringService mottaVarselKvitteringService() {
 	 	return new MottaVarselKvitteringService();
+	}
+
+	@Bean
+	public StoppReVarselService stoppReVarselService() {
+		return new StoppReVarselService();
 	}
 }

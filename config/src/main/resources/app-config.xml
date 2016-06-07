@@ -25,6 +25,7 @@
 			<queue alias="varsel_bestill_servicemelding" jndi="java:/jboss/bestillServicemelding"/>
 			<queue alias="varsel_varsel_kvittering" jndi="java:/jboss/varselKvittering"/>
 			<queue alias="VARSEL_INN" jndi="java:/jboss/varselutsending"/>
+			<queue alias="varsel_revarselStopp" jndi="java:/jboss/revarselStopp"/>
 		</queueManager>
 		<ldap alias="ldap" mapToProperty="ldap"/>
 		<webservice mapToProperty="aktoerv2.ws" alias="Aktoer_v2"/>

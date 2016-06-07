@@ -88,6 +88,10 @@ public abstract class AbstractConsumerJmsTest {
 		assertTrue(response != null && response.isOk());
 	}
 
+	protected void isError(JmsReply response) {
+		assertTrue(response != null && !response.isOk());
+	}
+
 	protected void isOk(Message response) {
 		assertThat(response, notNullValue());
 	}

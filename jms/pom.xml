@@ -50,6 +50,11 @@
 			<artifactId>nav-virksomhet-varselKvittering-v1-meldingsdefinisjon</artifactId>
 			<classifier>jaxb</classifier>
 		</dependency>
+		<dependency>
+			<groupId>no.nav.meldinger.virksomhet</groupId>
+			<artifactId>nav-virksomhet-stoppReVarsel-v1-meldingsdefinisjon</artifactId>
+			<classifier>jaxb</classifier>
+		</dependency>
 
 		<dependency>
 			<groupId>com.ryantenney.metrics</groupId>

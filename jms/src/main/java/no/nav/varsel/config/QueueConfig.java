@@ -36,13 +36,19 @@ public class QueueConfig {
 	}
 
 	@Bean
+	public Queue revarselStoppQueue() {
+		return getQueue("java:/jboss/revarselStopp");
+	}
+
+	@Bean
 	public Map<QueueInfo, Queue> queueOverview(Queue bestillServicemeldingQueue,
 											   Queue varselKvitteringQueue,
-											   Queue varselutsendingQueue) {
+											   Queue varselutsendingQueue, Queue revarselStoppQueue) {
 		HashMap<QueueInfo, Queue> map = Maps.newHashMap();
 		map.put(BESTILL_SERVICEMELDING, bestillServicemeldingQueue);
 		map.put(VARSEL_KVITTERING, varselKvitteringQueue);
 		map.put(VARSELUTSENDING, varselutsendingQueue);
+		map.put(REVARSEL_STOPP, revarselStoppQueue);
 		return map;
 	}
 

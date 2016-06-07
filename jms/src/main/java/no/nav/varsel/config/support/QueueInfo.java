@@ -11,7 +11,8 @@ import static no.nav.varsel.config.support.QueueInfo.Direction.OUT;
 public enum QueueInfo {
 	BESTILL_SERVICEMELDING("varsel_bestill_servicemelding", "bestillServicemelding", IN),
 	VARSEL_KVITTERING("varsel_varsel_kvittering", "varselKvittering", IN),
-	VARSELUTSENDING("varselutsending", "varselutsending", OUT);
+	VARSELUTSENDING("varselutsending", "varselutsending", OUT),
+	REVARSEL_STOPP("varsel_revarselStopp", "revarselStopp", IN);
 
 	private final String fasitName;
 	private final String internalName;
