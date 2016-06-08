@@ -14,7 +14,7 @@ public class QueueInfoTest {
 	@Test
 	public void shouldGetDescription() throws Exception {
 		String string = QueueInfo.BESTILL_SERVICEMELDING.getDescription();
-		assertThat(string, is("direction=IN fasitAlias=varsel_bestill_servicemelding"));
+		assertThat(string, is("direction=IN fasitAlias=VARSELPRODUKSJON.VARSLINGER"));
 	}
 
 }
