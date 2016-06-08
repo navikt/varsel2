@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 public class HentDigitalKontaktinformasjonMapperTest {
 
 	public static final String ID = "id";
-	public static final boolean RESERVASJON = true;
+	public static final boolean RESERVASJON = false;
 	public static final String RESERVASJON_STRING = String.valueOf(RESERVASJON);
 	public static final String EPOSTADRESSE = "er@mocked.data";
 	public static final String MOBILTELEFONNUMMER = "54621378";

@@ -2,7 +2,8 @@ package no.nav.varsel.config;
 
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
-import no.nav.melding.virksomhet.varselutsending.v1.varselutsending.Varselutsending;
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
+import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
 import no.nav.varsel.jms.JmsPingProvider;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import org.slf4j.Logger;
@@ -100,6 +101,7 @@ public class JmsConfig {
 				Varsel.class.getPackage().getName(),
 				Varselutsending.class.getPackage().getName(),
 				VarselKvittering.class.getPackage().getName(),
+				VarselMedHandling.class.getPackage().getName(),
 				JmsReply.class.getPackage().getName()
 		);
 		return marshaller;

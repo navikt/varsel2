@@ -6,12 +6,16 @@ import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigit
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonSikkerhetsbegrensing;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonRequest;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonResponse;
+import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
+import no.nav.varsel.wsconsumer.support.VarslelKanalDecider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * HentDigitalKontaktinformasjon Stub
@@ -27,7 +31,19 @@ public class HentDigitalKontaktinformasjonConsumer {
 	@Inject
 	private HentDigitalKontaktinformasjonMapper mapper;
 
-	public KontaktregisterTo hentDigitalKontaktinformasjon(String personIdent) {
+	@Inject
+	private VarslelKanalDecider varslelKanalDecider;
+
+	public KontaktregisterTo hentDigitalKontaktinformasjonAndDecideKanal(String personIdent, Set<KanalCode> preferertKanal) {
+		KontaktregisterTo kontaktregisterTo = hentDigitalKontaktinformasjon(personIdent);
+		kontaktregisterTo = kontaktregisterTo == null ? new KontaktregisterTo() : kontaktregisterTo;
+
+		Collection<KanalCode> kanaler = varslelKanalDecider.decideKanaler(kontaktregisterTo, preferertKanal);
+		kontaktregisterTo.setKanaler(kanaler);
+		return kontaktregisterTo;
+	}
+
+	KontaktregisterTo hentDigitalKontaktinformasjon(String personIdent) {
 		HentDigitalKontaktinformasjonRequest request = new HentDigitalKontaktinformasjonRequest();
 		request.setPersonident(personIdent);
 		HentDigitalKontaktinformasjonResponse response;

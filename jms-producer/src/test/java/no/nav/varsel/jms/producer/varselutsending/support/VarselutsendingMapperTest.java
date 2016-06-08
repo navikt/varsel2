@@ -7,12 +7,11 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import no.nav.melding.virksomhet.varselutsending.v1.varselutsending.AktoerId;
-import no.nav.melding.virksomhet.varselutsending.v1.varselutsending.PersonIdent;
-import no.nav.melding.virksomhet.varselutsending.v1.varselutsending.Varselutsending;
+import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.AktoerId;
+import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Person;
+import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.to.AktoerTo;
-import no.nav.varsel.domain.to.MottakerType;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo.VarselutsendingToBuilder;
 import org.junit.Test;
 
@@ -33,6 +32,8 @@ public class VarselutsendingMapperTest {
 	private static final String VARSELTEKST = "varseltekst";
 	private static final String VARSELTITTEL = "varseltittel";
 	private static final String IDENT = "ident";
+	private static final String KONTAKT_INFO = "kontaktInfo";
+	private static final String PERSON_IDENT_TYPE = "FNR";
 
 	private VarselutsendingMapper mapper = new VarselutsendingMapper();
 
@@ -42,7 +43,8 @@ public class VarselutsendingMapperTest {
 
 		assertThat(varselutsending.getUtloepstidspunkt(), equalTo(toXmlGregorianCalendar(UTLOEPSTIDSPUNKT)));
 		assertThat(varselutsending.getVarslingstype().getValue(), is(VARSLINGSTYPE));
-		assertThat(varselutsending.getKanal().getValue(), is(KANAL_CODE.toString()));
+		assertThat(varselutsending.getDistribusjon().getKanal().getValue(), is(KANAL_CODE.toString()));
+		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), is(KONTAKT_INFO));
 		assertThat(varselutsending.getMottaker(), instanceOf(AktoerId.class));
 		assertThat(((AktoerId) varselutsending.getMottaker()).getAktoerId(), is(IDENT));
 		assertThat(varselutsending.getVarselId(), is(VARSELID));
@@ -54,10 +56,11 @@ public class VarselutsendingMapperTest {
 	@Test
 	public void shouldMapPersonIdent() throws Exception {
 		Varselutsending varselutsending = mapper.map(createVarselutsendingTo()
-				.mottaker(new AktoerTo(IDENT, MottakerType.PERSON)).build());
+				.mottaker(AktoerTo.newPersonIdent(IDENT)).build());
 
-		assertThat(varselutsending.getMottaker(), instanceOf(PersonIdent.class));
-		assertThat(((PersonIdent) varselutsending.getMottaker()).getPersonIdent(), is(IDENT));
+		assertThat(varselutsending.getMottaker(), instanceOf(Person.class));
+		assertThat(((Person) varselutsending.getMottaker()).getIdent().getIdent(), is(IDENT));
+		assertThat(((Person) varselutsending.getMottaker()).getIdent().getType().getValue(), is(PERSON_IDENT_TYPE));
 	}
 
 	private VarselutsendingToBuilder createVarselutsendingTo() {
@@ -65,7 +68,8 @@ public class VarselutsendingMapperTest {
 				.utloepstidspunkt(UTLOEPSTIDSPUNKT)
 				.varslingstype(VARSLINGSTYPE)
 				.kanal(KANAL_CODE)
-				.mottaker(new AktoerTo(IDENT, MottakerType.AKTOER))
+				.kontaktInformasjon(KONTAKT_INFO)
+				.mottaker(AktoerTo.newAktoerId(IDENT))
 				.varselId(VARSELID)
 				.varselUrl(VARSELURL)
 				.varselTekst(VARSELTEKST)

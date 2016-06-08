@@ -9,7 +9,7 @@ import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapper;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.service.ServicemeldingService;
-import no.nav.varsel.service.tvarsel001.to.BestillServicemeldingTo;
+import no.nav.varsel.service.to.BestillVarselTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListener;
@@ -47,9 +47,9 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 
 	@Override
 	protected void handleMessage(Varsel varsel) {
-		LOGG.debug("Mottat varsel " + varsel.getVarslingstype().getValue());
-		BestillServicemeldingTo to = bestillServicemeldingMapper.map(varsel);
+		BestillVarselTo to = bestillServicemeldingMapper.map(varsel);
 		to.validateTvarsel001Input();
+		LOGG.debug(String.format("Mottat varsel %s til %s", to.getVarslingstype(), to.craeteAktoerTo()));
 
 		servicemeldingService.bestillServicemelding(to);
 	}

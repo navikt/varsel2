@@ -1,9 +1,12 @@
 package no.nav.varsel.domain.builder;
 
+import com.google.common.collect.Sets;
 import no.nav.varsel.domain.auxiliary.Builder;
+import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,14 +25,14 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 	private Long id;
 	private String varselbestillingId;
 	private String varslingstype;
-	private String preferertKanal;
+	private Set<KanalCode> preferertKanal = Sets.newHashSet();
 	private LocalDateTime utlopTidspunkt;
 	private String fnr;
 	private String aktorId;
 	private LocalDateTime bestillingTidspunkt;
 	private Integer revarslingIntervall;
 	private Integer antallRevarslinger;
-	private LocalDateTime nesteVarslingstidspunkt;
+	private LocalDate nesteVarslingstidspunkt;
 	private Set<Varsel> varsels = new HashSet<>();
 	private Map<String, String> parameters = new HashMap<>();
 
@@ -55,8 +58,12 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 		return this;
 	}
 
-	public VarselbestillingBuilder preferertKanal(String preferertKanal) {
-		this.preferertKanal = preferertKanal;
+	public VarselbestillingBuilder preferertKanal(KanalCode... preferertKanal) {
+		return preferertKanal(Arrays.asList(preferertKanal));
+	}
+
+	public VarselbestillingBuilder preferertKanal(Collection<KanalCode> preferertKanal) {
+		this.preferertKanal.addAll(preferertKanal);
 		return this;
 	}
 
@@ -90,7 +97,7 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 		return this;
 	}
 
-	public VarselbestillingBuilder nesteVarslingstidspunkt(LocalDateTime nesteVarslingstidspunkt) {
+	public VarselbestillingBuilder nesteVarslingstidspunkt(LocalDate nesteVarslingstidspunkt) {
 		this.nesteVarslingstidspunkt = nesteVarslingstidspunkt;
 		return this;
 	}

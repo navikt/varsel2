@@ -1,9 +1,10 @@
-package no.nav.varsel.service;
+package no.nav.varsel.wsconsumer.support;
 
 import static no.nav.varsel.domain.code.KanalCode.DITTNAV;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
 import static no.nav.varsel.domain.code.KanalCode.SMS;
 
+import com.google.common.collect.Sets;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 
@@ -18,20 +19,24 @@ import java.util.Set;
  */
 public class VarslelKanalDecider {
 
-	public static final String SMS_EPOST = "SMS_EPOST";
-
-	public Collection<KanalCode> decideKanaler(KontaktregisterTo kontaktregisterTo, String preferertKanal) {
+	public Collection<KanalCode> decideKanaler(KontaktregisterTo kontaktregisterTo, Set<KanalCode> preferertKanal) {
 		Set<KanalCode> kanaler = new HashSet<>();
-		preferertKanal = preferertKanal == null ? SMS_EPOST : preferertKanal;
+		if (preferertKanal == null) {
+			preferertKanal = Sets.newHashSet();
+		}
+		if (preferertKanal.isEmpty()) {
+			preferertKanal.add(SMS);
+			preferertKanal.add(EPOST);
+		}
 
-		if (SMS_EPOST.equals(preferertKanal)) {
+		if (preferertKanal.contains(SMS) && preferertKanal.contains(EPOST)) {
 			prefSmsEpost(kanaler, kontaktregisterTo);
-		} else if (EPOST.toString().equals(preferertKanal)) {
+		} else if (preferertKanal.contains(EPOST)) {
 			tryEpost(kanaler, kontaktregisterTo);
 			if (kanaler.isEmpty()) {
 				trySms(kanaler, kontaktregisterTo);
 			}
-		} else if (SMS.toString().equals(preferertKanal)) {
+		} else if (preferertKanal.contains(SMS)) {
 			trySms(kanaler, kontaktregisterTo);
 			if (kanaler.isEmpty()) {
 				tryEpost(kanaler, kontaktregisterTo);

@@ -1,6 +1,8 @@
 package no.nav.varsel.domain.object;
 
+import com.google.common.collect.Sets;
 import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
+import no.nav.varsel.domain.code.KanalCode;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
@@ -8,6 +10,8 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,9 +21,8 @@ import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,8 +51,11 @@ public class Varselbestilling extends AbstractDomainObject {
 	@Column(name = "varslingstype", nullable = false)
 	private String varslingstype;
 
-	@Column(name = "preferert_kanal")
-	private String preferertKanal;
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "varselbest_prefkanal", joinColumns = @JoinColumn(name = "fk_varselbestilling_id"))
+	@Column(name = "k_kanal")
+	@Enumerated(EnumType.STRING)
+	private Set<KanalCode> preferertKanal = Sets.newHashSet();
 
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
 	@Column(name = "utlop_tidspunkt", columnDefinition = "TIMESTAMP")
@@ -71,17 +77,17 @@ public class Varselbestilling extends AbstractDomainObject {
 	@Column(name = "antall_revarslinger")
 	private Integer antallRevarslinger;
 
-	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
-	@Column(name = "neste_varsling_tidspunkt", columnDefinition = "TIMESTAMP")
-	private LocalDateTime nesteVarslingstidspunkt;
+	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDate")
+	@Column(name = "neste_varsling_tidspunkt", columnDefinition = "DATE")
+	private LocalDate nesteVarslingstidspunkt;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "varselbestilling")
 	private Set<Varsel> varsels = new HashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "FLETTE_PARAMETER", joinColumns = @JoinColumn(name = "FK_VARSELBESTILLING_ID"))
-	@MapKeyColumn(name = "KEY")
-	@Column(name = "VALUE")
+	@CollectionTable(name = "flette_parameter", joinColumns = @JoinColumn(name = "fk_varselbestilling_id"))
+	@MapKeyColumn(name = "key")
+	@Column(name = "value")
 	private Map<String, String> fletteparametere = new HashMap<>();
 
 	public Varselbestilling(Long id, Long versjon) {
@@ -116,12 +122,16 @@ public class Varselbestilling extends AbstractDomainObject {
 		this.varslingstype = varslingstype;
 	}
 
-	public String getPreferertKanal() {
+	public Set<KanalCode> getPreferertKanal() {
 		return preferertKanal;
 	}
 
-	public void setPreferertKanal(String preferertKanal) {
+	public void setPreferertKanal(Set<KanalCode> preferertKanal) {
 		this.preferertKanal = preferertKanal;
+	}
+
+	public void addPreferertKanal(KanalCode preferertKanal) {
+		this.preferertKanal.add(preferertKanal);
 	}
 
 	public LocalDateTime getUtlopTidspunkt() {
@@ -172,11 +182,11 @@ public class Varselbestilling extends AbstractDomainObject {
 		this.antallRevarslinger = antallRevarslinger;
 	}
 
-	public LocalDateTime getNesteVarslingstidspunkt() {
+	public LocalDate getNesteVarslingstidspunkt() {
 		return nesteVarslingstidspunkt;
 	}
 
-	public void setNesteVarslingstidspunkt(LocalDateTime nesteVarslingstidspunkt) {
+	public void setNesteVarslingstidspunkt(LocalDate nesteVarslingstidspunkt) {
 		this.nesteVarslingstidspunkt = nesteVarslingstidspunkt;
 	}
 

@@ -1,8 +1,8 @@
 package no.nav.varsel.jms.producer;
 
 
-import no.nav.melding.virksomhet.varselutsending.v1.varselutsending.ObjectFactory;
-import no.nav.melding.virksomhet.varselutsending.v1.varselutsending.Varselutsending;
+import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.ObjectFactory;
+import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
 import no.nav.varsel.jms.producer.varselutsending.support.VarselutsendingMapper;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 import org.springframework.jms.core.JmsTemplate;

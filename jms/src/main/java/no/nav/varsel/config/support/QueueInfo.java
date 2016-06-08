@@ -10,6 +10,7 @@ import static no.nav.varsel.config.support.QueueInfo.Direction.OUT;
  */
 public enum QueueInfo {
 	BESTILL_SERVICEMELDING("varsel_bestill_servicemelding", "bestillServicemelding", IN),
+	BESTILL_VARSEL("varsel_bestill_varsel", "bestillVarsel", IN),
 	VARSEL_KVITTERING("varsel_varsel_kvittering", "varselKvittering", IN),
 	VARSELUTSENDING("varselutsending", "varselutsending", OUT);
 

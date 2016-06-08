@@ -8,7 +8,7 @@ import no.nav.melding.virksomhet.varsel.v1.varsel.Parameter;
 import no.nav.melding.virksomhet.varsel.v1.varsel.PersonIdent;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.varsel.jms.consumer.tvarsel001.BestillServicemeldingConsumer;
-import no.nav.varsel.service.tvarsel001.to.BestillServicemeldingTo;
+import no.nav.varsel.service.to.BestillVarselTo;
 import org.springframework.util.Assert;
 
 import java.util.HashMap;
@@ -22,9 +22,9 @@ import java.util.Map;
  */
 public class BestillServicemeldingMapper {
 
-	public BestillServicemeldingTo map(Varsel varsel) {
+	public BestillVarselTo map(Varsel varsel) {
 		Assert.notNull(varsel, "Varsel er null");
-		BestillServicemeldingTo to = new BestillServicemeldingTo();
+		BestillVarselTo to = new BestillVarselTo();
 
 		map(varsel.getMottaker(), to);
 		to.setVarslingstype(varsel.getVarslingstype() == null ? null :
@@ -41,7 +41,7 @@ public class BestillServicemeldingMapper {
 		return map;
 	}
 
-	private void map(Aktoer aktoer, BestillServicemeldingTo to) {
+	private void map(Aktoer aktoer, BestillVarselTo to) {
 		if (aktoer instanceof AktoerId) {
 			to.setAktoerId(((AktoerId) aktoer).getAktoerId());
 		} else if (aktoer instanceof PersonIdent) {
