@@ -49,15 +49,16 @@ public class BestillVarselService {
 	public void bestillVarsel(BestillVarselTo to) {
 		Varselbestilling existingVarsel = varselbestillingRepo.findByVarselbestillingId(to.getVarselBestillingId());
 
-		if (to.isRevarsling() && existingVarsel == null) {
+		Boolean revarsling = to.isRevarsling();
+		if (revarsling && existingVarsel == null) {
 			throw new VarselbestillingNotExistException(to.getVarselBestillingId());
-		} else if (!to.isRevarsling() && existingVarsel != null) {
+		} else if (!revarsling && existingVarsel != null) {
 			throw new VarselbestillingAlreadyExistException(to.getVarselBestillingId());
 		}
 
 		AktoerTo origAktoer = to.craeteAktoerTo();
 
-		if (to.isRevarsling()) {
+		if (revarsling) {
 			to.setMottaker(AktoerTo.newPersonIdent(existingVarsel.getFnr()));
 		} else {
 			aktoerService.completeAktoerPersonIdent(to);
@@ -70,15 +71,16 @@ public class BestillVarselService {
 
 		Set<Varsel> varsels;
 		Varselbestilling varselbestilling;
-		if (!to.isRevarsling()) {
-			varselbestilling = domainMapper.mapVarselbestillingFoerstegangVarselMedRevarsel(to, varselInfoTo, kontaktregisterTo);
-			varsels = varselbestilling.getVarsels();
-		} else {
+
+		if (revarsling) {
 			varselbestilling = existingVarsel;
 			varsels = kontaktregisterTo.getKanaler().stream()
 					.map((kanalCode) -> domainMapper.mapReVarsel(kanalCode, to, varselInfoTo, kontaktregisterTo))
 					.peek(existingVarsel::addVarsel)
 					.collect(toSet());
+		} else {
+			varselbestilling = domainMapper.mapVarselbestillingFoerstegangVarselMedRevarsel(to, varselInfoTo, kontaktregisterTo);
+			varsels = varselbestilling.getVarsels();
 		}
 
 		varselbestillingRepo.saveAndFlush(varselbestilling);
