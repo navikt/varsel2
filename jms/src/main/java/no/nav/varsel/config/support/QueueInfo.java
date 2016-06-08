@@ -9,10 +9,10 @@ import static no.nav.varsel.config.support.QueueInfo.Direction.OUT;
  * @author Andreas Skomedal, Visma Consulting.
  */
 public enum QueueInfo {
-	BESTILL_SERVICEMELDING("varsel_bestill_servicemelding", "bestillServicemelding", IN),
+	BESTILL_SERVICEMELDING("VARSELPRODUKSJON.VARSLINGER", "bestillServicemelding", IN),
 	BESTILL_VARSEL("varsel_bestill_varsel", "bestillVarsel", IN),
-	VARSEL_KVITTERING("varsel_varsel_kvittering", "varselKvittering", IN),
-	VARSELUTSENDING("varselutsending", "varselutsending", OUT);
+	VARSEL_KVITTERING("VARSELPRODUKSJON.KVITTERING", "varselKvittering", IN),
+	VARSELUTSENDING("VARSEL_INN", "varselutsending", OUT);
 
 	private final String fasitName;
 	private final String internalName;

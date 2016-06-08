@@ -20,10 +20,10 @@
 		<datasource alias="varselDS" jndi="java:/jboss/datasources/varselDS" type="ORACLE" xaEnabled="true">
 			<pool maxPoolSize="50"/>
 		</datasource>
-		<queueManager alias="mqGateway01" jndi="java:/jboss/mqConnectionFactory" xaEnabled="true"
+		<queueManager alias="mqGateway02" jndi="java:/jboss/mqConnectionFactory" xaEnabled="true"
 					  unifiedConnectionFactory="true">
-			<queue alias="varsel_bestill_servicemelding" jndi="java:/jboss/bestillServicemelding"/>
-			<queue alias="varsel_varsel_kvittering" jndi="java:/jboss/varselKvittering"/>
+			<queue alias="VARSELPRODUKSJON.VARSLINGER" jndi="java:/jboss/bestillServicemelding"/>
+			<queue alias="VARSELPRODUKSJON.KVITTERING" jndi="java:/jboss/varselKvittering"/>
 			<queue alias="VARSEL_INN" jndi="java:/jboss/varselutsending"/>
 			<queue alias="varsel_bestill_varsel" jndi="java:/jboss/bestillVarsel"/>
 		</queueManager>
@@ -34,8 +34,8 @@
 	</resources>
 
 	<exposed-services>
-		<exposedQueue name="varsel_bestill_servicemelding"/>
-		<exposedQueue name="varsel_varsel_kvittering"/>
+		<exposedQueue name="VARSELPRODUKSJON.VARSLINGER"/>
+		<exposedQueue name="VARSELPRODUKSJON.KVITTERING"/>
 	</exposed-services>
 
 	<security serviceUserResourceAlias="srvVarsel"/>
