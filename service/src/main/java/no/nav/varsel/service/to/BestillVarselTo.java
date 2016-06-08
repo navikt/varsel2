@@ -87,7 +87,7 @@ public class BestillVarselTo extends AktoerBestillingTo {
 
 	public void validateTvarsel003Input() {
 		try {
-			notNull(varselBestillingId, "varselBestillingId");
+			hasText(varselBestillingId, "varselBestillingId");
 			notNull(revarsling, "revarsling");
 			assertHasOneIdent();
 			assertOptionalPersonIdentType();
