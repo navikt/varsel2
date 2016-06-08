@@ -68,6 +68,13 @@
 		<!--test-->
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
+			<artifactId>varsel-config</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-repo</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
