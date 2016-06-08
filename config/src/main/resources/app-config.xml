@@ -36,6 +36,7 @@
 	<exposed-services>
 		<exposedQueue name="VARSELPRODUKSJON.VARSLINGER"/>
 		<exposedQueue name="VARSELPRODUKSJON.KVITTERING"/>
+		<exposedQueue name="varsel_bestill_varsel"/>
 	</exposed-services>
 
 	<security serviceUserResourceAlias="srvVarsel"/>
