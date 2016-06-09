@@ -8,6 +8,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.UUID;
 
+/**
+ * Unit test for {@link StoppReVarselTo}
+ * @author Hiep Luong Nguyen, Computas
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class StoppReVarselToTest {
     public static final String VARSELBESTILLING_ID = UUID.randomUUID().toString();

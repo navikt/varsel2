@@ -2,16 +2,19 @@ package no.nav.varsel.jms.consumer.tvarsel004.support;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-
 import no.nav.melding.virksomhet.stopprevarsel.v1.stopprevarsel.StoppReVarsel;
-import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
 import no.nav.varsel.service.tvarsel004.to.StoppReVarselTo;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.UUID;
 
+/**
+ * Unit tests for {@link StoppReVarselMapper}
+ * @author Hiep Luong Nguyen, Computas
+ */
 public class StoppReVarselMapperTest {
     public static final String VARSELBESTILLING_ID = UUID.randomUUID().toString();
 

@@ -11,7 +11,6 @@ import static org.junit.Assert.assertTrue;
 import no.nav.melding.virksomhet.stopprevarsel.v1.stopprevarsel.ObjectFactory;
 import no.nav.melding.virksomhet.stopprevarsel.v1.stopprevarsel.StoppReVarsel;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
-import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
@@ -28,7 +27,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Itest for RevarselStoppConsumer
+ * Itest for {@link StoppReVarselConsumer}
+ * @author Hiep Luong Nguyen, Computas
  */
 public class StoppReVarselConsumerTest extends AbstractConsumerJmsTest {
 

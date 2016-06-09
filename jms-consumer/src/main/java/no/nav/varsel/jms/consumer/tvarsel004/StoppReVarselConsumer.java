@@ -21,6 +21,7 @@ import javax.jms.TextMessage;
 
 /**
  * Consumer for TVARSEL004 StoppRevarsel
+ * @author Hiep Luong Nguyen, Computas
  */
 @Component
 public class StoppReVarselConsumer extends AbstractJmsConsumer<StoppReVarsel> {

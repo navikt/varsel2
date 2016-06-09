@@ -18,7 +18,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 
 /**
- * Unit tests for StoppReVarselService
+ * Unit tests for {@link StoppReVarselService}
+ * @author Hiep Luong Nguyen, Computas
  */
 @RunWith(MockitoJUnitRunner.class)
 public class StoppReVarselServiceTest {
