@@ -1,0 +1,55 @@
+package no.nav.varsel.config;
+
+import static java.util.Collections.singletonList;
+
+import no.nav.varsel.wsconsumer.dokkat.support.VarselInfoMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.InterceptingClientHttpRequestFactory;
+import org.springframework.util.Base64Utils;
+import org.springframework.web.client.RestTemplate;
+
+/**
+ * Spring config for Rest Consumers
+ *
+ * @author Andreas Skomedal, Visma Consulting.
+ */
+@Configuration
+public class RestConsumerConfig {
+
+	public static final int TIMEOUT = 30_000;
+
+	@Value("${no.nav.modig.security.systemuser.username}")
+	private String srvVarselUsername;
+	@Value("${no.nav.modig.security.systemuser.password}")
+	private String srvVarselPassword;
+
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate(requestFactory());
+	}
+
+	protected InterceptingClientHttpRequestFactory requestFactory() {
+		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+		requestFactory.setReadTimeout(TIMEOUT);
+		requestFactory.setConnectTimeout(TIMEOUT);
+		return new InterceptingClientHttpRequestFactory(requestFactory, singletonList(basicAuthInterceptor()));
+	}
+
+	protected ClientHttpRequestInterceptor basicAuthInterceptor() {
+		return (request, body, execution) -> {
+			String token = Base64Utils.encodeToString((srvVarselUsername + ":" + srvVarselPassword).getBytes());
+			request.getHeaders().add("Authorization", "Basic " + token);
+			return execution.execute(request, body);
+		};
+	}
+
+	@Bean
+	public VarselInfoMapper varselInfoMapper() {
+		return new VarselInfoMapper();
+	}
+
+}

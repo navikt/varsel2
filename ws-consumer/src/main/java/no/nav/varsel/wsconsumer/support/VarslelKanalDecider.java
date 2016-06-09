@@ -1,6 +1,6 @@
 package no.nav.varsel.wsconsumer.support;
 
-import static no.nav.varsel.domain.code.KanalCode.DITTNAV;
+import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
 import static no.nav.varsel.domain.code.KanalCode.SMS;
 
@@ -44,7 +44,7 @@ public class VarslelKanalDecider {
 		}
 
 		if (kanaler.isEmpty()) {
-			kanaler.add(DITTNAV);
+			kanaler.add(DITT_NAV);
 		}
 		return kanaler;
 	}

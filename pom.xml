@@ -57,6 +57,7 @@
 		<dokumentkataloginfo-v1.version>1.0.3</dokumentkataloginfo-v1.version>
 		<nav-fim-aktoer-v2-tjenestespesifikasjon.version>2.0.1</nav-fim-aktoer-v2-tjenestespesifikasjon.version>
 		<nav-virksomhet-varselMedHandling-v1.version>1.0.1-SNAPSHOT</nav-virksomhet-varselMedHandling-v1.version>
+		<dokkat-schemas.version>6.0.0-SNAPSHOT</dokkat-schemas.version>
 	</properties>
 
 	<dependencyManagement>
@@ -109,6 +110,11 @@
 				<artifactId>nav-fim-aktoer-v2-tjenestespesifikasjon</artifactId>
 				<version>${nav-fim-aktoer-v2-tjenestespesifikasjon.version}</version>
 				<classifier>jaxws</classifier>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.dokkat</groupId>
+				<artifactId>dokkat-schemas</artifactId>
+				<version>${dokkat-schemas.version}</version>
 			</dependency>
 
 			<!--java-ee-->

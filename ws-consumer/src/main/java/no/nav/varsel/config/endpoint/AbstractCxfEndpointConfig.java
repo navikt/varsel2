@@ -1,5 +1,6 @@
 package no.nav.varsel.config.endpoint;
 
+import no.nav.varsel.config.endpoint.support.TimeoutFeature;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.LoggingInInterceptor;
@@ -17,9 +18,12 @@ import java.util.HashMap;
  */
 public abstract class AbstractCxfEndpointConfig {
 
+	public static final int DEFAULT_TIMEOUT = 30_000;
+
 	@Inject
 	private SpringBus bus;
 
+	private int timeout = DEFAULT_TIMEOUT;
 	private final JaxWsProxyFactoryBean factoryBean = new JaxWsProxyFactoryBean();
 
 	public AbstractCxfEndpointConfig() {
@@ -38,6 +42,7 @@ public abstract class AbstractCxfEndpointConfig {
 	}
 
 	<T> T createPort(Class<T> portType) {
+		factoryBean.getFeatures().add(new TimeoutFeature(timeout, timeout));
 		return factoryBean.create(portType);
 	}
 
@@ -45,4 +50,7 @@ public abstract class AbstractCxfEndpointConfig {
 		factoryBean.getProperties().put("mtom-enabled", true);
 	}
 
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
 }

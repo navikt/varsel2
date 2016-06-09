@@ -114,7 +114,7 @@ public class VarselBestillingDomainMapper {
 				.feilbeskrivelse(null)
 				.varselTittel(mal.getTittel())
 				.varselTekst(varselFletter.flettVarsel(tekstMal, bestillServicemeldingTo.getParameters()))
-				.varselUrl(kanalCode == KanalCode.DITTNAV ? varselInfoTo.getVarselURL() : null)
+				.varselUrl(kanalCode == KanalCode.DITT_NAV ? varselInfoTo.getVarselURL() : null)
 				.erRevarsel(revarsel)
 				.build();
 	}

@@ -12,9 +12,9 @@ import static no.nav.varsel.repo.TestdataUtil.FUNKSJONELL_FEIL;
 import static no.nav.varsel.repo.TestdataUtil.TEKNISK_FEIL;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.FOERSTE_GANG_TEKST;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.PREFERERT_KANAL;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.VARSEL_TITTEL;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.PREFERERT_KANAL;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -138,7 +138,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(((no.nav.melding.virksomhet.varselutsending.v2.varselutsending.AktoerId)
 				varselutsending.getMottaker()).getAktoerId(), is(MOTTAKER));
 		assertThat(varselutsending.getUtloepstidspunkt(), equalTo(toXmlGregorianCalendar(UTLOEPSTIDSPUNKT_LDT)));
-		assertThat(varselutsending.getDistribusjon().getKanal().getValue(), is(EPOST.toString()));
+		assertThat(varselutsending.getDistribusjon().getKanal().getValue(), is(EPOST.getKommunikasjonskanal()));
 		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), is(EPOSTADRESSE));
 		assertThat(varselutsending.getVarslingstype().getValue(), is(VARSLINGSTYPE));
 		assertThat(varselutsending.getVarselTittel(), is(VARSEL_TITTEL));

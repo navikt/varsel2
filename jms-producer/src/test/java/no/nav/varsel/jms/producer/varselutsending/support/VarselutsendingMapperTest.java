@@ -26,7 +26,7 @@ public class VarselutsendingMapperTest {
 
 	private static final LocalDateTime UTLOEPSTIDSPUNKT = LocalDateTime.parse("2016-04-24T15:22:45");
 	private static final String VARSLINGSTYPE = "varslingstype";
-	private static final KanalCode KANAL_CODE = KanalCode.DITTNAV;
+	private static final KanalCode KANAL_CODE = KanalCode.DITT_NAV;
 	private static final String VARSELID = "varselid";
 	private static final String VARSELURL = "varselurl";
 	private static final String VARSELTEKST = "varseltekst";
@@ -43,7 +43,7 @@ public class VarselutsendingMapperTest {
 
 		assertThat(varselutsending.getUtloepstidspunkt(), equalTo(toXmlGregorianCalendar(UTLOEPSTIDSPUNKT)));
 		assertThat(varselutsending.getVarslingstype().getValue(), is(VARSLINGSTYPE));
-		assertThat(varselutsending.getDistribusjon().getKanal().getValue(), is(KANAL_CODE.toString()));
+		assertThat(varselutsending.getDistribusjon().getKanal().getValue(), is(KANAL_CODE.getKommunikasjonskanal()));
 		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), is(KONTAKT_INFO));
 		assertThat(varselutsending.getMottaker(), instanceOf(AktoerId.class));
 		assertThat(((AktoerId) varselutsending.getMottaker()).getAktoerId(), is(IDENT));

@@ -25,7 +25,7 @@ public class VarselutsendingMapper {
 	public Varselutsending map(VarselutsendingTo to) {
 		Varselutsending varselutsending = new Varselutsending();
 		Kommunikasjonskanaler kommunikasjonskanaler = new Kommunikasjonskanaler();
-		kommunikasjonskanaler.setValue(to.getKanal().toString());
+		kommunikasjonskanaler.setValue(to.getKanal().getKommunikasjonskanal());
 		Distribusjon distribusjon = new Distribusjon();
 		distribusjon.setKanal(kommunikasjonskanaler);
 		distribusjon.setKontaktinformasjon(to.getKontaktInformasjon());

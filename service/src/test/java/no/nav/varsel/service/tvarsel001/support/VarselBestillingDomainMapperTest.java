@@ -58,7 +58,7 @@ public class VarselBestillingDomainMapperTest {
 	public static final boolean INAKTIV = false;
 	public static final int REVARSLING_INTERVALL = 4;
 	public static final int ANTALL_REVARSLING = 2;
-	public static final KanalCode PREFERERT_KANAL = KanalCode.DITTNAV;
+	public static final KanalCode PREFERERT_KANAL = KanalCode.DITT_NAV;
 
 	@Spy
 	private VarselFletter varselFletter;
@@ -145,9 +145,9 @@ public class VarselBestillingDomainMapperTest {
 
 	@Test
 	public void shouldMapUrlForDittNavButNotKontaktInfo() throws Exception {
-		Varsel varsel = mapper.mapReVarsel(KanalCode.DITTNAV, createBestillTo(), createVarselTo(), createDigitalKontaktinfoTo());
+		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), createVarselTo(), createDigitalKontaktinfoTo());
 
-		assertThat(varsel.getKanal(), is(KanalCode.DITTNAV));
+		assertThat(varsel.getKanal(), is(KanalCode.DITT_NAV));
 		assertThat(varsel.getVarselUrl(), is(URL));
 		assertThat(varsel.getKontaktInfo(), nullValue());
 	}
@@ -188,7 +188,7 @@ public class VarselBestillingDomainMapperTest {
 
 		VarselMalTo malToDittnav = new VarselMalTo();
 		malToDittnav.setTittel(TITTEL);
-		malToDittnav.setKanal(KanalCode.DITTNAV);
+		malToDittnav.setKanal(KanalCode.DITT_NAV);
 		malToDittnav.setFoerstegangsTekst(FOERSTEGANGS_TEKST);
 		malToDittnav.setRevarslingTekst(REVARSLING_TEKST);
 

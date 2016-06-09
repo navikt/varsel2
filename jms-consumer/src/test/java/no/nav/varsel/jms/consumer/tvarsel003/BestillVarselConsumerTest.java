@@ -9,12 +9,12 @@ import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperT
 import static no.nav.varsel.mock.AktoerV2Mock.AKTOER_ID;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.ANTALL_REVARSLING;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.FOERSTE_GANG_TEKST;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.PREFERERT_KANAL;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.REVARSLING_INTERVALL;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.REVARSLING_TEKST;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer.VARSEL_TITTEL;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.ANTALL_REVARSLING;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.PREFERERT_KANAL;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.REVARSLING_INTERVALL;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.REVARSLING_TEKST;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -181,7 +181,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(((Person) varselutsending.getMottaker()).getIdent().getType().getValue(), is("FNR"));
 		assertThat(varselutsending.getUtloepstidspunkt(), is(toXmlGregorianCalendar(varselbestilling.getUtlopTidspunkt())));
 		assertThat(varselutsending.getUtsendelsestidspunkt(), nullValue());
-		assertThat(varselutsending.getDistribusjon().getKanal().getValue(), is(varsel.getKanal().toString()));
+		assertThat(varselutsending.getDistribusjon().getKanal().getValue(), is(varsel.getKanal().getKommunikasjonskanal()));
 		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), is(varsel.getKontaktInfo()));
 		assertThat(varselutsending.getVarslingstype().getValue(), is(varselbestilling.getVarslingstype()));
 		assertThat(varselutsending.getVarselTittel(), is(varsel.getVarselTittel()));

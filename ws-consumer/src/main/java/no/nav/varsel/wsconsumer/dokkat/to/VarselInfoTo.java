@@ -100,4 +100,82 @@ public class VarselInfoTo {
 	public void setMaler(Set<VarselMalTo> maler) {
 		this.maler = maler;
 	}
+
+	public static final class VarselInfoToBuilder {
+		private Set<KanalCode> preferertKanal = Sets.newHashSet();
+		private String varselURL;
+		private String varslingstype;
+		private String varselForDistrKanal;
+		private String varselKategori;
+		private boolean inaktiv;
+		private int revarslingIntervall;
+		private int antallRevarsling;
+		private Set<VarselMalTo> maler;
+
+		private VarselInfoToBuilder() {
+		}
+
+		public static VarselInfoToBuilder aVarselInfoTo() {
+			return new VarselInfoToBuilder();
+		}
+
+		public VarselInfoToBuilder preferertKanal(Set<KanalCode> preferertKanal) {
+			this.preferertKanal = preferertKanal;
+			return this;
+		}
+
+		public VarselInfoToBuilder varselURL(String varselURL) {
+			this.varselURL = varselURL;
+			return this;
+		}
+
+		public VarselInfoToBuilder varslingstype(String varslingstype) {
+			this.varslingstype = varslingstype;
+			return this;
+		}
+
+		public VarselInfoToBuilder varselForDistrKanal(String varselForDistrKanal) {
+			this.varselForDistrKanal = varselForDistrKanal;
+			return this;
+		}
+
+		public VarselInfoToBuilder varselKategori(String varselKategori) {
+			this.varselKategori = varselKategori;
+			return this;
+		}
+
+		public VarselInfoToBuilder inaktiv(boolean inaktiv) {
+			this.inaktiv = inaktiv;
+			return this;
+		}
+
+		public VarselInfoToBuilder revarslingIntervall(int revarslingIntervall) {
+			this.revarslingIntervall = revarslingIntervall;
+			return this;
+		}
+
+		public VarselInfoToBuilder antallRevarsling(int antallRevarsling) {
+			this.antallRevarsling = antallRevarsling;
+			return this;
+		}
+
+		public VarselInfoToBuilder maler(Set<VarselMalTo> maler) {
+			this.maler = maler;
+			return this;
+		}
+
+		public VarselInfoTo build() {
+			VarselInfoTo varselInfoTo = new VarselInfoTo();
+			varselInfoTo.setPreferertKanal(preferertKanal);
+			varselInfoTo.setVarselURL(varselURL);
+			varselInfoTo.setVarslingstype(varslingstype);
+			varselInfoTo.setVarselForDistrKanal(varselForDistrKanal);
+			varselInfoTo.setVarselKategori(varselKategori);
+			varselInfoTo.setInaktiv(inaktiv);
+			varselInfoTo.setRevarslingIntervall(revarslingIntervall);
+			varselInfoTo.setAntallRevarsling(antallRevarsling);
+			varselInfoTo.setMaler(maler);
+			return varselInfoTo;
+		}
+	}
 }

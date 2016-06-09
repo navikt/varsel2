@@ -25,14 +25,14 @@ public class VarslelKanalDeciderTest {
 	public static final HashSet<KanalCode> PREFERERT_SMS = Sets.newHashSet(KanalCode.SMS);
 	public static final HashSet<KanalCode> PREFERERT_EPOST = Sets.newHashSet(KanalCode.EPOST);
 	public static final HashSet<KanalCode> PREFERERT_SMS_EPOST = Sets.newHashSet(KanalCode.SMS, KanalCode.EPOST);
-	public static final HashSet<KanalCode> PREFERERT_DITTNAV = Sets.newHashSet(KanalCode.DITTNAV);
+	public static final HashSet<KanalCode> PREFERERT_DITTNAV = Sets.newHashSet(KanalCode.DITT_NAV);
 
 	private VarslelKanalDecider decider = new VarslelKanalDecider();
 
 	@Test
 	public void shouldPrefDittNav() throws Exception {
 		Collection<KanalCode> kanaler = decider.decideKanaler(createKontaktTo(EPOST, MOBIL), PREFERERT_DITTNAV);
-		assertThat(kanaler, containsInAnyOrder(KanalCode.DITTNAV));
+		assertThat(kanaler, containsInAnyOrder(KanalCode.DITT_NAV));
 	}
 
 	@Test
@@ -56,7 +56,7 @@ public class VarslelKanalDeciderTest {
 	@Test
 	public void shouldPrefSmsEpostFallbackDittNav() throws Exception {
 		Collection<KanalCode> kanaler = decider.decideKanaler(createKontaktTo(null, null), PREFERERT_SMS_EPOST);
-		assertThat(kanaler, containsInAnyOrder(KanalCode.DITTNAV));
+		assertThat(kanaler, containsInAnyOrder(KanalCode.DITT_NAV));
 	}
 
 	@Test
@@ -81,7 +81,7 @@ public class VarslelKanalDeciderTest {
 	@Test
 	public void shouldPrefSmsFinalFallbackDittNav() throws Exception {
 		Collection<KanalCode> kanaler = decider.decideKanaler(createKontaktTo(null, null), PREFERERT_SMS);
-		assertThat(kanaler, containsInAnyOrder(KanalCode.DITTNAV));
+		assertThat(kanaler, containsInAnyOrder(KanalCode.DITT_NAV));
 	}
 
 	@Test
@@ -99,7 +99,7 @@ public class VarslelKanalDeciderTest {
 	@Test
 	public void shouldPrefEpostFinalFallbackDittNav() throws Exception {
 		Collection<KanalCode> kanaler = decider.decideKanaler(createKontaktTo(null, null), PREFERERT_EPOST);
-		assertThat(kanaler, containsInAnyOrder(KanalCode.DITTNAV));
+		assertThat(kanaler, containsInAnyOrder(KanalCode.DITT_NAV));
 	}
 
 	private static KontaktregisterTo createKontaktTo(String epost, String mobil) {

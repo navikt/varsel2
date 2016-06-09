@@ -44,7 +44,7 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 	private static final String ID_404 = "404";
 	private static final String ID_KON404 = "4042";
 	private static final String ID_500 = "500";
-	public static final Set<KanalCode> PREFERERT_KANAL = Sets.newHashSet(KanalCode.DITTNAV);
+	public static final Set<KanalCode> PREFERERT_KANAL = Sets.newHashSet(KanalCode.DITT_NAV);
 	public static final Set<KanalCode> PREFERERT_KANAL_2 = Sets.newHashSet(KanalCode.SMS);
 
 	@Mock
@@ -57,7 +57,7 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 	@InjectMocks
 	private HentDigitalKontaktinformasjonConsumer consumer;
 	private KontaktregisterTo kontaktregisterTo;
-	private ArrayList<KanalCode> kanalCodes = Lists.newArrayList(KanalCode.DITTNAV);
+	private ArrayList<KanalCode> kanalCodes = Lists.newArrayList(KanalCode.DITT_NAV);
 	private ArrayList<KanalCode> kanalCodes2 = Lists.newArrayList(KanalCode.SMS);
 
 	@Before
