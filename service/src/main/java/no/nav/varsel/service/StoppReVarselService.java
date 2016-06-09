@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 /**
  * Service for StoppReVarsel
+ * @author Hiep Luong Nguyen, Computas
  */
 public class StoppReVarselService {
     @Inject

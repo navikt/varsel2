@@ -51,7 +51,7 @@ public class StoppReVarselConsumer extends AbstractJmsConsumer<StoppReVarsel> {
             StoppReVarselTo stoppReVarselTo = stoppReVarselMapper.map(stoppReVarsel);
             stoppReVarselTo.validateTo();
             stoppReVarselService.behandleVarselbestilling(stoppReVarselTo);
-        } catch (IllegalArgumentException | FunctionalVarselException e) {
+        } catch (FunctionalVarselException e) {
             throw new NoJmsBackoutException(e);
         }
     }

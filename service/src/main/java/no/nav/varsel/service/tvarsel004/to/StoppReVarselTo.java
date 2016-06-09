@@ -3,7 +3,7 @@ package no.nav.varsel.service.tvarsel004.to;
 import static no.nav.varsel.service.support.ValueValidator.hasText;
 
 /**
- * To for {@link StoppReVarselTo}
+ * To for {@link no.nav.varsel.service.StoppReVarselService}
  * @author Hiep Luong Nguyen, Computas
  */
 public class StoppReVarselTo {
