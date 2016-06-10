@@ -134,7 +134,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varsel.getStatus(), is(StatusCode.SENDT));
 		assertThat(varsel.getFeilbeskrivelse(), nullValue());
 		assertThat(varsel.getVarselTittel(), is(VARSEL_TITTEL));
-		assertThat(varsel.getVarselTekst(), is(FOERSTE_GANG_TEKST.replace(":" + KEY, VAL)));
+		assertThat(varsel.getVarselTekst(), is(FOERSTE_GANG_TEKST.replace("{mottaker}", VAL)));
 		assertThat(varsel.getVarselUrl(), nullValue());
 		assertThat(varsel.getErRevarsel(), is(false));
 		return varsel;
@@ -167,7 +167,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varsel.getStatus(), is(StatusCode.SENDT));
 		assertThat(varsel.getFeilbeskrivelse(), nullValue());
 		assertThat(varsel.getVarselTittel(), is(VARSEL_TITTEL));
-		assertThat(varsel.getVarselTekst(), is(REVARSLING_TEKST.replace(":" + KEY, VAL)));
+		assertThat(varsel.getVarselTekst(), is(REVARSLING_TEKST.replace("{mottaker}", VAL)));
 		assertThat(varsel.getVarselUrl(), nullValue());
 		assertThat(varsel.getErRevarsel(), is(true));
 		return varsel;

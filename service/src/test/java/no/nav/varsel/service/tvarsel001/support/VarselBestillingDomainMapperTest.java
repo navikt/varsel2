@@ -44,8 +44,8 @@ public class VarselBestillingDomainMapperTest {
 	public static final String KEY = "key";
 	public static final String VALUE = "val";
 	public static final String URL = "url";
-	public static final String FOERSTEGANGS_TEKST = "foreste tekst for :key";
-	public static final String REVARSLING_TEKST = "revarsling tekst for :key";
+	public static final String FOERSTEGANGS_TEKST = "foreste tekst for {key}";
+	public static final String REVARSLING_TEKST = "revarsling tekst for {key}";
 	public static final String TITTEL = "tittel";
 	public static final String MOBILTELEFONNUMMER = "12345678";
 	public static final String EPOSTADRESSE = "epost@epost.no";
@@ -85,7 +85,7 @@ public class VarselBestillingDomainMapperTest {
 		assertThat(smsVarsel.getKontaktInfo(), is(MOBILTELEFONNUMMER));
 		assertThat(smsVarsel.getStatus(), is(StatusCode.SENDT));
 		assertThat(smsVarsel.getVarselTittel(), is(TITTEL));
-		assertThat(smsVarsel.getVarselTekst(), is(FOERSTEGANGS_TEKST.replace(":" + KEY, VALUE)));
+		assertThat(smsVarsel.getVarselTekst(), is(FOERSTEGANGS_TEKST.replace("{key}", VALUE)));
 		assertThat(smsVarsel.getVarselUrl(), nullValue());
 		assertThat(smsVarsel.getSendtTidspunkt(), aboutNow());
 		assertThat(smsVarsel.getErRevarsel(), is(false));
@@ -118,7 +118,7 @@ public class VarselBestillingDomainMapperTest {
 		assertThat(smsVarsel.getKontaktInfo(), is(MOBILTELEFONNUMMER));
 		assertThat(smsVarsel.getStatus(), is(StatusCode.SENDT));
 		assertThat(smsVarsel.getVarselTittel(), is(TITTEL));
-		assertThat(smsVarsel.getVarselTekst(), is(FOERSTEGANGS_TEKST.replace(":" + KEY, VALUE)));
+		assertThat(smsVarsel.getVarselTekst(), is(FOERSTEGANGS_TEKST.replace("{key}", VALUE)));
 		assertThat(smsVarsel.getVarselUrl(), nullValue());
 		assertThat(smsVarsel.getSendtTidspunkt(), aboutNow());
 		assertThat(smsVarsel.getErRevarsel(), is(false));
@@ -137,7 +137,7 @@ public class VarselBestillingDomainMapperTest {
 		assertThat(varsel.getKontaktInfo(), is(EPOSTADRESSE));
 		assertThat(varsel.getStatus(), is(StatusCode.SENDT));
 		assertThat(varsel.getVarselTittel(), is(TITTEL));
-		assertThat(varsel.getVarselTekst(), is(REVARSLING_TEKST.replace(":" + KEY, VALUE)));
+		assertThat(varsel.getVarselTekst(), is(REVARSLING_TEKST.replace("{key}", VALUE)));
 		assertThat(varsel.getVarselUrl(), nullValue());
 		assertThat(varsel.getSendtTidspunkt(), aboutNow());
 		assertThat(varsel.getErRevarsel(), is(true));

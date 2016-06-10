@@ -60,7 +60,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		isOk(response);
 		assertThat(varselbestillingRepo.count(), is(1L));
 
-		String varselTekst = FOERSTE_GANG_TEKST.replace(":mottaker", VAL);
+		String varselTekst = FOERSTE_GANG_TEKST.replace("{mottaker}", VAL);
 		String varselId = assertDb(varselTekst).getVarselId();
 		assertVarselutsendingQueue(varselTekst, varselId);
 	}

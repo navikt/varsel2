@@ -12,8 +12,8 @@ public class VarselInfoConsumerTest {
 
 	public static final String VARSEL_URL = "URL";
 	public static final String VARSEL_TITTEL = "Varsel Tittel";
-	public static final String FOERSTE_GANG_TEKST = "Første gang tekst til :mottaker";
-	public static final String REVARSLING_TEKST = "Revarsling tekst til :mottaker";
+	public static final String FOERSTE_GANG_TEKST = "Første gang tekst til {mottaker}";
+	public static final String REVARSLING_TEKST = "Revarsling tekst til {mottaker}";
 	public static final String VARSEL_FOR_DISTR_KANAL = "vardistkanal";
 	public static final String VARSEL_KATEGORI = "varkat";
 	public static final boolean INAKTIV = false;
