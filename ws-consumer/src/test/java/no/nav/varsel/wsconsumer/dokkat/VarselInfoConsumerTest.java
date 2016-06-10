@@ -10,7 +10,6 @@ import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
  */
 public class VarselInfoConsumerTest {
 
-	public static final String VARSEL_URL = "URL";
 	public static final String VARSEL_TITTEL = "Varsel Tittel";
 	public static final String FOERSTE_GANG_TEKST = "Første gang tekst til {mottaker}";
 	public static final String REVARSLING_TEKST = "Revarsling tekst til {mottaker}";
@@ -31,7 +30,6 @@ public class VarselInfoConsumerTest {
 		varselInfoTo.setRevarslingIntervall(REVARSLING_INTERVALL);
 		varselInfoTo.setAntallRevarsling(ANTALL_REVARSLING);
 		varselInfoTo.addPreferertKanal(PREFERERT_KANAL);
-		varselInfoTo.setVarselURL(VARSEL_URL);
 
 		VarselMalTo varselMalTo = new VarselMalTo();
 		varselMalTo.setKanal(KanalCode.EPOST);

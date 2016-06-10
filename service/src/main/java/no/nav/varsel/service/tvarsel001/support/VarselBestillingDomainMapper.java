@@ -14,6 +14,9 @@ import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.Assert;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -26,8 +29,11 @@ import java.util.UUID;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public class VarselBestillingDomainMapper {
+public class VarselBestillingDomainMapper implements InitializingBean{
 
+	private static final String ID_REPLACE = "{id}";
+
+	private String varselUrl;
 	@Inject
 	private VarselFletter varselFletter;
 
@@ -104,8 +110,9 @@ public class VarselBestillingDomainMapper {
 								null;
 
 		String tekstMal = revarsel ? mal.getRevarslingTekst() : mal.getFoerstegangsTekst();
+		String varselId = UUID.randomUUID().toString();
 		return aVarsel()
-				.varselId(UUID.randomUUID().toString())
+				.varselId(varselId)
 				.kanal(kanalCode)
 				.sendtTidspunkt(LocalDateTime.now())
 				.distribusjonTidspunkt(null)
@@ -114,9 +121,18 @@ public class VarselBestillingDomainMapper {
 				.feilbeskrivelse(null)
 				.varselTittel(mal.getTittel())
 				.varselTekst(varselFletter.flettVarsel(tekstMal, bestillServicemeldingTo.getParameters()))
-				.varselUrl(kanalCode == KanalCode.DITT_NAV ? varselInfoTo.getVarselURL() : null)
+				.varselUrl(kanalCode == KanalCode.DITT_NAV ? varselUrl.replace(ID_REPLACE, varselId) : null)
 				.erRevarsel(revarsel)
 				.build();
 	}
 
+	@Inject
+	public void setVarselUrl(@Value("${varsel.url}") String varselUrl) {
+		this.varselUrl = varselUrl;
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		Assert.isTrue(varselUrl.contains(ID_REPLACE));
+	}
 }

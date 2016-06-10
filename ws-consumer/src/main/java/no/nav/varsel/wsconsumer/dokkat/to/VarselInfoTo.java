@@ -12,7 +12,6 @@ import java.util.Set;
  */
 public class VarselInfoTo {
 	private Set<KanalCode> preferertKanal = Sets.newHashSet();
-	private String varselURL;
 	private String varslingstype;
 	private String varselForDistrKanal;
 	private String varselKategori;
@@ -35,14 +34,6 @@ public class VarselInfoTo {
 
 	public void setPreferertKanal(Set<KanalCode> preferertKanal) {
 		this.preferertKanal = preferertKanal;
-	}
-
-	public String getVarselURL() {
-		return varselURL;
-	}
-
-	public void setVarselURL(String varselURL) {
-		this.varselURL = varselURL;
 	}
 
 	public String getVarslingstype() {
@@ -167,7 +158,6 @@ public class VarselInfoTo {
 		public VarselInfoTo build() {
 			VarselInfoTo varselInfoTo = new VarselInfoTo();
 			varselInfoTo.setPreferertKanal(preferertKanal);
-			varselInfoTo.setVarselURL(varselURL);
 			varselInfoTo.setVarslingstype(varslingstype);
 			varselInfoTo.setVarselForDistrKanal(varselForDistrKanal);
 			varselInfoTo.setVarselKategori(varselKategori);

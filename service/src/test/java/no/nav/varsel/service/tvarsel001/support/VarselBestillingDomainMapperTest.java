@@ -18,6 +18,7 @@ import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -37,33 +38,37 @@ import java.util.UUID;
 @RunWith(MockitoJUnitRunner.class)
 public class VarselBestillingDomainMapperTest {
 
-	public static final LocalDateTime UTLOEPSTIDSPUNKT = LocalDateTime.parse("2013-12-03T21:25:45");
-	public static final String AKTOER_ID = "aktoerId";
-	public static final String PERSONIDENT = "personident";
-	public static final String VARSLIGNSTYPE = "varslignstype";
-	public static final String KEY = "key";
-	public static final String VALUE = "val";
-	public static final String URL = "url";
-	public static final String FOERSTEGANGS_TEKST = "foreste tekst for {key}";
-	public static final String REVARSLING_TEKST = "revarsling tekst for {key}";
-	public static final String TITTEL = "tittel";
-	public static final String MOBILTELEFONNUMMER = "12345678";
-	public static final String EPOSTADRESSE = "epost@epost.no";
-	public static final HashSet<KanalCode> KANALER = Sets.newHashSet(KanalCode.EPOST, KanalCode.SMS);
-	public static final String BESTILLING_ID = "b592d5f1-7506-462d-9814-4c2d92bf8946";
+	private static final LocalDateTime UTLOEPSTIDSPUNKT = LocalDateTime.parse("2013-12-03T21:25:45");
+	private static final String AKTOER_ID = "aktoerId";
+	private static final String PERSONIDENT = "personident";
+	private static final String VARSLIGNSTYPE = "varslignstype";
+	private static final String KEY = "key";
+	private static final String VALUE = "val";
+	private static final String FOERSTEGANGS_TEKST = "foreste tekst for {key}";
+	private static final String REVARSLING_TEKST = "revarsling tekst for {key}";
+	private static final String TITTEL = "tittel";
+	private static final String MOBILTELEFONNUMMER = "12345678";
+	private static final String EPOSTADRESSE = "epost@epost.no";
+	private static final HashSet<KanalCode> KANALER = Sets.newHashSet(KanalCode.EPOST, KanalCode.SMS);
+	private static final String BESTILLING_ID = "b592d5f1-7506-462d-9814-4c2d92bf8946";
 
-
-	public static final String VARSEL_FOR_DISTR_KANAL = "vardistkanal";
-	public static final String VARSEL_KATEGORI = "varkat";
-	public static final boolean INAKTIV = false;
-	public static final int REVARSLING_INTERVALL = 4;
-	public static final int ANTALL_REVARSLING = 2;
-	public static final KanalCode PREFERERT_KANAL = KanalCode.DITT_NAV;
+	private static final String VARSEL_FOR_DISTR_KANAL = "vardistkanal";
+	private static final String VARSEL_KATEGORI = "varkat";
+	private static final boolean INAKTIV = false;
+	private static final int REVARSLING_INTERVALL = 4;
+	private static final int ANTALL_REVARSLING = 2;
+	private static final KanalCode PREFERERT_KANAL = KanalCode.DITT_NAV;
 
 	@Spy
 	private VarselFletter varselFletter;
 	@InjectMocks
 	private VarselBestillingDomainMapper mapper;
+
+	@Before
+	public void setUp() throws Exception {
+		mapper.setVarselUrl("baseurl/{id}");
+		mapper.afterPropertiesSet();
+	}
 
 	@Test
 	public void shouldMapToDomainFoerstegangVarselUtenRevarsel() throws Exception {
@@ -148,7 +153,7 @@ public class VarselBestillingDomainMapperTest {
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), createVarselTo(), createDigitalKontaktinfoTo());
 
 		assertThat(varsel.getKanal(), is(KanalCode.DITT_NAV));
-		assertThat(varsel.getVarselUrl(), is(URL));
+		assertThat(varsel.getVarselUrl(), is("baseurl/" + varsel.getVarselId()));
 		assertThat(varsel.getKontaktInfo(), nullValue());
 	}
 
@@ -171,7 +176,6 @@ public class VarselBestillingDomainMapperTest {
 		to.setRevarslingIntervall(REVARSLING_INTERVALL);
 		to.setAntallRevarsling(ANTALL_REVARSLING);
 		to.addPreferertKanal(PREFERERT_KANAL);
-		to.setVarselURL(URL);
 
 		VarselMalTo malToSms = new VarselMalTo();
 		to.setMaler(Sets.newHashSet(malToSms));
