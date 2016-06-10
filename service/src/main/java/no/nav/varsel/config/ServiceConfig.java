@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Import;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration
-@Import({RepoConfig.class, WsConsumerConfig.class, JmsProducerConfig.class})
+@Import({MetricsConfig.class, RepoConfig.class, WsConsumerConfig.class, JmsProducerConfig.class})
 public class ServiceConfig {
 
 	@Bean

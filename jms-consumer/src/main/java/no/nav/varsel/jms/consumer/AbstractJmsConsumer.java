@@ -1,11 +1,15 @@
 package no.nav.varsel.jms.consumer;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 import no.nav.varsel.domain.Constants;
 import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
@@ -24,22 +28,42 @@ import java.io.StringReader;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public abstract class AbstractJmsConsumer<T> {
+public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 
 	private static final Logger NO_BACKOUTLOG = LoggerFactory.getLogger("no.nav.varsel.jms.nobackoutlog");
 
 	private final JmsConsumer jmsConsumer;
 	private final Class<T> inputType;
+
 	@Inject
 	private Jaxb2Marshaller marshaller;
 	@Inject
 	private JmsConsumerManager jmsConsumerManager;
+
+	@Inject
+	private MetricRegistry metricRegistry;
+	private Timer timer;
+	private Meter exceptionMeter;
+	private Meter noBackoutExceptionMeter;
 
 	public AbstractJmsConsumer(JmsConsumer jmsConsumer, Class<T> inputType) {
 		this.jmsConsumer = jmsConsumer;
 		this.inputType = inputType;
 	}
 
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		String metricBase = String.format("varsel.%s.%s", jmsConsumer.getServiceName(), jmsConsumer.getConsumerName());
+		timer = metricRegistry.timer(metricBase + ".timer");
+		exceptionMeter = metricRegistry.meter(metricBase + ".excpetionMeter");
+		noBackoutExceptionMeter = metricRegistry.meter(metricBase + ".noBackoutExceptionMeter");
+	}
+
+	/**
+	 * Method that handles a message
+	 *
+	 * @param message message unmarshalled in the type of this consumer
+	 */
 	protected abstract void handleMessage(T message);
 
 	/**
@@ -56,7 +80,12 @@ public abstract class AbstractJmsConsumer<T> {
 
 	protected JmsReply doListen(TextMessage message) {
 		MDC.put(Constants.USER_ID, jmsConsumer.getServiceName());
-		unmarshalAndHandle(message);
+		try {
+			timer.time(() -> unmarshalAndHandle(message));
+		} catch (Exception e) {
+			// This will never happen as unmarshalAndHandle doesnt throw checked exceptions
+			throw new RuntimeException(e);
+		}
 		return reply(message);
 	}
 
@@ -66,8 +95,10 @@ public abstract class AbstractJmsConsumer<T> {
 			unmarshalledObject = unmarshal(message);
 			handleMessage(unmarshalledObject);
 		} catch (NoJmsBackoutException e) {
+			noBackoutExceptionMeter.mark();
 			NO_BACKOUTLOG.warn("Nonbackout " + errorFor(message), e);
 		} catch (Exception e) {
+			exceptionMeter.mark();
 			jmsConsumerManager.registerError(jmsConsumer);
 			throw new RuntimeException(errorFor(message), e);
 		}

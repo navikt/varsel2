@@ -17,8 +17,8 @@ public enum JmsConsumer {
 	private final String consumerName;
 	private final String serviceName;
 
-	JmsConsumer(String name, String serviceName) {
-		this.consumerName = name;
+	JmsConsumer(String consumerName, String serviceName) {
+		this.consumerName = consumerName;
 		this.serviceName = serviceName;
 	}
 
