@@ -1,13 +1,29 @@
 package no.nav.varsel.wsconsumer.dokkat;
 
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
+
 import com.google.common.collect.Sets;
+import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
 import no.nav.varsel.domain.code.KanalCode;
+import no.nav.varsel.wsconsumer.dokkat.support.VarselInfoMapper;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.web.client.RestTemplate;
 
 /**
+ * Unit test for {@link VarselInfoConsumer}
+ *
  * @author Andreas Skomedal, Visma Consulting.
  */
+@RunWith(MockitoJUnitRunner.class)
 public class VarselInfoConsumerTest {
 
 	public static final String VARSEL_TITTEL = "Varsel Tittel";
@@ -19,6 +35,35 @@ public class VarselInfoConsumerTest {
 	public static final int REVARSLING_INTERVALL = 4;
 	public static final int ANTALL_REVARSLING = 2;
 	public static final KanalCode PREFERERT_KANAL = KanalCode.EPOST;
+
+	private static final String VARSLINGSTYPE = "varslingstypen";
+	private static final String DOKKAT_URL = "http://nav.no/varselinfo";
+
+
+	@Mock
+	private RestTemplate restTemplate;
+	@Mock
+	private VarselInfoMapper varselInfoMapper;
+
+	@InjectMocks
+	private VarselInfoConsumer varselInfoConsumer;
+
+	@Before
+	public void setUp() throws Exception {
+		varselInfoConsumer.setVarselinfoUrl(DOKKAT_URL);
+	}
+
+	@Test
+	public void shouldConsume() throws Exception {
+		VarselInfoRestTo restTo = new VarselInfoRestTo();
+		when(restTemplate.getForObject(DOKKAT_URL + "/{varslingstype}", VarselInfoRestTo.class, VARSLINGSTYPE))
+				.thenReturn(restTo);
+		VarselInfoTo mock = new VarselInfoTo();
+		when(varselInfoMapper.map(restTo)).thenReturn(mock);
+
+		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(VARSLINGSTYPE);
+		Assert.assertThat(varselInfoTo, is(mock));
+	}
 
 	// Move to test class when implemented
 	public static VarselInfoTo createVarselInfoTo(String varseltype) {

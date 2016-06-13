@@ -16,8 +16,8 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import com.google.common.collect.Sets;
-import no.nav.dokkat.schemas.tkat021.VarselInfo;
-import no.nav.dokkat.schemas.tkat021.VarselMal;
+import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
+import no.nav.dokkat.schemas.tkat021.VarselMalRestTo;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
@@ -52,8 +52,8 @@ public class VarselInfoMapperTest {
 		assertThat(malTo.getRevarslingTekst(), is(REVARSLING_TEKST));
 	}
 
-	public static VarselInfo createVarselInfo() {
-		VarselInfo varselInfo = new VarselInfo();
+	public static VarselInfoRestTo createVarselInfo() {
+		VarselInfoRestTo varselInfo = new VarselInfoRestTo();
 		varselInfo.setVarslingstype(VARSLINGSTYPE);
 		varselInfo.setVarselForDistribusjonKanal(VARSEL_FOR_DISTR_KANAL);
 		varselInfo.setVarselKategori(VARSEL_KATEGORI);
@@ -62,7 +62,7 @@ public class VarselInfoMapperTest {
 		varselInfo.setAntallRevarslinger(ANTALL_REVARSLINGER);
 		varselInfo.setPreferertKanal(Sets.newHashSet(PREFERERT_KANAL.toString()));
 
-		VarselMal varselMal = new VarselMal();
+		VarselMalRestTo varselMal = new VarselMalRestTo();
 		varselMal.setKanal(PREFERERT_KANAL.toString());
 		varselMal.setVarselTittel(VARSEL_TITTEL);
 		varselMal.setFoerstegangsvarselTekst(FOERSTE_GANG_TEKST);

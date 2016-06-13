@@ -1,9 +1,8 @@
 package no.nav.varsel.wsconsumer.dokkat;
 
-import no.nav.dokkat.schemas.tkat021.VarselInfo;
+import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
 import no.nav.varsel.wsconsumer.dokkat.support.VarselInfoMapper;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,10 +13,8 @@ import javax.inject.Inject;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public class VarselInfoConsumer implements InitializingBean {
+public class VarselInfoConsumer {
 
-	@Value("${dokkat.varselinfo.rest.url}")
-	private String varselinfoUrl;
 	@Inject
 	private RestTemplate restTemplate;
 	private String varselinfoUrlGet;
@@ -26,12 +23,12 @@ public class VarselInfoConsumer implements InitializingBean {
 	private VarselInfoMapper varselInfoMapper;
 
 	public VarselInfoTo hentVarselInfo(String varslingstype) {
-		VarselInfo varselInfo = restTemplate.getForObject(varselinfoUrlGet, VarselInfo.class, varslingstype);
+		VarselInfoRestTo varselInfo = restTemplate.getForObject(varselinfoUrlGet, VarselInfoRestTo.class, varslingstype);
 		return varselInfoMapper.map(varselInfo);
 	}
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
+	@Inject
+	public void setVarselinfoUrl(@Value("${dokkat.varselinfo.rest.url}") String varselinfoUrl) {
 		varselinfoUrlGet = varselinfoUrl;
 		if (!varselinfoUrlGet.endsWith("/")) {
 			varselinfoUrlGet += "/";
