@@ -37,8 +37,12 @@ public abstract class AbstractCxfEndpointConfig {
 		factoryBean.setAddress(aktoerUrl);
 	}
 
-	void addInterceptor(Interceptor<? extends Message> interceptor) {
+	void addOutInterceptor(Interceptor<? extends Message> interceptor) {
 		factoryBean.getOutInterceptors().add(interceptor);
+	}
+
+	void addInnInterceptor(Interceptor<? extends Message> interceptor) {
+		factoryBean.getInInterceptors().add(interceptor);
 	}
 
 	<T> T createPort(Class<T> portType) {

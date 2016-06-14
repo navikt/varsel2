@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.IOException;
-
 /**
  * Spring config for Aktoer v2 CXF endpoint
  *
@@ -20,8 +18,8 @@ public class AktoerV2Endpoint extends AbstractCxfEndpointConfig {
 	private String aktoerUrl;
 
 	@Bean
-	public AktoerV2 aktoerV2() throws IOException {
-		addInterceptor(new SystemSAMLOutInterceptor());
+	public AktoerV2 aktoerV2() {
+		addOutInterceptor(new SystemSAMLOutInterceptor());
 		setAdress(aktoerUrl);
 		enableMtom();
 
