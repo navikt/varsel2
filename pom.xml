@@ -56,6 +56,7 @@
 		<nav-digitalKontaktinformasjon-v1.version>2.0.0</nav-digitalKontaktinformasjon-v1.version>
 		<dokumentkataloginfo-v1.version>1.0.3</dokumentkataloginfo-v1.version>
 		<nav-fim-aktoer-v2-tjenestespesifikasjon.version>2.0.1</nav-fim-aktoer-v2-tjenestespesifikasjon.version>
+		<nav-fim-kodeverk-v2-tjenestespesifikasjon.version>2.0.0-alpha004</nav-fim-kodeverk-v2-tjenestespesifikasjon.version>
 	</properties>
 
 	<dependencyManagement>
@@ -103,7 +104,12 @@
 				<version>${nav-fim-aktoer-v2-tjenestespesifikasjon.version}</version>
 				<classifier>jaxws</classifier>
 			</dependency>
-
+			<dependency>
+				<groupId>no.nav.tjenester.fim</groupId>
+				<artifactId>nav-fim-kodeverk-v2-tjenestespesifikasjon</artifactId>
+				<version>${nav-fim-kodeverk-v2-tjenestespesifikasjon.version}</version>
+				<classifier>jaxws</classifier>
+			</dependency>
 			<!--java-ee-->
 			<dependency>
 				<groupId>javax.inject</groupId>
