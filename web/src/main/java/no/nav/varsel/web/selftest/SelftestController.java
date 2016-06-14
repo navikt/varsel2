@@ -49,7 +49,7 @@ public class SelftestController {
 	/**
 	 * Thymeleaf view
 	 */
-	@RequestMapping(value = "/internal/selftest", produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = "/internal/selftest", produces = MediaType.ALL_VALUE)
 	public String selftest(@RequestParam(value = "status", required = false) String status,
 						   HttpServletResponse httpServletResponse, Model model) throws IOException {
 		SelftestResponse response = performSelftest();
