@@ -3,6 +3,7 @@ package no.nav.varsel.config;
 import static no.nav.varsel.config.JmsConfig.getJndiObject;
 import static no.nav.varsel.config.support.QueueInfo.BESTILL_SERVICEMELDING;
 import static no.nav.varsel.config.support.QueueInfo.BESTILL_VARSEL;
+import static no.nav.varsel.config.support.QueueInfo.REVARSEL_STOPP;
 import static no.nav.varsel.config.support.QueueInfo.VARSELUTSENDING;
 import static no.nav.varsel.config.support.QueueInfo.VARSEL_KVITTERING;
 
@@ -44,12 +45,18 @@ public class QueueConfig {
 	}
 
 	@Bean
+	public Queue revarselStoppQueue() {
+		return getQueue("java:/jboss/revarselStopp");
+	}
+
+	@Bean
 	public Map<QueueInfo, Queue> queueOverview() {
 		HashMap<QueueInfo, Queue> map = Maps.newHashMap();
 		map.put(BESTILL_SERVICEMELDING, bestillServicemeldingQueue());
 		map.put(BESTILL_VARSEL, bestillVarselQueue());
 		map.put(VARSEL_KVITTERING, varselKvitteringQueue());
 		map.put(VARSELUTSENDING, varselutsendingQueue());
+		map.put(REVARSEL_STOPP, revarselStoppQueue());
 		return map;
 	}
 

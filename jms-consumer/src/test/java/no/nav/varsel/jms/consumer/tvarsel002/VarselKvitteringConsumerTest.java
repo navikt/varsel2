@@ -50,7 +50,6 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 		String varselId = varselbestilling.getVarsels().iterator().next().getVarselId();
 
 		JAXBElement<VarselKvittering> varselKvittering = createVarselKvitteringJaxBElement(varselId);
-//		new JmsConfig().marshaller().marshal(varselKvittering, new StreamResult(System.out));
 		JmsReply response = sendMessage(varselKvitteringQueue, varselKvittering);
 		assertThat(response.isOk(), is(true));
 
