@@ -29,7 +29,7 @@ public class JmsPingProvider {
 
 	@Resource
 	private Map<QueueInfo, Queue> queueOverview;
-	private Set<QueueInfo> remoteQueues = Sets.newHashSet(QueueInfo.VARSELUTSENDING);
+	private Set<QueueInfo> remoteQueues = Sets.newHashSet();
 
 	@Inject
 	private JmsTemplate jmsTemplate;

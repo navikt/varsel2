@@ -12,7 +12,7 @@ public enum QueueInfo {
 	BESTILL_SERVICEMELDING("VARSELPRODUKSJON.VARSLINGER", "bestillServicemelding", IN),
 	VARSEL_KVITTERING("VARSELPRODUKSJON.KVITTERING", "varselKvittering", IN),
 	VARSELUTSENDING("VARSEL_INN", "varselutsending", OUT),
-	BESTILL_VARSEL("varsel_bestill_varsel", "bestillVarsel", IN);
+	BESTILL_VARSEL("VARSELPRODUKSJON.BEST_VARSEL_M_HANDLING", "bestillVarsel", IN);
 
 	private final String fasitName;
 	private final String internalName;
