@@ -4,6 +4,7 @@ import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
 import no.nav.varsel.wsconsumer.dokkat.support.VarselInfoMapper;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 
 import javax.inject.Inject;
@@ -34,5 +35,10 @@ public class VarselInfoConsumer {
 			varselinfoUrlGet += "/";
 		}
 		varselinfoUrlGet += "{varslingstype}";
+	}
+
+	public void ping() {
+		String ping = restTemplate.getForObject(varselinfoUrlGet, String.class, "ping");
+		Assert.isTrue("ok".equals(ping), "VarselInfo ping failed " + ping);
 	}
 }
