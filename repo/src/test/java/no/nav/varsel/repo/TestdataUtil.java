@@ -48,6 +48,13 @@ public class TestdataUtil {
 	public static final String PARAMETERKEY = "17";
 	public static final boolean ER_REVARSEL = false;
 	public static final String PERSON_IDENT_TYPE = "FNR";
+	public static final String PERSON_IDENTER_FDAT_KODENAVN = "FDAT";
+	public static final String PERSON_IDENTER_FNR_KODENAVN = "FNR";
+	public static final String PERSON_IDENTER_BOST_KODENAVN = "BOST";
+	public static final String PERSON_IDENTER_DNR_KODENAVN = "DNR";
+	public static final String PERSON_IDENTER_SOME_OLD_KODENAVN = "SOME_OLD_KODENAVN";
+	public static final String PERSON_IDENTER_SOME_FUTURE_KODENAVN = "SOME_FUTURE_KODENAVN";
+	public static final String PERSON_IDENTER_SOME_VALID_KODENAVN = "SOME_VALID_KODENAVN";
 
 	public static Varselbestilling createVarselbestilling() {
 		return aVarselbestilling()
