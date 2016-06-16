@@ -66,8 +66,7 @@ public class BestillVarselService {
 	private void bestillFoerstegangsVarsel(BestillVarselTo to) {
 		AktoerTo origAktoer = aktoerService.completeAktoerPersonIdent(to);
 
-		String varslingstype = to.getVarslingstype();
-		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(varslingstype);
+		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(to.getVarslingstype());
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
 				.hentDigitalKontaktinformasjonAndDecideKanal(to.getPersonIdent(), varselInfoTo.getPreferertKanal());
 
@@ -76,18 +75,15 @@ public class BestillVarselService {
 
 		varselbestillingRepo.saveAndFlush(varselbestilling);
 
-		sendToVarselUtsending(to, origAktoer, varslingstype, varselbestilling.getVarsels());
+		sendToVarselutsending(to, origAktoer, to.getVarslingstype(), varselbestilling.getVarsels());
 	}
 
 	private void bestillRevarsel(BestillVarselTo to, Varselbestilling existingVarsel) {
 		AktoerTo origAktoer = to.createAktoerTo();
 
-		to.setMottaker(AktoerTo.newPersonIdent(existingVarsel.getFnr()));
-
-		String varslingstype = to.getVarslingstype();
-		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(varslingstype);
+		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(to.getVarslingstype());
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
-				.hentDigitalKontaktinformasjonAndDecideKanal(to.getPersonIdent(), varselInfoTo.getPreferertKanal());
+				.hentDigitalKontaktinformasjonAndDecideKanal(existingVarsel.getFnr(), varselInfoTo.getPreferertKanal());
 
 		Set<Varsel> varsels = kontaktregisterTo.getKanaler().stream()
 				.map((kanalCode) -> domainMapper.mapReVarsel(kanalCode, to, varselInfoTo, kontaktregisterTo))
@@ -96,10 +92,10 @@ public class BestillVarselService {
 
 		varselbestillingRepo.saveAndFlush(existingVarsel);
 
-		sendToVarselUtsending(to, origAktoer, varslingstype, varsels);
+		sendToVarselutsending(to, origAktoer, to.getVarslingstype(), varsels);
 	}
 
-	private void sendToVarselUtsending(BestillVarselTo to, AktoerTo origAktoer, String varslingstype, Set<Varsel> varsels) {
+	private void sendToVarselutsending(BestillVarselTo to, AktoerTo origAktoer, String varslingstype, Set<Varsel> varsels) {
 		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper
 				.mapVarsels(origAktoer, to.getUtloepstidspunkt(), varslingstype, varsels);
 
