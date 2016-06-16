@@ -38,7 +38,11 @@
 			<artifactId>nav-fim-aktoer-v2-tjenestespesifikasjon</artifactId>
 			<classifier>jaxws</classifier>
 		</dependency>
-
+		<dependency>
+			<groupId>no.nav.tjenester.fim</groupId>
+			<artifactId>nav-fim-kodeverk-v2-tjenestespesifikasjon</artifactId>
+			<classifier>jaxws</classifier>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
