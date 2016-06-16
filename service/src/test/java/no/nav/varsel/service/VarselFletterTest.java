@@ -40,7 +40,7 @@ public class VarselFletterTest {
 	@Test
 	public void shouldThrowIfMissingParameter() throws Exception {
 		expectedException.expect(FletteparameterMissingException.class);
-		expectedException.expectMessage("Not all paramters given for varsel, missing: navn tema");
+		expectedException.expectMessage("missing: navn tema");
 
 		Map<String, String> map = new HashMap<>();
 		map.put("aarstall", AAR);
@@ -51,7 +51,7 @@ public class VarselFletterTest {
 	@Test
 	public void shouldThrowIfMissingParameterValueInTekst() throws Exception {
 		expectedException.expect(FletteparameterNotUsedException.class);
-		expectedException.expectMessage("Not all paramters used for varsel, unused: tema");
+		expectedException.expectMessage("unused: tema");
 
 		Map<String, String> map = new HashMap<>();
 		map.put("aarstall", AAR);
