@@ -31,8 +31,7 @@ public class VarselutsendingToMapperTest {
 
 	@Test
 	public void shouldMapVarselbestilling() throws Exception {
-		AktoerTo aktoer = aktoerTo;
-		List<VarselutsendingTo> tos = mapper.map(createVarselbestilling(), aktoer);
+		List<VarselutsendingTo> tos = mapper.map(createVarselbestilling(), aktoerTo);
 
 		assertThat(tos, hasSize(1));
 		assertVarselTo(tos.get(0));

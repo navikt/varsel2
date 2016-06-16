@@ -13,9 +13,7 @@ import static no.nav.varsel.repo.TestdataUtil.TEKNISK_FEIL;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.PREFERERT_KANAL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -101,7 +99,6 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		Varselbestilling varselbestilling = varselbestillingRepo.findAll().iterator().next();
 		assertThat(UUID.fromString(varselbestilling.getVarselbestillingId()).toString(), is(varselbestilling.getVarselbestillingId()));
 		assertThat(varselbestilling.getVarslingstype(), is(VARSLINGSTYPE));
-		assertThat(varselbestilling.getPreferertKanal(), contains(PREFERERT_KANAL));
 		assertThat(varselbestilling.getUtlopTidspunkt(), is(equalTo(UTLOEPSTIDSPUNKT_LDT)));
 		assertThat(varselbestilling.getFnr(), is(PERSON_IDENT));
 		assertThat(varselbestilling.getAktorId(), is(MOTTAKER));

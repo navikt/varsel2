@@ -19,8 +19,14 @@ public class AktoerService {
 	@Inject
 	private AktoerConsumer aktoerConsumer;
 
+	/**
+	 * Fetch missing aktoer component and return the original
+	 *
+	 * @param aktoerBestillingTo the bestilling
+	 * @return the original aktoer used in lookup
+	 */
 	public AktoerTo completeAktoerPersonIdent(AktoerBestillingTo aktoerBestillingTo) {
-		AktoerTo origAktoer = aktoerBestillingTo.craeteAktoerTo();
+		AktoerTo origAktoer = aktoerBestillingTo.createAktoerTo();
 		AktoerTo fetchedAktoer;
 		try {
 			fetchedAktoer = aktoerConsumer.hentIdent(origAktoer);

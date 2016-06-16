@@ -4,7 +4,7 @@ import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianC
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Aktoer;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.AktoerId;
@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 
 /**
  * Unit test for {@link BestillVarselMapper}
+ *
  * @author Andreas Skomedal, Visma Consulting.
  */
 public class BestillVarselMapperTest {

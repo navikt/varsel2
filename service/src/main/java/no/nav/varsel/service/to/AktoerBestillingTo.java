@@ -49,7 +49,7 @@ public class AktoerBestillingTo {
 		hasText(personIdent != null ? personidentType : "na", "personidentType");
 	}
 
-	public AktoerTo craeteAktoerTo() {
+	public AktoerTo createAktoerTo() {
 		boolean isAktoerId = personIdent == null;
 		if (isAktoerId) {
 			return newAktoerId(aktoerId);

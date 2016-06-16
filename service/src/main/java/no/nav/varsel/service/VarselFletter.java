@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  */
 public class VarselFletter {
 
-	public static final Pattern PARAMETER_PATTERN = Pattern.compile("\\{.+?\\}");
+	private static final Pattern PARAMETER_PATTERN = Pattern.compile("\\{.+?\\}");
 
 	public String flettVarsel(String tekst, Map<String, String> flettedata) {
 		StrBuilder sb = new StrBuilder(tekst);
@@ -35,19 +35,24 @@ public class VarselFletter {
 			}
 			sb.replace(stringMatcher(replace), val, 0, sb.length(), -1);
 		});
+		String string = sb.toString();
 
+		assertNoUnusedParameters(parametere);
+		assertNoMissedParameters(string);
+		return string;
+	}
+
+	private void assertNoUnusedParameters(Set<String> parametere) {
 		if (!parametere.isEmpty()) {
 			throw new FletteparameterNotUsedException(Joiner.on(" ").join(parametere));
 		}
+	}
 
-		String string = sb.toString();
-
+	private void assertNoMissedParameters(String string) {
 		Matcher matcher = PARAMETER_PATTERN.matcher(string);
 		if (matcher.find()) {
 			throw new FletteparameterMissingException(list(matcher));
 		}
-
-		return string;
 	}
 
 	private String list(Matcher matcher) {

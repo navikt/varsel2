@@ -49,42 +49,57 @@ public class BestillVarselService {
 	public void bestillVarsel(BestillVarselTo to) {
 		Varselbestilling existingVarsel = varselbestillingRepo.findByVarselbestillingId(to.getVarselBestillingId());
 
-		Boolean revarsling = to.isRevarsling();
+		boolean revarsling = to.isRevarsling();
 		if (revarsling && existingVarsel == null) {
 			throw new VarselbestillingNotExistException(to.getVarselBestillingId());
 		} else if (!revarsling && existingVarsel != null) {
 			throw new VarselbestillingAlreadyExistException(to.getVarselBestillingId());
 		}
 
-		AktoerTo origAktoer = to.craeteAktoerTo();
-
 		if (revarsling) {
-			to.setMottaker(AktoerTo.newPersonIdent(existingVarsel.getFnr()));
+			bestillRevarsel(to, existingVarsel);
 		} else {
-			aktoerService.completeAktoerPersonIdent(to);
+			bestillFoerstegangsVarsel(to);
 		}
+	}
+
+	private void bestillFoerstegangsVarsel(BestillVarselTo to) {
+		AktoerTo origAktoer = aktoerService.completeAktoerPersonIdent(to);
 
 		String varslingstype = to.getVarslingstype();
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(varslingstype);
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
 				.hentDigitalKontaktinformasjonAndDecideKanal(to.getPersonIdent(), varselInfoTo.getPreferertKanal());
 
-		Set<Varsel> varsels;
-		Varselbestilling varselbestilling;
-
-		if (revarsling) {
-			varselbestilling = existingVarsel;
-			varsels = kontaktregisterTo.getKanaler().stream()
-					.map((kanalCode) -> domainMapper.mapReVarsel(kanalCode, to, varselInfoTo, kontaktregisterTo))
-					.peek(existingVarsel::addVarsel)
-					.collect(toSet());
-		} else {
-			varselbestilling = domainMapper.mapVarselbestillingFoerstegangVarselMedRevarsel(to, varselInfoTo, kontaktregisterTo);
-			varsels = varselbestilling.getVarsels();
-		}
+		Varselbestilling varselbestilling = domainMapper
+				.mapVarselbestillingFoerstegangVarselMedRevarsel(to, varselInfoTo, kontaktregisterTo);
 
 		varselbestillingRepo.saveAndFlush(varselbestilling);
 
+		sendToVarselUtsending(to, origAktoer, varslingstype, varselbestilling.getVarsels());
+	}
+
+	private void bestillRevarsel(BestillVarselTo to, Varselbestilling existingVarsel) {
+		AktoerTo origAktoer = to.createAktoerTo();
+
+		to.setMottaker(AktoerTo.newPersonIdent(existingVarsel.getFnr()));
+
+		String varslingstype = to.getVarslingstype();
+		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(varslingstype);
+		KontaktregisterTo kontaktregisterTo = dkifConsumer
+				.hentDigitalKontaktinformasjonAndDecideKanal(to.getPersonIdent(), varselInfoTo.getPreferertKanal());
+
+		Set<Varsel> varsels = kontaktregisterTo.getKanaler().stream()
+				.map((kanalCode) -> domainMapper.mapReVarsel(kanalCode, to, varselInfoTo, kontaktregisterTo))
+				.peek(existingVarsel::addVarsel)
+				.collect(toSet());
+
+		varselbestillingRepo.saveAndFlush(existingVarsel);
+
+		sendToVarselUtsending(to, origAktoer, varslingstype, varsels);
+	}
+
+	private void sendToVarselUtsending(BestillVarselTo to, AktoerTo origAktoer, String varslingstype, Set<Varsel> varsels) {
 		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper
 				.mapVarsels(origAktoer, to.getUtloepstidspunkt(), varslingstype, varsels);
 

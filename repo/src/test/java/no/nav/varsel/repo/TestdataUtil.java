@@ -53,7 +53,6 @@ public class TestdataUtil {
 		return aVarselbestilling()
 				.varselbestillingId(VARSELBESTILLING_ID)
 				.varslingstype(VARSLINGSTYPE)
-				.preferertKanal(PREFERERT_KANAL)
 				.utlopTidspunkt(UTLOP_TIDSPUNKT)
 				.fnr(FNR)
 				.aktorId(AKTOR_ID)

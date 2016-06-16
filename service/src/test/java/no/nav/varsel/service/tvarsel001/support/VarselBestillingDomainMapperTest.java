@@ -2,7 +2,6 @@ package no.nav.varsel.service.tvarsel001.support;
 
 import static java.util.Collections.singletonMap;
 import static no.nav.varsel.test.TestUtils.aboutNow;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -76,7 +75,6 @@ public class VarselBestillingDomainMapperTest {
 
 		assertThat(varselbestilling.getVarselbestillingId(), is(BESTILLING_ID));
 		assertThat(varselbestilling.getVarslingstype(), is(VARSLIGNSTYPE));
-		assertThat(varselbestilling.getPreferertKanal(), contains(PREFERERT_KANAL));
 		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPSTIDSPUNKT));
 		assertThat(varselbestilling.getFnr(), is(PERSONIDENT));
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
@@ -106,7 +104,6 @@ public class VarselBestillingDomainMapperTest {
 
 		assertThat(varselbestilling.getVarselbestillingId(), is(BESTILLING_ID));
 		assertThat(varselbestilling.getVarslingstype(), is(VARSLIGNSTYPE));
-		assertThat(varselbestilling.getPreferertKanal(), contains(PREFERERT_KANAL));
 		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPSTIDSPUNKT));
 		assertThat(varselbestilling.getFnr(), is(PERSONIDENT));
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));

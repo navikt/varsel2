@@ -26,7 +26,7 @@ public class BestillVarselToTest {
 
 	@Test
 	public void shouldCreateAktoerTo() throws Exception {
-		AktoerTo aktoerTo = createTo().craeteAktoerTo();
+		AktoerTo aktoerTo = createTo().createAktoerTo();
 
 		Assert.assertThat(aktoerTo.getIdent(), is(MOTTAKER));
 		Assert.assertThat(aktoerTo.getMottakerType(), is(MOTTAKER_TYPE));

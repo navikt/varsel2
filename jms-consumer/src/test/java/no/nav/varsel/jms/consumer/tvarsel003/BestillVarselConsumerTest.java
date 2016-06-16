@@ -1,7 +1,6 @@
 package no.nav.varsel.jms.consumer.tvarsel003;
 
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
-import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.KEY;
 import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.UTLOEPS_TIDSPUNKT;
 import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.VAL;
 import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.VARSELBESTILLING_ID;
@@ -15,7 +14,6 @@ import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.PREFERERT_K
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.REVARSLING_INTERVALL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.REVARSLING_TEKST;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -114,7 +112,6 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestilling, notNullValue());
 		assertThat(varselbestilling.getVarselbestillingId(), is(VARSELBESTILLING_ID));
 		assertThat(varselbestilling.getVarslingstype(), is(VARSLINGSTYPE));
-		assertThat(varselbestilling.getPreferertKanal(), contains(PREFERERT_KANAL));
 		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPS_TIDSPUNKT));
 		assertThat(varselbestilling.getFnr(), is(BestillVarselMapperTest.PERSON_IDENT));
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
@@ -144,7 +141,6 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestilling, notNullValue());
 		assertThat(varselbestilling.getVarselbestillingId(), is(VARSELBESTILLING_ID));
 		assertThat(varselbestilling.getVarslingstype(), is(VARSLINGSTYPE));
-		assertThat(varselbestilling.getPreferertKanal(), contains(PREFERERT_KANAL));
 		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPS_TIDSPUNKT));
 		assertThat(varselbestilling.getFnr(), is(BestillVarselMapperTest.PERSON_IDENT));
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));

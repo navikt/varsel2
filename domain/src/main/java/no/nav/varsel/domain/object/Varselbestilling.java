@@ -1,8 +1,6 @@
 package no.nav.varsel.domain.object;
 
-import com.google.common.collect.Sets;
 import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
-import no.nav.varsel.domain.code.KanalCode;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
@@ -10,8 +8,6 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -52,12 +48,6 @@ public class Varselbestilling extends AbstractDomainObject {
 
 	@Column(name = "varslingstype", nullable = false)
 	private String varslingstype;
-
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "varselbest_prefkanal", joinColumns = @JoinColumn(name = "fk_varselbestilling_id"))
-	@Column(name = "k_kanal")
-	@Enumerated(EnumType.STRING)
-	private Set<KanalCode> preferertKanal = Sets.newHashSet();
 
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
 	@Column(name = "utlop_tidspunkt", columnDefinition = "TIMESTAMP")
@@ -122,18 +112,6 @@ public class Varselbestilling extends AbstractDomainObject {
 
 	public void setVarslingstype(String varslingstype) {
 		this.varslingstype = varslingstype;
-	}
-
-	public Set<KanalCode> getPreferertKanal() {
-		return preferertKanal;
-	}
-
-	public void setPreferertKanal(Set<KanalCode> preferertKanal) {
-		this.preferertKanal = preferertKanal;
-	}
-
-	public void addPreferertKanal(KanalCode preferertKanal) {
-		this.preferertKanal.add(preferertKanal);
 	}
 
 	public LocalDateTime getUtlopTidspunkt() {

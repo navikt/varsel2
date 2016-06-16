@@ -49,7 +49,7 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 	protected void handleMessage(Varsel varsel) {
 		BestillVarselTo to = bestillServicemeldingMapper.map(varsel);
 		to.validateTvarsel001Input();
-		LOGG.debug(String.format("Mottat varsel %s til %s", to.getVarslingstype(), to.craeteAktoerTo()));
+		LOGG.debug(String.format("Mottatt varsel %s til %s", to.getVarslingstype(), to.createAktoerTo()));
 
 		servicemeldingService.bestillServicemelding(to);
 	}

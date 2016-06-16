@@ -49,15 +49,14 @@ public class VarselBestillingDomainMapper implements InitializingBean{
 		return mapVarselbestilling(bestillingTo, varselInfoTo, kontaktregisterTo, false);
 	}
 
-	Varselbestilling mapVarselbestilling(BestillVarselTo bestillingTo,
-										 VarselInfoTo varselInfoTo,
-										 KontaktregisterTo kontaktregisterTo,
-										 boolean withRevarsel) {
+	private Varselbestilling mapVarselbestilling(BestillVarselTo bestillingTo,
+												 VarselInfoTo varselInfoTo,
+												 KontaktregisterTo kontaktregisterTo,
+												 boolean withRevarsel) {
 
 		VarselbestillingBuilder builder = aVarselbestilling()
 				.varselbestillingId(bestillingTo.getVarselBestillingId())
 				.varslingstype(bestillingTo.getVarslingstype())
-				.preferertKanal(varselInfoTo.getPreferertKanal())
 				.utlopTidspunkt(bestillingTo.getUtloepstidspunkt())
 				.fnr(bestillingTo.getPersonIdent())
 				.aktorId(bestillingTo.getAktoerId())
@@ -81,10 +80,10 @@ public class VarselBestillingDomainMapper implements InitializingBean{
 		return varselbestilling;
 	}
 
-	public Varsel mapVarsel(KanalCode kanalCode,
-							BestillVarselTo bestillServicemeldingTo,
-							VarselInfoTo varselInfoTo,
-							KontaktregisterTo kontaktregisterTo) {
+	private Varsel mapVarsel(KanalCode kanalCode,
+							 BestillVarselTo bestillServicemeldingTo,
+							 VarselInfoTo varselInfoTo,
+							 KontaktregisterTo kontaktregisterTo) {
 		return mapVarsel(kanalCode, bestillServicemeldingTo, varselInfoTo, kontaktregisterTo, false);
 
 	}
@@ -97,11 +96,11 @@ public class VarselBestillingDomainMapper implements InitializingBean{
 
 	}
 
-	Varsel mapVarsel(KanalCode kanalCode,
-					 BestillVarselTo bestillServicemeldingTo,
-					 VarselInfoTo varselInfoTo,
-					 KontaktregisterTo kontaktregisterTo,
-					 boolean revarsel) {
+	private Varsel mapVarsel(KanalCode kanalCode,
+							 BestillVarselTo bestillServicemeldingTo,
+							 VarselInfoTo varselInfoTo,
+							 KontaktregisterTo kontaktregisterTo,
+							 boolean revarsel) {
 
 		VarselMalTo mal = varselInfoTo.getMal(kanalCode);
 		String kontaktInfo =
