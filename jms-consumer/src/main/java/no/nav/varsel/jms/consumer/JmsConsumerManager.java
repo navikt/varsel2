@@ -90,7 +90,7 @@ public class JmsConsumerManager {
 				try {
 					Thread.sleep(1000L * restartTimeSeconds);
 				} catch (InterruptedException e) {
-					// ignore
+					LOG.trace("sleep interrupted", e);
 				} finally {
 					start(jmsConsumer);
 					LOG.info("Starting {} after {} seconds downtime", jmsConsumer, restartTimeSeconds);

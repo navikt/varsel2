@@ -31,6 +31,7 @@ import java.io.StringReader;
 public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 
 	private static final Logger NO_BACKOUTLOG = LoggerFactory.getLogger("no.nav.varsel.jms.nobackoutlog");
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractJmsConsumer.class);
 
 	private final JmsConsumer jmsConsumer;
 	private final Class<T> inputType;
@@ -146,8 +147,9 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 			if (replyTo != null) {
 				return new JmsReply("ok");
 			}
-		} catch (JMSException ignore) {
+		} catch (JMSException e) {
 			// implementations do not throw exception
+			LOG.trace("cannot create jms reply", e);
 		}
 		return null;
 	}
