@@ -70,8 +70,8 @@ public class Varselbestilling extends AbstractDomainObject {
 	private Integer antallRevarslinger;
 
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDate")
-	@Column(name = "neste_varsling_tidspunkt", columnDefinition = "DATE")
-	private LocalDate nesteVarslingstidspunkt;
+	@Column(name = "neste_varsling_dato", columnDefinition = "DATE")
+	private LocalDate nesteVarslingDato;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "varselbestilling")
 	private Set<Varsel> varsels = new HashSet<>();
@@ -162,12 +162,12 @@ public class Varselbestilling extends AbstractDomainObject {
 		this.antallRevarslinger = antallRevarslinger;
 	}
 
-	public LocalDate getNesteVarslingstidspunkt() {
-		return nesteVarslingstidspunkt;
+	public LocalDate getNesteVarslingDato() {
+		return nesteVarslingDato;
 	}
 
-	public void setNesteVarslingstidspunkt(LocalDate nesteVarslingstidspunkt) {
-		this.nesteVarslingstidspunkt = nesteVarslingstidspunkt;
+	public void setNesteVarslingDato(LocalDate nesteVarslingDato) {
+		this.nesteVarslingDato = nesteVarslingDato;
 	}
 
 	public Set<Varsel> getVarsels() {

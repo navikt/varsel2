@@ -49,7 +49,7 @@ public class StoppReVarselConsumerTest extends AbstractConsumerJmsTest {
 
         Varselbestilling processedVarselbestilling = varselbestillingRepo.findByVarselbestillingId(varselbestilling.getVarselbestillingId());
         assertThat(processedVarselbestilling.getAntallRevarslinger(), equalTo(0));
-        assertThat(processedVarselbestilling.getNesteVarslingstidspunkt(), is(nullValue()));
+        assertThat(processedVarselbestilling.getNesteVarslingDato(), is(nullValue()));
         assertThat(processedVarselbestilling.getChangeStamp().getEndretAv(), is(TVARSEL004));
     }
 
@@ -72,7 +72,7 @@ public class StoppReVarselConsumerTest extends AbstractConsumerJmsTest {
         Varselbestilling varselbestilling = varselbestillings.iterator().next();
         assertThat(varselbestilling.getVarsels(), hasSize(1));
         varselbestilling.setAntallRevarslinger(5);
-        varselbestilling.setNesteVarslingstidspunkt(LocalDate.now());
+        varselbestilling.setNesteVarslingDato(LocalDate.now());
         return varselbestilling;
     }
 

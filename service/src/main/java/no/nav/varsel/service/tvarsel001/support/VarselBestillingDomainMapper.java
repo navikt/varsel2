@@ -67,7 +67,7 @@ public class VarselBestillingDomainMapper implements InitializingBean{
 		if (withRevarsel) {
 			builder.revarslingIntervall(varselInfoTo.getRevarslingIntervall())
 					.antallRevarslinger(varselInfoTo.getAntallRevarsling())
-					.nesteVarslingstidspunkt(LocalDate.now().plusDays(varselInfoTo.getRevarslingIntervall()));
+					.nesteVarslingDato(LocalDate.now().plusDays(varselInfoTo.getRevarslingIntervall()));
 		}
 
 		Varselbestilling varselbestilling = builder

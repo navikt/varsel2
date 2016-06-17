@@ -29,7 +29,7 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 	private LocalDateTime bestillingTidspunkt;
 	private Integer revarslingIntervall;
 	private Integer antallRevarslinger;
-	private LocalDate nesteVarslingstidspunkt;
+	private LocalDate nesteVarslingDato;
 	private Set<Varsel> varsels = new HashSet<>();
 	private Map<String, String> parameters = new HashMap<>();
 
@@ -85,8 +85,8 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 		return this;
 	}
 
-	public VarselbestillingBuilder nesteVarslingstidspunkt(LocalDate nesteVarslingstidspunkt) {
-		this.nesteVarslingstidspunkt = nesteVarslingstidspunkt;
+	public VarselbestillingBuilder nesteVarslingDato(LocalDate nesteVarslingDato) {
+		this.nesteVarslingDato = nesteVarslingDato;
 		return this;
 	}
 
@@ -121,7 +121,7 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 		varselbestilling.setBestillingTidspunkt(bestillingTidspunkt);
 		varselbestilling.setRevarslingIntervall(revarslingIntervall);
 		varselbestilling.setAntallRevarslinger(antallRevarslinger);
-		varselbestilling.setNesteVarslingstidspunkt(nesteVarslingstidspunkt);
+		varselbestilling.setNesteVarslingDato(nesteVarslingDato);
 		varsels.forEach(varselbestilling::addVarsel);
 		parameters.forEach(varselbestilling::addFletteParameter);
 		return varselbestilling;

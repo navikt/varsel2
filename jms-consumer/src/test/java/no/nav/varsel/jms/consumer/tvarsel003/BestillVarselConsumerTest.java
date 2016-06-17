@@ -118,7 +118,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
 		assertThat(varselbestilling.getRevarslingIntervall(), is(REVARSLING_INTERVALL));
 		assertThat(varselbestilling.getAntallRevarslinger(), is(ANTALL_REVARSLING));
-		assertThat(varselbestilling.getNesteVarslingstidspunkt(), is(LocalDate.now().plusDays(REVARSLING_INTERVALL)));
+		assertThat(varselbestilling.getNesteVarslingDato(), is(LocalDate.now().plusDays(REVARSLING_INTERVALL)));
 
 		assertThat(varselbestilling.getVarsels(), hasSize(1));
 		Varsel varsel = varselbestilling.getVarsels().iterator().next();
@@ -147,7 +147,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
 		assertThat(varselbestilling.getRevarslingIntervall(), is(REVARSLING_INTERVALL));
 		assertThat(varselbestilling.getAntallRevarslinger(), is(ANTALL_REVARSLING));
-		assertThat(varselbestilling.getNesteVarslingstidspunkt(), is(LocalDate.now().plusDays(REVARSLING_INTERVALL)));
+		assertThat(varselbestilling.getNesteVarslingDato(), is(LocalDate.now().plusDays(REVARSLING_INTERVALL)));
 
 		assertThat(varselbestilling.getVarsels(), hasSize(2));
 		Iterator<Varsel> iterator = varselbestilling.getVarsels().iterator();

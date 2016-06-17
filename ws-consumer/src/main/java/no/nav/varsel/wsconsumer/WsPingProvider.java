@@ -51,6 +51,6 @@ public class WsPingProvider {
 	}
 
 	public Ping pingKodeverkPortType() {
-		return new Ping(Soap, "KodeverkPortType", kodeverkUrl, () -> kodeverkPortType.ping());
+		return new Ping(Soap, "Kodeverk_v2", kodeverkUrl, () -> kodeverkPortType.ping());
 	}
 }

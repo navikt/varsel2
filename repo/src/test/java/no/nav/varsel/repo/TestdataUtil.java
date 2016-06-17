@@ -31,7 +31,7 @@ public class TestdataUtil {
 	public static final LocalDateTime BESTILLING_TIDSPUNKT = LocalDateTime.parse("2016-04-04T11:12:13");
 	public static final int REVARSLING_INTERVALL = 7;
 	public static final int ANTALL_REVARSLINGER = 2;
-	public static final LocalDate NESTE_VARSLINGSTIDSPUNKT = LocalDate.parse("2016-04-05");
+	public static final LocalDate NESTE_VARSLING_DATO = LocalDate.parse("2016-04-05");
 	public static final String VARSEL_ID = "fc763632-40b0-4504-a7d1-8c44ee199b11";
 	public static final KanalCode KANAL_CODE = KanalCode.EPOST;
 	public static final LocalDateTime SENDT_TIDSPUNKT = LocalDateTime.parse("2016-04-05T14:15:16");
@@ -66,7 +66,7 @@ public class TestdataUtil {
 				.bestillingTidspunkt(BESTILLING_TIDSPUNKT)
 				.revarslingIntervall(REVARSLING_INTERVALL)
 				.antallRevarslinger(ANTALL_REVARSLINGER)
-				.nesteVarslingstidspunkt(NESTE_VARSLINGSTIDSPUNKT)
+				.nesteVarslingDato(NESTE_VARSLING_DATO)
 				.parameter(PARAMETERKEY, PARAMETERVALUE)
 				.varsel(aVarsel()
 						.varselId(VARSEL_ID)

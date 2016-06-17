@@ -31,6 +31,7 @@
 		<ldap alias="ldap" mapToProperty="ldap"/>
 		<webservice mapToProperty="aktoerv2.ws" alias="Aktoer_v2"/>
 		<webservice mapToProperty="dkif.ws" alias="virksomhet:DigitalKontakinformasjon_v1"/>
+		<webservice mapToProperty="kodeverkv2.ws" alias="virksomhet:Kodeverk_v2"/>
 		<rest alias="VarselInfo_v1" mapToProperty="dokkat.varselinfo.rest"/>
 		<applicationProperties alias="varselProps"/>
 	</resources>

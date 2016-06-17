@@ -105,7 +105,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
 		assertThat(varselbestilling.getRevarslingIntervall(), nullValue());
 		assertThat(varselbestilling.getAntallRevarslinger(), nullValue());
-		assertThat(varselbestilling.getNesteVarslingstidspunkt(), nullValue());
+		assertThat(varselbestilling.getNesteVarslingDato(), nullValue());
 		assertThat(varselbestilling.getChangeStamp().getOpprettetAv(), is(JmsConsumer.BESTILL_SERVICEMELDING.getServiceName()));
 		assertThat(varselbestilling.getChangeStamp().getOpprettetDato(), aboutNow());
 
