@@ -31,6 +31,6 @@ public class StoppReVarselService {
 
     private void updateVarselbestilling(Varselbestilling varselbestilling) {
         varselbestilling.setAntallRevarslinger(0);
-        varselbestilling.setNesteVarslingstidspunkt(null);
+        varselbestilling.setNesteVarslingDato(null);
     }
 }

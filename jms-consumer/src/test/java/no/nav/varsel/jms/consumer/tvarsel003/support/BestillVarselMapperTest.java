@@ -1,0 +1,104 @@
+package no.nav.varsel.jms.consumer.tvarsel003.support;
+
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
+
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Aktoer;
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.AktoerId;
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.NorskIdent;
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Parameter;
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Person;
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Personidenter;
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Varslingstyper;
+import no.nav.varsel.service.to.BestillVarselTo;
+import org.junit.Test;
+
+import java.time.LocalDateTime;
+
+/**
+ * Unit test for {@link BestillVarselMapper}
+ *
+ * @author Andreas Skomedal, Visma Consulting.
+ */
+public class BestillVarselMapperTest {
+
+	public static final String VARSELBESTILLING_ID = "84d31fc5-523d-4ae1-a1d8-449ed2382f61";
+	public static final boolean REVARSLING = true;
+	public static final String KEY = "mottaker";
+	public static final String VAL = "val";
+	public static final String AKTOER_ID = "aktoerId";
+	public static final String PERSON_IDENT = "personIdent";
+	public static final String IDENT_TYPE = "FNR";
+	public static final String VARSLINGSTYPE = "varslingstype";
+	public static final LocalDateTime UTLOEPS_TIDSPUNKT = LocalDateTime.parse("2016-06-06T21:21:42");
+
+	private BestillVarselMapper mapper = new BestillVarselMapper();
+
+	@Test
+	public void shouldMap() throws Exception {
+		BestillVarselTo to = mapper.map(createVarselBestilling());
+
+		assertThat(to.getVarselBestillingId(), is(VARSELBESTILLING_ID));
+		assertThat(to.isRevarsling(), is(REVARSLING));
+		assertThat(to.getPersonIdent(), is(PERSON_IDENT));
+		assertThat(to.getPersonidentType(), is(IDENT_TYPE));
+		assertThat(to.getAktoerId(), nullValue());
+		assertThat(to.getVarslingstype(), is(VARSLINGSTYPE));
+		assertThat(to.getUtloepstidspunkt(), is(UTLOEPS_TIDSPUNKT));
+		assertThat(to.getParameters().keySet(), hasSize(1));
+		assertThat(to.getParameters().get(KEY), is(VAL));
+	}
+
+	@Test
+	public void shouldMapAktoerId() throws Exception {
+		VarselMedHandling varsel = createVarselBestilling();
+		varsel.setMottaker(createAktoerId());
+		BestillVarselTo to = mapper.map(varsel);
+
+		assertThat(to.getPersonIdent(), nullValue());
+		assertThat(to.getPersonidentType(), nullValue());
+		assertThat(to.getAktoerId(), is(AKTOER_ID));
+	}
+
+	@Test
+	public void shouldMapNullValues() throws Exception {
+		mapper.map(new VarselMedHandling());
+	}
+
+	public static VarselMedHandling createVarselBestilling() {
+		VarselMedHandling varsel = new VarselMedHandling();
+		varsel.setVarselbestillingId(VARSELBESTILLING_ID);
+		varsel.setRevarsling(REVARSLING);
+		Parameter parameter = new Parameter();
+		parameter.setKey(KEY);
+		parameter.setValue(VAL);
+		varsel.getParameterListe().add(parameter);
+		varsel.setMottaker(createPerson());
+		Varslingstyper varslingstype = new Varslingstyper();
+		varslingstype.setValue(VARSLINGSTYPE);
+		varsel.setVarslingstype(varslingstype);
+		varsel.setUtloepstidspunkt(toXmlGregorianCalendar(UTLOEPS_TIDSPUNKT));
+		return varsel;
+	}
+
+	private static Aktoer createAktoerId() {
+		AktoerId aktoerId = new AktoerId();
+		aktoerId.setAktoerId(AKTOER_ID);
+		return aktoerId;
+	}
+
+	private static Aktoer createPerson() {
+		Person person = new Person();
+		NorskIdent personIdent = new NorskIdent();
+		personIdent.setIdent(PERSON_IDENT);
+		Personidenter personidenter = new Personidenter();
+		personidenter.setValue(IDENT_TYPE);
+		personIdent.setType(personidenter);
+		person.setPersonIdent(personIdent);
+		return person;
+	}
+}

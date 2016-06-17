@@ -1,11 +1,11 @@
 package no.nav.varsel.jms.consumer.tvarsel004;
 
+import static no.nav.varsel.jms.consumer.tvarsel004.StoppReVarselConsumer.TVARSEL004;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.equalTo;
-import static no.nav.varsel.jms.consumer.tvarsel004.StoppReVarselConsumer.TVARSEL004;
 import static org.junit.Assert.assertTrue;
 
 import no.nav.melding.virksomhet.stopprevarsel.v1.stopprevarsel.ObjectFactory;
@@ -23,7 +23,7 @@ import org.junit.rules.ExpectedException;
 import javax.inject.Inject;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -49,7 +49,7 @@ public class StoppReVarselConsumerTest extends AbstractConsumerJmsTest {
 
         Varselbestilling processedVarselbestilling = varselbestillingRepo.findByVarselbestillingId(varselbestilling.getVarselbestillingId());
         assertThat(processedVarselbestilling.getAntallRevarslinger(), equalTo(0));
-        assertThat(processedVarselbestilling.getNesteVarslingstidspunkt(), is(nullValue()));
+        assertThat(processedVarselbestilling.getNesteVarslingDato(), is(nullValue()));
         assertThat(processedVarselbestilling.getChangeStamp().getEndretAv(), is(TVARSEL004));
     }
 
@@ -72,7 +72,7 @@ public class StoppReVarselConsumerTest extends AbstractConsumerJmsTest {
         Varselbestilling varselbestilling = varselbestillings.iterator().next();
         assertThat(varselbestilling.getVarsels(), hasSize(1));
         varselbestilling.setAntallRevarslinger(5);
-        varselbestilling.setNesteVarslingstidspunkt(LocalDateTime.now());
+        varselbestilling.setNesteVarslingDato(LocalDate.now());
         return varselbestilling;
     }
 

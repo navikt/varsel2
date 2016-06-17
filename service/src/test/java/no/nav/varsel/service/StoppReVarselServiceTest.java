@@ -51,7 +51,7 @@ public class StoppReVarselServiceTest {
         stoppReVarselService.behandleVarselbestilling(to);
 
         assertThat(varselbestilling.getAntallRevarslinger(), equalTo(0));
-        assertThat(varselbestilling.getNesteVarslingstidspunkt(), equalTo(null));
+        assertThat(varselbestilling.getNesteVarslingDato(), equalTo(null));
     }
 
     private Varselbestilling createVarselbestilling(String id) {

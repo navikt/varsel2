@@ -25,17 +25,21 @@
 			<queue alias="VARSELPRODUKSJON.VARSLINGER" jndi="java:/jboss/bestillServicemelding"/>
 			<queue alias="VARSELPRODUKSJON.KVITTERING" jndi="java:/jboss/varselKvittering"/>
 			<queue alias="VARSEL_INN" jndi="java:/jboss/varselutsending"/>
+			<queue alias="VARSELPRODUKSJON.BEST_VARSEL_M_HANDLING" jndi="java:/jboss/bestillVarsel"/>
 			<queue alias="VARSELPRODUKSJON.STOPP_VARSEL_UTSENDING" jndi="java:/jboss/revarselStopp"/>
 		</queueManager>
 		<ldap alias="ldap" mapToProperty="ldap"/>
 		<webservice mapToProperty="aktoerv2.ws" alias="Aktoer_v2"/>
 		<webservice mapToProperty="dkif.ws" alias="virksomhet:DigitalKontakinformasjon_v1"/>
+		<webservice mapToProperty="kodeverkv2.ws" alias="virksomhet:Kodeverk_v2"/>
+		<rest alias="VarselInfo_v1" mapToProperty="dokkat.varselinfo.rest"/>
 		<applicationProperties alias="varselProps"/>
 	</resources>
 
 	<exposed-services>
 		<exposedQueue name="VARSELPRODUKSJON.VARSLINGER"/>
 		<exposedQueue name="VARSELPRODUKSJON.KVITTERING"/>
+		<exposedQueue name="VARSELPRODUKSJON.BEST_VARSEL_M_HANDLING"/>
 		<exposedQueue name="VARSELPRODUKSJON.STOPP_VARSEL_UTSENDING"/>
 	</exposed-services>
 

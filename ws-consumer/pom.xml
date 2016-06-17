@@ -39,6 +39,11 @@
 			<classifier>jaxws</classifier>
 		</dependency>
 		<dependency>
+			<groupId>no.nav.dokkat</groupId>
+			<artifactId>dokkat-schemas</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>no.nav.tjenester.fim</groupId>
 			<artifactId>nav-fim-kodeverk-v2-tjenestespesifikasjon</artifactId>
 			<classifier>jaxws</classifier>
@@ -69,12 +74,42 @@
 			<version>${modig-security.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+
+
 		<!--test-->
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>varsel-config</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-repo</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

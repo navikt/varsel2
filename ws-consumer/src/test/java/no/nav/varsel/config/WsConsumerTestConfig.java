@@ -19,7 +19,7 @@ import javax.xml.ws.Endpoint;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@Import(WsConsumerConfig.class)
+@Import({WsConsumerConfig.class, RestMock.class})
 @Configuration
 public class WsConsumerTestConfig {
 

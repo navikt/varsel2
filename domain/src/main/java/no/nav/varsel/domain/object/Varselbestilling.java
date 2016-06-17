@@ -17,6 +17,7 @@ import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -48,9 +49,6 @@ public class Varselbestilling extends AbstractDomainObject {
 	@Column(name = "varslingstype", nullable = false)
 	private String varslingstype;
 
-	@Column(name = "preferert_kanal")
-	private String preferertKanal;
-
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
 	@Column(name = "utlop_tidspunkt", columnDefinition = "TIMESTAMP")
 	private LocalDateTime utlopTidspunkt;
@@ -71,17 +69,17 @@ public class Varselbestilling extends AbstractDomainObject {
 	@Column(name = "antall_revarslinger")
 	private Integer antallRevarslinger;
 
-	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
-	@Column(name = "neste_varsling_tidspunkt", columnDefinition = "TIMESTAMP")
-	private LocalDateTime nesteVarslingstidspunkt;
+	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDate")
+	@Column(name = "neste_varsling_dato", columnDefinition = "DATE")
+	private LocalDate nesteVarslingDato;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "varselbestilling")
 	private Set<Varsel> varsels = new HashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "FLETTE_PARAMETER", joinColumns = @JoinColumn(name = "FK_VARSELBESTILLING_ID"))
-	@MapKeyColumn(name = "KEY")
-	@Column(name = "VALUE")
+	@CollectionTable(name = "flette_parameter", joinColumns = @JoinColumn(name = "fk_varselbestilling_id"))
+	@MapKeyColumn(name = "key")
+	@Column(name = "value")
 	private Map<String, String> fletteparametere = new HashMap<>();
 
 	public Varselbestilling(Long id, Long versjon) {
@@ -114,14 +112,6 @@ public class Varselbestilling extends AbstractDomainObject {
 
 	public void setVarslingstype(String varslingstype) {
 		this.varslingstype = varslingstype;
-	}
-
-	public String getPreferertKanal() {
-		return preferertKanal;
-	}
-
-	public void setPreferertKanal(String preferertKanal) {
-		this.preferertKanal = preferertKanal;
 	}
 
 	public LocalDateTime getUtlopTidspunkt() {
@@ -172,12 +162,12 @@ public class Varselbestilling extends AbstractDomainObject {
 		this.antallRevarslinger = antallRevarslinger;
 	}
 
-	public LocalDateTime getNesteVarslingstidspunkt() {
-		return nesteVarslingstidspunkt;
+	public LocalDate getNesteVarslingDato() {
+		return nesteVarslingDato;
 	}
 
-	public void setNesteVarslingstidspunkt(LocalDateTime nesteVarslingstidspunkt) {
-		this.nesteVarslingstidspunkt = nesteVarslingstidspunkt;
+	public void setNesteVarslingDato(LocalDate nesteVarslingDato) {
+		this.nesteVarslingDato = nesteVarslingDato;
 	}
 
 	public Set<Varsel> getVarsels() {

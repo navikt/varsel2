@@ -11,7 +11,7 @@ import no.nav.melding.virksomhet.varsel.v1.varsel.Parameter;
 import no.nav.melding.virksomhet.varsel.v1.varsel.PersonIdent;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varslingstyper;
-import no.nav.varsel.service.tvarsel001.to.BestillServicemeldingTo;
+import no.nav.varsel.service.to.BestillVarselTo;
 import org.junit.Test;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -46,7 +46,7 @@ public class BestillServicemeldingMapperTest {
 
 	@Test
 	public void shouldMap() throws Exception {
-		BestillServicemeldingTo to = mapper.map(createVarsel());
+		BestillVarselTo to = mapper.map(createVarsel());
 
 		assertThat(to.getAktoerId(), is(MOTTAKER));
 		assertThat(to.getPersonIdent(), nullValue());
@@ -62,7 +62,7 @@ public class BestillServicemeldingMapperTest {
 		PersonIdent personIdent = new PersonIdent();
 		personIdent.setPersonIdent(MOTTAKER);
 		varsel.setMottaker(personIdent);
-		BestillServicemeldingTo to = mapper.map(varsel);
+		BestillVarselTo to = mapper.map(varsel);
 
 		assertThat(to.getPersonIdent(), is(MOTTAKER));
 		assertThat(to.getAktoerId(), nullValue());
@@ -72,7 +72,7 @@ public class BestillServicemeldingMapperTest {
 	public void shouldMapNullMottaker() throws Exception {
 		Varsel varsel = createVarsel();
 		varsel.setMottaker(null);
-		BestillServicemeldingTo to = mapper.map(varsel);
+		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getPersonIdent(), nullValue());
 		assertThat(to.getAktoerId(), nullValue());
 	}
@@ -81,7 +81,7 @@ public class BestillServicemeldingMapperTest {
 	public void shouldMapNullVarseltype() throws Exception {
 		Varsel varsel = createVarsel();
 		varsel.setVarslingstype(null);
-		BestillServicemeldingTo to = mapper.map(varsel);
+		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getVarslingstype(), nullValue());
 	}
 
@@ -89,7 +89,7 @@ public class BestillServicemeldingMapperTest {
 	public void shouldMapNullUtlop() throws Exception {
 		Varsel varsel = createVarsel();
 		varsel.setUtloepstidspunkt(null);
-		BestillServicemeldingTo to = mapper.map(varsel);
+		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getUtloepstidspunkt(), nullValue());
 	}
 
@@ -97,7 +97,7 @@ public class BestillServicemeldingMapperTest {
 	public void shouldMapEmptyParameter() throws Exception {
 		Varsel varsel = createVarsel();
 		varsel.getParameterListe().clear();
-		BestillServicemeldingTo to = mapper.map(varsel);
+		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getParameters().keySet(), hasSize(0));
 	}
 

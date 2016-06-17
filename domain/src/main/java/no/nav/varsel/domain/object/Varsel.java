@@ -79,7 +79,7 @@ public class Varsel extends AbstractDomainObject {
 	@Column(name = "varsel_url")
 	private String varselUrl;
 
-	@Column(name = "er_revarsel")
+	@Column(name = "er_revarsel", nullable = false)
 	private Boolean erRevarsel;
 
 

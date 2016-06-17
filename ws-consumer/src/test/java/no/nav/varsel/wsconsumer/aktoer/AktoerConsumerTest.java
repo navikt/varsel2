@@ -48,14 +48,14 @@ public class AktoerConsumerTest {
 
 	@Test
 	public void shouldHentPersonIdent() throws Exception {
-		AktoerTo aktoerTo = aktoerConsumer.hentIdent(new AktoerTo(AKTOER_ID, MottakerType.AKTOER));
+		AktoerTo aktoerTo = aktoerConsumer.hentIdent(AktoerTo.newAktoerId(AKTOER_ID));
 		assertThat(aktoerTo.getMottakerType(), is(MottakerType.PERSON));
 		assertThat(aktoerTo.getIdent(), is(PERSON_ID));
 	}
 
 	@Test
 	public void shouldHentAktoerId() throws Exception {
-		AktoerTo aktoerTo = aktoerConsumer.hentIdent(new AktoerTo(PERSON_ID, MottakerType.PERSON));
+		AktoerTo aktoerTo = aktoerConsumer.hentIdent(AktoerTo.newPersonIdent(PERSON_ID));
 		assertThat(aktoerTo.getMottakerType(), is(MottakerType.AKTOER));
 		assertThat(aktoerTo.getIdent(), is(AKTOER_ID));
 	}

@@ -42,12 +42,17 @@
 		</dependency>
 		<dependency>
 			<groupId>no.nav.meldinger.virksomhet</groupId>
-			<artifactId>nav-virksomhet-varselutsending-v1-meldingsdefinisjon</artifactId>
+			<artifactId>nav-virksomhet-varselutsending-v2-meldingsdefinisjon</artifactId>
 			<classifier>jaxb</classifier>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.meldinger.virksomhet</groupId>
 			<artifactId>nav-virksomhet-varselKvittering-v1-meldingsdefinisjon</artifactId>
+			<classifier>jaxb</classifier>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.meldinger.virksomhet</groupId>
+			<artifactId>nav-virksomhet-varselMedHandling-v1-meldingsdefinisjon</artifactId>
 			<classifier>jaxb</classifier>
 		</dependency>
 		<dependency>

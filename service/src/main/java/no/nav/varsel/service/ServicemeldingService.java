@@ -1,26 +1,21 @@
 package no.nav.varsel.service;
 
-import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentIdentForAktoerIdPersonIkkeFunnet;
-import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
-import no.nav.varsel.service.tvarsel001.support.ServicemeldingDomainMapper;
-import no.nav.varsel.service.tvarsel001.to.BestillServicemeldingTo;
-import no.nav.varsel.wsconsumer.aktoer.AktoerConsumer;
-import no.nav.varsel.wsconsumer.aktoer.support.AktoerIkkeFunnetException;
+import no.nav.varsel.service.to.BestillVarselTo;
+import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 
 import javax.inject.Inject;
-import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Service for Servicemelding
@@ -30,11 +25,11 @@ import java.util.List;
 public class ServicemeldingService {
 
 	@Inject
-	private AktoerConsumer aktoerConsumer;
+	private AktoerService aktoerService;
 	@Inject
 	private VarselInfoConsumer varselInfoConsumer;
 	@Inject
-	private HentDigitalKontaktinformasjonConsumer digitalKontaktinformasjonConsumer;
+	private HentDigitalKontaktinformasjonConsumer dkifConsumer;
 
 	@Inject
 	private VarselutsendingProducer varselutsendingProducer;
@@ -42,19 +37,20 @@ public class ServicemeldingService {
 	private VarselutsendingToMapper varselutsendingToMapper;
 
 	@Inject
-	private ServicemeldingDomainMapper domainMapper;
-	@Inject
-	private VarslelKanalDecider varslelKanalDecider;
+	private VarselBestillingDomainMapper domainMapper;
+
 	@Inject
 	private VarselbestillingRepo varselbestillingRepo;
 
-	public void bestillServicemelding(BestillServicemeldingTo bestillServicemeldingTo) {
-		AktoerTo origAktoer = completeAktoerPersonIdent(bestillServicemeldingTo);
+	public void bestillServicemelding(BestillVarselTo bestilling) {
+		AktoerTo origAktoer = aktoerService.completeAktoerPersonIdent(bestilling);
 
-		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestillServicemeldingTo.getVarslingstype());
-		KontaktregisterTo kontaktregisterTo = hentKontaktregisterAndDecideKanal(bestillServicemeldingTo, varselInfoTo);
+		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestilling.getVarslingstype());
+		KontaktregisterTo kontaktregisterTo = dkifConsumer
+				.hentDigitalKontaktinformasjonAndDecideKanal(bestilling.getPersonIdent(), varselInfoTo.getPreferertKanal());
 
-		Varselbestilling varselbestilling = domainMapper.mapToDomain(bestillServicemeldingTo, varselInfoTo, kontaktregisterTo);
+		bestilling.setVarselBestillingId(UUID.randomUUID().toString());
+		Varselbestilling varselbestilling = domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo);
 
 		varselbestillingRepo.saveAndFlush(varselbestilling);
 
@@ -62,27 +58,6 @@ public class ServicemeldingService {
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
 			varselutsendingProducer.produce(varselutsendingTo);
 		}
-	}
-
-	private AktoerTo completeAktoerPersonIdent(BestillServicemeldingTo bestillServicemeldingTo) {
-		AktoerTo origAktoer = bestillServicemeldingTo.craeteAktoerTo();
-		AktoerTo fetchedAktoer;
-		try {
-			fetchedAktoer = aktoerConsumer.hentIdent(origAktoer);
-		} catch (HentIdentForAktoerIdPersonIkkeFunnet | HentAktoerIdForIdentPersonIkkeFunnet e) {
-			throw new AktoerIkkeFunnetException("Kunne ikke hente manglende ident for " + origAktoer, e);
-		}
-		bestillServicemeldingTo.setMottaker(fetchedAktoer);
-		return origAktoer;
-	}
-
-	private KontaktregisterTo hentKontaktregisterAndDecideKanal(BestillServicemeldingTo bestillServicemeldingTo, VarselInfoTo varselInfoTo) {
-		KontaktregisterTo kontaktregisterTo = digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(bestillServicemeldingTo.getPersonIdent());
-		kontaktregisterTo = kontaktregisterTo == null ? new KontaktregisterTo() : kontaktregisterTo;
-
-		Collection<KanalCode> kanaler = varslelKanalDecider.decideKanaler(kontaktregisterTo, varselInfoTo.getPreferertKanal());
-		kontaktregisterTo.setKanaler(kanaler);
-		return kontaktregisterTo;
 	}
 
 }

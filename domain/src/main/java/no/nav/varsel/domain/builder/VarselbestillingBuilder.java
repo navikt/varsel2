@@ -4,6 +4,7 @@ import no.nav.varsel.domain.auxiliary.Builder;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,14 +23,13 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 	private Long id;
 	private String varselbestillingId;
 	private String varslingstype;
-	private String preferertKanal;
 	private LocalDateTime utlopTidspunkt;
 	private String fnr;
 	private String aktorId;
 	private LocalDateTime bestillingTidspunkt;
 	private Integer revarslingIntervall;
 	private Integer antallRevarslinger;
-	private LocalDateTime nesteVarslingstidspunkt;
+	private LocalDate nesteVarslingDato;
 	private Set<Varsel> varsels = new HashSet<>();
 	private Map<String, String> parameters = new HashMap<>();
 
@@ -52,11 +52,6 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 
 	public VarselbestillingBuilder varslingstype(String varslingstype) {
 		this.varslingstype = varslingstype;
-		return this;
-	}
-
-	public VarselbestillingBuilder preferertKanal(String preferertKanal) {
-		this.preferertKanal = preferertKanal;
 		return this;
 	}
 
@@ -90,8 +85,8 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 		return this;
 	}
 
-	public VarselbestillingBuilder nesteVarslingstidspunkt(LocalDateTime nesteVarslingstidspunkt) {
-		this.nesteVarslingstidspunkt = nesteVarslingstidspunkt;
+	public VarselbestillingBuilder nesteVarslingDato(LocalDate nesteVarslingDato) {
+		this.nesteVarslingDato = nesteVarslingDato;
 		return this;
 	}
 
@@ -120,14 +115,13 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 		varselbestilling.setId(id);
 		varselbestilling.setVarselbestillingId(varselbestillingId);
 		varselbestilling.setVarslingstype(varslingstype);
-		varselbestilling.setPreferertKanal(preferertKanal);
 		varselbestilling.setUtlopTidspunkt(utlopTidspunkt);
 		varselbestilling.setFnr(fnr);
 		varselbestilling.setAktorId(aktorId);
 		varselbestilling.setBestillingTidspunkt(bestillingTidspunkt);
 		varselbestilling.setRevarslingIntervall(revarslingIntervall);
 		varselbestilling.setAntallRevarslinger(antallRevarslinger);
-		varselbestilling.setNesteVarslingstidspunkt(nesteVarslingstidspunkt);
+		varselbestilling.setNesteVarslingDato(nesteVarslingDato);
 		varsels.forEach(varselbestilling::addVarsel);
 		parameters.forEach(varselbestilling::addFletteParameter);
 		return varselbestilling;

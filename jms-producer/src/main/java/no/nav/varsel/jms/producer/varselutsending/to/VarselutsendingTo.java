@@ -19,6 +19,7 @@ public class VarselutsendingTo {
 	private String varselUrl;
 	private String varselTekst;
 	private String varselTittel;
+	private String kontaktInformasjon;
 
 	public LocalDateTime getUtloepstidspunkt() {
 		return utloepstidspunkt;
@@ -84,6 +85,14 @@ public class VarselutsendingTo {
 		this.varselTittel = varselTittel;
 	}
 
+	public String getKontaktInformasjon() {
+		return kontaktInformasjon;
+	}
+
+	public void setKontaktInformasjon(String kontaktInformasjon) {
+		this.kontaktInformasjon = kontaktInformasjon;
+	}
+
 	public static final class VarselutsendingToBuilder {
 		private LocalDateTime utloepstidspunkt;
 		private String varslingstype;
@@ -93,6 +102,7 @@ public class VarselutsendingTo {
 		private String varselUrl;
 		private String varselTekst;
 		private String varselTittel;
+		private String kontaktInformasjon;
 
 		private VarselutsendingToBuilder() {
 		}
@@ -141,6 +151,11 @@ public class VarselutsendingTo {
 			return this;
 		}
 
+		public VarselutsendingToBuilder kontaktInformasjon(String kontaktInformasjon) {
+			this.kontaktInformasjon = kontaktInformasjon;
+			return this;
+		}
+
 		public VarselutsendingTo build() {
 			VarselutsendingTo varselutsendingTo = new VarselutsendingTo();
 			varselutsendingTo.setUtloepstidspunkt(utloepstidspunkt);
@@ -151,6 +166,7 @@ public class VarselutsendingTo {
 			varselutsendingTo.setVarselUrl(varselUrl);
 			varselutsendingTo.setVarselTekst(varselTekst);
 			varselutsendingTo.setVarselTittel(varselTittel);
+			varselutsendingTo.setKontaktInformasjon(kontaktInformasjon);
 			return varselutsendingTo;
 		}
 	}

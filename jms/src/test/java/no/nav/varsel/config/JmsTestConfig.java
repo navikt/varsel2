@@ -51,6 +51,7 @@ public class JmsTestConfig {
 		ctx.bind("java:/jboss/bestillServicemelding", new ActiveMQQueue("bestillServicemelding"));
 		ctx.bind("java:/jboss/varselKvittering", new ActiveMQQueue("varselKvittering"));
 		ctx.bind("java:/jboss/varselutsending", new ActiveMQQueue("varselutsending"));
+		ctx.bind("java:/jboss/bestillVarsel", new ActiveMQQueue("bestillVarsel"));
 		ctx.bind("java:/jboss/revarselStopp", new ActiveMQQueue("revarselStopp"));
 
 		// Test queues

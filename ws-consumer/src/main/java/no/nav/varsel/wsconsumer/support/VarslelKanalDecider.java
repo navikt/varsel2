@@ -1,6 +1,6 @@
-package no.nav.varsel.service;
+package no.nav.varsel.wsconsumer.support;
 
-import static no.nav.varsel.domain.code.KanalCode.DITTNAV;
+import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
 import static no.nav.varsel.domain.code.KanalCode.SMS;
 
@@ -18,20 +18,26 @@ import java.util.Set;
  */
 public class VarslelKanalDecider {
 
-	public static final String SMS_EPOST = "SMS_EPOST";
-
-	public Collection<KanalCode> decideKanaler(KontaktregisterTo kontaktregisterTo, String preferertKanal) {
+	public Collection<KanalCode> decideKanaler(KontaktregisterTo kontaktregisterTo, Set<KanalCode> preferertKanalDki) {
 		Set<KanalCode> kanaler = new HashSet<>();
-		preferertKanal = preferertKanal == null ? SMS_EPOST : preferertKanal;
+		Set<KanalCode> preferertKanal = new HashSet<>();
+		if (preferertKanalDki != null) {
+			preferertKanal.addAll(preferertKanalDki);
+		}
+		if (preferertKanal.isEmpty()) {
+			preferertKanal.add(SMS);
+			preferertKanal.add(EPOST);
+		}
 
-		if (SMS_EPOST.equals(preferertKanal)) {
-			prefSmsEpost(kanaler, kontaktregisterTo);
-		} else if (EPOST.toString().equals(preferertKanal)) {
+		if (preferertKanal.contains(SMS) && preferertKanal.contains(EPOST)) {
+			tryEpost(kanaler, kontaktregisterTo);
+			trySms(kanaler, kontaktregisterTo);
+		} else if (preferertKanal.contains(EPOST)) {
 			tryEpost(kanaler, kontaktregisterTo);
 			if (kanaler.isEmpty()) {
 				trySms(kanaler, kontaktregisterTo);
 			}
-		} else if (SMS.toString().equals(preferertKanal)) {
+		} else if (preferertKanal.contains(SMS)) {
 			trySms(kanaler, kontaktregisterTo);
 			if (kanaler.isEmpty()) {
 				tryEpost(kanaler, kontaktregisterTo);
@@ -39,14 +45,9 @@ public class VarslelKanalDecider {
 		}
 
 		if (kanaler.isEmpty()) {
-			kanaler.add(DITTNAV);
+			kanaler.add(DITT_NAV);
 		}
 		return kanaler;
-	}
-
-	private void prefSmsEpost(Set<KanalCode> kanaler, KontaktregisterTo kontaktregisterTo) {
-		tryEpost(kanaler, kontaktregisterTo);
-		trySms(kanaler, kontaktregisterTo);
 	}
 
 	private void tryEpost(Set<KanalCode> kanaler, KontaktregisterTo kontaktregisterTo) {

@@ -3,11 +3,14 @@ package no.nav.varsel.repo;
 import static no.nav.varsel.domain.builder.VarselBuilder.aVarsel;
 import static no.nav.varsel.domain.builder.VarselbestillingBuilder.aVarselbestilling;
 
+import com.google.common.collect.Sets;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * Test data utility class
@@ -21,16 +24,16 @@ public class TestdataUtil {
 
 	public static final String VARSELBESTILLING_ID = "d9f8f75e-13cb-4766-81c8-306d9d9385b2";
 	public static final String VARSLINGSTYPE = "UT";
-	public static final String PREFERERT_KANAL = "SMS";
+	public static final Set<KanalCode> PREFERERT_KANAL = Sets.newHashSet(KanalCode.EPOST);
 	public static final LocalDateTime UTLOP_TIDSPUNKT = LocalDateTime.parse("2016-04-16T01:02:03");
 	public static final String FNR = "***gammelt_fnr***";
 	public static final String AKTOR_ID = "***gammelt_fnr***34444";
 	public static final LocalDateTime BESTILLING_TIDSPUNKT = LocalDateTime.parse("2016-04-04T11:12:13");
 	public static final int REVARSLING_INTERVALL = 7;
 	public static final int ANTALL_REVARSLINGER = 2;
-	public static final LocalDateTime NESTE_VARSLINGSTIDSPUNKT = LocalDateTime.parse("2016-04-05T12:13:14");
+	public static final LocalDate NESTE_VARSLING_DATO = LocalDate.parse("2016-04-05");
 	public static final String VARSEL_ID = "fc763632-40b0-4504-a7d1-8c44ee199b11";
-	public static final KanalCode KANAL_CODE = KanalCode.DITTNAV;
+	public static final KanalCode KANAL_CODE = KanalCode.EPOST;
 	public static final LocalDateTime SENDT_TIDSPUNKT = LocalDateTime.parse("2016-04-05T14:15:16");
 	public static final LocalDateTime DISTRIBUSJON_TIDSPUNKT = LocalDateTime.parse("2016-04-03T04:05:06");
 	public static final LocalDateTime KVITTERING_TIDSPUNKT = LocalDateTime.parse("2016-04-06T04:55:06");
@@ -44,6 +47,7 @@ public class TestdataUtil {
 	public static final String PARAMETERVALUE = "antall";
 	public static final String PARAMETERKEY = "17";
 	public static final boolean ER_REVARSEL = false;
+	public static final String PERSON_IDENT_TYPE = "FNR";
 	public static final String PERSON_IDENTER_FDAT_KODENAVN = "FDAT";
 	public static final String PERSON_IDENTER_FNR_KODENAVN = "FNR";
 	public static final String PERSON_IDENTER_BOST_KODENAVN = "BOST";
@@ -56,14 +60,13 @@ public class TestdataUtil {
 		return aVarselbestilling()
 				.varselbestillingId(VARSELBESTILLING_ID)
 				.varslingstype(VARSLINGSTYPE)
-				.preferertKanal(PREFERERT_KANAL)
 				.utlopTidspunkt(UTLOP_TIDSPUNKT)
 				.fnr(FNR)
 				.aktorId(AKTOR_ID)
 				.bestillingTidspunkt(BESTILLING_TIDSPUNKT)
 				.revarslingIntervall(REVARSLING_INTERVALL)
 				.antallRevarslinger(ANTALL_REVARSLINGER)
-				.nesteVarslingstidspunkt(NESTE_VARSLINGSTIDSPUNKT)
+				.nesteVarslingDato(NESTE_VARSLING_DATO)
 				.parameter(PARAMETERKEY, PARAMETERVALUE)
 				.varsel(aVarsel()
 						.varselId(VARSEL_ID)

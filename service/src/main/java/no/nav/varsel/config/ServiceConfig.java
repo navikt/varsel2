@@ -1,12 +1,13 @@
 package no.nav.varsel.config;
 
+import no.nav.varsel.service.AktoerService;
 import no.nav.varsel.service.MottaVarselKvitteringService;
 import no.nav.varsel.service.StoppReVarselService;
 import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.VarselFletter;
-import no.nav.varsel.service.VarslelKanalDecider;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
-import no.nav.varsel.service.tvarsel001.support.ServicemeldingDomainMapper;
+import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
+import no.nav.varsel.service.BestillVarselService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -17,7 +18,7 @@ import org.springframework.context.annotation.Import;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration
-@Import({RepoConfig.class, WsConsumerConfig.class, JmsProducerConfig.class})
+@Import({MetricsConfig.class, RepoConfig.class, WsConsumerConfig.class, JmsProducerConfig.class})
 public class ServiceConfig {
 
 	@Bean
@@ -26,18 +27,13 @@ public class ServiceConfig {
 	}
 
 	@Bean
-	public ServicemeldingDomainMapper servicemeldingDomainMapper() {
-		return new ServicemeldingDomainMapper();
+	public VarselBestillingDomainMapper varselBestillingDomainMapper() {
+		return new VarselBestillingDomainMapper();
 	}
 
 	@Bean
 	public VarselFletter varselFletter() {
 		return new VarselFletter();
-	}
-
-	@Bean
-	public VarslelKanalDecider varslelKanalDecider() {
-		return new VarslelKanalDecider();
 	}
 
 	@Bean
@@ -47,7 +43,17 @@ public class ServiceConfig {
 
 	@Bean
 	public MottaVarselKvitteringService mottaVarselKvitteringService() {
-	 	return new MottaVarselKvitteringService();
+		return new MottaVarselKvitteringService();
+	}
+
+	@Bean
+	public AktoerService aktoerService() {
+		return new AktoerService();
+	}
+
+	@Bean
+	public BestillVarselService bestillVarselService() {
+		return new BestillVarselService();
 	}
 
 	@Bean

@@ -51,12 +51,14 @@
 		<activemq-core.version>5.7.0</activemq-core.version>
 
 		<nav-varsel-v1.version>1.1.1</nav-varsel-v1.version>
-		<nav-virksomhet-varselutsending-v1.version>1.1.0</nav-virksomhet-varselutsending-v1.version>
+		<nav-virksomhet-varselutsending-v2.version>2.0.1</nav-virksomhet-varselutsending-v2.version>
 		<nav-varselKvittering-v1.version>1.0.0</nav-varselKvittering-v1.version>
 		<nav-stoppReVarsel-v1.version>1.0.1</nav-stoppReVarsel-v1.version>
 		<nav-digitalKontaktinformasjon-v1.version>2.0.0</nav-digitalKontaktinformasjon-v1.version>
 		<dokumentkataloginfo-v1.version>1.0.3</dokumentkataloginfo-v1.version>
 		<nav-fim-aktoer-v2-tjenestespesifikasjon.version>2.0.1</nav-fim-aktoer-v2-tjenestespesifikasjon.version>
+		<nav-virksomhet-varselMedHandling-v1.version>1.0.1-SNAPSHOT</nav-virksomhet-varselMedHandling-v1.version>
+		<dokkat-schemas.version>6.0.0-SNAPSHOT</dokkat-schemas.version>
 		<nav-fim-kodeverk-v2-tjenestespesifikasjon.version>2.0.0-alpha004</nav-fim-kodeverk-v2-tjenestespesifikasjon.version>
 	</properties>
 
@@ -77,8 +79,8 @@
 			</dependency>
 			<dependency>
 				<groupId>no.nav.meldinger.virksomhet</groupId>
-				<artifactId>nav-virksomhet-varselutsending-v1-meldingsdefinisjon</artifactId>
-				<version>${nav-virksomhet-varselutsending-v1.version}</version>
+				<artifactId>nav-virksomhet-varselutsending-v2-meldingsdefinisjon</artifactId>
+				<version>${nav-virksomhet-varselutsending-v2.version}</version>
 				<classifier>jaxb</classifier>
 			</dependency>
 			<dependency>
@@ -91,6 +93,12 @@
 				<groupId>no.nav.meldinger.virksomhet</groupId>
 				<artifactId>nav-virksomhet-stoppReVarsel-v1-meldingsdefinisjon</artifactId>
 				<version>${nav-stoppReVarsel-v1.version}</version>
+				<classifier>jaxb</classifier>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.meldinger.virksomhet</groupId>
+				<artifactId>nav-virksomhet-varselMedHandling-v1-meldingsdefinisjon</artifactId>
+				<version>${nav-virksomhet-varselMedHandling-v1.version}</version>
 				<classifier>jaxb</classifier>
 			</dependency>
 			<dependency>
@@ -111,6 +119,12 @@
 				<version>${nav-fim-aktoer-v2-tjenestespesifikasjon.version}</version>
 				<classifier>jaxws</classifier>
 			</dependency>
+			<dependency>
+				<groupId>no.nav.dokkat</groupId>
+				<artifactId>dokkat-schemas</artifactId>
+				<version>${dokkat-schemas.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>no.nav.tjenester.fim</groupId>
 				<artifactId>nav-fim-kodeverk-v2-tjenestespesifikasjon</artifactId>

@@ -1,0 +1,159 @@
+package no.nav.varsel.service;
+
+import static no.nav.varsel.domain.to.AktoerTo.newAktoerId;
+import static no.nav.varsel.domain.to.AktoerTo.newPersonIdent;
+import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
+import static no.nav.varsel.repo.TestdataUtil.FNR;
+import static no.nav.varsel.repo.TestdataUtil.KANAL_CODE;
+import static no.nav.varsel.repo.TestdataUtil.PREFERERT_KANAL;
+import static no.nav.varsel.repo.TestdataUtil.UTLOP_TIDSPUNKT;
+import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
+import static no.nav.varsel.repo.TestdataUtil.VARSLINGSTYPE;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import no.nav.varsel.domain.object.Varsel;
+import no.nav.varsel.domain.object.Varselbestilling;
+import no.nav.varsel.domain.to.AktoerTo;
+import no.nav.varsel.jms.producer.VarselutsendingProducer;
+import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
+import no.nav.varsel.repo.VarselbestillingRepo;
+import no.nav.varsel.service.support.VarselutsendingToMapper;
+import no.nav.varsel.service.support.exception.VarselbestillingAlreadyExistException;
+import no.nav.varsel.service.support.exception.VarselbestillingNotExistException;
+import no.nav.varsel.service.to.AktoerBestillingTo;
+import no.nav.varsel.service.to.BestillVarselTo;
+import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
+import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
+import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
+import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
+import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+/**
+ * Unit test for {@link BestillVarselService}
+ *
+ * @author Andreas Skomedal, Visma Consulting.
+ */
+@RunWith(MockitoJUnitRunner.class)
+public class BestillVarselServiceTest {
+
+	public static final String NEW_BESTILLING_ID = "newBestillingId";
+
+	@Mock
+	private VarselbestillingRepo varselbestillingRepoMock;
+	@Mock
+	private AktoerService aktoerService;
+
+	@Mock
+	private VarselInfoConsumer varselInfoConsumer;
+	@Mock
+	private HentDigitalKontaktinformasjonConsumer dkifConsumer;
+
+	@Mock
+	private VarselBestillingDomainMapper domainMapper;
+	@Mock
+	private VarselutsendingProducer varselutsendingProducer;
+	@Mock
+	private VarselutsendingToMapper varselutsendingToMapper;
+
+	@InjectMocks
+	private BestillVarselService bestillVarselService;
+
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
+
+	private BestillVarselTo bestillingTo;
+	private Varselbestilling existingVarselbestilling = new Varselbestilling();
+	private Varselbestilling newVarselbestilling = new Varselbestilling();
+	private Varsel varsel = new Varsel();
+	private VarselutsendingTo varselutsendingTo = new VarselutsendingTo();
+	private AktoerTo aktoerTo = newAktoerId(AKTOR_ID);
+	private VarselInfoTo varselInfoTo = new VarselInfoTo();
+	private KontaktregisterTo kontaktregisterTo = new KontaktregisterTo();
+
+	@Before
+	public void setUp() throws Exception {
+		bestillingTo = new BestillVarselTo();
+		existingVarselbestilling.setFnr(FNR);
+		when(varselbestillingRepoMock.findByVarselbestillingId(VARSELBESTILLING_ID)).thenReturn(existingVarselbestilling);
+
+		when(aktoerService.completeAktoerPersonIdent(bestillingTo)).thenAnswer(
+				invocation -> {
+					if (invocation.getArgumentAt(0, AktoerBestillingTo.class).getPersonIdent() == null) {
+						bestillingTo.setMottaker(newPersonIdent(FNR));
+					}
+					return aktoerTo;
+				}
+		);
+
+		varselInfoTo.setPreferertKanal(PREFERERT_KANAL);
+		when(varselInfoConsumer.hentVarselInfo(VARSLINGSTYPE)).thenReturn(varselInfoTo);
+		kontaktregisterTo.setKanaler(PREFERERT_KANAL);
+		when(dkifConsumer.hentDigitalKontaktinformasjonAndDecideKanal(FNR, varselInfoTo.getPreferertKanal()))
+				.thenReturn(kontaktregisterTo);
+		newVarselbestilling.getVarsels().add(varsel);
+
+		when(domainMapper.mapVarselbestillingFoerstegangVarselMedRevarsel(bestillingTo, varselInfoTo, kontaktregisterTo))
+				.thenReturn(newVarselbestilling);
+
+		when(domainMapper.mapReVarsel(KANAL_CODE, bestillingTo, varselInfoTo, kontaktregisterTo))
+				.thenReturn(varsel);
+		when(varselutsendingToMapper
+				.mapVarsels(eq(aktoerTo), eq(UTLOP_TIDSPUNKT), eq(VARSLINGSTYPE), eq(Sets.newHashSet(varsel))))
+				.thenReturn(Lists.newArrayList(varselutsendingTo));
+	}
+
+	@Test
+	public void shouldBestillRevarsel() throws Exception {
+		createBestillingTo(VARSELBESTILLING_ID, true);
+		bestillVarselService.bestillVarsel(bestillingTo);
+
+		verify(varselbestillingRepoMock).saveAndFlush(existingVarselbestilling);
+		verify(varselutsendingProducer).produce(varselutsendingTo);
+	}
+
+	@Test
+	public void shouldBestillFoerstegangsvarsel() throws Exception {
+		createBestillingTo(NEW_BESTILLING_ID, false);
+		bestillVarselService.bestillVarsel(bestillingTo);
+
+		verify(varselbestillingRepoMock).saveAndFlush(newVarselbestilling);
+		verify(varselutsendingProducer).produce(varselutsendingTo);
+	}
+
+	@Test
+	public void shouldThrowFunctionalForRevarsel_VarselIkkefunnet() throws Exception {
+		expectedException.expect(VarselbestillingNotExistException.class);
+
+		createBestillingTo("unknown", true);
+		bestillVarselService.bestillVarsel(bestillingTo);
+	}
+
+	@Test
+	public void shouldThrowFunctionalForVarsel_VarselEksistererAllerede() throws Exception {
+		expectedException.expect(VarselbestillingAlreadyExistException.class);
+
+		createBestillingTo(VARSELBESTILLING_ID, false);
+		bestillVarselService.bestillVarsel(bestillingTo);
+	}
+
+	private BestillVarselTo createBestillingTo(String bestillingId, boolean revarsling) {
+		bestillingTo.setVarselBestillingId(bestillingId);
+		bestillingTo.setRevarsling(revarsling);
+		bestillingTo.setMottaker(aktoerTo);
+		bestillingTo.setUtloepstidspunkt(UTLOP_TIDSPUNKT);
+		bestillingTo.setVarslingstype(VARSLINGSTYPE);
+		return bestillingTo;
+	}
+}

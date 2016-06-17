@@ -1,9 +1,13 @@
 package no.nav.varsel.wsconsumer.dokkat;
 
-import com.google.common.collect.Sets;
-import no.nav.varsel.domain.code.KanalCode;
+import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
+import no.nav.varsel.wsconsumer.dokkat.support.VarselInfoMapper;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.Assert;
+import org.springframework.web.client.RestTemplate;
+
+import javax.inject.Inject;
 
 /**
  * VarselInfo Stub
@@ -12,28 +16,29 @@ import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
  */
 public class VarselInfoConsumer {
 
-	public static final String PREFERERT_KANAL = "DITTNAV";
-	public static final String VARSEL_URL = "URL";
-	public static final String VARSEL_TITTEL = "Varsel Tittel";
-	public static final String FOERSTE_GANG_TEKST_TIL_MOTTAKER = "Første gang tekst til :mottaker";
-	public static final String REVARSLING_TEKST_TIL_MOTTAKER = "Revarsling tekst til :mottaker";
+	@Inject
+	private RestTemplate restTemplate;
+	private String varselinfoUrlGet;
 
-	public VarselInfoTo hentVarselInfo(String varseltype) {
-		// TODO PK-31739
-		return createVarselInfoTo();
+	@Inject
+	private VarselInfoMapper varselInfoMapper;
+
+	public VarselInfoTo hentVarselInfo(String varslingstype) {
+		VarselInfoRestTo varselInfo = restTemplate.getForObject(varselinfoUrlGet, VarselInfoRestTo.class, varslingstype);
+		return varselInfoMapper.map(varselInfo);
 	}
 
-	// Move to test class when implemented
-	public static VarselInfoTo createVarselInfoTo() {
-		VarselInfoTo varselInfoTo = new VarselInfoTo();
-		varselInfoTo.setPreferertKanal(PREFERERT_KANAL);
-		varselInfoTo.setVarselURL(VARSEL_URL);
-		VarselMalTo varselMalTo = new VarselMalTo();
-		varselMalTo.setKanal(KanalCode.DITTNAV);
-		varselMalTo.setTittel(VARSEL_TITTEL);
-		varselMalTo.setFoerstegangsTekst(FOERSTE_GANG_TEKST_TIL_MOTTAKER);
-		varselMalTo.setRevarslingTekst(REVARSLING_TEKST_TIL_MOTTAKER);
-		varselInfoTo.setMaler(Sets.newHashSet(varselMalTo));
-		return varselInfoTo;
+	@Inject
+	public void setVarselinfoUrl(@Value("${dokkat.varselinfo.rest.url}") String varselinfoUrl) {
+		varselinfoUrlGet = varselinfoUrl;
+		if (!varselinfoUrlGet.endsWith("/")) {
+			varselinfoUrlGet += "/";
+		}
+		varselinfoUrlGet += "{varslingstype}";
+	}
+
+	public void ping() {
+		String ping = restTemplate.getForObject(varselinfoUrlGet, String.class, "ping");
+		Assert.isTrue("ok".equals(ping), "VarselInfo ping failed " + ping);
 	}
 }

@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.IOException;
-
 /**
  * Spring config for Dkif CXF endpoint
  *
@@ -20,8 +18,8 @@ public class DkifEndpoint extends AbstractCxfEndpointConfig {
 	private String dkifUrl;
 
 	@Bean
-	public DigitalKontaktinformasjonV1 digitalKontaktinformasjonV1() throws IOException {
-		addInterceptor(new SystemSAMLOutInterceptor());
+	public DigitalKontaktinformasjonV1 digitalKontaktinformasjonV1() {
+		addOutInterceptor(new SystemSAMLOutInterceptor());
 		setAdress(dkifUrl);
 		enableMtom();
 
