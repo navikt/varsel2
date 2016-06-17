@@ -39,9 +39,10 @@ public class JmsPingProvider {
 
 		LOG.debug("tester køer {}", map.size());
 		List<Ping> pings = new ArrayList<>();
-		for (final QueueInfo queueInfo : map.keySet()) {
-			Queue queue = map.get(queueInfo);
-			final String queueName = getQueueName(queue);
+		for (Map.Entry<QueueInfo, Queue> entry : map.entrySet()) {
+			QueueInfo queueInfo = entry.getKey();
+			Queue queue = entry.getValue();
+			String queueName = getQueueName(queue);
 			boolean isRemoteQueue = remoteQueues.contains(queueInfo);
 			Runnable pinger = null;
 			if (!isRemoteQueue) {

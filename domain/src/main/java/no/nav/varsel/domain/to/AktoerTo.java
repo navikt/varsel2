@@ -69,14 +69,21 @@ public class AktoerTo {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
 		AktoerTo aktoerTo = (AktoerTo) o;
 
-		if (ident != null ? !ident.equals(aktoerTo.ident) : aktoerTo.ident != null) return false;
-		if (personIdentType != null ? !personIdentType.equals(aktoerTo.personIdentType) : aktoerTo.personIdentType != null)
+		if (ident != null ? !ident.equals(aktoerTo.ident) : aktoerTo.ident != null) {
 			return false;
+		}
+		if (personIdentType != null ? !personIdentType.equals(aktoerTo.personIdentType) : aktoerTo.personIdentType != null) {
+			return false;
+		}
 		return mottakerType == aktoerTo.mottakerType;
 
 	}

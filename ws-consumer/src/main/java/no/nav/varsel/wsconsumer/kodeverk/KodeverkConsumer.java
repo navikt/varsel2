@@ -36,7 +36,7 @@ public class KodeverkConsumer {
 	@Inject
 	private KodeverkPortType kodeverkPortType;
 
-	private LoadingCache<String, List<Kode>> kodeverk = CacheBuilder.newBuilder()
+	private LoadingCache<String, List<Kode>> kodeverkCache = CacheBuilder.newBuilder()
 			.expireAfterWrite(TIMEOUT_MINUTES, TimeUnit.MINUTES)
 			.build(new CacheLoader<String, List<Kode>>() {
 				@Override
@@ -79,7 +79,7 @@ public class KodeverkConsumer {
 		Assert.notNull(kodeverksnavn, "Parameteren kodeverksnavn kan ikke være null.");
 		Assert.notNull(kodenavn, "Parameteren kodenavn kan ikke være null.");
 
-		return kodeverk.get(kodeverksnavn).stream().anyMatch(kode -> kode.getNavn().equals(kodenavn));
+		return kodeverkCache.get(kodeverksnavn).stream().anyMatch(kode -> kode.getNavn().equals(kodenavn));
 	}
 
 	private boolean kodeIsValidAt(Kode kode, LocalDateTime tidspunkt) {
