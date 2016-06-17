@@ -94,7 +94,6 @@ public class VarselInfoTo {
 
 	public static final class VarselInfoToBuilder {
 		private Set<KanalCode> preferertKanal = Sets.newHashSet();
-		private String varselURL;
 		private String varslingstype;
 		private String varselForDistrKanal;
 		private String varselKategori;
@@ -112,11 +111,6 @@ public class VarselInfoTo {
 
 		public VarselInfoToBuilder preferertKanal(Set<KanalCode> preferertKanal) {
 			this.preferertKanal = preferertKanal;
-			return this;
-		}
-
-		public VarselInfoToBuilder varselURL(String varselURL) {
-			this.varselURL = varselURL;
 			return this;
 		}
 

@@ -65,7 +65,6 @@ public class VarselInfoConsumerTest {
 		Assert.assertThat(varselInfoTo, is(mock));
 	}
 
-	// Move to test class when implemented
 	public static VarselInfoTo createVarselInfoTo(String varseltype) {
 		VarselInfoTo varselInfoTo = new VarselInfoTo();
 		varselInfoTo.setVarslingstype(varseltype);
