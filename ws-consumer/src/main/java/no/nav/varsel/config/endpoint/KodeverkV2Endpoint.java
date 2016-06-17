@@ -1,6 +1,7 @@
 package no.nav.varsel.config.endpoint;
 
 import no.nav.tjeneste.virksomhet.kodeverk.v2.KodeverkPortType;
+import no.nav.varsel.config.AbstractCxfEndpointConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

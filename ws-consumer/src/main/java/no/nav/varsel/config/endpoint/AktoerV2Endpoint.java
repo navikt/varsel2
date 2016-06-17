@@ -2,6 +2,7 @@ package no.nav.varsel.config.endpoint;
 
 import no.nav.modig.security.ws.SystemSAMLOutInterceptor;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
+import no.nav.varsel.config.AbstractCxfEndpointConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

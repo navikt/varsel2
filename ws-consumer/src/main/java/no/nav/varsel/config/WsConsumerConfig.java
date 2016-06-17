@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Import;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@Import({CxfConfig.class, RestConsumerConfig.class})
+@Import({CxfConfig.class, ConsumerEndpointConfig.class, RestConsumerConfig.class})
 @Configuration
 public class WsConsumerConfig {
 

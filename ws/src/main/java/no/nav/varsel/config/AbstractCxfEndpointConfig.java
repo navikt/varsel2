@@ -1,6 +1,6 @@
-package no.nav.varsel.config.endpoint;
+package no.nav.varsel.config;
 
-import no.nav.varsel.config.endpoint.support.TimeoutFeature;
+import no.nav.varsel.config.support.TimeoutFeature;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.LoggingInInterceptor;
@@ -33,28 +33,28 @@ public abstract class AbstractCxfEndpointConfig {
 		factoryBean.setBus(bus);
 	}
 
-	void setAdress(String aktoerUrl) {
+	protected void setAdress(String aktoerUrl) {
 		factoryBean.setAddress(aktoerUrl);
 	}
 
-	void addOutInterceptor(Interceptor<? extends Message> interceptor) {
+	protected void addOutInterceptor(Interceptor<? extends Message> interceptor) {
 		factoryBean.getOutInterceptors().add(interceptor);
 	}
 
-	void addInnInterceptor(Interceptor<? extends Message> interceptor) {
+	protected void addInnInterceptor(Interceptor<? extends Message> interceptor) {
 		factoryBean.getInInterceptors().add(interceptor);
 	}
 
-	<T> T createPort(Class<T> portType) {
+	protected <T> T createPort(Class<T> portType) {
 		factoryBean.getFeatures().add(new TimeoutFeature(timeout, timeout));
 		return factoryBean.create(portType);
 	}
 
-	void enableMtom() {
+	protected void enableMtom() {
 		factoryBean.getProperties().put("mtom-enabled", true);
 	}
 
-	public void setTimeout(int timeout) {
+	protected void setTimeout(int timeout) {
 		this.timeout = timeout;
 	}
 }

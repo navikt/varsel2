@@ -1,4 +1,4 @@
-package no.nav.varsel.config.endpoint.support;
+package no.nav.varsel.config.support;
 
 import org.apache.cxf.Bus;
 import org.apache.cxf.endpoint.Client;

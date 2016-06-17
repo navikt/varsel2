@@ -27,7 +27,7 @@ import java.net.URISyntaxException;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @EnableAutoConfiguration
-@Import({RepoTestConfig.class, JmsConfig.class})
+@Import({JmsConfig.class})
 @Configuration
 public class JmsTestConfig {
 

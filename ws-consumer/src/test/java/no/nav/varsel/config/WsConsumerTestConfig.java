@@ -4,6 +4,7 @@ package no.nav.varsel.config;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.DigitalKontaktinformasjonV1;
 import no.nav.tjeneste.virksomhet.kodeverk.v2.KodeverkPortType;
+import no.nav.varsel.config.local.LocalTomcatConfiguration;
 import no.nav.varsel.mock.AktoerV2Mock;
 import no.nav.varsel.mock.DigitalKontaktinformasjonV1Mock;
 import no.nav.varsel.mock.KodeverkPortTypeMock;
@@ -19,7 +20,7 @@ import javax.xml.ws.Endpoint;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@Import({WsConsumerConfig.class, RestMock.class})
+@Import({LocalTomcatConfiguration.class, WsConsumerConfig.class, RestMock.class})
 @Configuration
 public class WsConsumerTestConfig {
 

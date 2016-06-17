@@ -9,7 +9,8 @@ import org.springframework.context.annotation.Import;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@Import({LocalTomcatConfiguration.class, JmsTestConfig.class, ServiceTestConfig.class, JmsConsumerConfig.class})
+@Import({LocalTomcatConfiguration.class, JmsTestConfig.class, RepoTestConfig.class,
+		ServiceTestConfig.class, JmsConsumerConfig.class})
 @Configuration
 public class JmsConsumerTestConfig {
 

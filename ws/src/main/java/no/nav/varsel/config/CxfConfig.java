@@ -1,14 +1,10 @@
 package no.nav.varsel.config;
 
-import no.nav.varsel.config.endpoint.AktoerV2Endpoint;
-import no.nav.varsel.config.endpoint.DkifEndpoint;
-import no.nav.varsel.config.endpoint.KodeverkV2Endpoint;
 import org.apache.cxf.Bus;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.feature.Feature;
 import org.apache.cxf.ws.addressing.WSAddressingFeature;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 
 import java.util.Collection;
 
@@ -17,7 +13,6 @@ import java.util.Collection;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@Import({AktoerV2Endpoint.class, DkifEndpoint.class, KodeverkV2Endpoint.class})
 public class CxfConfig {
 
 	@Bean(name = Bus.DEFAULT_BUS_ID)
