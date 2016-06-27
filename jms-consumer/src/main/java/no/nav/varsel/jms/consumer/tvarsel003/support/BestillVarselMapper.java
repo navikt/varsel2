@@ -2,7 +2,6 @@ package no.nav.varsel.jms.consumer.tvarsel003.support;
 
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Aktoer;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.AktoerId;
-import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.NorskIdent;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Parameter;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Person;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
@@ -25,9 +24,9 @@ public class BestillVarselMapper {
 		BestillVarselTo to = new BestillVarselTo();
 
 		to.setVarselBestillingId(varsel.getVarselbestillingId());
-		to.setRevarsling(varsel.isRevarsling());
+		to.setRevarsling(varsel.isReVarsel());
 		map(varsel.getMottaker(), to);
-		to.setVarslingstype(varsel.getVarslingstype() == null ? null : varsel.getVarslingstype().getValue());
+		to.setVarseltypeId(varsel.getVarseltypeId());
 		to.setParameters(map(varsel.getParameterListe()));
 		to.setUtloepstidspunkt(XmlGregorianConverter.toLocalDateTime(varsel.getUtloepstidspunkt()));
 
@@ -40,14 +39,11 @@ public class BestillVarselMapper {
 		return map;
 	}
 
-
 	private void map(Aktoer aktoer, BestillVarselTo to) {
 		if (aktoer instanceof AktoerId) {
 			to.setAktoerId(((AktoerId) aktoer).getAktoerId());
 		} else if (aktoer instanceof Person) {
-			NorskIdent norskIdent = ((Person) aktoer).getPersonIdent();
-			to.setPersonIdent(norskIdent.getIdent());
-			to.setPersonidentType(norskIdent.getType() == null ? null : norskIdent.getType().getValue());
+			to.setPersonIdent(((Person) aktoer).getIdent());
 		}
 	}
 }

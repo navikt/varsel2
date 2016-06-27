@@ -20,7 +20,7 @@ public class BestillVarselTo extends AktoerBestillingTo {
 	private String varselBestillingId;
 	private LocalDateTime utsendelsesTidspunkt;
 	private Boolean revarsling;
-	private String varslingstype;
+	private String varseltypeId;
 	private Map<String, String> parameters = new HashMap<>();
 	private LocalDateTime utloepstidspunkt;
 
@@ -48,12 +48,12 @@ public class BestillVarselTo extends AktoerBestillingTo {
 		this.revarsling = revarsling;
 	}
 
-	public String getVarslingstype() {
-		return varslingstype;
+	public String getVarseltypeId() {
+		return varseltypeId;
 	}
 
-	public void setVarslingstype(String varslingstype) {
-		this.varslingstype = varslingstype;
+	public void setVarseltypeId(String varseltypeId) {
+		this.varseltypeId = varseltypeId;
 	}
 
 	public Map<String, String> getParameters() {
@@ -75,7 +75,7 @@ public class BestillVarselTo extends AktoerBestillingTo {
 	public void validateTvarsel001Input() {
 		try {
 			assertHasOneIdent();
-			hasText(varslingstype, "varslingstype");
+			hasText(varseltypeId, "varseltypeId");
 			parameters.forEach((key, val) -> {
 				hasText(key, "parameter.key");
 				hasText(val, "parameter.value");
@@ -90,8 +90,7 @@ public class BestillVarselTo extends AktoerBestillingTo {
 			hasText(varselBestillingId, "varselBestillingId");
 			notNull(revarsling, "revarsling");
 			assertHasOneIdent();
-			assertOptionalPersonIdentType();
-			hasText(varslingstype, "varslingstype");
+			hasText(varseltypeId, "varseltypeId");
 			parameters.forEach((key, val) -> {
 				hasText(key, "parameter.key");
 				hasText(val, "parameter.value");

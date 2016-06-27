@@ -32,7 +32,7 @@ public class RestMock {
 	public Map<String, ResponseCreator> restMocks(RestTemplate restTemplate) throws JsonProcessingException {
 
 		// MockRestServiceServer will only mock a request once, do it a bit more manual here
-		mocks.put("http://localhost:8041/varsel/rest/varselInfoV1/varslingstype",
+		mocks.put("http://localhost:8041/varsel/rest/varselInfoV1/varseltypeId",
 				withSuccess(objectMapper.writeValueAsString(createVarselInfo()), APPLICATION_JSON));
 
 		restTemplate.setRequestFactory((uri, httpMethod) -> {

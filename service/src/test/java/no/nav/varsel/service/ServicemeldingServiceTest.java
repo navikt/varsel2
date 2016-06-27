@@ -5,7 +5,7 @@ import static no.nav.varsel.domain.to.AktoerTo.newPersonIdent;
 import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
 import static no.nav.varsel.repo.TestdataUtil.FNR;
 import static no.nav.varsel.repo.TestdataUtil.PREFERERT_KANAL;
-import static no.nav.varsel.repo.TestdataUtil.VARSLINGSTYPE;
+import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.eq;
@@ -28,7 +28,7 @@ import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.wsconsumer.support.VarslelKanalDecider;
+import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -65,7 +65,7 @@ public class ServicemeldingServiceTest {
 	@Mock
 	private VarselBestillingDomainMapper domainMapper;
 	@Mock
-	private VarslelKanalDecider varslelKanalDecider;
+	private VarselKanalDecider varselKanalDecider;
 	@Mock
 	private VarselbestillingRepo varselbestillingRepo;
 
@@ -85,7 +85,7 @@ public class ServicemeldingServiceTest {
 		bestilling.setVarselBestillingId(null);
 		bestilling.setPersonIdent(null);
 		bestilling.setAktoerId(null);
-		bestilling.setVarslingstype(VARSLINGSTYPE);
+		bestilling.setVarseltypeId(VARSELTYPE_ID);
 
 		varselInfoTo.setPreferertKanal(PREFERERT_KANAL);
 
@@ -96,7 +96,7 @@ public class ServicemeldingServiceTest {
 					return aktoerTo;
 				}
 		);
-		when(varselInfoConsumer.hentVarselInfo(VARSLINGSTYPE)).thenReturn(varselInfoTo);
+		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjonAndDecideKanal(FNR, PREFERERT_KANAL)).thenReturn(kontaktregisterTo);
 		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
 		when(varselutsendingToMapper.map(eq(varselbestilling), eq(aktoerTo))).thenReturn(varselutsendingTos);

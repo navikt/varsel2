@@ -16,7 +16,7 @@ import java.util.Set;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public class VarslelKanalDecider {
+public class VarselKanalDecider {
 
 	public Collection<KanalCode> decideKanaler(KontaktregisterTo kontaktregisterTo, Set<KanalCode> preferertKanalDki) {
 		Set<KanalCode> kanaler = new HashSet<>();

@@ -29,14 +29,14 @@ public class VarselInfoConsumerTest {
 	public static final String VARSEL_TITTEL = "Varsel Tittel";
 	public static final String FOERSTE_GANG_TEKST = "Første gang tekst til {mottaker}";
 	public static final String REVARSLING_TEKST = "Revarsling tekst til {mottaker}";
-	public static final String VARSEL_FOR_DISTR_KANAL = "vardistkanal";
+	public static final String VARSEL_FOR_DIST_KANAL = "vardistkanal";
 	public static final String VARSEL_KATEGORI = "varkat";
 	public static final boolean INAKTIV = false;
 	public static final int REVARSLING_INTERVALL = 4;
 	public static final int ANTALL_REVARSLING = 2;
 	public static final KanalCode PREFERERT_KANAL = KanalCode.EPOST;
 
-	private static final String VARSLINGSTYPE = "varslingstypen";
+	private static final String VARSELTYPE_ID = "varseltypeIden";
 	private static final String DOKKAT_URL = "http://nav.no/varselinfo";
 
 
@@ -56,19 +56,19 @@ public class VarselInfoConsumerTest {
 	@Test
 	public void shouldConsume() throws Exception {
 		VarselInfoRestTo restTo = new VarselInfoRestTo();
-		when(restTemplate.getForObject(DOKKAT_URL + "/{varslingstype}", VarselInfoRestTo.class, VARSLINGSTYPE))
+		when(restTemplate.getForObject(DOKKAT_URL + "/{varseltypeId}", VarselInfoRestTo.class, VARSELTYPE_ID))
 				.thenReturn(restTo);
 		VarselInfoTo mock = new VarselInfoTo();
 		when(varselInfoMapper.map(restTo)).thenReturn(mock);
 
-		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(VARSLINGSTYPE);
+		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID);
 		Assert.assertThat(varselInfoTo, is(mock));
 	}
 
 	public static VarselInfoTo createVarselInfoTo(String varseltype) {
 		VarselInfoTo varselInfoTo = new VarselInfoTo();
-		varselInfoTo.setVarslingstype(varseltype);
-		varselInfoTo.setVarselForDistrKanal(VARSEL_FOR_DISTR_KANAL);
+		varselInfoTo.setVarseltypeId(varseltype);
+		varselInfoTo.setVarselForDistKanal(VARSEL_FOR_DIST_KANAL);
 		varselInfoTo.setVarselKategori(VARSEL_KATEGORI);
 		varselInfoTo.setInaktiv(INAKTIV);
 		varselInfoTo.setRevarslingIntervall(REVARSLING_INTERVALL);

@@ -27,7 +27,7 @@ public class BestillServicemeldingMapper {
 		BestillVarselTo to = new BestillVarselTo();
 
 		map(varsel.getMottaker(), to);
-		to.setVarslingstype(varsel.getVarslingstype() == null ? null :
+		to.setVarseltypeId(varsel.getVarslingstype() == null ? null :
 				varsel.getVarslingstype().getValue());
 		to.setUtloepstidspunkt(toLocalDateTime(varsel.getUtloepstidspunkt()));
 		to.setParameters(map(varsel.getParameterListe()));

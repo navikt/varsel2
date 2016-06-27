@@ -22,7 +22,7 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 
 	private Long id;
 	private String varselbestillingId;
-	private String varslingstype;
+	private String varseltypeId;
 	private LocalDateTime utlopTidspunkt;
 	private String fnr;
 	private String aktorId;
@@ -50,8 +50,8 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 		return this;
 	}
 
-	public VarselbestillingBuilder varslingstype(String varslingstype) {
-		this.varslingstype = varslingstype;
+	public VarselbestillingBuilder varseltypeId(String varseltypeId) {
+		this.varseltypeId = varseltypeId;
 		return this;
 	}
 
@@ -114,7 +114,7 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 		Varselbestilling varselbestilling = new Varselbestilling();
 		varselbestilling.setId(id);
 		varselbestilling.setVarselbestillingId(varselbestillingId);
-		varselbestilling.setVarslingstype(varslingstype);
+		varselbestilling.setVarseltypeId(varseltypeId);
 		varselbestilling.setUtlopTidspunkt(utlopTidspunkt);
 		varselbestilling.setFnr(fnr);
 		varselbestilling.setAktorId(aktorId);

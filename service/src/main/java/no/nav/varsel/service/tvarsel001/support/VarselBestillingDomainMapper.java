@@ -56,7 +56,7 @@ public class VarselBestillingDomainMapper implements InitializingBean{
 
 		VarselbestillingBuilder builder = aVarselbestilling()
 				.varselbestillingId(bestillingTo.getVarselBestillingId())
-				.varslingstype(bestillingTo.getVarslingstype())
+				.varseltypeId(bestillingTo.getVarseltypeId())
 				.utlopTidspunkt(bestillingTo.getUtloepstidspunkt())
 				.fnr(bestillingTo.getPersonIdent())
 				.aktorId(bestillingTo.getAktoerId())

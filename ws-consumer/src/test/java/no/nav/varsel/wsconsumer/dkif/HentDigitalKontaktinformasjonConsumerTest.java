@@ -21,7 +21,7 @@ import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDig
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.wsconsumer.support.VarslelKanalDecider;
+import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,7 +48,7 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 	public static final Set<KanalCode> PREFERERT_KANAL_2 = Sets.newHashSet(KanalCode.SMS);
 
 	@Mock
-	private VarslelKanalDecider varslelKanalDecider;
+	private VarselKanalDecider varselKanalDecider;
 	@Mock
 	private DigitalKontaktinformasjonV1 digitalKontaktinformasjonV1;
 	@Mock
@@ -73,8 +73,8 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 
 		kontaktregisterTo = new KontaktregisterTo();
 		when(mapper.map(response)).thenReturn(kontaktregisterTo);
-		when(varslelKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(kanalCodes);
-		when(varslelKanalDecider.decideKanaler(any(KontaktregisterTo.class), eq(PREFERERT_KANAL_2))).thenReturn(kanalCodes2);
+		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(kanalCodes);
+		when(varselKanalDecider.decideKanaler(any(KontaktregisterTo.class), eq(PREFERERT_KANAL_2))).thenReturn(kanalCodes2);
 	}
 
 	@Test

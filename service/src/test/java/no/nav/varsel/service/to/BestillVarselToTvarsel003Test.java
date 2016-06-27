@@ -1,7 +1,5 @@
 package no.nav.varsel.service.to;
 
-import static no.nav.varsel.service.to.BestillVarselToTest.createTo;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -25,7 +23,6 @@ public class BestillVarselToTvarsel003Test {
 	public void shouldBeOkAktoerId() throws Exception {
 		BestillVarselTo to = createTo();
 		to.setPersonIdent(null);
-		to.setPersonidentType(null);
 		to.setAktoerId("aktoerid");
 		to.validateTvarsel003Input();
 	}
@@ -55,18 +52,10 @@ public class BestillVarselToTvarsel003Test {
 	}
 
 	@Test
-	public void shouldFailMissingPersonIdentType() throws Exception {
-		expectedException.expectMessage("personidentType cannot be empty or missing");
+	public void shouldFailMissingVarseltypeId() throws Exception {
+		expectedException.expectMessage("varseltypeId cannot be empty or missing");
 		BestillVarselTo to = createTo();
-		to.setPersonidentType(null);
-		to.validateTvarsel003Input();
-	}
-
-	@Test
-	public void shouldFailMissingVarslingstype() throws Exception {
-		expectedException.expectMessage("varslingstype cannot be empty or missing");
-		BestillVarselTo to = createTo();
-		to.setVarslingstype(null);
+		to.setVarseltypeId(null);
 		to.validateTvarsel003Input();
 	}
 
@@ -91,8 +80,7 @@ public class BestillVarselToTvarsel003Test {
 		to.setVarselBestillingId("id");
 		to.setRevarsling(true);
 		to.setPersonIdent("pident");
-		to.setPersonidentType("FNR");
-		to.setVarslingstype("varslingstype");
+		to.setVarseltypeId("varseltypeId");
 		return to;
 	}
 }

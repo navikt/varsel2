@@ -35,7 +35,7 @@ public class BestillVarselToTest {
 	public static BestillVarselTo createTo() {
 		BestillVarselTo to = new BestillVarselTo();
 		to.setMottaker(AktoerTo.newAktoerId(MOTTAKER));
-		to.setVarslingstype("varsel");
+		to.setVarseltypeId("varsel");
 		to.setUtloepstidspunkt(LocalDateTime.now());
 		to.getParameters().put("key", "val");
 		return to;

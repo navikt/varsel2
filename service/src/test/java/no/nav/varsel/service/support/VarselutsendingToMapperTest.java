@@ -7,7 +7,7 @@ import static no.nav.varsel.repo.TestdataUtil.VARSEL_ID;
 import static no.nav.varsel.repo.TestdataUtil.VARSEL_TEKST;
 import static no.nav.varsel.repo.TestdataUtil.VARSEL_TITTEL;
 import static no.nav.varsel.repo.TestdataUtil.VARSEL_URL;
-import static no.nav.varsel.repo.TestdataUtil.VARSLINGSTYPE;
+import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static no.nav.varsel.repo.TestdataUtil.createVarselbestilling;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -39,7 +39,7 @@ public class VarselutsendingToMapperTest {
 
 	@Test
 	public void shouldMapVarsel() throws Exception {
-		List<VarselutsendingTo> tos = mapper.mapVarsels(aktoerTo, UTLOP_TIDSPUNKT, VARSLINGSTYPE,
+		List<VarselutsendingTo> tos = mapper.mapVarsels(aktoerTo, UTLOP_TIDSPUNKT, VARSELTYPE_ID,
 				createVarselbestilling().getVarsels());
 
 		assertThat(tos, hasSize(1));
@@ -52,7 +52,7 @@ public class VarselutsendingToMapperTest {
 		assertThat(to.getUtloepstidspunkt(), is(UTLOP_TIDSPUNKT));
 		assertThat(to.getKanal(), is(KANAL_CODE));
 		assertThat(to.getKontaktInformasjon(), is(KONTAKT_INFO));
-		assertThat(to.getVarslingstype(), is(VARSLINGSTYPE));
+		assertThat(to.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(to.getVarselTittel(), is(VARSEL_TITTEL));
 		assertThat(to.getVarselTekst(), is(VARSEL_TEKST));
 		assertThat(to.getVarselUrl(), is(VARSEL_URL));

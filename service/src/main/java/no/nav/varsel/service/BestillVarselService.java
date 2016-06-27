@@ -66,7 +66,7 @@ public class BestillVarselService {
 	private void bestillFoerstegangsVarsel(BestillVarselTo to) {
 		AktoerTo origAktoer = aktoerService.completeAktoerPersonIdent(to);
 
-		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(to.getVarslingstype());
+		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(to.getVarseltypeId());
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
 				.hentDigitalKontaktinformasjonAndDecideKanal(to.getPersonIdent(), varselInfoTo.getPreferertKanal());
 
@@ -75,13 +75,13 @@ public class BestillVarselService {
 
 		varselbestillingRepo.saveAndFlush(varselbestilling);
 
-		sendToVarselutsending(to, origAktoer, to.getVarslingstype(), varselbestilling.getVarsels());
+		sendToVarselutsending(to, origAktoer, to.getVarseltypeId(), varselbestilling.getVarsels());
 	}
 
 	private void bestillRevarsel(BestillVarselTo to, Varselbestilling existingVarsel) {
 		AktoerTo origAktoer = to.createAktoerTo();
 
-		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(to.getVarslingstype());
+		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(to.getVarseltypeId());
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
 				.hentDigitalKontaktinformasjonAndDecideKanal(existingVarsel.getFnr(), varselInfoTo.getPreferertKanal());
 
@@ -92,12 +92,12 @@ public class BestillVarselService {
 
 		varselbestillingRepo.saveAndFlush(existingVarsel);
 
-		sendToVarselutsending(to, origAktoer, to.getVarslingstype(), varsels);
+		sendToVarselutsending(to, origAktoer, to.getVarseltypeId(), varsels);
 	}
 
-	private void sendToVarselutsending(BestillVarselTo to, AktoerTo origAktoer, String varslingstype, Set<Varsel> varsels) {
+	private void sendToVarselutsending(BestillVarselTo to, AktoerTo origAktoer, String varseltypeId, Set<Varsel> varsels) {
 		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper
-				.mapVarsels(origAktoer, to.getUtloepstidspunkt(), varslingstype, varsels);
+				.mapVarsels(origAktoer, to.getUtloepstidspunkt(), varseltypeId, varsels);
 
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
 			varselutsendingProducer.produce(varselutsendingTo);

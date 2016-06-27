@@ -8,12 +8,9 @@ import static org.junit.Assert.assertThat;
 
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Aktoer;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.AktoerId;
-import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.NorskIdent;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Parameter;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Person;
-import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Personidenter;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
-import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Varslingstyper;
 import no.nav.varsel.service.to.BestillVarselTo;
 import org.junit.Test;
 
@@ -33,7 +30,7 @@ public class BestillVarselMapperTest {
 	public static final String AKTOER_ID = "aktoerId";
 	public static final String PERSON_IDENT = "personIdent";
 	public static final String IDENT_TYPE = "FNR";
-	public static final String VARSLINGSTYPE = "varslingstype";
+	public static final String VARSELTYPE_ID = "varseltypeId";
 	public static final LocalDateTime UTLOEPS_TIDSPUNKT = LocalDateTime.parse("2016-06-06T21:21:42");
 
 	private BestillVarselMapper mapper = new BestillVarselMapper();
@@ -45,9 +42,8 @@ public class BestillVarselMapperTest {
 		assertThat(to.getVarselBestillingId(), is(VARSELBESTILLING_ID));
 		assertThat(to.isRevarsling(), is(REVARSLING));
 		assertThat(to.getPersonIdent(), is(PERSON_IDENT));
-		assertThat(to.getPersonidentType(), is(IDENT_TYPE));
 		assertThat(to.getAktoerId(), nullValue());
-		assertThat(to.getVarslingstype(), is(VARSLINGSTYPE));
+		assertThat(to.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(to.getUtloepstidspunkt(), is(UTLOEPS_TIDSPUNKT));
 		assertThat(to.getParameters().keySet(), hasSize(1));
 		assertThat(to.getParameters().get(KEY), is(VAL));
@@ -60,7 +56,6 @@ public class BestillVarselMapperTest {
 		BestillVarselTo to = mapper.map(varsel);
 
 		assertThat(to.getPersonIdent(), nullValue());
-		assertThat(to.getPersonidentType(), nullValue());
 		assertThat(to.getAktoerId(), is(AKTOER_ID));
 	}
 
@@ -72,15 +67,13 @@ public class BestillVarselMapperTest {
 	public static VarselMedHandling createVarselBestilling() {
 		VarselMedHandling varsel = new VarselMedHandling();
 		varsel.setVarselbestillingId(VARSELBESTILLING_ID);
-		varsel.setRevarsling(REVARSLING);
+		varsel.setReVarsel(REVARSLING);
 		Parameter parameter = new Parameter();
 		parameter.setKey(KEY);
 		parameter.setValue(VAL);
 		varsel.getParameterListe().add(parameter);
 		varsel.setMottaker(createPerson());
-		Varslingstyper varslingstype = new Varslingstyper();
-		varslingstype.setValue(VARSLINGSTYPE);
-		varsel.setVarslingstype(varslingstype);
+		varsel.setVarseltypeId(VARSELTYPE_ID);
 		varsel.setUtloepstidspunkt(toXmlGregorianCalendar(UTLOEPS_TIDSPUNKT));
 		return varsel;
 	}
@@ -93,12 +86,7 @@ public class BestillVarselMapperTest {
 
 	private static Aktoer createPerson() {
 		Person person = new Person();
-		NorskIdent personIdent = new NorskIdent();
-		personIdent.setIdent(PERSON_IDENT);
-		Personidenter personidenter = new Personidenter();
-		personidenter.setValue(IDENT_TYPE);
-		personIdent.setType(personidenter);
-		person.setPersonIdent(personIdent);
+		person.setIdent(PERSON_IDENT);
 		return person;
 	}
 }

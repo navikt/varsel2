@@ -23,7 +23,7 @@ public class TestdataUtil {
 	public static final String FUNKSJONELL_FEIL = "funksjonellfeil";
 
 	public static final String VARSELBESTILLING_ID = "d9f8f75e-13cb-4766-81c8-306d9d9385b2";
-	public static final String VARSLINGSTYPE = "UT";
+	public static final String VARSELTYPE_ID = "UT";
 	public static final Set<KanalCode> PREFERERT_KANAL = Sets.newHashSet(KanalCode.EPOST);
 	public static final LocalDateTime UTLOP_TIDSPUNKT = LocalDateTime.parse("2016-04-16T01:02:03");
 	public static final String FNR = "***gammelt_fnr***";
@@ -59,7 +59,7 @@ public class TestdataUtil {
 	public static Varselbestilling createVarselbestilling() {
 		return aVarselbestilling()
 				.varselbestillingId(VARSELBESTILLING_ID)
-				.varslingstype(VARSLINGSTYPE)
+				.varseltypeId(VARSELTYPE_ID)
 				.utlopTidspunkt(UTLOP_TIDSPUNKT)
 				.fnr(FNR)
 				.aktorId(AKTOR_ID)

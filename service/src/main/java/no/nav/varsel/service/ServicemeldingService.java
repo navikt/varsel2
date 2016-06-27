@@ -45,7 +45,7 @@ public class ServicemeldingService {
 	public void bestillServicemelding(BestillVarselTo bestilling) {
 		AktoerTo origAktoer = aktoerService.completeAktoerPersonIdent(bestilling);
 
-		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestilling.getVarslingstype());
+		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestilling.getVarseltypeId());
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
 				.hentDigitalKontaktinformasjonAndDecideKanal(bestilling.getPersonIdent(), varselInfoTo.getPreferertKanal());
 

@@ -4,7 +4,7 @@ import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianC
 import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.UTLOEPS_TIDSPUNKT;
 import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.VAL;
 import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.VARSELBESTILLING_ID;
-import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.VARSLINGSTYPE;
+import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.VARSELTYPE_ID;
 import static no.nav.varsel.mock.AktoerV2Mock.AKTOER_ID;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
@@ -102,7 +102,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 	@Test
 	public void shouldBackoutOnTechnicalErrorAndRollback() throws Exception {
 		JAXBElement<VarselMedHandling> varselBestilling = createVarselBestilling(false);
-		varselBestilling.getValue().getVarslingstype().setValue(VarselutsendingProducer.FEIL_MQ_UT);
+		varselBestilling.getValue().setVarseltypeId(VarselutsendingProducer.FEIL_MQ_UT);
 		Message message = sendMessageListenBoq(bestillVarselQueue, varselBestilling);
 		isOk(message);
 		assertThat(varselbestillingRepo.count(), is(0L));
@@ -111,7 +111,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 	protected Varsel assertDatabaseFoerstegangVarsel(Varselbestilling varselbestilling) {
 		assertThat(varselbestilling, notNullValue());
 		assertThat(varselbestilling.getVarselbestillingId(), is(VARSELBESTILLING_ID));
-		assertThat(varselbestilling.getVarslingstype(), is(VARSLINGSTYPE));
+		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPS_TIDSPUNKT));
 		assertThat(varselbestilling.getFnr(), is(BestillVarselMapperTest.PERSON_IDENT));
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
@@ -140,7 +140,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 	protected Varsel assertDatabaseRevarsel(String varselIdFoersteVarsel, Varselbestilling varselbestilling) {
 		assertThat(varselbestilling, notNullValue());
 		assertThat(varselbestilling.getVarselbestillingId(), is(VARSELBESTILLING_ID));
-		assertThat(varselbestilling.getVarslingstype(), is(VARSLINGSTYPE));
+		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPS_TIDSPUNKT));
 		assertThat(varselbestilling.getFnr(), is(BestillVarselMapperTest.PERSON_IDENT));
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
@@ -173,13 +173,12 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		Varselutsending varselutsending = receive(varselutsendingQueue);
 
 		assertThat(varselutsending.getVarselId(), is(varsel.getVarselId()));
-		assertThat(((Person) varselutsending.getMottaker()).getIdent().getIdent(), is(varselbestilling.getFnr()));
-		assertThat(((Person) varselutsending.getMottaker()).getIdent().getType().getValue(), is("FNR"));
+		assertThat(((Person) varselutsending.getMottaker()).getIdent(), is(varselbestilling.getFnr()));
 		assertThat(varselutsending.getUtloepstidspunkt(), is(toXmlGregorianCalendar(varselbestilling.getUtlopTidspunkt())));
 		assertThat(varselutsending.getUtsendelsestidspunkt(), nullValue());
 		assertThat(varselutsending.getDistribusjon().getKanal().getValue(), is(varsel.getKanal().getKommunikasjonskanal()));
 		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), is(varsel.getKontaktInfo()));
-		assertThat(varselutsending.getVarslingstype().getValue(), is(varselbestilling.getVarslingstype()));
+		assertThat(varselutsending.getVarseltypeId(), is(varselbestilling.getVarseltypeId()));
 		assertThat(varselutsending.getVarselTittel(), is(varsel.getVarselTittel()));
 		assertThat(varselutsending.getVarselTekst(), is(varsel.getVarselTekst()));
 		assertThat(varselutsending.getVarselURL(), nullValue());
@@ -187,7 +186,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 
 	private JAXBElement<VarselMedHandling> createVarselBestilling(boolean revarsel) {
 		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling();
-		varselBestilling.setRevarsling(revarsel);
+		varselBestilling.setReVarsel(revarsel);
 		return new ObjectFactory().createVarselMedHandling(varselBestilling);
 	}
 }

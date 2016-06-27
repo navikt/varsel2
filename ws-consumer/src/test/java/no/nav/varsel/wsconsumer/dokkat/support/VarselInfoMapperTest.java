@@ -1,13 +1,13 @@
 package no.nav.varsel.wsconsumer.dokkat.support;
 
 import static no.nav.varsel.repo.TestdataUtil.ANTALL_REVARSLINGER;
-import static no.nav.varsel.repo.TestdataUtil.VARSLINGSTYPE;
+import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.INAKTIV;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.PREFERERT_KANAL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.REVARSLING_INTERVALL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.REVARSLING_TEKST;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_FOR_DISTR_KANAL;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_FOR_DIST_KANAL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_KATEGORI;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static org.hamcrest.Matchers.contains;
@@ -36,8 +36,8 @@ public class VarselInfoMapperTest {
 	public void shouldMap() throws Exception {
 		VarselInfoTo to = mapper.map(createVarselInfo());
 
-		assertThat(to.getVarslingstype(), is(VARSLINGSTYPE));
-		assertThat(to.getVarselForDistrKanal(), is(VARSEL_FOR_DISTR_KANAL));
+		assertThat(to.getVarseltypeId(), is(VARSELTYPE_ID));
+		assertThat(to.getVarselForDistKanal(), is(VARSEL_FOR_DIST_KANAL));
 		assertThat(to.getVarselKategori(), is(VARSEL_KATEGORI));
 		assertThat(to.isInaktiv(), is(INAKTIV));
 		assertThat(to.getRevarslingIntervall(), is(REVARSLING_INTERVALL));
@@ -54,8 +54,8 @@ public class VarselInfoMapperTest {
 
 	public static VarselInfoRestTo createVarselInfo() {
 		VarselInfoRestTo varselInfo = new VarselInfoRestTo();
-		varselInfo.setVarslingstype(VARSLINGSTYPE);
-		varselInfo.setVarselForDistribusjonKanal(VARSEL_FOR_DISTR_KANAL);
+		varselInfo.setVarseltypeId(VARSELTYPE_ID);
+		varselInfo.setVarselForDistribusjonKanal(VARSEL_FOR_DIST_KANAL);
 		varselInfo.setVarselKategori(VARSEL_KATEGORI);
 		varselInfo.setInaktiv(INAKTIV);
 		varselInfo.setRevarslingIntervall(REVARSLING_INTERVALL);

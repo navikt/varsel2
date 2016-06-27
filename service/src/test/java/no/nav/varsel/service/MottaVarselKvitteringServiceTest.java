@@ -15,7 +15,7 @@ import no.nav.varsel.service.support.exception.VarselNotExistException;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringStatusTo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringTo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringToTest;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -63,7 +63,8 @@ public class MottaVarselKvitteringServiceTest {
 		when(varselRepo.findByVarselId(to.getVarselId())).thenReturn(varsel);
 
 		expectedException.expect(InvalidVarselStatusException.class);
-		expectedException.expectMessage("Varsel with varselId=" + to.getVarselId() + " has invalid statusCode=" + StatusCode.OPPRETTET);
+		expectedException.expectMessage("Varsel with varselId=" + to.getVarselId() +
+				" has invalid statusCode=" + StatusCode.OPPRETTET);
 
 		mottaVarselKvitteringService.behandleKvitteringsmelding(to);
 	}

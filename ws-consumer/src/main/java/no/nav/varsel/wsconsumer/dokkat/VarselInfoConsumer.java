@@ -23,8 +23,8 @@ public class VarselInfoConsumer {
 	@Inject
 	private VarselInfoMapper varselInfoMapper;
 
-	public VarselInfoTo hentVarselInfo(String varslingstype) {
-		VarselInfoRestTo varselInfo = restTemplate.getForObject(varselinfoUrlGet, VarselInfoRestTo.class, varslingstype);
+	public VarselInfoTo hentVarselInfo(String varseltypeId) {
+		VarselInfoRestTo varselInfo = restTemplate.getForObject(varselinfoUrlGet, VarselInfoRestTo.class, varseltypeId);
 		return varselInfoMapper.map(varselInfo);
 	}
 
@@ -34,7 +34,7 @@ public class VarselInfoConsumer {
 		if (!varselinfoUrlGet.endsWith("/")) {
 			varselinfoUrlGet += "/";
 		}
-		varselinfoUrlGet += "{varslingstype}";
+		varselinfoUrlGet += "{varseltypeId}";
 	}
 
 	public void ping() {

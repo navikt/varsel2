@@ -12,8 +12,8 @@ import java.util.Set;
  */
 public class VarselInfoTo {
 	private Set<KanalCode> preferertKanal = Sets.newHashSet();
-	private String varslingstype;
-	private String varselForDistrKanal;
+	private String varseltypeId;
+	private String varselForDistKanal;
 	private String varselKategori;
 	private boolean inaktiv;
 	private int revarslingIntervall;
@@ -36,20 +36,20 @@ public class VarselInfoTo {
 		this.preferertKanal = preferertKanal;
 	}
 
-	public String getVarslingstype() {
-		return varslingstype;
+	public String getVarseltypeId() {
+		return varseltypeId;
 	}
 
-	public void setVarslingstype(String varslingstype) {
-		this.varslingstype = varslingstype;
+	public void setVarseltypeId(String varseltypeId) {
+		this.varseltypeId = varseltypeId;
 	}
 
-	public String getVarselForDistrKanal() {
-		return varselForDistrKanal;
+	public String getVarselForDistKanal() {
+		return varselForDistKanal;
 	}
 
-	public void setVarselForDistrKanal(String varselForDistrKanal) {
-		this.varselForDistrKanal = varselForDistrKanal;
+	public void setVarselForDistKanal(String varselForDistKanal) {
+		this.varselForDistKanal = varselForDistKanal;
 	}
 
 	public String getVarselKategori() {
@@ -94,8 +94,8 @@ public class VarselInfoTo {
 
 	public static final class VarselInfoToBuilder {
 		private Set<KanalCode> preferertKanal = Sets.newHashSet();
-		private String varslingstype;
-		private String varselForDistrKanal;
+		private String varseltypeId;
+		private String varselForDistKanal;
 		private String varselKategori;
 		private boolean inaktiv;
 		private int revarslingIntervall;
@@ -114,13 +114,13 @@ public class VarselInfoTo {
 			return this;
 		}
 
-		public VarselInfoToBuilder varslingstype(String varslingstype) {
-			this.varslingstype = varslingstype;
+		public VarselInfoToBuilder varseltypeId(String varseltypeId) {
+			this.varseltypeId = varseltypeId;
 			return this;
 		}
 
-		public VarselInfoToBuilder varselForDistrKanal(String varselForDistrKanal) {
-			this.varselForDistrKanal = varselForDistrKanal;
+		public VarselInfoToBuilder varselForDistKanal(String varselForDistKanal) {
+			this.varselForDistKanal = varselForDistKanal;
 			return this;
 		}
 
@@ -152,8 +152,8 @@ public class VarselInfoTo {
 		public VarselInfoTo build() {
 			VarselInfoTo varselInfoTo = new VarselInfoTo();
 			varselInfoTo.setPreferertKanal(preferertKanal);
-			varselInfoTo.setVarslingstype(varslingstype);
-			varselInfoTo.setVarselForDistrKanal(varselForDistrKanal);
+			varselInfoTo.setVarseltypeId(varseltypeId);
+			varselInfoTo.setVarselForDistKanal(varselForDistKanal);
 			varselInfoTo.setVarselKategori(varselKategori);
 			varselInfoTo.setInaktiv(inaktiv);
 			varselInfoTo.setRevarslingIntervall(revarslingIntervall);

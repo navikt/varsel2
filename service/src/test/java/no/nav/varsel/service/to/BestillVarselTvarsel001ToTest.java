@@ -31,10 +31,10 @@ public class BestillVarselTvarsel001ToTest {
 	}
 
 	@Test
-	public void shouldValidateMissingVarslingstype() throws Exception {
-		expectedException.expectMessage("varslingstype cannot be empty or missing");
+	public void shouldValidateMissingVarseltypeId() throws Exception {
+		expectedException.expectMessage("varseltypeId cannot be empty or missing");
 		BestillVarselTo to = createTo();
-		to.setVarslingstype(null);
+		to.setVarseltypeId(null);
 		to.validateTvarsel001Input();
 	}
 

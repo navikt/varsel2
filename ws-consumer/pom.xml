@@ -35,11 +35,6 @@
 			<classifier>jaxws</classifier>
 		</dependency>
 		<dependency>
-			<groupId>no.nav.tjenester.brevogarkiv</groupId>
-			<artifactId>dokumentkataloginfo-tjenestespesifikasjon</artifactId>
-			<classifier>jaxws</classifier>
-		</dependency>
-		<dependency>
 			<groupId>no.nav.tjenester.fim</groupId>
 			<artifactId>nav-fim-aktoer-v2-tjenestespesifikasjon</artifactId>
 			<classifier>jaxws</classifier>

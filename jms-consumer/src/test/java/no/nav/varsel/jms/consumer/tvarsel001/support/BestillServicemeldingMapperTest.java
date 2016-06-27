@@ -34,7 +34,7 @@ public class BestillServicemeldingMapperTest {
 
 	private BestillServicemeldingMapper mapper = new BestillServicemeldingMapper();
 
-	public static final String VARSLINGSTYPE = "varslingstype";
+	public static final String VARSELTYPE_ID = "varseltypeId";
 
 	static {
 		try {
@@ -50,7 +50,7 @@ public class BestillServicemeldingMapperTest {
 
 		assertThat(to.getAktoerId(), is(MOTTAKER));
 		assertThat(to.getPersonIdent(), nullValue());
-		assertThat(to.getVarslingstype(), is(VARSLINGSTYPE));
+		assertThat(to.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(to.getUtloepstidspunkt(), equalTo(UTLOEPSTIDSPUNKT_LDT));
 		assertThat(to.getParameters().keySet(), hasSize(1));
 		assertThat(to.getParameters().get(KEY), is(VAL));
@@ -82,7 +82,7 @@ public class BestillServicemeldingMapperTest {
 		Varsel varsel = createVarsel();
 		varsel.setVarslingstype(null);
 		BestillVarselTo to = mapper.map(varsel);
-		assertThat(to.getVarslingstype(), nullValue());
+		assertThat(to.getVarseltypeId(), nullValue());
 	}
 
 	@Test
@@ -104,7 +104,7 @@ public class BestillServicemeldingMapperTest {
 	public static Varsel createVarsel() {
 		Varsel varsel = new Varsel();
 		Varslingstyper varslingstype = new Varslingstyper();
-		varslingstype.setValue(VARSLINGSTYPE);
+		varslingstype.setValue(VARSELTYPE_ID);
 		varsel.setVarslingstype(varslingstype);
 		AktoerId aktoerId = new AktoerId();
 		aktoerId.setAktoerId(MOTTAKER);

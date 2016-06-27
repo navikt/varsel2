@@ -51,7 +51,7 @@ public class BestillVarselConsumer extends AbstractJmsConsumer<VarselMedHandling
 		try {
 			BestillVarselTo to = bestillVarselMapper.map(message);
 			to.validateTvarsel003Input();
-			LOGG.debug(String.format("Mottatt varsel %s til %s", to.getVarslingstype(), to.createAktoerTo()));
+			LOGG.debug(String.format("Mottatt varsel %s til %s", to.getVarseltypeId(), to.createAktoerTo()));
 
 			bestillVarselService.bestillVarsel(to);
 		} catch (FunctionalVarselException e) {

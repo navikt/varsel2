@@ -46,8 +46,8 @@ public class Varselbestilling extends AbstractDomainObject {
 	@Column(name = "varselbestilling_id", nullable = false)
 	private String varselbestillingId;
 
-	@Column(name = "varslingstype", nullable = false)
-	private String varslingstype;
+	@Column(name = "varseltype_id", nullable = false)
+	private String varseltypeId;
 
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
 	@Column(name = "utlop_tidspunkt", columnDefinition = "TIMESTAMP")
@@ -106,12 +106,12 @@ public class Varselbestilling extends AbstractDomainObject {
 		this.varselbestillingId = varselbestillingId;
 	}
 
-	public String getVarslingstype() {
-		return varslingstype;
+	public String getVarseltypeId() {
+		return varseltypeId;
 	}
 
-	public void setVarslingstype(String varslingstype) {
-		this.varslingstype = varslingstype;
+	public void setVarseltypeId(String varseltypeId) {
+		this.varseltypeId = varseltypeId;
 	}
 
 	public LocalDateTime getUtlopTidspunkt() {

@@ -5,7 +5,7 @@ import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianC
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.MOTTAKER;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.UTLOEPSTIDSPUNKT_LDT;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VAL;
-import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VARSLINGSTYPE;
+import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VARSELTYPE_ID;
 import static no.nav.varsel.jms.producer.VarselutsendingProducer.FEIL_MQ_UT;
 import static no.nav.varsel.mock.AktoerV2Mock.PERSON_IDENT;
 import static no.nav.varsel.repo.TestdataUtil.FUNKSJONELL_FEIL;
@@ -98,7 +98,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	private no.nav.varsel.domain.object.Varsel assertDb(String varselTekst) {
 		Varselbestilling varselbestilling = varselbestillingRepo.findAll().iterator().next();
 		assertThat(UUID.fromString(varselbestilling.getVarselbestillingId()).toString(), is(varselbestilling.getVarselbestillingId()));
-		assertThat(varselbestilling.getVarslingstype(), is(VARSLINGSTYPE));
+		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(varselbestilling.getUtlopTidspunkt(), is(equalTo(UTLOEPSTIDSPUNKT_LDT)));
 		assertThat(varselbestilling.getFnr(), is(PERSON_IDENT));
 		assertThat(varselbestilling.getAktorId(), is(MOTTAKER));
@@ -137,7 +137,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselutsending.getUtloepstidspunkt(), equalTo(toXmlGregorianCalendar(UTLOEPSTIDSPUNKT_LDT)));
 		assertThat(varselutsending.getDistribusjon().getKanal().getValue(), is(EPOST.getKommunikasjonskanal()));
 		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), is(EPOSTADRESSE));
-		assertThat(varselutsending.getVarslingstype().getValue(), is(VARSLINGSTYPE));
+		assertThat(varselutsending.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(varselutsending.getVarselTittel(), is(VARSEL_TITTEL));
 		assertThat(varselutsending.getVarselTekst(), is(varselTekst));
 		assertThat(varselutsending.getVarselURL(), nullValue());

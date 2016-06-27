@@ -25,8 +25,8 @@ public class VarselInfoMapper {
 		Set<VarselMalRestTo> varselmals = varselInfo.getVarselmals();
 
 		return aVarselInfoTo()
-				.varslingstype(varselInfo.getVarslingstype())
-				.varselForDistrKanal(varselInfo.getVarselForDistribusjonKanal())
+				.varseltypeId(varselInfo.getVarseltypeId())
+				.varselForDistKanal(varselInfo.getVarselForDistribusjonKanal())
 				.varselKategori(varselInfo.getVarselKategori())
 				.inaktiv(varselInfo.getInaktiv())
 				.revarslingIntervall(varselInfo.getRevarslingIntervall())

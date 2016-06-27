@@ -15,7 +15,6 @@ import no.nav.varsel.domain.to.MottakerType;
 public class AktoerBestillingTo {
 	protected String personIdent;
 	protected String aktoerId;
-	protected String personidentType;
 
 	public String getPersonIdent() {
 		return personIdent;
@@ -33,20 +32,8 @@ public class AktoerBestillingTo {
 		this.aktoerId = aktoerId;
 	}
 
-	public String getPersonidentType() {
-		return personidentType;
-	}
-
-	public void setPersonidentType(String personidentType) {
-		this.personidentType = personidentType;
-	}
-
 	protected void assertHasOneIdent() {
 		hasText(personIdent == null ? aktoerId : personIdent, "mottaker");
-	}
-
-	protected void assertOptionalPersonIdentType() {
-		hasText(personIdent != null ? personidentType : "na", "personidentType");
 	}
 
 	public AktoerTo createAktoerTo() {

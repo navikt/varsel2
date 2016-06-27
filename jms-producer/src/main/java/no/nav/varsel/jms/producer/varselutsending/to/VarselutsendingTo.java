@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  */
 public class VarselutsendingTo {
 	private LocalDateTime utloepstidspunkt;
-	private String varslingstype;
+	private String varseltypeId;
 	private KanalCode kanal;
 	private AktoerTo mottaker;
 	private String varselId;
@@ -29,12 +29,12 @@ public class VarselutsendingTo {
 		this.utloepstidspunkt = utloepstidspunkt;
 	}
 
-	public String getVarslingstype() {
-		return varslingstype;
+	public String getVarseltypeId() {
+		return varseltypeId;
 	}
 
-	public void setVarslingstype(String varslingstype) {
-		this.varslingstype = varslingstype;
+	public void setVarseltypeId(String varseltypeId) {
+		this.varseltypeId = varseltypeId;
 	}
 
 	public KanalCode getKanal() {
@@ -95,7 +95,7 @@ public class VarselutsendingTo {
 
 	public static final class VarselutsendingToBuilder {
 		private LocalDateTime utloepstidspunkt;
-		private String varslingstype;
+		private String varseltypeId;
 		private KanalCode kanal;
 		private AktoerTo mottaker;
 		private String varselId;
@@ -116,8 +116,8 @@ public class VarselutsendingTo {
 			return this;
 		}
 
-		public VarselutsendingToBuilder varslingstype(String varslingstype) {
-			this.varslingstype = varslingstype;
+		public VarselutsendingToBuilder varseltypeId(String varseltypeId) {
+			this.varseltypeId = varseltypeId;
 			return this;
 		}
 
@@ -159,7 +159,7 @@ public class VarselutsendingTo {
 		public VarselutsendingTo build() {
 			VarselutsendingTo varselutsendingTo = new VarselutsendingTo();
 			varselutsendingTo.setUtloepstidspunkt(utloepstidspunkt);
-			varselutsendingTo.setVarslingstype(varslingstype);
+			varselutsendingTo.setVarseltypeId(varseltypeId);
 			varselutsendingTo.setKanal(kanal);
 			varselutsendingTo.setMottaker(mottaker);
 			varselutsendingTo.setVarselId(varselId);

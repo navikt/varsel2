@@ -6,11 +6,8 @@ import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Aktoer;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.AktoerId;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Distribusjon;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Kommunikasjonskanaler;
-import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.NorskIdent;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Person;
-import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Personidenter;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
-import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varslingstyper;
 import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.domain.to.MottakerType;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
@@ -32,9 +29,7 @@ public class VarselutsendingMapper {
 		varselutsending.setDistribusjon(distribusjon);
 
 		varselutsending.setUtloepstidspunkt(toXmlGregorianCalendar(to.getUtloepstidspunkt()));
-		Varslingstyper varslingstype = new Varslingstyper();
-		varslingstype.setValue(to.getVarslingstype());
-		varselutsending.setVarslingstype(varslingstype);
+		varselutsending.setVarseltypeId(to.getVarseltypeId());
 		varselutsending.setMottaker(convert(to.getMottaker()));
 		varselutsending.setVarselId(to.getVarselId());
 		varselutsending.setVarselURL(to.getVarselUrl());
@@ -50,12 +45,7 @@ public class VarselutsendingMapper {
 			return aktoerId;
 		}
 		Person person = new Person();
-		NorskIdent norskIdent = new NorskIdent();
-		norskIdent.setIdent(mottaker.getIdent());
-		Personidenter personidenter = new Personidenter();
-		personidenter.setValue(mottaker.getPersonIdentType());
-		norskIdent.setType(personidenter);
-		person.setIdent(norskIdent);
+		person.setIdent(mottaker.getIdent());
 		return person;
 	}
 

@@ -51,7 +51,7 @@ public class VarselBestillingDomainMapperTest {
 	private static final HashSet<KanalCode> KANALER = Sets.newHashSet(KanalCode.EPOST, KanalCode.SMS);
 	private static final String BESTILLING_ID = "b592d5f1-7506-462d-9814-4c2d92bf8946";
 
-	private static final String VARSEL_FOR_DISTR_KANAL = "vardistkanal";
+	private static final String VARSEL_FOR_DIST_KANAL = "vardistkanal";
 	private static final String VARSEL_KATEGORI = "varkat";
 	private static final boolean INAKTIV = false;
 	private static final int REVARSLING_INTERVALL = 4;
@@ -74,7 +74,7 @@ public class VarselBestillingDomainMapperTest {
 		Varselbestilling varselbestilling = mapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(createBestillTo(), createVarselTo(), createDigitalKontaktinfoTo());
 
 		assertThat(varselbestilling.getVarselbestillingId(), is(BESTILLING_ID));
-		assertThat(varselbestilling.getVarslingstype(), is(VARSLIGNSTYPE));
+		assertThat(varselbestilling.getVarseltypeId(), is(VARSLIGNSTYPE));
 		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPSTIDSPUNKT));
 		assertThat(varselbestilling.getFnr(), is(PERSONIDENT));
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
@@ -103,7 +103,7 @@ public class VarselBestillingDomainMapperTest {
 		Varselbestilling varselbestilling = mapper.mapVarselbestillingFoerstegangVarselMedRevarsel(createBestillTo(), createVarselTo(), createDigitalKontaktinfoTo());
 
 		assertThat(varselbestilling.getVarselbestillingId(), is(BESTILLING_ID));
-		assertThat(varselbestilling.getVarslingstype(), is(VARSLIGNSTYPE));
+		assertThat(varselbestilling.getVarseltypeId(), is(VARSLIGNSTYPE));
 		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPSTIDSPUNKT));
 		assertThat(varselbestilling.getFnr(), is(PERSONIDENT));
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
@@ -161,13 +161,13 @@ public class VarselBestillingDomainMapperTest {
 		to.setAktoerId(AKTOER_ID);
 		to.setUtloepstidspunkt(UTLOEPSTIDSPUNKT);
 		to.setParameters(singletonMap(KEY, VALUE));
-		to.setVarslingstype(VARSLIGNSTYPE);
+		to.setVarseltypeId(VARSLIGNSTYPE);
 		return to;
 	}
 
 	private VarselInfoTo createVarselTo() {
 		VarselInfoTo to = new VarselInfoTo();
-		to.setVarselForDistrKanal(VARSEL_FOR_DISTR_KANAL);
+		to.setVarselForDistKanal(VARSEL_FOR_DIST_KANAL);
 		to.setVarselKategori(VARSEL_KATEGORI);
 		to.setInaktiv(INAKTIV);
 		to.setRevarslingIntervall(REVARSLING_INTERVALL);

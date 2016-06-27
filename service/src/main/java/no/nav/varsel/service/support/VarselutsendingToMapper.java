@@ -19,16 +19,16 @@ public class VarselutsendingToMapper {
 
 	public List<VarselutsendingTo> map(Varselbestilling varselbestilling, AktoerTo aktoer) {
 		LocalDateTime utlopTidspunkt = varselbestilling.getUtlopTidspunkt();
-		String varslingstype = varselbestilling.getVarslingstype();
+		String varseltypeId = varselbestilling.getVarseltypeId();
 		Set<Varsel> varsels = varselbestilling.getVarsels();
-		return mapVarsels(aktoer, utlopTidspunkt, varslingstype, varsels);
+		return mapVarsels(aktoer, utlopTidspunkt, varseltypeId, varsels);
 	}
 
-	public List<VarselutsendingTo> mapVarsels(AktoerTo aktoer, LocalDateTime utlopTidspunkt, String varslingstype, Set<Varsel> varsels) {
+	public List<VarselutsendingTo> mapVarsels(AktoerTo aktoer, LocalDateTime utlopTidspunkt, String varseltypeId, Set<Varsel> varsels) {
 		return varsels.stream().map(varsel -> {
 			VarselutsendingTo to = new VarselutsendingTo();
 			to.setUtloepstidspunkt(utlopTidspunkt);
-			to.setVarslingstype(varslingstype);
+			to.setVarseltypeId(varseltypeId);
 			to.setKanal(varsel.getKanal());
 			to.setKontaktInformasjon(varsel.getKontaktInfo());
 			to.setMottaker(aktoer);

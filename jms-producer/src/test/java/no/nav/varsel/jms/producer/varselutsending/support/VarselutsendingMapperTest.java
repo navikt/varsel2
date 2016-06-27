@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 public class VarselutsendingMapperTest {
 
 	private static final LocalDateTime UTLOEPSTIDSPUNKT = LocalDateTime.parse("2016-04-24T15:22:45");
-	private static final String VARSLINGSTYPE = "varslingstype";
+	private static final String VARSELTYPE_ID = "varseltypeId";
 	private static final KanalCode KANAL_CODE = KanalCode.DITT_NAV;
 	private static final String VARSELID = "varselid";
 	private static final String VARSELURL = "varselurl";
@@ -33,7 +33,6 @@ public class VarselutsendingMapperTest {
 	private static final String VARSELTITTEL = "varseltittel";
 	private static final String IDENT = "ident";
 	private static final String KONTAKT_INFO = "kontaktInfo";
-	private static final String PERSON_IDENT_TYPE = "FNR";
 
 	private VarselutsendingMapper mapper = new VarselutsendingMapper();
 
@@ -42,7 +41,7 @@ public class VarselutsendingMapperTest {
 		Varselutsending varselutsending = mapper.map(createVarselutsendingTo().build());
 
 		assertThat(varselutsending.getUtloepstidspunkt(), equalTo(toXmlGregorianCalendar(UTLOEPSTIDSPUNKT)));
-		assertThat(varselutsending.getVarslingstype().getValue(), is(VARSLINGSTYPE));
+		assertThat(varselutsending.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(varselutsending.getDistribusjon().getKanal().getValue(), is(KANAL_CODE.getKommunikasjonskanal()));
 		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), is(KONTAKT_INFO));
 		assertThat(varselutsending.getMottaker(), instanceOf(AktoerId.class));
@@ -59,14 +58,13 @@ public class VarselutsendingMapperTest {
 				.mottaker(AktoerTo.newPersonIdent(IDENT)).build());
 
 		assertThat(varselutsending.getMottaker(), instanceOf(Person.class));
-		assertThat(((Person) varselutsending.getMottaker()).getIdent().getIdent(), is(IDENT));
-		assertThat(((Person) varselutsending.getMottaker()).getIdent().getType().getValue(), is(PERSON_IDENT_TYPE));
+		assertThat(((Person) varselutsending.getMottaker()).getIdent(), is(IDENT));
 	}
 
 	private VarselutsendingToBuilder createVarselutsendingTo() {
 		return aVarselutsendingTo()
 				.utloepstidspunkt(UTLOEPSTIDSPUNKT)
-				.varslingstype(VARSLINGSTYPE)
+				.varseltypeId(VARSELTYPE_ID)
 				.kanal(KANAL_CODE)
 				.kontaktInformasjon(KONTAKT_INFO)
 				.mottaker(AktoerTo.newAktoerId(IDENT))

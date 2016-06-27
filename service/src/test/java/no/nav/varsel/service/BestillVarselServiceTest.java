@@ -8,7 +8,7 @@ import static no.nav.varsel.repo.TestdataUtil.KANAL_CODE;
 import static no.nav.varsel.repo.TestdataUtil.PREFERERT_KANAL;
 import static no.nav.varsel.repo.TestdataUtil.UTLOP_TIDSPUNKT;
 import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
-import static no.nav.varsel.repo.TestdataUtil.VARSLINGSTYPE;
+import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -98,7 +98,7 @@ public class BestillVarselServiceTest {
 		);
 
 		varselInfoTo.setPreferertKanal(PREFERERT_KANAL);
-		when(varselInfoConsumer.hentVarselInfo(VARSLINGSTYPE)).thenReturn(varselInfoTo);
+		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		kontaktregisterTo.setKanaler(PREFERERT_KANAL);
 		when(dkifConsumer.hentDigitalKontaktinformasjonAndDecideKanal(FNR, varselInfoTo.getPreferertKanal()))
 				.thenReturn(kontaktregisterTo);
@@ -110,7 +110,7 @@ public class BestillVarselServiceTest {
 		when(domainMapper.mapReVarsel(KANAL_CODE, bestillingTo, varselInfoTo, kontaktregisterTo))
 				.thenReturn(varsel);
 		when(varselutsendingToMapper
-				.mapVarsels(eq(aktoerTo), eq(UTLOP_TIDSPUNKT), eq(VARSLINGSTYPE), eq(Sets.newHashSet(varsel))))
+				.mapVarsels(eq(aktoerTo), eq(UTLOP_TIDSPUNKT), eq(VARSELTYPE_ID), eq(Sets.newHashSet(varsel))))
 				.thenReturn(Lists.newArrayList(varselutsendingTo));
 	}
 
@@ -153,7 +153,7 @@ public class BestillVarselServiceTest {
 		bestillingTo.setRevarsling(revarsling);
 		bestillingTo.setMottaker(aktoerTo);
 		bestillingTo.setUtloepstidspunkt(UTLOP_TIDSPUNKT);
-		bestillingTo.setVarslingstype(VARSLINGSTYPE);
+		bestillingTo.setVarseltypeId(VARSELTYPE_ID);
 		return bestillingTo;
 	}
 }

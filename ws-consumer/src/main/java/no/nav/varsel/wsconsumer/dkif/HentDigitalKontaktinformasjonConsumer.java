@@ -9,7 +9,7 @@ import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDig
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.wsconsumer.support.VarslelKanalDecider;
+import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,13 +32,13 @@ public class HentDigitalKontaktinformasjonConsumer {
 	private HentDigitalKontaktinformasjonMapper mapper;
 
 	@Inject
-	private VarslelKanalDecider varslelKanalDecider;
+	private VarselKanalDecider varselKanalDecider;
 
 	public KontaktregisterTo hentDigitalKontaktinformasjonAndDecideKanal(String personIdent, Set<KanalCode> preferertKanal) {
 		KontaktregisterTo kontaktregisterTo = hentDigitalKontaktinformasjon(personIdent);
 		kontaktregisterTo = kontaktregisterTo == null ? new KontaktregisterTo() : kontaktregisterTo;
 
-		Collection<KanalCode> kanaler = varslelKanalDecider.decideKanaler(kontaktregisterTo, preferertKanal);
+		Collection<KanalCode> kanaler = varselKanalDecider.decideKanaler(kontaktregisterTo, preferertKanal);
 		kontaktregisterTo.setKanaler(kanaler);
 		return kontaktregisterTo;
 	}

@@ -30,7 +30,7 @@ public class VarselutsendingProducer {
 
 	public void produce(VarselutsendingTo varselutsendingTo) {
 		// TODO replace with better mocking
-		if (FEIL_MQ_UT.equals(varselutsendingTo.getVarslingstype())) {
+		if (FEIL_MQ_UT.equals(varselutsendingTo.getVarseltypeId())) {
 			throw new RuntimeException("mq ut feil");
 		}
 		Varselutsending varselutsending = mapper.map(varselutsendingTo);

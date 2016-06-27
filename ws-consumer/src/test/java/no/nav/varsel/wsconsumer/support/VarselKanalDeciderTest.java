@@ -13,11 +13,11 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * Unit test for {@link VarslelKanalDecider}
+ * Unit test for {@link VarselKanalDecider}
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public class VarslelKanalDeciderTest {
+public class VarselKanalDeciderTest {
 
 	private static final String EPOST = "epost@epost.no";
 	private static final String MOBIL = "12345678";
@@ -27,7 +27,7 @@ public class VarslelKanalDeciderTest {
 	public static final HashSet<KanalCode> PREFERERT_SMS_EPOST = Sets.newHashSet(KanalCode.SMS, KanalCode.EPOST);
 	public static final HashSet<KanalCode> PREFERERT_DITTNAV = Sets.newHashSet(KanalCode.DITT_NAV);
 
-	private VarslelKanalDecider decider = new VarslelKanalDecider();
+	private VarselKanalDecider decider = new VarselKanalDecider();
 
 	@Test
 	public void shouldPrefDittNav() throws Exception {
