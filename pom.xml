@@ -17,6 +17,8 @@
 		<module>ws-consumer</module>
 		<module>jms-producer</module>
 		<module>service</module>
+		<module>batch</module>
+		<module>batch-client</module>
 		<module>web</module>
 		<module>jee</module>
 	</modules>
@@ -247,6 +249,13 @@
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-jaxrs</artifactId>
 				<version>${resteasy.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.modig</groupId>
+				<artifactId>modig-batch-connector</artifactId>
+				<classifier>script-and-jar</classifier>
+				<type>zip</type>
+				<version>1.1.1</version>
 			</dependency>
 
 			<!-- cxf -->
