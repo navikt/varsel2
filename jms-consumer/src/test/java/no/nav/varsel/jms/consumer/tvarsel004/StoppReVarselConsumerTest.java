@@ -67,7 +67,7 @@ public class StoppReVarselConsumerTest extends AbstractConsumerJmsTest {
     private Varselbestilling persistVarselbestilling() {
         JmsReply createVarselresponse = sendMessage(bestillServicemeldingQueue, createVarsel());
         assertTrue(createVarselresponse != null && createVarselresponse.isOk());
-        List<Varselbestilling> varselbestillings = varselbestillingRepo.findAll();
+        List<Varselbestilling> varselbestillings = varselbestillingRepo.findAllEager();
         assertThat(varselbestillings, hasSize(1));
         Varselbestilling varselbestilling = varselbestillings.iterator().next();
         assertThat(varselbestilling.getVarsels(), hasSize(1));

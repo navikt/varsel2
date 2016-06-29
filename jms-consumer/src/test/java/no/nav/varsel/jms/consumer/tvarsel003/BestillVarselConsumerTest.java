@@ -57,7 +57,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		JmsReply jmsReply = sendMessage(bestillVarselQueue, createVarselBestilling(false));
 		isOk(jmsReply);
 
-		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingId(VARSELBESTILLING_ID);
+		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
 
 		assertDatabaseFoerstegangVarsel(varselbestilling);
 		assertVarselutsending(varselbestilling, varselbestilling.getVarsels().iterator().next());
@@ -68,14 +68,14 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		// setup
 		sendMessage(bestillVarselQueue, createVarselBestilling(false));
 		receive(varselutsendingQueue);
-		String varselIdFoersteVarsel = varselbestillingRepo.findByVarselbestillingId(VARSELBESTILLING_ID)
+		String varselIdFoersteVarsel = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID)
 				.getVarsels().iterator().next().getVarselId();
 
 		// run
 		JmsReply jmsReply = sendMessage(bestillVarselQueue, createVarselBestilling(true));
 		isOk(jmsReply);
 
-		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingId(VARSELBESTILLING_ID);
+		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
 		Varsel varsel = assertDatabaseRevarsel(varselIdFoersteVarsel, varselbestilling);
 
 		assertVarselutsending(varselbestilling, varsel);

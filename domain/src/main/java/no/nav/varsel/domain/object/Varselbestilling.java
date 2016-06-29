@@ -73,7 +73,7 @@ public class Varselbestilling extends AbstractDomainObject {
 	@Column(name = "neste_varsling_dato", columnDefinition = "DATE")
 	private LocalDate nesteVarslingDato;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "varselbestilling")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "varselbestilling")
 	private Set<Varsel> varsels = new HashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
