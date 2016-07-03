@@ -1,0 +1,28 @@
+package no.nav.varsel.provider.map.support;
+
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varsel;
+import no.nav.varsel.domain.utility.XmlGregorianConverter;
+import no.nav.varsel.provider.map.VarselMapper;
+import no.nav.varsel.service.tvarsel005.to.VarselTo;
+import org.springframework.util.Assert;
+
+/**
+ * @author Lars Aune
+ */
+public class DefaultVarselMapper implements VarselMapper {
+
+	@Override
+	public Varsel map(VarselTo varselTo) {
+		Assert.notNull(varselTo, "The parameter varselTo can't be null.");
+		Varsel result = new Varsel();
+		result.setKanal(varselTo.getKanal());
+		result.setSendt(XmlGregorianConverter.toXmlGregorianCalendar(varselTo.getSendtTidspunkt()));
+		result.setDistribuert(XmlGregorianConverter.toXmlGregorianCalendar(varselTo.getDistribusjonsTidspunkt()));
+		result.setKontaktinfo(varselTo.getKontaktInfo());
+		result.setVarseltittel(varselTo.getVarselTittel());
+		result.setVarseltekst(varselTo.getVarselTekst());
+		result.setVarselURL(varselTo.getVarselURL());
+		result.setReVarsel(varselTo.isRevarsel());
+		return result;
+	}
+}

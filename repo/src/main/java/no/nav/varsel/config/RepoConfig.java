@@ -1,9 +1,12 @@
 package no.nav.varsel.config;
 
 import no.nav.varsel.domain.object.Varselbestilling;
+import no.nav.varsel.repo.TVARSEL005Repo;
 import no.nav.varsel.repo.VarselRepo;
+import no.nav.varsel.repo.support.TVARSEL005RepoImpl;
 import no.nav.varsel.repo.support.VarselRepoImpl;
 import org.springframework.boot.orm.jpa.EntityScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -17,8 +20,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @Import(TransactionConfig.class)
 @EntityScan(basePackageClasses = {Varselbestilling.class})
-@EnableJpaRepositories(basePackageClasses = {VarselRepo.class, VarselRepoImpl.class})
+@EnableJpaRepositories(basePackageClasses = {VarselRepo.class, VarselRepoImpl.class, TVARSEL005Repo.class})
 @EnableTransactionManagement
 public class RepoConfig {
+	@Bean
+	public TVARSEL005Repo tVarsel005Repo() {
+		return new TVARSEL005RepoImpl();
+	}
 
 }
