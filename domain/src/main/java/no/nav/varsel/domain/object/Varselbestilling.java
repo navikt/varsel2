@@ -76,7 +76,7 @@ public class Varselbestilling extends AbstractDomainObject {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "varselbestilling")
 	private Set<Varsel> varsels = new HashSet<>();
 
-	@ElementCollection(fetch = FetchType.EAGER)
+	@ElementCollection(fetch = FetchType.LAZY)
 	@CollectionTable(name = "flette_parameter", joinColumns = @JoinColumn(name = "fk_varselbestilling_id"))
 	@MapKeyColumn(name = "key")
 	@Column(name = "value")

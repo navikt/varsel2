@@ -1,0 +1,45 @@
+package no.nav.varsel.batch.bvarsel001.itest;
+
+import static java.time.LocalDate.now;
+import static no.nav.varsel.domain.object.worktable.ArbeidStatus.OPPRETTET;
+import static no.nav.varsel.repo.TestdataUtil.createVarselbestillingBuilder;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * Itest for PopulateArbeidsTabellStep Bvarsel001
+ *
+ * @author Andreas Skomedal, Visma Consulting.
+ */
+public class PopulateArbeidsTabellStepTest extends AbstractBvarsel001StepTest {
+
+	private static final String YESTERDAY = "yesterday";
+	private static final String LAST_WEEK = "last_week";
+
+	@Before
+	public void setUp() throws Exception {
+		varselbestillingRepo.save(createVarselbestillingBuilder()
+				.varselbestillingId("today_not_picked").nesteVarslingDato(now()).build());
+		varselbestillingRepo.save(createVarselbestillingBuilder()
+				.varselbestillingId("tomorrow_not_picked").nesteVarslingDato(now().plusDays(1)).build());
+		varselbestillingRepo.save(createVarselbestillingBuilder()
+				.varselbestillingId("nest_week_not_picked").nesteVarslingDato(now().plusWeeks(1)).build());
+		varselbestillingRepo.save(createVarselbestillingBuilder()
+				.varselbestillingId(YESTERDAY).nesteVarslingDato(now().minusDays(1)).build());
+		varselbestillingRepo.save(createVarselbestillingBuilder()
+				.varselbestillingId(LAST_WEEK).nesteVarslingDato(now().minusWeeks(1)).build());
+	}
+
+	@Test
+	public void shouldPopulateArbeidsTabell() throws Exception {
+		launchStep("populateArbeidsTabellStep");
+
+
+		assertThat(bvarsel001Repo.findOne(YESTERDAY).getArbeidStatus(), is(OPPRETTET));
+		assertThat(bvarsel001Repo.findOne(LAST_WEEK).getArbeidStatus(), is(OPPRETTET));
+		assertThat(bvarsel001Repo.count(), is(2L));
+	}
+}

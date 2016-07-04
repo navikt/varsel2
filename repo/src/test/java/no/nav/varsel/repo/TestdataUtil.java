@@ -4,6 +4,7 @@ import static no.nav.varsel.domain.builder.VarselBuilder.aVarsel;
 import static no.nav.varsel.domain.builder.VarselbestillingBuilder.aVarselbestilling;
 
 import com.google.common.collect.Sets;
+import no.nav.varsel.domain.builder.VarselbestillingBuilder;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varselbestilling;
@@ -44,10 +45,9 @@ public class TestdataUtil {
 	public static final String VARSEL_TEKST = "Sjekk Ditt NAV på www.nav.no for å se hva som har blitt vedtatt " +
 			"anngående din søknad om :antall takvifter.";
 	public static final String VARSEL_URL = "http://www.nav.no/dittnav/takvifte/rosa/1212aeg23g";
-	public static final String PARAMETERVALUE = "antall";
-	public static final String PARAMETERKEY = "17";
+	public static final String PARAMETERKEY = "antall";
+	public static final String PARAMETERVALUE = "17";
 	public static final boolean ER_REVARSEL = false;
-	public static final String PERSON_IDENT_TYPE = "FNR";
 	public static final String PERSON_IDENTER_FDAT_KODENAVN = "FDAT";
 	public static final String PERSON_IDENTER_FNR_KODENAVN = "FNR";
 	public static final String PERSON_IDENTER_BOST_KODENAVN = "BOST";
@@ -57,6 +57,11 @@ public class TestdataUtil {
 	public static final String PERSON_IDENTER_SOME_VALID_KODENAVN = "SOME_VALID_KODENAVN";
 
 	public static Varselbestilling createVarselbestilling() {
+		return createVarselbestillingBuilder()
+				.build();
+	}
+
+	public static VarselbestillingBuilder createVarselbestillingBuilder() {
 		return aVarselbestilling()
 				.varselbestillingId(VARSELBESTILLING_ID)
 				.varseltypeId(VARSELTYPE_ID)
@@ -81,7 +86,6 @@ public class TestdataUtil {
 						.varselTekst(VARSEL_TEKST)
 						.varselUrl(VARSEL_URL)
 						.erRevarsel(ER_REVARSEL)
-						.build())
-				.build();
+						.build());
 	}
 }
