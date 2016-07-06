@@ -10,7 +10,6 @@ import no.nav.brevogarkiv.batch.common.provider.launch.support.SimpleModigJobOpe
 import no.nav.brevogarkiv.batch.common.validator.CommonJobParametersValidator;
 import no.nav.varsel.domain.Constants;
 import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.GenericApplicationContextFactory;
 import org.springframework.batch.core.converter.DefaultJobParametersConverter;
@@ -31,8 +30,7 @@ import java.util.Arrays;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration
-@EnableBatchProcessing(modular = true)
-@Import({RepoConfig.class, JmsProducerConfig.class})
+@Import({RepoConfig.class, JmsProducerConfig.class, ModularBatchConfig.class})
 public class BatchConfig {
 
 	public static final String START_TIME_FORMAT = "dd.MM.yyyy-HH:mm:ss";

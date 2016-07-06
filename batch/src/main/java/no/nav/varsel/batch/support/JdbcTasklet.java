@@ -7,7 +7,6 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.inject.Inject;
-import javax.sql.DataSource;
 
 /**
  * Tasklet for performing sql commands
@@ -16,18 +15,18 @@ import javax.sql.DataSource;
  */
 public class JdbcTasklet implements Tasklet {
 
-	private DataSource dataSource;
+	private JdbcTemplate jdbcTemplate;
 	private String sql;
 
 	@Override
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-		new JdbcTemplate(dataSource).execute(sql);
+		jdbcTemplate.execute(sql);
 		return RepeatStatus.FINISHED;
 	}
 
 	@Inject
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	public void setSql(String sql) {

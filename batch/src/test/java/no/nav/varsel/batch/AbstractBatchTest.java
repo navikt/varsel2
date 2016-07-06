@@ -37,7 +37,7 @@ import javax.jms.Queue;
 @ActiveProfiles({"itest"})
 public abstract class AbstractBatchTest extends JobLauncherTestUtils {
 
-	public static final String DEFAULT_WORK_UNIT = "2";
+	protected static final String DEFAULT_WORK_UNIT = "2";
 
 	@Inject
 	protected VarselbestillingRepo varselbestillingRepo;
@@ -63,18 +63,6 @@ public abstract class AbstractBatchTest extends JobLauncherTestUtils {
 	@After
 	public void tearDownAbstract() throws Exception {
 		MDC.remove(Constants.USER_ID);
-	}
-
-	@Inject
-	@Override
-	public void setJobRepository(JobRepository jobRepository) {
-		super.setJobRepository(jobRepository);
-	}
-
-	@Inject
-	@Override
-	public void setJobLauncher(JobLauncher jobLauncher) {
-		super.setJobLauncher(jobLauncher);
 	}
 
 	protected JobParametersBuilder getDefaultCommonJobParametersBuilder() {

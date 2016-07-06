@@ -2,7 +2,8 @@ package no.nav.varsel.config;
 
 import static no.nav.varsel.config.QueueConfig.getQueue;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
+import com.atomikos.jms.AtomikosConnectionFactoryBean;
+import org.apache.activemq.ActiveMQXAConnectionFactory;
 import org.apache.activemq.RedeliveryPolicy;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.broker.region.policy.PolicyEntry;
@@ -10,11 +11,15 @@ import org.apache.activemq.broker.region.policy.PolicyMap;
 import org.apache.activemq.broker.region.policy.SharedDeadLetterStrategy;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import javax.inject.Named;
+import javax.jms.ConnectionFactory;
 import javax.jms.Queue;
+import javax.jms.XAConnectionFactory;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -26,7 +31,7 @@ import java.net.URISyntaxException;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = DataSourceTransactionManagerAutoConfiguration.class)
 @Import({JmsConfig.class})
 @Configuration
 public class JmsTestConfig {
@@ -59,8 +64,9 @@ public class JmsTestConfig {
 		ctx.bind("java:/jboss/reply", new ActiveMQQueue("reply"));
 	}
 
-	private static ActiveMQConnectionFactory mqConnectionFactory() {
-		ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(VM_LOCALHOST + "?create=false");
+	private static ActiveMQXAConnectionFactory mqConnectionFactory() {
+		ActiveMQXAConnectionFactory factory = new ActiveMQXAConnectionFactory();
+		factory.setBrokerURL(VM_LOCALHOST + "?create=false");
 		RedeliveryPolicy redeliveryPolicy = new RedeliveryPolicy();
 		redeliveryPolicy.setMaximumRedeliveries(0);
 		factory.setRedeliveryPolicy(redeliveryPolicy);
@@ -82,6 +88,16 @@ public class JmsTestConfig {
 		broker.setPersistent(false);
 		return broker;
 	}
+
+//	@Bean(initMethod = "init", destroyMethod = "close")
+//	public ConnectionFactory mqConnectionFactory(@Named("prodmqConnectionFactory") XAConnectionFactory mqConnectionFactory) {
+//		AtomikosConnectionFactoryBean factoryBean = new AtomikosConnectionFactoryBean();
+//		factoryBean.setXaConnectionFactory(mqConnectionFactory);
+////		factoryBean.setIgnoreSessionTransactedFlag(true);
+//		factoryBean.setUniqueResourceName("mq-confactory_d5f7e1d6");
+//		return factoryBean;
+//	}
+
 
 	@Bean
 	public Queue replyQueue() {

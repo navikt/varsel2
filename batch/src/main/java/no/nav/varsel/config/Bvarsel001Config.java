@@ -54,7 +54,6 @@ import javax.inject.Inject;
 import javax.jms.Queue;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.util.ArrayList;
 
 /**
  * Spring config for Bvarsel001
@@ -137,7 +136,7 @@ public class Bvarsel001Config {
 		return
 				stepBuilder.get("enqueueVarselbestillingStep")
 						.<Varselbestilling, VarselbestillingTo>chunk(workUnitCompletionPolicy)
-						.faultTolerant()
+						.faultTolerant().retryLimit(2)
 						.retry(JmsException.class)
 
 						.reader(opprettetVarselbestillingWithFletteparameterReader)
@@ -177,8 +176,8 @@ public class Bvarsel001Config {
 			ItemWriter<VarselbestillingTo> varselbestillingQueueItemWriter) {
 		CompositeItemWriter<VarselbestillingTo> writer = new CompositeItemWriter<>();
 		ArrayList<ItemWriter<? super VarselbestillingTo>> delegates = Lists.newArrayList();
-		delegates.add(varselbestillingQueueItemWriter);
 		delegates.add(arbeidstabellStatusUpdater);
+		delegates.add(varselbestillingQueueItemWriter);
 		writer.setDelegates(delegates);
 		return writer;
 	}
