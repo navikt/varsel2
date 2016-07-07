@@ -13,8 +13,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.MDC;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.jms.core.JmsTemplate;
@@ -24,10 +22,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.inject.Inject;
+import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import javax.jms.Queue;
 
 /**
  * Abstract class for batch test

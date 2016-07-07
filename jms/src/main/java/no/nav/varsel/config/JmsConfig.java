@@ -33,8 +33,6 @@ import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
-import javax.jms.XAConnection;
-import javax.jms.XAConnectionFactory;
 import javax.naming.NamingException;
 
 /**
