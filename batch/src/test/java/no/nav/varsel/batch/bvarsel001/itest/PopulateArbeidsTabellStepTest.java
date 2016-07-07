@@ -1,11 +1,11 @@
 package no.nav.varsel.batch.bvarsel001.itest;
 
 import static java.time.LocalDate.now;
-import static no.nav.varsel.domain.object.worktable.ArbeidStatus.OPPRETTET;
 import static no.nav.varsel.repo.TestdataUtil.createVarselbestillingBuilder;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import no.nav.varsel.domain.object.worktable.ArbeidStatus;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,8 +38,8 @@ public class PopulateArbeidsTabellStepTest extends AbstractBvarsel001StepTest {
 		launchStep("populateArbeidsTabellStep");
 
 
-		assertThat(bvarsel001Repo.findOne(YESTERDAY).getArbeidStatus(), is(OPPRETTET));
-		assertThat(bvarsel001Repo.findOne(LAST_WEEK).getArbeidStatus(), is(OPPRETTET));
+		assertThat(bvarsel001Repo.findOne(YESTERDAY).getArbeidStatus(), is(ArbeidStatus.OPPRETTET));
+		assertThat(bvarsel001Repo.findOne(LAST_WEEK).getArbeidStatus(), is(ArbeidStatus.OPPRETTET));
 		assertThat(bvarsel001Repo.count(), is(2L));
 	}
 }

@@ -56,13 +56,12 @@ public class JmsConfig {
 
 	@Bean
 	public JmsTemplate jmsTemplate(DestinationResolver destinationResolver,
-								   ConnectionFactory mqConnectionFactory
+								   ConnectionFactory connectionFactory
 	) {
 		JmsTemplate jmsTemplate = new JmsTemplate();
-		jmsTemplate.setSessionTransacted(true);
 		jmsTemplate.setReceiveTimeout(10_000);
 		jmsTemplate.setMessageConverter(converter());
-		jmsTemplate.setConnectionFactory(mqConnectionFactory);
+		jmsTemplate.setConnectionFactory(connectionFactory);
 		jmsTemplate.setDestinationResolver(destinationResolver);
 		return jmsTemplate;
 	}
@@ -74,13 +73,12 @@ public class JmsConfig {
 
 	@Bean
 	public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(DestinationResolver destinationResolver,
-																		  ConnectionFactory mqConnectionFactory,
+																		  ConnectionFactory connectionFactory,
 																		  PlatformTransactionManager transactionManager) {
 		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-		factory.setConnectionFactory(mqConnectionFactory);
+		factory.setConnectionFactory(connectionFactory);
 		factory.setDestinationResolver(destinationResolver);
 		factory.setMessageConverter(new ConsumerMessageConverter(converter()));
-		factory.setSessionTransacted(true);
 		factory.setTransactionManager(transactionManager);
 		factory.setConcurrency(String.format("%d-%d", minimumConsumers, maximumConsumers));
 		factory.setErrorHandler(t -> {
@@ -115,7 +113,7 @@ public class JmsConfig {
 	}
 
 	@Bean
-	public ConnectionFactory mqConnectionFactory() {
+	public ConnectionFactory connectionFactory() {
 		ConnectionFactory connectionFactory = getJndiObject("java:/jboss/mqConnectionFactory", ConnectionFactory.class);
 		UserCredentialsConnectionFactoryAdapter adapter = new UserCredentialsConnectionFactoryAdapter();
 		adapter.setTargetConnectionFactory(connectionFactory);
@@ -123,29 +121,6 @@ public class JmsConfig {
 		adapter.setPassword("");
 		return adapter;
 	}
-
-
-//	@Bean
-//	public XAConnectionFactory prodmqConnectionFactory() {
-//		XAConnectionFactory connectionFactory = getJndiObject("java:/jboss/mqConnectionFactory", XAConnectionFactory.class);
-////		UserCredentialsConnectionFactoryAdapter adapter = new UserCredentialsConnectionFactoryAdapter();
-////		adapter.setTargetConnectionFactory(connectionFactory);
-////		adapter.setUsername("srvappserver");
-////		adapter.setPassword("");
-//
-////		return new SingleConnectionFactory(adapter);
-//		return new XAConnectionFactory() {
-//			@Override
-//			public XAConnection createXAConnection() throws JMSException {
-//				return createXAConnection("srvappserver", "");
-//			}
-//
-//			@Override
-//			public XAConnection createXAConnection(String userName, String password) throws JMSException {
-//				return connectionFactory.createXAConnection(userName, password);
-//			}
-//		};
-//	}
 
 	@Bean
 	public JmsPingProvider jmsPingProvider() {

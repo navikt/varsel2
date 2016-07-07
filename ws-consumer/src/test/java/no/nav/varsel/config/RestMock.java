@@ -34,6 +34,8 @@ public class RestMock {
 		// MockRestServiceServer will only mock a request once, do it a bit more manual here
 		mocks.put("http://localhost:8041/varsel/rest/varselInfoV1/varseltypeId",
 				withSuccess(objectMapper.writeValueAsString(createVarselInfo()), APPLICATION_JSON));
+		mocks.put("http://localhost:8041/varsel/rest/varselInfoV1/varsel_test_feil",
+				withSuccess(objectMapper.writeValueAsString(createVarselInfo()), APPLICATION_JSON));
 
 		restTemplate.setRequestFactory((uri, httpMethod) -> {
 			MockClientHttpRequest mockClientHttpRequest = new MockClientHttpRequest(httpMethod, uri);

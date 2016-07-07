@@ -46,6 +46,7 @@ import java.util.UUID;
  */
 public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
+
 	@Inject
 	private Queue bestillServicemeldingQueue;
 	@Inject
@@ -89,6 +90,9 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 		isOk(response);
 		assertThat(varselbestillingRepo.count(), is(0L));
+
+		Object receive = receive(varselutsendingQueue);
+		assertThat(receive, nullValue());
 	}
 
 	public static JAXBElement<Varsel> createVarsel() {

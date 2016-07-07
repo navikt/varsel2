@@ -29,11 +29,11 @@ public class VarselutsendingProducer {
 	private ObjectFactory objectFactory = new ObjectFactory();
 
 	public void produce(VarselutsendingTo varselutsendingTo) {
+		Varselutsending varselutsending = mapper.map(varselutsendingTo);
+		jmsTemplate.convertAndSend(varselutsendingQueue, objectFactory.createVarselutsending(varselutsending));
 		// TODO replace with better mocking
 		if (FEIL_MQ_UT.equals(varselutsendingTo.getVarseltypeId())) {
 			throw new RuntimeException("mq ut feil");
 		}
-		Varselutsending varselutsending = mapper.map(varselutsendingTo);
-		jmsTemplate.convertAndSend(varselutsendingQueue, objectFactory.createVarselutsending(varselutsending));
 	}
 }

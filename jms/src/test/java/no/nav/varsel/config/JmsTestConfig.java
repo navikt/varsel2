@@ -15,11 +15,14 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.inject.Named;
+import javax.inject.Inject;
 import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
 import javax.jms.Queue;
-import javax.jms.XAConnectionFactory;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -36,6 +39,8 @@ import java.net.URISyntaxException;
 @Configuration
 public class JmsTestConfig {
 
+	@Inject
+
 	private static final String VM_LOCALHOST = "vm://localhost";
 
 	public static void mockJndi() throws Exception {
@@ -50,7 +55,6 @@ public class JmsTestConfig {
 
 		ctx.createSubcontext("java:");
 		ctx.createSubcontext("java:/jboss");
-		ctx.bind("java:/jboss/mqConnectionFactory", mqConnectionFactory());
 
 		// Queue mocks
 		ctx.bind("java:/jboss/bestillServicemelding", new ActiveMQQueue("bestillServicemelding"));
@@ -64,13 +68,52 @@ public class JmsTestConfig {
 		ctx.bind("java:/jboss/reply", new ActiveMQQueue("reply"));
 	}
 
-	private static ActiveMQXAConnectionFactory mqConnectionFactory() {
+
+	/**
+	 * Using the same username/password-wrapper as in production to ensure it delegates down to XAConnectionFactory
+	 * @param atomikosConnectionFactoryBean
+	 * @return
+	 * @throws JMSException
+	 */
+	@Bean
+	public ConnectionFactory connectionFactory(ConnectionFactory atomikosConnectionFactoryBean) throws JMSException {
+		UserCredentialsConnectionFactoryAdapter adapter = new UserCredentialsConnectionFactoryAdapter();
+		adapter.setTargetConnectionFactory(atomikosConnectionFactoryBean);
+		adapter.setUsername("srvappserver");
+		adapter.setPassword("");
+		return adapter;
+	}
+
+	/**
+	 * Atomikos wrapper for XAConnectionFactory
+	 * @return
+	 * @throws JMSException
+	 */
+	@Bean(initMethod = "init", destroyMethod = "close")
+	public ConnectionFactory atomikosConnectionFactoryBean() {
+		AtomikosConnectionFactoryBean atomikosConnectionFactoryBean = new AtomikosConnectionFactoryBean();
+		atomikosConnectionFactoryBean.setUniqueResourceName("QUEUE_BROKER");
+		atomikosConnectionFactoryBean.setXaConnectionFactory(activeMQXAConnectionFactory());
+		atomikosConnectionFactoryBean.setPoolSize(10);
+		return atomikosConnectionFactoryBean;
+	}
+
+	/**
+	 * XA ConnectionFactory for ActiveMQ
+	 * @return
+	 */
+	public static ActiveMQXAConnectionFactory activeMQXAConnectionFactory() {
 		ActiveMQXAConnectionFactory factory = new ActiveMQXAConnectionFactory();
 		factory.setBrokerURL(VM_LOCALHOST + "?create=false");
 		RedeliveryPolicy redeliveryPolicy = new RedeliveryPolicy();
 		redeliveryPolicy.setMaximumRedeliveries(0);
 		factory.setRedeliveryPolicy(redeliveryPolicy);
 		return factory;
+	}
+
+	@Bean
+	public TransactionTemplate transactionTemplate(PlatformTransactionManager platformTransactionManager) {
+		return new TransactionTemplate(platformTransactionManager);
 	}
 
 	@Bean(initMethod = "start", destroyMethod = "stop")
@@ -88,16 +131,6 @@ public class JmsTestConfig {
 		broker.setPersistent(false);
 		return broker;
 	}
-
-//	@Bean(initMethod = "init", destroyMethod = "close")
-//	public ConnectionFactory mqConnectionFactory(@Named("prodmqConnectionFactory") XAConnectionFactory mqConnectionFactory) {
-//		AtomikosConnectionFactoryBean factoryBean = new AtomikosConnectionFactoryBean();
-//		factoryBean.setXaConnectionFactory(mqConnectionFactory);
-////		factoryBean.setIgnoreSessionTransactedFlag(true);
-//		factoryBean.setUniqueResourceName("mq-confactory_d5f7e1d6");
-//		return factoryBean;
-//	}
-
 
 	@Bean
 	public Queue replyQueue() {

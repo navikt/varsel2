@@ -9,9 +9,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import com.atomikos.datasource.xa.XID;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import no.nav.varsel.batch.common.JmsQueueItemWriter;
 import no.nav.varsel.config.BatchTestConfig;
 import no.nav.varsel.domain.object.Varselbestilling;
@@ -31,14 +28,12 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.UncategorizedJmsException;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
+import javax.inject.Inject;
 import javax.jms.Queue;
-import javax.transaction.xa.XAException;
-import javax.transaction.xa.XAResource;
-import javax.transaction.xa.Xid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -52,13 +47,14 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 	private static final String FAIL = "FAIL";
 	private static final String FAILONLYONCE = "FAILONLYONCE";
 	private static final String FAILONSECOND = "FAILONSECOND";
-	private static int failwrite;
+	private static int triggerFailure;
+	private static int failureCount;
 	private static int okwrite;
-
-	private static XaTestResource xaTestResource = new XaTestResource();
 
 	private static final Logger LOG = LoggerFactory.getLogger(Bvarsel001JobFailureTest.class);
 
+	@Inject
+	TransactionTemplate transactionTemplate;
 
 	@Configuration
 	public static class Config {
@@ -69,11 +65,11 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 			ClassifierCompositeItemWriter<VarselbestillingTo> writer = new ClassifierCompositeItemWriter<>();
 			writer.setClassifier(vb ->
 					vb.getMottakerFnr().equals(FAIL)
-							|| (vb.getMottakerFnr().equals(FAILONLYONCE) && failwrite > 0)
-							|| (vb.getMottakerFnr().equals(FAILONSECOND) && okwrite++ > 0)
+							|| (vb.getMottakerFnr().equals(FAILONLYONCE) && triggerFailure++ == 0)
+							|| (vb.getMottakerFnr().equals(FAILONSECOND) && triggerFailure++ > 0)
 							? items -> {
-						failwrite++;
-						LOG.error("varselbestillingQueueItemFailingWriter-" + failwrite);
+						failureCount++;
+						LOG.error("varselbestillingQueueItemFailingWriter-" + failureCount);
 						throw new UncategorizedJmsException("testfail");
 					} : jmsTestWriter
 
@@ -97,9 +93,8 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 
 	@Before
 	public void setUp() throws Exception {
-		xaTestResource.clear();
-		failwrite = 0;
-		okwrite = 0;
+		triggerFailure = 0;
+		failureCount = 0;
 		jmsTemplate.setReceiveTimeout(500L);
 	}
 
@@ -111,7 +106,7 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 		assertThat(jobExecution.getStatus(), is(BatchStatus.FAILED));
 		assertThat(bvarsel001Repo.findOne(VARSELBESTILLING_ID).getArbeidStatus(), is(ArbeidStatus.OPPRETTET));
 		assertJms(0);
-		assertThat(failwrite, is(2));
+		assertThat(failureCount, is(2));
 	}
 
 	@Test
@@ -124,7 +119,7 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 		assertThat(jobExecution.getStatus(), is(BatchStatus.FAILED));
 		assertThat(bvarsel001Repo.findOne(VARSELBESTILLING_ID).getArbeidStatus(), is(ArbeidStatus.OPPRETTET));
 		assertJms(0);
-		assertThat(failwrite, is(2));
+		assertThat(failureCount, is(2));
 	}
 
 	@Test
@@ -139,15 +134,26 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 		assertThat(varselbestillingRepo.findByVarselbestillingId(VARSELBESTILLING_ID).getAntallRevarslinger(),
 				is(ANTALL_REVARSLINGER - 1));
 
-		assertJms(1);
-		assertThat(failwrite, is(1));
+		assertJms(2);
+		assertThat(failureCount, is(1));
 	}
 
 	private void assertJms(int i) {
 		for (int i1 = 0; i1 < i; i1++) {
-			assertThat(jmsTemplate.receiveAndConvert(bestillVarselQueue), notNullValue());
+			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+					assertThat(jmsTemplate.receiveAndConvert(bestillVarselQueue), notNullValue());
+				}
+			});
 		}
-		assertThat(jmsTemplate.receiveAndConvert(bestillVarselQueue), nullValue());
+		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+			@Override
+			protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+				assertThat(jmsTemplate.receiveAndConvert(bestillVarselQueue), nullValue());
+			}
+		});
+
 	}
 
 	@Test
@@ -157,8 +163,8 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 
 		JobExecution jobExecution = launchJob(jobParameters);
 		assertThat(jobExecution.getStatus(), is(BatchStatus.FAILED));
-		assertThat(failwrite, is(2));
-		assertThat(xaTestResource.commited, hasSize(0));
+		assertThat(failureCount, is(2));
+		assertJms(0);
 
 		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingId(VARSELBESTILLING_ID);
 		varselbestilling.setFnr("oknow");
@@ -168,98 +174,7 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 		assertThat(jobExecution.getStatus(), is(BatchStatus.COMPLETED));
 		assertThat(bvarsel001Repo.count(), is(0L));
 		assertJms(1);
-		assertThat(failwrite, is(2));
-	}
-
-}
-
-class XaTestResource implements XAResource {
-
-	final List<Object> commited = Lists.newCopyOnWriteArrayList();
-	final Map<Xid, ArrayList<Object>> halfCommited = Maps.newConcurrentMap();
-	final Map<Xid, ArrayList<Object>> cache = Maps.newConcurrentMap();
-	int transactionTimeout = 300;
-
-	private Xid current = new XID("x", "x");
-
-	public boolean add(Object o) {
-		return cache.get(current).add(o);
-	}
-
-	@Override
-	public void commit(Xid xid, boolean b) throws XAException {
-		ArrayList<Object> list = cache.get(xid);
-		if (b) {
-			commited.addAll(list);
-		} else {
-			halfCommited.get(xid).addAll(list);
-		}
-		cache.clear();
-	}
-
-	@Override
-	public void end(Xid xid, int i) throws XAException {
-		if ((i & TMSUCCESS) > 0) {
-			commited.addAll(halfCommited.get(xid));
-			halfCommited.get(xid).clear();
-
-		}
-		if ((i & TMFAIL) > 0) {
-			halfCommited.get(xid).clear();
-		}
-		cache.remove(xid);
-	}
-
-	@Override
-	public void forget(Xid xid) throws XAException {
-		halfCommited.get(xid).clear();
-	}
-
-	@Override
-	public int getTransactionTimeout() throws XAException {
-		return transactionTimeout;
-	}
-
-	@Override
-	public boolean isSameRM(XAResource xaResource) throws XAException {
-		return xaResource.getClass().isAssignableFrom(getClass());
-	}
-
-	@Override
-	public int prepare(Xid xid) throws XAException {
-		return XA_OK;
-	}
-
-	@Override
-	public Xid[] recover(int i) throws XAException {
-		return cache.keySet().toArray(new Xid[0]);
-	}
-
-	@Override
-	public void rollback(Xid xid) throws XAException {
-		cache.remove(xid);
-		halfCommited.remove(xid);
-	}
-
-	@Override
-	public boolean setTransactionTimeout(int i) throws XAException {
-		this.transactionTimeout = i;
-		return true;
-	}
-
-	@Override
-	public void start(Xid xid, int i) throws XAException {
-		current = xid;
-		if (!cache.keySet().contains(xid)) {
-			cache.put(xid, new ArrayList<>());
-			halfCommited.put(xid, new ArrayList<>());
-		}
-	}
-
-	public void clear() {
-		cache.clear();
-		halfCommited.clear();
-		commited.clear();
+		assertThat(failureCount, is(2));
 	}
 
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.jms.TextMessage;
+import javax.transaction.Transactional;
 
 /**
  * Consumer for TVARSEL001 BestillServicemelding

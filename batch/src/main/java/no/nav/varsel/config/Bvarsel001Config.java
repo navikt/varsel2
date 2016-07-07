@@ -54,6 +54,7 @@ import javax.inject.Inject;
 import javax.jms.Queue;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.util.ArrayList;
 
 /**
  * Spring config for Bvarsel001

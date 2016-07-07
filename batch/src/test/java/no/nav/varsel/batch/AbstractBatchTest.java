@@ -18,8 +18,10 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.inject.Inject;
 import javax.xml.bind.JAXBElement;
@@ -35,6 +37,7 @@ import javax.jms.Queue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BatchTestConfig.class)
 @ActiveProfiles({"itest"})
+@DirtiesContext
 public abstract class AbstractBatchTest extends JobLauncherTestUtils {
 
 	protected static final String DEFAULT_WORK_UNIT = "2";
@@ -46,6 +49,8 @@ public abstract class AbstractBatchTest extends JobLauncherTestUtils {
 	protected JmsTemplate jmsTemplate;
 	@Inject
 	protected MetricRegistry metricRegistry;
+	@Inject
+	protected TransactionTemplate transactionTemplate;
 
 	protected JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
 
@@ -90,10 +95,13 @@ public abstract class AbstractBatchTest extends JobLauncherTestUtils {
 
 	@SuppressWarnings("unchecked")
 	protected <T> T receive(Queue queue) {
-		Object response = jmsTemplate.receiveAndConvert(queue);
-		if (response instanceof JAXBElement) {
-			response = ((JAXBElement) response).getValue();
-		}
-		return (T) response;
+		return transactionTemplate.execute(transactionStatus ->
+		{
+			Object response = jmsTemplate.receiveAndConvert(queue);
+			if (response instanceof JAXBElement) {
+				response = ((JAXBElement) response).getValue();
+			}
+			return (T) response;
+		});
 	}
 }
