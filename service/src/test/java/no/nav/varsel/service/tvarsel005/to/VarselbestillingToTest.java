@@ -23,6 +23,7 @@ public class VarselbestillingToTest {
 	private static final LocalDateTime BESTILLINGSTIDSPUNKT = LocalDateTime.of(2016, Month.JULY, 1, 0, 0, 0, 0);
 	private static final Integer REVARSLING_INTERVALL = 5;
 	private static final LocalDateTime SISTE_VARSEL_UTSENDELSE = LocalDateTime.of(2016, Month.JULY, 3, 0, 0, 0, 0);
+	public static final LocalDateTime DISTRIBUSJON_TIDSPUNKT_OLD = LocalDateTime.of(2016, Month.MAY, 3, 0, 0, 0, 0);
 
 	@Test
 	public void shouldBuild() {
@@ -39,8 +40,7 @@ public class VarselbestillingToTest {
 		assertThat(varselbestillingTo.getBestillingstidspunkt(), is(BESTILLINGSTIDSPUNKT));
 		assertThat(varselbestillingTo.getRevarslingsIntervall(), is(REVARSLING_INTERVALL));
 		assertThat(varselbestillingTo.getSisteVarselUtsendelse(), is(SISTE_VARSEL_UTSENDELSE));
-		assertThat(varselbestillingTo.getVarsler(), hasSize(1));
-		VarselToTest.assertVarselTo(varselbestillingTo.getVarsler().get(0));
+		assertThat(varselbestillingTo.getVarsler(), hasSize(3));
 	}
 
 	public static VarselbestillingTo buildVarselBestillingTo(List<VarselTo> varsler) {
@@ -51,15 +51,15 @@ public class VarselbestillingToTest {
 				aktoerId(AKTOER_ID).
 				bestillingstidspunkt(BESTILLINGSTIDSPUNKT).
 				revarslingIntervall(REVARSLING_INTERVALL).
-				sisteVarselUtsendelse(SISTE_VARSEL_UTSENDELSE).
 				varsler(varsler).
-				build();
+				buildAndCalculateSisteVarselUtsendelse();
 	}
 
 	public static List<VarselTo> buildVarsler() {
 		List<VarselTo> varsler = new ArrayList<>();
-		VarselTo varselTo = VarselToTest.buildVarselTo();
-		varsler.add(varselTo);
+		varsler.add(VarselToTest.varselToBuilder().distribusjonTidspunkt(DISTRIBUSJON_TIDSPUNKT_OLD).build());
+		varsler.add(VarselToTest.varselToBuilder().distribusjonTidspunkt(SISTE_VARSEL_UTSENDELSE).build());
+		varsler.add(VarselToTest.varselToBuilder().distribusjonTidspunkt(null).build());
 		return varsler;
 	}
 }

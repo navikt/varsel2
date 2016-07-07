@@ -2,16 +2,14 @@ package no.nav.varsel.provider.map.support;
 
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varsel;
 import no.nav.varsel.domain.utility.XmlGregorianConverter;
-import no.nav.varsel.provider.map.VarselMapper;
 import no.nav.varsel.service.tvarsel005.to.VarselTo;
 import org.springframework.util.Assert;
 
 /**
  * @author Lars Aune
  */
-public class DefaultVarselMapper implements VarselMapper {
+public class VarselMapper {
 
-	@Override
 	public Varsel map(VarselTo varselTo) {
 		Assert.notNull(varselTo, "The parameter varselTo can't be null.");
 		Varsel result = new Varsel();

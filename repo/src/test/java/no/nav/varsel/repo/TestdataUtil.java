@@ -4,13 +4,17 @@ import static no.nav.varsel.domain.builder.VarselBuilder.aVarsel;
 import static no.nav.varsel.domain.builder.VarselbestillingBuilder.aVarselbestilling;
 
 import com.google.common.collect.Sets;
+import no.nav.varsel.domain.builder.VarselBuilder;
+import no.nav.varsel.domain.builder.VarselbestillingBuilder;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
+import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Test data utility class
@@ -57,6 +61,11 @@ public class TestdataUtil {
 	public static final String PERSON_IDENTER_SOME_VALID_KODENAVN = "SOME_VALID_KODENAVN";
 
 	public static Varselbestilling createVarselbestilling() {
+		return createVarselbestillingBuilder()
+				.build();
+	}
+
+	public static VarselbestillingBuilder createVarselbestillingBuilder() {
 		return aVarselbestilling()
 				.varselbestillingId(VARSELBESTILLING_ID)
 				.varseltypeId(VARSELTYPE_ID)
@@ -68,20 +77,39 @@ public class TestdataUtil {
 				.antallRevarslinger(ANTALL_REVARSLINGER)
 				.nesteVarslingDato(NESTE_VARSLING_DATO)
 				.parameter(PARAMETERKEY, PARAMETERVALUE)
-				.varsel(aVarsel()
-						.varselId(VARSEL_ID)
-						.kanal(KANAL_CODE)
-						.sendtTidspunkt(SENDT_TIDSPUNKT)
-						.distribusjonTidspunkt(DISTRIBUSJON_TIDSPUNKT)
-						.kvitteringTidspunkt(KVITTERING_TIDSPUNKT)
-						.kontaktInfo(KONTAKT_INFO)
-						.status(STATUS_CODE)
-						.feilbeskrivelse(FEILBESKRIVELSE)
-						.varselTittel(VARSEL_TITTEL)
-						.varselTekst(VARSEL_TEKST)
-						.varselUrl(VARSEL_URL)
-						.erRevarsel(ER_REVARSEL)
-						.build())
+				.varsels(createVarsel());
+	}
+
+	/**
+	 * Create a varsel with test values
+	 */
+	public static Varsel createVarsel() {
+		return createVarselBuilder()
+				.varselId(VARSEL_ID)
 				.build();
+	}
+
+	/**
+	 * Create a varsel with unique Id
+	 */
+	public static Varsel createVarselUnique() {
+		return createVarselBuilder()
+				.build();
+	}
+
+	public static VarselBuilder createVarselBuilder() {
+		return aVarsel()
+				.varselId(UUID.randomUUID().toString())
+				.kanal(KANAL_CODE)
+				.sendtTidspunkt(SENDT_TIDSPUNKT)
+				.distribusjonTidspunkt(DISTRIBUSJON_TIDSPUNKT)
+				.kvitteringTidspunkt(KVITTERING_TIDSPUNKT)
+				.kontaktInfo(KONTAKT_INFO)
+				.status(STATUS_CODE)
+				.feilbeskrivelse(FEILBESKRIVELSE)
+				.varselTittel(VARSEL_TITTEL)
+				.varselTekst(VARSEL_TEKST)
+				.varselUrl(VARSEL_URL)
+				.erRevarsel(ER_REVARSEL);
 	}
 }

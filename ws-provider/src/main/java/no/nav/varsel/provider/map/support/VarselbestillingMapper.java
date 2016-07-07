@@ -4,8 +4,6 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.AktoerId;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Person;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varselbestilling;
 import no.nav.varsel.domain.utility.XmlGregorianConverter;
-import no.nav.varsel.provider.map.VarselMapper;
-import no.nav.varsel.provider.map.VarselbestillingMapper;
 import no.nav.varsel.service.tvarsel005.to.VarselbestillingTo;
 import org.springframework.util.Assert;
 
@@ -16,12 +14,11 @@ import java.time.LocalDateTime;
 /**
  * @author Lars Aune
  */
-public class DefaultVarselbestillingMapper implements VarselbestillingMapper {
+public class VarselbestillingMapper {
 
 	@Inject
 	private VarselMapper varselMapper;
 
-	@Override
 	public Varselbestilling map(VarselbestillingTo varselbestillingTo) {
 		Assert.notNull(varselbestillingTo, "The parameter varselbestillingTo can't be null.");
 

@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 import java.time.Month;
 
 /**
- * Unit test for DefaultVarselMapper
+ * Unit test for VarselMapper
  *
  * @author lars Aune
  */
-public class DefaultVarselMapperTest {
+public class VarselMapperTest {
 
 	public static final String KANAL = "KANAL";
 	public static final LocalDateTime SENDT_TIDSPUNKT = LocalDateTime.of(2016, Month.JULY, 1, 0, 0, 0, 0);
@@ -34,7 +34,7 @@ public class DefaultVarselMapperTest {
 		DISTRIBUERT = TestdataUtil.getXMLGregorianCalendar(2016, 6, 2);
 	}
 
-	private static final DefaultVarselMapper MAPPER = new DefaultVarselMapper();
+	private static final VarselMapper MAPPER = new VarselMapper();
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowIllegalArgumentExceptionWhenParameterIsNull() {

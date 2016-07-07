@@ -1,5 +1,6 @@
 package no.nav.varsel.domain.object;
 
+import com.google.common.base.MoreObjects;
 import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
@@ -16,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
 
 /**
@@ -24,7 +26,7 @@ import java.time.LocalDateTime;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Entity
-@Table(name = "VARSEL")
+@Table(name = "VARSEL", uniqueConstraints = @UniqueConstraint(columnNames = "varsel_id"))
 public class Varsel extends AbstractDomainObject {
 
 	private static final long serialVersionUID = 7416687143L;
@@ -201,5 +203,18 @@ public class Varsel extends AbstractDomainObject {
 
 	public void setErRevarsel(Boolean erRevarsel) {
 		this.erRevarsel = erRevarsel;
+	}
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this)
+				.add("id", id)
+				.add("varselId", varselId)
+				.add("kanal", kanal)
+				.add("sendtTidspunkt", sendtTidspunkt)
+				.add("distribusjonTidspunkt", distribusjonTidspunkt)
+				.add("kvitteringTidspunkt", kvitteringTidspunkt)
+				.add("status", status)
+				.toString();
 	}
 }

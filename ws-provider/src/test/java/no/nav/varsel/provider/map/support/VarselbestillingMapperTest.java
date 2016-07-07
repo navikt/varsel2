@@ -25,7 +25,7 @@ import java.util.List;
  * @author Lars Aune
  */
 @RunWith(MockitoJUnitRunner.class)
-public class DefaultVarselbestillingMapperTest {
+public class VarselbestillingMapperTest {
 	public static final String AKTOER_ID = "AKTOER_ID";
 	public static final LocalDateTime BESTILLINGSTIDSPUNKT = LocalDateTime.of(2016, Month.JULY, 1, 0, 0, 0, 0);
 	public static final int REVARSLING_INTERVALL = 5;
@@ -36,10 +36,10 @@ public class DefaultVarselbestillingMapperTest {
 	public static final String FNR = "FNR";
 
 	@Spy
-	private DefaultVarselMapper varselMapper;
+	private VarselMapper varselMapper;
 
 	@InjectMocks
-	private DefaultVarselbestillingMapper mapper;
+	private VarselbestillingMapper mapper;
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowIllegalArgumentExceptionWhenParameterIsNull() {
@@ -50,7 +50,7 @@ public class DefaultVarselbestillingMapperTest {
 	public void shouldMapAktoerId() {
 		VarselbestillingTo.Builder varselbestillingToBuilder = new VarselbestillingTo.Builder();
 		List<VarselTo> varsler = new ArrayList<>();
-		varsler.add(DefaultVarselMapperTest.buildVarselTo());
+		varsler.add(VarselMapperTest.buildVarselTo());
 		varselbestillingToBuilder.
 				aktoerId(AKTOER_ID).
 				bestillingstidspunkt(BESTILLINGSTIDSPUNKT).
@@ -71,7 +71,7 @@ public class DefaultVarselbestillingMapperTest {
 	public void shouldMapFnr() {
 		VarselbestillingTo.Builder varselbestillingToBuilder = new VarselbestillingTo.Builder();
 		List<VarselTo> varsler = new ArrayList<>();
-		varsler.add(DefaultVarselMapperTest.buildVarselTo());
+		varsler.add(VarselMapperTest.buildVarselTo());
 		varselbestillingToBuilder.
 				fnr(FNR).
 				bestillingstidspunkt(BESTILLINGSTIDSPUNKT).
@@ -111,6 +111,6 @@ public class DefaultVarselbestillingMapperTest {
 
 	public static void assertVarsel(Varselbestilling varselbestilling) {
 		assertThat(varselbestilling.getVarselListe(), hasSize(1));
-		DefaultVarselMapperTest.assertVarsel(varselbestilling.getVarselListe().get(0));
+		VarselMapperTest.assertVarsel(varselbestilling.getVarselListe().get(0));
 	}
 }

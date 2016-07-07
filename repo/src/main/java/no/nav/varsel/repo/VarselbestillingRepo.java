@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public interface VarselbestillingRepo extends JpaRepository<Varselbestilling, Long> {
+public interface VarselbestillingRepo extends JpaRepository<Varselbestilling, Long>, VarselbestillingRepoCustom {
 
 	/**
 	 * Find {@link Varselbestilling} by varselbestillingId

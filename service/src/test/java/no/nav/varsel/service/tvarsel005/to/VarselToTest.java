@@ -1,5 +1,6 @@
 package no.nav.varsel.service.tvarsel005.to;
 
+import static no.nav.varsel.service.tvarsel005.to.VarselTo.Builder.aVarselTo;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -10,6 +11,7 @@ import java.time.Month;
 
 /**
  * Unit test for VarsellTo
+ *
  * @author Lars Aune
  */
 public class VarselToTest {
@@ -44,16 +46,18 @@ public class VarselToTest {
 	}
 
 	public static VarselTo buildVarselTo() {
-		VarselTo.Builder builder = new VarselTo.Builder();
+		return varselToBuilder().build();
+	}
 
-		return builder.kanal(KANAL).
+	public static VarselTo.Builder varselToBuilder() {
+		return aVarselTo().kanal(KANAL).
 				sendtTidspunkt(SENDT_TIDSPUNKT).
 				distribusjonTidspunkt(DISTRIBUSJON_TIDSPUNKT).
 				kontaktInfo(KONTAKT_INFO).
 				varselTittel(VARSEL_TITTEL).
 				varselTekst(VARSEL_TEKST).
 				varselURL(VARSEL_URL).
-				revarsel(REVARSEL).build();
+				revarsel(REVARSEL);
 	}
 
 }

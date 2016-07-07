@@ -103,6 +103,10 @@ public class VarselTo {
 			return result;
 		}
 
+		public static VarselTo.Builder aVarselTo() {
+			return new VarselTo.Builder();
+		}
+
 		public Builder kanal(String kanal) {
 			this.kanal = kanal;
 			return this;

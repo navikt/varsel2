@@ -1,7 +1,13 @@
 package no.nav.varsel.service.tvarsel005.to;
 
+import static java.util.Comparator.naturalOrder;
+
+import com.google.common.collect.Lists;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -79,20 +85,33 @@ public class VarselbestillingTo {
 		private LocalDateTime bestillingstidspunkt;
 		private Integer revarslingIntervall;
 		private LocalDateTime sisteVarselUtsendelse;
-		private List<VarselTo> varsler;
+		private List<VarselTo> varsler = Lists.newArrayList();
 
 		public VarselbestillingTo build() {
 			VarselbestillingTo result = new VarselbestillingTo();
-			result.setVarseltypeId(this.varseltypeId);
-			result.setFnr(this.fnr);
-			result.setAktoerId(this.aktoerId);
-			result.setBestillingstidspunkt(this.bestillingstidspunkt);
-			result.setRevarslingsIntervall(this.revarslingIntervall);
-			result.setSisteVarselUtsendelse(this.sisteVarselUtsendelse);
-			if (this.varsler != null) {
-				result.varsler.addAll(this.varsler);
-			}
+			result.setVarseltypeId(varseltypeId);
+			result.setFnr(fnr);
+			result.setAktoerId(aktoerId);
+			result.setBestillingstidspunkt(bestillingstidspunkt);
+			result.setRevarslingsIntervall(revarslingIntervall);
+			result.setSisteVarselUtsendelse(sisteVarselUtsendelse);
+			result.getVarsler().addAll(varsler);
 			return result;
+		}
+
+		public VarselbestillingTo buildAndCalculateSisteVarselUtsendelse() {
+			VarselbestillingTo result = build();
+			LocalDateTime sisteVarselUtsendelse = varsler.stream()
+					.map(VarselTo::getDistribusjonsTidspunkt)
+					.filter(v -> v != null)
+					.max(naturalOrder())
+					.orElse(null);
+			result.setSisteVarselUtsendelse(sisteVarselUtsendelse);
+			return result;
+		}
+
+		public static VarselbestillingTo.Builder aVarselbestillingTo() {
+			return new Builder();
 		}
 
 		public Builder varseltypeId(String varseltypeId) {
@@ -125,8 +144,15 @@ public class VarselbestillingTo {
 			return this;
 		}
 
+		public Builder varsler(VarselTo... varsler) {
+			this.varsler.clear();
+			Collections.addAll(this.varsler, varsler);
+			return this;
+		}
+
 		public Builder varsler(List<VarselTo> varsler) {
-			this.varsler = varsler;
+			this.varsler.clear();
+			this.varsler.addAll(varsler);
 			return this;
 		}
 	}

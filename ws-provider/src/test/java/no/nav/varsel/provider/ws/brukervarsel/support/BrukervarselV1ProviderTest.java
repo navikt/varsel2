@@ -1,12 +1,12 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
+import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo.Builder.aHentVarselForBrukerResponseTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -18,13 +18,12 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varselbestilling;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
 import no.nav.varsel.domain.utility.XmlGregorianConverter;
-import no.nav.varsel.provider.map.support.DefaultHentVarselForBrukerRequestMapper;
-import no.nav.varsel.provider.map.support.DefaultHentVarselForBrukerResponseMapper;
-import no.nav.varsel.provider.map.support.DefaultVarselMapper;
-import no.nav.varsel.provider.map.support.DefaultVarselbestillingMapper;
+import no.nav.varsel.provider.map.support.HentVarselForBrukerRequestMapper;
+import no.nav.varsel.provider.map.support.HentVarselForBrukerResponseMapper;
+import no.nav.varsel.provider.map.support.VarselMapper;
+import no.nav.varsel.provider.map.support.VarselbestillingMapper;
 import no.nav.varsel.provider.map.support.HentVarselForBrukerRequestValidator;
 import no.nav.varsel.service.BrukervarselV1Service;
-import no.nav.varsel.service.PingService;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 import no.nav.varsel.service.tvarsel005.to.VarselTo;
 import no.nav.varsel.service.tvarsel005.to.VarselbestillingTo;
@@ -80,23 +79,17 @@ public class BrukervarselV1ProviderTest {
 			XmlGregorianConverter.toXmlGregorianCalendar(SENDT_TIDSPUNKT);
 	public static final int REVARSLING_INTERVALL = 5;
 
-	@Mock
-	PingService pingService;
+	@Spy
+	private HentVarselForBrukerRequestMapper hentVarselForBrukerRequestMapper;
 
 	@Spy
-	private HentVarselForBrukerRequestValidator validatorSpy;
+	private HentVarselForBrukerResponseMapper hentVarselForBrukerResponseMapper;
 
 	@Spy
-	private DefaultHentVarselForBrukerRequestMapper hentVarselForBrukerRequestMapper;
+	private VarselbestillingMapper varselbestillingMapper;
 
 	@Spy
-	private DefaultHentVarselForBrukerResponseMapper hentVarselForBrukerResponseMapper;
-
-	@Spy
-	private DefaultVarselbestillingMapper varselbestillingMapper;
-
-	@Spy
-	private DefaultVarselMapper varselMapper;
+	private VarselMapper varselMapper;
 
 	@Mock
 	private BrukervarselV1Service brukervarselV1Service;
@@ -115,17 +108,8 @@ public class BrukervarselV1ProviderTest {
 	}
 
 	@Test
-	public void shouldUsePingService() {
+	public void shouldPing() {
 		brukervarselV1Provider.ping();
-		verify(pingService, times(1)).ping();
-	}
-
-	@Test(expected = HentVarselForBrukerUgyldigInput.class)
-	public void shouldThrowIllegalArgumentExceptionWhenRequestLacksBruker() throws HentVarselForBrukerUgyldigInput {
-		HentVarselForBrukerRequest request = new HentVarselForBrukerRequest();
-		request.setBruker(null);
-
-		brukervarselV1Provider.hentVarselForBruker(request);
 	}
 
 	@Test
@@ -138,7 +122,7 @@ public class BrukervarselV1ProviderTest {
 		periode.setTom(THIRD_OF_JULY_2016);
 		request.setPeriode(periode);
 
-		HentVarselForBrukerResponseTo.Builder responseToBuilder = new HentVarselForBrukerResponseTo.Builder();
+		HentVarselForBrukerResponseTo.Builder responseToBuilder = aHentVarselForBrukerResponseTo();
 		List<VarselTo> varsler = new ArrayList<>();
 
 		VarselTo.Builder varselToBuilder = new VarselTo.Builder();
@@ -168,7 +152,7 @@ public class BrukervarselV1ProviderTest {
 		List<VarselbestillingTo> brukersVarsler = new ArrayList<>();
 		brukersVarsler.add(varselbestillingTo);
 
-		HentVarselForBrukerResponseTo hentVarselForBrukerResponseTo = responseToBuilder.brukersVarsler(brukersVarsler).build();
+		HentVarselForBrukerResponseTo hentVarselForBrukerResponseTo = responseToBuilder.varselbestillingTos(brukersVarsler).build();
 
 		when(brukervarselV1Service.hentVarselForBruker(anyObject())).thenReturn(hentVarselForBrukerResponseTo);
 

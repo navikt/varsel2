@@ -6,7 +6,6 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Aktoer;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
 import no.nav.varsel.domain.utility.XmlGregorianConverter;
-import no.nav.varsel.provider.ws.handler.Validator;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
@@ -17,7 +16,7 @@ import java.util.GregorianCalendar;
  *
  * @author Lars Aune
  */
-public class HentVarselForBrukerRequestValidator implements Validator<HentVarselForBrukerRequest> {
+public class HentVarselForBrukerRequestValidator {
 
 	public static final String PAAKREVD_INPUTPARAMETER_ER_IKKE_SATT_FEILMELDING = "Påkrevd inputparameter er ikke satt";
 	public static final String INPUTPARAMETER_BRUKER_MANGLER_FEILAARSAK = "Inputparameter Bruker mangler";
@@ -25,7 +24,6 @@ public class HentVarselForBrukerRequestValidator implements Validator<HentVarsel
 	public static final String PERIODENS_TOM_KAN_IKKE_VÆRE_SENERE_ENN_DAGENS_DATO_FEILAARSAK = "Periodens DatoTom kan ikke være senere enn dagens dato";
 	public static final String PERIODENS_DATO_FOM_KAN_IKKE_VÆRE_SENERE_ENN_PERIODENS_DATO_TOM_FEILAARSAK = "Periodens DatoFom kan ikke være senere enn periodens DatoTom";
 
-	@Override
 	public void validate(HentVarselForBrukerRequest request) throws HentVarselForBrukerUgyldigInput {
 		validateBruker(request.getBruker());
 		validatePeriode(request.getPeriode());

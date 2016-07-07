@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-service</artifactId>
+			<artifactId>varsel-ws-provider</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

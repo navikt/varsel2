@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author Lars Aune
  */
-public interface TVARSEL005Repo {
+public interface VarselbestillingRepoCustom {
 
 	/**
 	 * Find (@Link Varselbestilling) by bruker, datoFom and datoTom

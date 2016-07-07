@@ -2,8 +2,6 @@ package no.nav.varsel.provider.map.support;
 
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Brukervarsel;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
-import no.nav.varsel.provider.map.HentVarselForBrukerResponseMapper;
-import no.nav.varsel.provider.map.VarselbestillingMapper;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 import org.springframework.util.Assert;
 
@@ -12,11 +10,10 @@ import javax.inject.Inject;
 /**
  * @author Lars Aune
  */
-public class DefaultHentVarselForBrukerResponseMapper implements HentVarselForBrukerResponseMapper {
+public class HentVarselForBrukerResponseMapper {
 	@Inject
 	private VarselbestillingMapper varselbestillingMapper;
 
-	@Override
 	public HentVarselForBrukerResponse map(HentVarselForBrukerResponseTo hentVarselForBrukerResponseTo) {
 		Assert.notNull(hentVarselForBrukerResponseTo, "The parameter hentVarselForBrukerResponseTo can't be null.");
 
@@ -27,7 +24,7 @@ public class DefaultHentVarselForBrukerResponseMapper implements HentVarselForBr
 
 	private Brukervarsel createBrukerVarsel(HentVarselForBrukerResponseTo hentVarselForBrukerResponseTo) {
 		Brukervarsel result = new Brukervarsel();
-		hentVarselForBrukerResponseTo.getBrukersVarsler().forEach(varselbestillingTo -> result.getVarselbestillingListe().add(varselbestillingMapper.map(varselbestillingTo)));
+		hentVarselForBrukerResponseTo.getVarselbestillingTos().forEach(varselbestillingTo -> result.getVarselbestillingListe().add(varselbestillingMapper.map(varselbestillingTo)));
 		return result;
 	}
 

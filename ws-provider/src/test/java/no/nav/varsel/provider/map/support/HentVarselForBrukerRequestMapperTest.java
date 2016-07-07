@@ -8,7 +8,6 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.AktoerId;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Person;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
-import no.nav.varsel.provider.map.HentVarselForBrukerRequestMapper;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,10 +19,10 @@ import java.util.Calendar;
 /**
  * @author Lars Aune
  */
-public class DefaultHentVarselForBrukerRequestMapperTest {
+public class HentVarselForBrukerRequestMapperTest {
 	public static final String AKTOER_ID = "AKTOER_ID";
 	public static final String FNR = "FNR";
-	private HentVarselForBrukerRequestMapper mapper = new DefaultHentVarselForBrukerRequestMapper();
+	private HentVarselForBrukerRequestMapper mapper = new HentVarselForBrukerRequestMapper();
 	private XMLGregorianCalendar firstOfJune2016;
 	private XMLGregorianCalendar twentiethOfJune2016;
 	private LocalDateTime twentiethOfJune2016LocalDateTime;
@@ -100,6 +99,14 @@ public class DefaultHentVarselForBrukerRequestMapperTest {
 		assertThat(hentVarselForBrukerTo.getDatoTom(), is(twentiethOfJune2016LocalDateTime));
 	}
 
+	@Test
+	public void shouldHandleNullPeriode() throws Exception {
+		HentVarselForBrukerRequest request = createRequestWithFnr();
+		request.setPeriode(null);
+
+		HentVarselForBrukerTo hentVarselForBrukerTo = mapper.map(request);
+		assertThat(hentVarselForBrukerTo.getFnr(), is(FNR));
+	}
 
 	private HentVarselForBrukerRequest createRequestWithAktoerId() {
 		HentVarselForBrukerRequest request = new HentVarselForBrukerRequest();
