@@ -2,12 +2,15 @@ package no.nav.varsel.config;
 
 import no.nav.varsel.service.AktoerService;
 import no.nav.varsel.service.BestillVarselService;
+import no.nav.varsel.service.BrukervarselV1Service;
+import no.nav.varsel.service.BestillVarselService;
 import no.nav.varsel.service.MottaVarselKvitteringService;
 import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.StoppReVarselService;
 import no.nav.varsel.service.VarselFletter;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
+import no.nav.varsel.service.tvarsel005.support.BrukervarselMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -59,5 +62,15 @@ public class ServiceConfig {
 	@Bean
 	public StoppReVarselService stoppReVarselService() {
 		return new StoppReVarselService();
+	}
+
+	@Bean
+	public BrukervarselV1Service brukervarselV1Service() {
+		return new BrukervarselV1Service();
+	}
+
+	@Bean
+	public BrukervarselMapper brukervarselMapper() {
+		return new BrukervarselMapper();
 	}
 }

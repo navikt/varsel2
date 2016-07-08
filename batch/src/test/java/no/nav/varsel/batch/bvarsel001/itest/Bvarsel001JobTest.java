@@ -1,13 +1,13 @@
 package no.nav.varsel.batch.bvarsel001.itest;
 
 import static java.time.LocalDate.now;
-import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 import static no.nav.varsel.repo.TestdataUtil.ANTALL_REVARSLINGER;
 import static no.nav.varsel.repo.TestdataUtil.REVARSLING_INTERVALL;
 import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static no.nav.varsel.repo.TestdataUtil.createVarselbestillingBuilder;
+import static no.nav.varsel.repo.TestdataUtil.createVarselbestillingUnique;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -38,18 +38,17 @@ public class Bvarsel001JobTest extends AbstractBvarsel001Test {
 	public void setUp() throws Exception {
 		// create some that will not be picked
 		varselbestillingRepo.save(createVarselbestillingBuilder()
-				.varseltypeId(IGNORED)
-				.varselbestillingId(randomUUID().toString()).nesteVarslingDato(now()).build());
+				.varseltypeId(IGNORED).nesteVarslingDato(now()).build());
 		varselbestillingRepo.save(createVarselbestillingBuilder()
-				.varseltypeId(IGNORED)
-				.varselbestillingId(randomUUID().toString()).nesteVarslingDato(null).build());
+				.varseltypeId(IGNORED).nesteVarslingDato(null).build());
 
 		// create varsling which will be it's last varsling
-		varselbestillingRepo.save(createVarselbestillingBuilder().antallRevarslinger(1).build());
+		varselbestillingRepo.save(createVarselbestillingBuilder()
+				.varselbestillingId(VARSELBESTILLING_ID)
+				.antallRevarslinger(1).build());
 		// create four more to test chunking
 		for (int i = 0; i < 4; i++) {
-			varselbestillingRepo.save(createVarselbestillingBuilder()
-					.varselbestillingId(randomUUID().toString()).build());
+			varselbestillingRepo.save(createVarselbestillingUnique());
 		}
 		jmsTemplate.setReceiveTimeout(500L);
 	}

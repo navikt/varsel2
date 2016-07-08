@@ -16,6 +16,8 @@ import org.springframework.context.annotation.Import;
 @Import({LocalTomcatConfiguration.class,
 		ServiceConfig.class,
 		JmsConsumerConfig.class,
+		ProviderWsConfig.class,
+		SelftestConfig.class,
 		BatchConfig.class,
 		SelftestConfig.class,
 		WebConfig.class

@@ -90,17 +90,20 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 		return this;
 	}
 
-	public VarselbestillingBuilder varsel(Varsel... varsels) {
+	public VarselbestillingBuilder varsels(Varsel... varsels) {
+		this.varsels.clear();
 		this.varsels.addAll(Arrays.asList(varsels));
 		return this;
 	}
 
-	public VarselbestillingBuilder varsel(Collection<Varsel> varsels) {
+	public VarselbestillingBuilder varsels(Collection<Varsel> varsels) {
+		this.varsels.clear();
 		this.varsels.addAll(varsels);
 		return this;
 	}
 
 	public VarselbestillingBuilder parameters(Map<String, String> parameters) {
+		this.parameters.clear();
 		this.parameters.putAll(parameters);
 		return this;
 	}

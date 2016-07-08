@@ -42,6 +42,11 @@
 		<exposedQueue name="VARSELPRODUKSJON.KVITTERING"/>
 		<exposedQueue name="VARSELPRODUKSJON.BEST_VARSEL_M_HANDLING"/>
 		<exposedQueue name="VARSELPRODUKSJON.STOPP_VARSEL_UTSENDING"/>
+		<exposedSoap name="BrukervarselV1" path="/varsel/ws/Brukervarsel/v1"
+					 securityToken="SAML"
+					 wsdlGroupId="no.nav.tjenester"
+					 wsdlArtifactId="nav-brukervarsel-v1-tjenestespesifikasjon"
+					 wsdlVersion="${nav-brukervarsel-v1-tjenestespesifikasjon.version}"/>
 	</exposed-services>
 
 	<security serviceUserResourceAlias="srvVarsel"/>

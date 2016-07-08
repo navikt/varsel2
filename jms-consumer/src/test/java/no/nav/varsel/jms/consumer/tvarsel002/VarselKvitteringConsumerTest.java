@@ -5,6 +5,7 @@ import static no.nav.varsel.jms.consumer.tvarsel002.support.MottaVarselKvitterin
 import static no.nav.varsel.jms.consumer.tvarsel002.support.MottaVarselKvitteringMapperTest.FEILMELDING;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -51,7 +52,7 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 
 		JAXBElement<VarselKvittering> varselKvittering = createVarselKvitteringJaxBElement(varselId);
 		JmsReply response = sendMessage(varselKvitteringQueue, varselKvittering);
-		assertThat(response.isOk(), is(true));
+		assertMessageNotOnBq(response);
 
 		assertPlukketVarselScenario(varselId);
 	}
@@ -65,7 +66,7 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 		kvittering.setStatus("feilet");
 		JAXBElement<VarselKvittering> varselKvittering = createVarselKvitteringJaxBElement(kvittering);
 		JmsReply response = sendMessage(varselKvitteringQueue, varselKvittering);
-		assertThat(response.isOk(), is(true));
+		assertMessageNotOnBq(response);
 
 		no.nav.varsel.domain.object.Varsel varsel = varselRepo.findByVarselId(varselId);
 		assertThat(varsel.getStatus(), is(StatusCode.FEILET));
@@ -89,7 +90,7 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 
 		JAXBElement<VarselKvittering> varselKvittering = createVarselKvitteringJaxBElement(varselId);
 		JmsReply response = sendMessage(varselKvitteringQueue, varselKvittering);
-		assertThat(response.isOk(), is(true));
+		assertMessageNotOnBq(response);
 
 		response = sendMessage(varselKvitteringQueue, varselKvittering);
 		assertMessageNotOnBq(response);
@@ -128,6 +129,7 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 
 	private void assertMessageNotOnBq(JmsReply response) {
 		//Response is not Ok when message goes to backout
+		assertThat(response, notNullValue());
 		assertThat(response.isOk(), is(true));
 	}
 

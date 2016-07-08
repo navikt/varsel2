@@ -22,7 +22,7 @@ import no.nav.varsel.batch.common.JmsQueueItemWriter;
 import no.nav.varsel.batch.support.JdbcTasklet;
 import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.jms.producer.varselbestilling.support.VarselbestillingMapper;
+import no.nav.varsel.jms.producer.varselbestilling.support.BestillVarselProducerMapper;
 import no.nav.varsel.jms.producer.varselbestilling.to.VarselbestillingTo;
 import org.hibernate.SessionFactory;
 import org.springframework.batch.core.Job;
@@ -195,11 +195,11 @@ public class Bvarsel001Config {
 	@Bean
 	public JmsQueueItemWriter<VarselbestillingTo> varselbestillingQueueItemWriter(
 			Queue bestillVarselQueue,
-			VarselbestillingMapper varselbestillingMapper
+			BestillVarselProducerMapper bestillVarselProducerMapper
 	) {
 		JmsQueueItemWriter<VarselbestillingTo> jmsQueueItemWriter = new JmsQueueItemWriter<>();
 		jmsQueueItemWriter.setDestination(bestillVarselQueue);
-		jmsQueueItemWriter.setMapper(varselbestillingMapper);
+		jmsQueueItemWriter.setMapper(bestillVarselProducerMapper);
 		return jmsQueueItemWriter;
 	}
 

@@ -14,7 +14,7 @@ import java.util.function.Function;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public class VarselbestillingMapper implements Function<VarselbestillingTo, JAXBElement<VarselMedHandling>> {
+public class BestillVarselProducerMapper implements Function<VarselbestillingTo, JAXBElement<VarselMedHandling>> {
 
 	private ObjectFactory objectFactory = new ObjectFactory();
 

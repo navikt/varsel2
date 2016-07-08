@@ -9,11 +9,11 @@ import no.nav.varsel.jms.producer.varselbestilling.to.VarselbestillingTo;
 import org.junit.Test;
 
 /**
- * Unit test for {@link VarselbestillingMapper}
+ * Unit test for {@link BestillVarselProducerMapper}
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public class VarselbestillingMapperTest {
+public class BestillVarselProducerMapperTest {
 
 	private static final String VARSELBESTILLING_ID = "bestid";
 	private static final String MOTTAKER_FNR = "fnr";
@@ -24,7 +24,7 @@ public class VarselbestillingMapperTest {
 	private static final String PAR_2 = "par2";
 	private static final String VAL_2 = "val2";
 
-	private VarselbestillingMapper mapper = new VarselbestillingMapper();
+	private BestillVarselProducerMapper mapper = new BestillVarselProducerMapper();
 
 	@Test
 	public void shouldMap() throws Exception {

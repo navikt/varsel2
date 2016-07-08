@@ -1,5 +1,7 @@
 package no.nav.varsel.domain.object;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
 import org.hibernate.annotations.Type;
 
@@ -17,6 +19,7 @@ import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -30,7 +33,7 @@ import java.util.Set;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Entity
-@Table(name = "VARSELBESTILLING")
+@Table(name = "VARSELBESTILLING", uniqueConstraints = @UniqueConstraint(columnNames = "varselbestilling_id"))
 public class Varselbestilling extends AbstractDomainObject {
 
 	private static final long serialVersionUID = ***gammelt_fnr***412768L;
@@ -187,5 +190,19 @@ public class Varselbestilling extends AbstractDomainObject {
 
 	public void addFletteParameter(String key, String value) {
 		fletteparametere.put(key, value);
+	}
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this)
+				.add("id", id)
+				.add("varselbestillingId", varselbestillingId)
+				.add("varseltypeId", varseltypeId)
+				.add("fnr", fnr)
+				.add("aktorId", aktorId)
+				.add("bestillingTidspunkt", bestillingTidspunkt)
+				.add("nesteVarslingDato", nesteVarslingDato)
+				.add("varsels", varsels)
+				.toString();
 	}
 }
