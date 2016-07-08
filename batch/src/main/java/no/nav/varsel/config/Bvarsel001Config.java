@@ -64,8 +64,8 @@ import java.util.ArrayList;
 @Configuration
 public class Bvarsel001Config {
 
-	public static final String JOB_NAME = "BVARSEL001";
-	public static final String LOGNAME = "no.nav.varsel.batch.bvarsel001";
+	private static final String JOB_NAME = "BVARSEL001";
+	private static final String LOGNAME = "no.nav.varsel.batch.bvarsel001";
 
 	@Inject
 	private JobBuilderFactory jobBuilder;
