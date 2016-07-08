@@ -14,6 +14,7 @@
 
 	<artifacts>
 		<ear groupId="no.nav.varsel" artifactId="varsel-jee"/>
+		<batch groupId="no.nav.varsel" artifactId="varsel-batch-client" symlink="/data/batch/varsel/"/>
 	</artifacts>
 
 	<resources>

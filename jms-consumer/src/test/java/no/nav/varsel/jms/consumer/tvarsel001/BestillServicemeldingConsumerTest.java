@@ -46,6 +46,7 @@ import java.util.UUID;
  */
 public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
+
 	@Inject
 	private Queue bestillServicemeldingQueue;
 	@Inject
@@ -89,6 +90,9 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 		isOk(response);
 		assertThat(varselbestillingRepo.count(), is(0L));
+
+		Object receive = receive(varselutsendingQueue);
+		assertThat(receive, nullValue());
 	}
 
 	public static JAXBElement<Varsel> createVarsel() {
@@ -96,7 +100,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	private no.nav.varsel.domain.object.Varsel assertDb(String varselTekst) {
-		Varselbestilling varselbestilling = varselbestillingRepo.findAll().iterator().next();
+		Varselbestilling varselbestilling = varselbestillingRepo.findAllEager().get(0);
 		assertThat(UUID.fromString(varselbestilling.getVarselbestillingId()).toString(), is(varselbestilling.getVarselbestillingId()));
 		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(varselbestilling.getUtlopTidspunkt(), is(equalTo(UTLOEPSTIDSPUNKT_LDT)));

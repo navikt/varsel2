@@ -13,14 +13,20 @@
 
 	<logger name="no.nav.varsel" level="DEBUG"/>
 	<logger name="org.springframework" level="INFO"/>
+	<!--<logger name="org.springframework.boot" level="DEBUG"/>-->
+	<logger name="org.springframework.batch" level="INFO"/>
+	<!--<logger name="org.springframework.transaction" level="DEBUG"/>-->
+	<!--<logger name="org.springframework.jdbc" level="DEBUG"/>-->
+	<!--<logger name="org.springframework.jms" level="DEBUG"/>-->
 	<!--<logger name="org.springframework.web" level="DEBUG"/>-->
 	<logger name="org.apache.cxf" level="INFO"/>
 	<!--<logger name="org.apache.tomcat.jdbc" level="DEBUG"/>-->
+	<logger name="com.atomikos" level="ERROR"/>
 	<!--<logger name="com.atomikos" level="INFO"/>-->
 	<!--<logger name="com.atomikos.jdbc" level="DEBUG"/>-->
 	<!--<logger name="com.atomikos.datasource" level="DEBUG"/>-->
 	<!--<logger name="org.h2" level="TRACE"/>-->
-	<!--<logger name="org.hibernate" level="DEBUG"/>-->
+	<logger name="org.hibernate" level="INFO"/>
 	<logger name="org.apache.catalina" level="INFO">
 		<!--<appender-ref ref="debuglog"/>-->
 	</logger>

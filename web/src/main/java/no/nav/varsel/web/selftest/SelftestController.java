@@ -3,6 +3,7 @@ package no.nav.varsel.web.selftest;
 import no.nav.varsel.jms.JmsPingProvider;
 import no.nav.varsel.web.selftest.support.SelftestResponse;
 import no.nav.varsel.web.selftest.test.DbSelftest;
+import no.nav.varsel.web.selftest.test.HttpSelftest;
 import no.nav.varsel.web.selftest.test.PingSelftest;
 import no.nav.varsel.wsconsumer.WsPingProvider;
 import org.springframework.beans.factory.annotation.Value;
@@ -105,6 +106,9 @@ public class SelftestController {
 
 		// Jms
 		jmsPingProvider.ping().forEach(p -> response.addCheck(new PingSelftest(p).check()));
+
+		// Self
+		response.addCheck(new HttpSelftest("batch", "Batch Controller", "http://localhost:8080/varsel/batch/ping").check());
 	}
 
 	private String getServerAddress() {

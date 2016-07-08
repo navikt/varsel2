@@ -9,28 +9,29 @@ import javax.inject.Inject;
 
 /**
  * Service for StoppReVarsel
+ *
  * @author Hiep Luong Nguyen, Computas
  */
 public class StoppReVarselService {
-    @Inject
-    private VarselbestillingRepo varselbestillingRepo;
+	@Inject
+	private VarselbestillingRepo varselbestillingRepo;
 
-    public void behandleVarselbestilling(StoppReVarselTo stoppReVarselTo) {
-        Varselbestilling varselbestilling = findVarselbestilling(stoppReVarselTo);
-        updateVarselbestilling(varselbestilling);
-    }
+	public void behandleVarselbestilling(StoppReVarselTo stoppReVarselTo) {
+		Varselbestilling varselbestilling = findVarselbestilling(stoppReVarselTo);
+		updateVarselbestilling(varselbestilling);
+	}
 
-    private Varselbestilling findVarselbestilling(StoppReVarselTo stoppReVarselTo) {
-        Varselbestilling varselbestilling =
-                varselbestillingRepo.findByVarselbestillingId(stoppReVarselTo.getVarselbestillingId());
-        if (varselbestilling == null) {
-            throw new VarselbestillingNotExistException(stoppReVarselTo.getVarselbestillingId());
-        }
-        return varselbestilling;
-    }
+	private Varselbestilling findVarselbestilling(StoppReVarselTo stoppReVarselTo) {
+		Varselbestilling varselbestilling =
+				varselbestillingRepo.findByVarselbestillingId(stoppReVarselTo.getVarselbestillingId());
+		if (varselbestilling == null) {
+			throw new VarselbestillingNotExistException(stoppReVarselTo.getVarselbestillingId());
+		}
+		return varselbestilling;
+	}
 
-    private void updateVarselbestilling(Varselbestilling varselbestilling) {
-        varselbestilling.setAntallRevarslinger(0);
-        varselbestilling.setNesteVarslingDato(null);
-    }
+	private void updateVarselbestilling(Varselbestilling varselbestilling) {
+		varselbestilling.setAntallRevarslinger(0);
+		varselbestilling.setNesteVarslingDato(null);
+	}
 }

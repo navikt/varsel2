@@ -29,7 +29,7 @@ import java.util.UUID;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public class VarselBestillingDomainMapper implements InitializingBean{
+public class VarselBestillingDomainMapper implements InitializingBean {
 
 	private static final String ID_REPLACE = "{id}";
 

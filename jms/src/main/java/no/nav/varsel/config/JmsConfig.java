@@ -53,12 +53,13 @@ public class JmsConfig {
 	private static final Logger LOG = LoggerFactory.getLogger(JmsConfig.class);
 
 	@Bean
-	public JmsTemplate jmsTemplate(DestinationResolver destinationResolver) {
-		JmsTemplate jmsTemplate = new JmsTemplate(mqConnectionFactory());
-		jmsTemplate.setSessionTransacted(true);
+	public JmsTemplate jmsTemplate(DestinationResolver destinationResolver,
+								   ConnectionFactory connectionFactory
+	) {
+		JmsTemplate jmsTemplate = new JmsTemplate();
 		jmsTemplate.setReceiveTimeout(10_000);
 		jmsTemplate.setMessageConverter(converter());
-		jmsTemplate.setConnectionFactory(mqConnectionFactory());
+		jmsTemplate.setConnectionFactory(connectionFactory);
 		jmsTemplate.setDestinationResolver(destinationResolver);
 		return jmsTemplate;
 	}
@@ -70,12 +71,12 @@ public class JmsConfig {
 
 	@Bean
 	public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(DestinationResolver destinationResolver,
+																		  ConnectionFactory connectionFactory,
 																		  PlatformTransactionManager transactionManager) {
 		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-		factory.setConnectionFactory(mqConnectionFactory());
+		factory.setConnectionFactory(connectionFactory);
 		factory.setDestinationResolver(destinationResolver);
 		factory.setMessageConverter(new ConsumerMessageConverter(converter()));
-		factory.setSessionTransacted(true);
 		factory.setTransactionManager(transactionManager);
 		factory.setConcurrency(String.format("%d-%d", minimumConsumers, maximumConsumers));
 		factory.setErrorHandler(t -> {
@@ -110,7 +111,7 @@ public class JmsConfig {
 	}
 
 	@Bean
-	public ConnectionFactory mqConnectionFactory() {
+	public ConnectionFactory connectionFactory() {
 		ConnectionFactory connectionFactory = getJndiObject("java:/jboss/mqConnectionFactory", ConnectionFactory.class);
 		UserCredentialsConnectionFactoryAdapter adapter = new UserCredentialsConnectionFactoryAdapter();
 		adapter.setTargetConnectionFactory(connectionFactory);

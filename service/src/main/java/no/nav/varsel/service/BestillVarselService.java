@@ -47,7 +47,7 @@ public class BestillVarselService {
 	private VarselutsendingToMapper varselutsendingToMapper;
 
 	public void bestillVarsel(BestillVarselTo to) {
-		Varselbestilling existingVarsel = varselbestillingRepo.findByVarselbestillingId(to.getVarselBestillingId());
+		Varselbestilling existingVarsel = varselbestillingRepo.findByVarselbestillingIdEager(to.getVarselBestillingId());
 
 		boolean revarsling = to.isRevarsling();
 		if (revarsling && existingVarsel == null) {

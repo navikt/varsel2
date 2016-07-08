@@ -39,6 +39,6 @@ public class VarselInfoConsumer {
 
 	public void ping() {
 		String ping = restTemplate.getForObject(varselinfoUrlGet, String.class, "ping");
-		Assert.isTrue("ok".equals(ping), "VarselInfo ping failed " + ping);
+		Assert.isTrue("\"ok\"".equals(ping), "VarselInfo ping failed " + ping);
 	}
 }
