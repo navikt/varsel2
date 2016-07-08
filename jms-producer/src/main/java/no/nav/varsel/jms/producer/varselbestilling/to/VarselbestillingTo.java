@@ -1,7 +1,5 @@
 package no.nav.varsel.jms.producer.varselbestilling.to;
 
-import static com.sun.corba.se.spi.activation.IIOP_CLEAR_TEXT.value;
-
 import com.google.common.collect.Maps;
 
 import java.util.Map;

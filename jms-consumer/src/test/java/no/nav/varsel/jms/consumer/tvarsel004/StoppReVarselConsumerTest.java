@@ -28,55 +28,56 @@ import java.util.List;
 
 /**
  * Itest for {@link StoppReVarselConsumer}
+ *
  * @author Hiep Luong Nguyen, Computas
  */
 public class StoppReVarselConsumerTest extends AbstractConsumerJmsTest {
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
 
-    @Inject
-    private Queue revarselStoppQueue;
-    @Inject
-    private Queue bestillServicemeldingQueue;
+	@Inject
+	private Queue revarselStoppQueue;
+	@Inject
+	private Queue bestillServicemeldingQueue;
 
-    @Test
-    public void shouldPersistStoppReVarselMessage() throws Exception {
-        Varselbestilling varselbestilling = persistVarselbestilling();
-        JAXBElement<StoppReVarsel> stoppReVarsel = createStoppReVarselJaxBElement(varselbestilling.getVarselbestillingId());
-        JmsReply response = sendMessage(revarselStoppQueue, stoppReVarsel);
-        assertThat(response.isOk(), is(true));
+	@Test
+	public void shouldPersistStoppReVarselMessage() throws Exception {
+		Varselbestilling varselbestilling = persistVarselbestilling();
+		JAXBElement<StoppReVarsel> stoppReVarsel = createStoppReVarselJaxBElement(varselbestilling.getVarselbestillingId());
+		JmsReply response = sendMessage(revarselStoppQueue, stoppReVarsel);
+		assertThat(response.isOk(), is(true));
 
-        Varselbestilling processedVarselbestilling = varselbestillingRepo.findByVarselbestillingId(varselbestilling.getVarselbestillingId());
-        assertThat(processedVarselbestilling.getAntallRevarslinger(), equalTo(0));
-        assertThat(processedVarselbestilling.getNesteVarslingDato(), is(nullValue()));
-        assertThat(processedVarselbestilling.getChangeStamp().getEndretAv(), is(TVARSEL004));
-    }
+		Varselbestilling processedVarselbestilling = varselbestillingRepo.findByVarselbestillingId(varselbestilling.getVarselbestillingId());
+		assertThat(processedVarselbestilling.getAntallRevarslinger(), equalTo(0));
+		assertThat(processedVarselbestilling.getNesteVarslingDato(), is(nullValue()));
+		assertThat(processedVarselbestilling.getChangeStamp().getEndretAv(), is(TVARSEL004));
+	}
 
-    public static JAXBElement<StoppReVarsel> createStoppReVarselJaxBElement(String varselbestillingId) {
-        return new ObjectFactory().createStoppReVarsel(createStoppReVarsel(varselbestillingId));
-    }
+	public static JAXBElement<StoppReVarsel> createStoppReVarselJaxBElement(String varselbestillingId) {
+		return new ObjectFactory().createStoppReVarsel(createStoppReVarsel(varselbestillingId));
+	}
 
-    private static StoppReVarsel createStoppReVarsel(String varselbestillingId) {
-        StoppReVarsel stoppReVarsel = StoppReVarselMapperTest.createStoppReVarsel();
-        stoppReVarsel.setVarselbestillingId(varselbestillingId);
+	private static StoppReVarsel createStoppReVarsel(String varselbestillingId) {
+		StoppReVarsel stoppReVarsel = StoppReVarselMapperTest.createStoppReVarsel();
+		stoppReVarsel.setVarselbestillingId(varselbestillingId);
 
-        return stoppReVarsel;
-    }
+		return stoppReVarsel;
+	}
 
-    private Varselbestilling persistVarselbestilling() {
-        JmsReply createVarselresponse = sendMessage(bestillServicemeldingQueue, createVarsel());
-        assertTrue(createVarselresponse != null && createVarselresponse.isOk());
-        List<Varselbestilling> varselbestillings = varselbestillingRepo.findAllEager();
-        assertThat(varselbestillings, hasSize(1));
-        Varselbestilling varselbestilling = varselbestillings.iterator().next();
-        assertThat(varselbestilling.getVarsels(), hasSize(1));
-        varselbestilling.setAntallRevarslinger(5);
-        varselbestilling.setNesteVarslingDato(LocalDate.now());
-        return varselbestilling;
-    }
+	private Varselbestilling persistVarselbestilling() {
+		JmsReply createVarselresponse = sendMessage(bestillServicemeldingQueue, createVarsel());
+		assertTrue(createVarselresponse != null && createVarselresponse.isOk());
+		List<Varselbestilling> varselbestillings = varselbestillingRepo.findAllEager();
+		assertThat(varselbestillings, hasSize(1));
+		Varselbestilling varselbestilling = varselbestillings.iterator().next();
+		assertThat(varselbestilling.getVarsels(), hasSize(1));
+		varselbestilling.setAntallRevarslinger(5);
+		varselbestilling.setNesteVarslingDato(LocalDate.now());
+		return varselbestilling;
+	}
 
-    public static JAXBElement<Varsel> createVarsel() {
-        return new no.nav.melding.virksomhet.varsel.v1.varsel.ObjectFactory().createVarsel(BestillServicemeldingMapperTest.createVarsel());
-    }
+	public static JAXBElement<Varsel> createVarsel() {
+		return new no.nav.melding.virksomhet.varsel.v1.varsel.ObjectFactory().createVarsel(BestillServicemeldingMapperTest.createVarsel());
+	}
 }

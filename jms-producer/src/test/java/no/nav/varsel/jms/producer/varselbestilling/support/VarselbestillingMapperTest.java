@@ -1,7 +1,7 @@
 package no.nav.varsel.jms.producer.varselbestilling.support;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Person;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;

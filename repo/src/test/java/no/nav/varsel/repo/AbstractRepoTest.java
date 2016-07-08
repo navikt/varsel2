@@ -1,7 +1,7 @@
 package no.nav.varsel.repo;
 
-import no.nav.varsel.domain.Constants;
 import no.nav.varsel.config.RepoTestConfig;
+import no.nav.varsel.domain.Constants;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;

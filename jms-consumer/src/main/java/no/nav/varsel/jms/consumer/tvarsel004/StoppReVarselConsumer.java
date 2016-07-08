@@ -1,7 +1,7 @@
 package no.nav.varsel.jms.consumer.tvarsel004;
 
-import static no.nav.varsel.jms.consumer.JmsConsumer.REVARSEL_STOPP;
 import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.REVARSEL_STOPP_NAME;
+import static no.nav.varsel.jms.consumer.JmsConsumer.REVARSEL_STOPP;
 
 import no.nav.melding.virksomhet.stopprevarsel.v1.stopprevarsel.StoppReVarsel;
 import no.nav.varsel.domain.exception.NoJmsBackoutException;
@@ -21,38 +21,39 @@ import javax.jms.TextMessage;
 
 /**
  * Consumer for TVARSEL004 StoppRevarsel
+ *
  * @author Hiep Luong Nguyen, Computas
  */
 @Component
 public class StoppReVarselConsumer extends AbstractJmsConsumer<StoppReVarsel> {
-    private static final Logger LOGG = LoggerFactory.getLogger(StoppReVarselConsumer.class);
-    private static final String REVARSEL_STOPP_QUEUE = "revarselStoppQueue";
-    static final String TVARSEL004 = "tvarsel004";
+	private static final Logger LOGG = LoggerFactory.getLogger(StoppReVarselConsumer.class);
+	private static final String REVARSEL_STOPP_QUEUE = "revarselStoppQueue";
+	static final String TVARSEL004 = "tvarsel004";
 
-    @Inject
-    StoppReVarselMapper stoppReVarselMapper;
-    @Inject
-    StoppReVarselService stoppReVarselService;
+	@Inject
+	StoppReVarselMapper stoppReVarselMapper;
+	@Inject
+	StoppReVarselService stoppReVarselService;
 
-    public StoppReVarselConsumer() {
-        super(REVARSEL_STOPP, StoppReVarsel.class);
-    }
+	public StoppReVarselConsumer() {
+		super(REVARSEL_STOPP, StoppReVarsel.class);
+	}
 
-    @Override
-    @JmsListener(destination = REVARSEL_STOPP_QUEUE, id = REVARSEL_STOPP_NAME)
-    public JmsReply listen(TextMessage message) {
-        return doListen(message);
-    }
+	@Override
+	@JmsListener(destination = REVARSEL_STOPP_QUEUE, id = REVARSEL_STOPP_NAME)
+	public JmsReply listen(TextMessage message) {
+		return doListen(message);
+	}
 
-    @Override
-    protected void handleMessage(StoppReVarsel stoppReVarsel) {
-        LOGG.debug("Behandle stoppReVarsel " + stoppReVarsel.getVarselbestillingId());
-        try {
-            StoppReVarselTo stoppReVarselTo = stoppReVarselMapper.map(stoppReVarsel);
-            stoppReVarselTo.validateTo();
-            stoppReVarselService.behandleVarselbestilling(stoppReVarselTo);
-        } catch (FunctionalVarselException e) {
-            throw new NoJmsBackoutException(e);
-        }
-    }
+	@Override
+	protected void handleMessage(StoppReVarsel stoppReVarsel) {
+		LOGG.debug("Behandle stoppReVarsel " + stoppReVarsel.getVarselbestillingId());
+		try {
+			StoppReVarselTo stoppReVarselTo = stoppReVarselMapper.map(stoppReVarsel);
+			stoppReVarselTo.validateTo();
+			stoppReVarselService.behandleVarselbestilling(stoppReVarselTo);
+		} catch (FunctionalVarselException e) {
+			throw new NoJmsBackoutException(e);
+		}
+	}
 }

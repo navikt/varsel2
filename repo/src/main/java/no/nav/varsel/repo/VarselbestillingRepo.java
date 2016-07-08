@@ -3,10 +3,8 @@ package no.nav.varsel.repo;
 import no.nav.varsel.domain.object.Varselbestilling;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 
-import javax.persistence.QueryHint;
 import java.util.List;
 
 /**

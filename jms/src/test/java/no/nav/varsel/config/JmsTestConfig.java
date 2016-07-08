@@ -19,7 +19,6 @@ import org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapte
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.inject.Inject;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.Queue;
@@ -38,8 +37,6 @@ import java.net.URISyntaxException;
 @Import({JmsConfig.class})
 @Configuration
 public class JmsTestConfig {
-
-	@Inject
 
 	private static final String VM_LOCALHOST = "vm://localhost";
 
@@ -68,12 +65,8 @@ public class JmsTestConfig {
 		ctx.bind("java:/jboss/reply", new ActiveMQQueue("reply"));
 	}
 
-
 	/**
 	 * Using the same username/password-wrapper as in production to ensure it delegates down to XAConnectionFactory
-	 * @param atomikosConnectionFactoryBean
-	 * @return
-	 * @throws JMSException
 	 */
 	@Bean
 	public ConnectionFactory connectionFactory(ConnectionFactory atomikosConnectionFactoryBean) throws JMSException {
@@ -86,8 +79,6 @@ public class JmsTestConfig {
 
 	/**
 	 * Atomikos wrapper for XAConnectionFactory
-	 * @return
-	 * @throws JMSException
 	 */
 	@Bean(initMethod = "init", destroyMethod = "close")
 	public ConnectionFactory atomikosConnectionFactoryBean() {
@@ -100,7 +91,6 @@ public class JmsTestConfig {
 
 	/**
 	 * XA ConnectionFactory for ActiveMQ
-	 * @return
 	 */
 	public static ActiveMQXAConnectionFactory activeMQXAConnectionFactory() {
 		ActiveMQXAConnectionFactory factory = new ActiveMQXAConnectionFactory();

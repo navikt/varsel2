@@ -47,7 +47,7 @@ public class KodeverkConsumer {
 
 	private List<Kode> createKodeverk(String kodeverksnavn) throws HentKodeverkHentKodeverkKodeverkIkkeFunnet {
 		HentKodeverkResponse hentKodeverkResponse = kodeverkPortType.hentKodeverk(hentkodeverkRequest(kodeverksnavn));
-		Kodeverk kodeverk =	hentKodeverkResponse.getKodeverk();
+		Kodeverk kodeverk = hentKodeverkResponse.getKodeverk();
 
 		List<Kode> result = new ArrayList<>();
 
@@ -75,6 +75,7 @@ public class KodeverkConsumer {
 	public boolean hasPersonIdenterKode(String kodenavn) throws ExecutionException {
 		return hasKode(PERSONIDENTER_KODEVERKSNAVN, kodenavn);
 	}
+
 	public boolean hasKode(String kodeverksnavn, String kodenavn) throws ExecutionException {
 		Assert.notNull(kodeverksnavn, "Parameteren kodeverksnavn kan ikke være null.");
 		Assert.notNull(kodenavn, "Parameteren kodenavn kan ikke være null.");
@@ -86,11 +87,11 @@ public class KodeverkConsumer {
 
 		return kode.getGyldighetsperiode().isEmpty() ||
 				kode.getGyldighetsperiode().stream().anyMatch(periode ->
-				periodenManglerStartOgSlutt(periode) ||
-						tidspunktFoerEllerLikSluttForPeriodeUtenStart(tidspunkt, periode) ||
-						tidspunktEtterEllerLikStartForPeriodeUtenSlutt(tidspunkt, periode) ||
-						tidspunktIPeriodeMedStartOgSlutt(tidspunkt, periode)
-		);
+						periodenManglerStartOgSlutt(periode) ||
+								tidspunktFoerEllerLikSluttForPeriodeUtenStart(tidspunkt, periode) ||
+								tidspunktEtterEllerLikStartForPeriodeUtenSlutt(tidspunkt, periode) ||
+								tidspunktIPeriodeMedStartOgSlutt(tidspunkt, periode)
+				);
 	}
 
 	private boolean tidspunktIPeriodeMedStartOgSlutt(LocalDateTime time, Periode periode) {
