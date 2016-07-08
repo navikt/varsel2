@@ -37,7 +37,6 @@ import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 
 /**
- *
  * Unit test for {@link KodeverkConsumer}
  *
  * @author lars Aune
@@ -66,7 +65,7 @@ public class KodeverkConsumerTest {
 
 		tenDaysAgo = LocalDateTime.now().minusDays(10);
 		fiveDaysAgo = LocalDateTime.now().minusDays(5);
-		fiveDaysIntoTheFuture =  LocalDateTime.now().plusDays(5);
+		fiveDaysIntoTheFuture = LocalDateTime.now().plusDays(5);
 
 		doReturn(createHentKodeverkResponseForPersonIdenter()).
 				when(kodeverkPortTypeMock).hentKodeverk(anyObject());

@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
 
+	<property name="BATCH_LOG_HOME" value="${APP_LOG_HOME}/../batch" />
+
+	<!-- Appender for batch info logging; applies to all batches -->
+	<appender name="BATCH-SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+		<discriminator>
+			<Key>jobName</Key>
+			<DefaultValue>default</DefaultValue>
+		</discriminator>
+		<sift>
+			<appender name="FILE-${jobName}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+				<Append>true</Append>
+				<File>${BATCH_LOG_HOME}/${jobName}/${jobName}.log</File>
+				<encoder>
+					<pattern>[%d, %-5p, %C:%L] - [%X{stepName} %thread] - %m%n</pattern>
+				</encoder>
+				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+					<fileNamePattern>${BATCH_LOG_HOME}/${jobName}/${jobName}.%d{yyyy-MM}.log.zip</fileNamePattern>
+					<maxHistory>12</maxHistory>
+				</rollingPolicy>
+			</appender>
+		</sift>
+	</appender>
+
 	<appender name="nobackoutlog" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<Append>true</Append>
 		<File>${APP_LOG_HOME}/nobackoutlog.log</File>
@@ -68,6 +91,15 @@
 	<logger name="no.nav.varsel.jms.nobackoutlog" level="INFO" additivity="false">
 		<appender-ref ref="nobackoutlog"/>
 		<appender-ref ref="SYSLOG"/>
+	</logger>
+
+	<logger name="no.nav.dokdist.batch" additivity="false" level="INFO">
+		<appender-ref ref="BATCH-SIFT" />
+		<appender-ref ref="SYSLOG" />
+	</logger>
+	<logger name="org.springframework.batch" additivity="false" level="INFO">
+		<appender-ref ref="BATCH-SIFT" />
+		<appender-ref ref="SYSLOG" />
 	</logger>
 
 </configuration>

@@ -20,7 +20,7 @@ public class MottaVarselKvitteringTo {
 
 	public void validateTo() {
 		hasText(varselId, "varselId");
-		notNull(utsendingstidspunkt,"utsendingstidspunkt");
+		notNull(utsendingstidspunkt, "utsendingstidspunkt");
 		notNull(status, "status");
 	}
 

@@ -42,8 +42,8 @@ public class KodeverkPortTypeMock implements KodeverkPortType {
 	@Override
 	public HentKodeverkResponse hentKodeverk(HentKodeverkRequest hentKodeverkRequest) throws HentKodeverkHentKodeverkKodeverkIkkeFunnet {
 		LocalDateTime tenDaysAgo = LocalDateTime.now().minusDays(10);
-		LocalDateTime fiveDaysAgo  = LocalDateTime.now().minusDays(5);
-		LocalDateTime fiveDaysIntoTheFuture  =  LocalDateTime.now().plusDays(5);
+		LocalDateTime fiveDaysAgo = LocalDateTime.now().minusDays(5);
+		LocalDateTime fiveDaysIntoTheFuture = LocalDateTime.now().plusDays(5);
 
 		HentKodeverkResponse result = new HentKodeverkResponse();
 		EnkeltKodeverk kodeverk = new EnkeltKodeverk();

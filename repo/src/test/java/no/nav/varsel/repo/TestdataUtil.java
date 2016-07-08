@@ -48,10 +48,9 @@ public class TestdataUtil {
 	public static final String VARSEL_TEKST = "Sjekk Ditt NAV på www.nav.no for å se hva som har blitt vedtatt " +
 			"anngående din søknad om :antall takvifter.";
 	public static final String VARSEL_URL = "http://www.nav.no/dittnav/takvifte/rosa/1212aeg23g";
-	public static final String PARAMETERVALUE = "antall";
-	public static final String PARAMETERKEY = "17";
+	public static final String PARAMETERKEY = "antall";
+	public static final String PARAMETERVALUE = "17";
 	public static final boolean ER_REVARSEL = false;
-	public static final String PERSON_IDENT_TYPE = "FNR";
 	public static final String PERSON_IDENTER_FDAT_KODENAVN = "FDAT";
 	public static final String PERSON_IDENTER_FNR_KODENAVN = "FNR";
 	public static final String PERSON_IDENTER_BOST_KODENAVN = "BOST";

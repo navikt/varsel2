@@ -3,6 +3,7 @@ package no.nav.varsel.config;
 import no.nav.varsel.service.AktoerService;
 import no.nav.varsel.service.BestillVarselService;
 import no.nav.varsel.service.BrukervarselV1Service;
+import no.nav.varsel.service.BestillVarselService;
 import no.nav.varsel.service.MottaVarselKvitteringService;
 import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.StoppReVarselService;
@@ -20,7 +21,7 @@ import org.springframework.context.annotation.Import;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration
-@Import({MetricsConfig.class, RepoConfig.class, WsConsumerConfig.class, JmsProducerConfig.class})
+@Import({RepoConfig.class, WsConsumerConfig.class, JmsProducerConfig.class})
 public class ServiceConfig {
 
 	@Bean

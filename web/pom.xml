@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
 		<artifactId>varsel</artifactId>
 		<groupId>no.nav.varsel</groupId>
@@ -20,6 +21,11 @@
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-jms-consumer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>varsel-batch</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -70,10 +76,34 @@
 			<artifactId>modig-security-core</artifactId>
 		</dependency>
 
+		<!--provided-->
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.jms</groupId>
+			<artifactId>jboss-jms-api_1.1_spec</artifactId>
+		</dependency>
+
 		<!-- test -->
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-config</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>varsel-repo</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>varsel-jms</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>

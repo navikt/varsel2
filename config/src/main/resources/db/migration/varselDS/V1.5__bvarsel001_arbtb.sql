@@ -1,0 +1,7 @@
+CREATE TABLE arbtb_bvarsel001 (
+  varselbestilling_id VARCHAR2(40 CHAR)                     NOT NULL,
+  arbeid_status       VARCHAR2(20 CHAR) DEFAULT 'OPPRETTET' NOT NULL,
+  CONSTRAINT XPK_arbtb_bvarsel001 PRIMARY KEY (varselbestilling_id)
+);
+
+CREATE INDEX VARSELBEST_NESTEVARSEL ON VARSELBESTILLING (NESTE_VARSLING_DATO);

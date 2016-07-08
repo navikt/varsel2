@@ -86,7 +86,7 @@ public class BestillVarselServiceTest {
 	public void setUp() throws Exception {
 		bestillingTo = new BestillVarselTo();
 		existingVarselbestilling.setFnr(FNR);
-		when(varselbestillingRepoMock.findByVarselbestillingId(VARSELBESTILLING_ID)).thenReturn(existingVarselbestilling);
+		when(varselbestillingRepoMock.findByVarselbestillingIdEager(VARSELBESTILLING_ID)).thenReturn(existingVarselbestilling);
 
 		when(aktoerService.completeAktoerPersonIdent(bestillingTo)).thenAnswer(
 				invocation -> {

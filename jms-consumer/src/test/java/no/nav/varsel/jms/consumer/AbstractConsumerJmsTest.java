@@ -18,6 +18,9 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.inject.Inject;
 import javax.jms.Message;
@@ -51,6 +54,8 @@ public abstract class AbstractConsumerJmsTest {
 	protected VarselbestillingRepo varselbestillingRepo;
 	@Inject
 	protected VarselRepo varselRepo;
+	@Inject
+	private TransactionTemplate transactionTemplate;
 
 	@Before
 	public void setUpAbstract() throws Exception {
@@ -63,16 +68,21 @@ public abstract class AbstractConsumerJmsTest {
 	}
 
 	protected JmsReply sendMessage(Queue queue, Object message) {
-		jmsTemplate.convertAndSend(queue, message, message1 -> {
-			message1.setJMSReplyTo(replyQueue);
-			return message1;
+		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+			@Override
+			protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+				jmsTemplate.convertAndSend(queue, message, message1 -> {
+					message1.setJMSReplyTo(replyQueue);
+					return message1;
+				});
+			}
 		});
-		return receive(replyQueue);
+		return transactionTemplate.execute(transactionStatus -> receive(replyQueue));
 	}
 
 	@SuppressWarnings("unchecked")
-	protected  <T> T receive(Queue queue) {
-		Object response = jmsTemplate.receiveAndConvert(queue);
+	protected <T> T receive(Queue queue) {
+		Object response = transactionTemplate.execute(transactionStatus -> jmsTemplate.receiveAndConvert(queue));
 		if (response instanceof JAXBElement) {
 			response = ((JAXBElement) response).getValue();
 		}
@@ -80,8 +90,13 @@ public abstract class AbstractConsumerJmsTest {
 	}
 
 	protected Message sendMessageListenBoq(Queue queue, Object message) {
-		jmsTemplate.convertAndSend(queue, message);
-		return jmsTemplate.receive(backoutQueue);
+		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+			@Override
+			protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+				jmsTemplate.convertAndSend(queue, message);
+			}
+		});
+		return transactionTemplate.execute(t -> jmsTemplate.receive(backoutQueue));
 	}
 
 	protected void isOk(JmsReply response) {

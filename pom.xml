@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>no.nav.varsel</groupId>
@@ -17,6 +18,8 @@
 		<module>ws-consumer</module>
 		<module>jms-producer</module>
 		<module>service</module>
+		<module>batch</module>
+		<module>batch-client</module>
 		<module>web</module>
 		<module>jee</module>
 		<module>ws-provider</module>
@@ -43,6 +46,8 @@
 		<hamcrest.version>1.3</hamcrest.version>
 		<slf4j.version>1.7.13</slf4j.version>
 		<logback.version>1.1.3</logback.version>
+
+		<brevogarkiv-batch-common.version>3.0.3</brevogarkiv-batch-common.version>
 
 		<flyway.version>3.2.1</flyway.version>
 
@@ -258,6 +263,13 @@
 				<artifactId>resteasy-jaxrs</artifactId>
 				<version>${resteasy.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>no.nav.modig</groupId>
+				<artifactId>modig-batch-connector</artifactId>
+				<classifier>script-and-jar</classifier>
+				<type>zip</type>
+				<version>1.1.1</version>
+			</dependency>
 
 			<!-- cxf -->
 			<dependency>
@@ -310,6 +322,12 @@
 				<groupId>xml-apis</groupId>
 				<artifactId>xml-apis</artifactId>
 				<version>1.4.01</version>
+			</dependency>
+
+			<dependency>
+				<groupId>no.nav.brevogarkiv</groupId>
+				<artifactId>brevogarkiv-batch-common</artifactId>
+				<version>${brevogarkiv-batch-common.version}</version>
 			</dependency>
 
 			<!-- test -->
