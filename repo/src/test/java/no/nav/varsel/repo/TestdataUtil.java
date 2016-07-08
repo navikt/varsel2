@@ -59,14 +59,30 @@ public class TestdataUtil {
 	public static final String PERSON_IDENTER_SOME_FUTURE_KODENAVN = "SOME_FUTURE_KODENAVN";
 	public static final String PERSON_IDENTER_SOME_VALID_KODENAVN = "SOME_VALID_KODENAVN";
 
+	/**
+	 * Create varselbestilling with preset values
+	 */
 	public static Varselbestilling createVarselbestilling() {
+		return createVarselbestillingBuilder()
+				.varselbestillingId(VARSELBESTILLING_ID)
+				.varsels(createVarsel())
+				.build();
+	}
+
+	/**
+	 * Create varselbestilling with unique ids
+	 */
+	public static Varselbestilling createVarselbestillingUnique() {
 		return createVarselbestillingBuilder()
 				.build();
 	}
 
+	/**
+	 * create a builder where unique Id are set at random
+	 */
 	public static VarselbestillingBuilder createVarselbestillingBuilder() {
 		return aVarselbestilling()
-				.varselbestillingId(VARSELBESTILLING_ID)
+				.varselbestillingId(UUID.randomUUID().toString())
 				.varseltypeId(VARSELTYPE_ID)
 				.utlopTidspunkt(UTLOP_TIDSPUNKT)
 				.fnr(FNR)
@@ -76,7 +92,7 @@ public class TestdataUtil {
 				.antallRevarslinger(ANTALL_REVARSLINGER)
 				.nesteVarslingDato(NESTE_VARSLING_DATO)
 				.parameter(PARAMETERKEY, PARAMETERVALUE)
-				.varsels(createVarsel());
+				.varsels(createVarselUnique());
 	}
 
 	/**
@@ -96,6 +112,9 @@ public class TestdataUtil {
 				.build();
 	}
 
+	/**
+	 * create a builder where unique Id are set at random
+	 */
 	public static VarselBuilder createVarselBuilder() {
 		return aVarsel()
 				.varselId(UUID.randomUUID().toString())

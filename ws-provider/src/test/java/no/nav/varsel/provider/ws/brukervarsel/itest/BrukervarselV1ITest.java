@@ -14,7 +14,6 @@ import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static no.nav.varsel.repo.TestdataUtil.VARSEL_TEKST;
 import static no.nav.varsel.repo.TestdataUtil.VARSEL_TITTEL;
 import static no.nav.varsel.repo.TestdataUtil.VARSEL_URL;
-import static no.nav.varsel.repo.TestdataUtil.createVarsel;
 import static no.nav.varsel.repo.TestdataUtil.createVarselBuilder;
 import static no.nav.varsel.repo.TestdataUtil.createVarselUnique;
 import static no.nav.varsel.repo.TestdataUtil.createVarselbestillingBuilder;
@@ -39,7 +38,6 @@ import org.junit.Test;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * Itest for {@link no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.BrukervarselV1}
@@ -111,10 +109,8 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 	public void shouldHandleMultipleVarselbestillingerAndVarsel() throws Exception {
 		varselbestillingRepo.deleteAll();
 		varselbestillingRepo.save(createVarselbestillingBuilder()
-				.varselbestillingId(UUID.randomUUID().toString())
 				.varsels(createVarselUnique(), createVarselUnique(), createVarselUnique()).build());
 		varselbestillingRepo.save(createVarselbestillingBuilder()
-				.varselbestillingId(UUID.randomUUID().toString())
 				.varsels(createVarselUnique(), createVarselUnique(), createVarselUnique()).build());
 
 		HentVarselForBrukerResponse response = brukervarselV1
@@ -126,7 +122,6 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 	@Test
 	public void shoulNotReturnNonFerdigstiltVarselOrOutsideTimeframe() throws Exception {
 		varselbestillingRepo.save(createVarselbestillingBuilder()
-				.varselbestillingId(UUID.randomUUID().toString())
 				.varsels(
 						createVarselBuilder().status(StatusCode.OPPRETTET).build(),
 						createVarselBuilder().status(StatusCode.SENDT).build(),
@@ -135,7 +130,6 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 				.build());
 		varselbestillingRepo.save(createVarselbestillingBuilder()
 				.varsels(createVarselUnique())
-				.varselbestillingId(UUID.randomUUID().toString())
 				.bestillingTidspunkt(FOM.minusDays(1)).build());
 
 		HentVarselForBrukerResponse response = brukervarselV1

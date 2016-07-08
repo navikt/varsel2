@@ -2,7 +2,7 @@ package no.nav.varsel.config;
 
 import no.nav.varsel.jms.producer.VarselbestillingProducer;
 import no.nav.varsel.jms.producer.VarselutsendingProducer;
-import no.nav.varsel.jms.producer.varselbestilling.support.VarselbestillingMapper;
+import no.nav.varsel.jms.producer.varselbestilling.support.BestillVarselProducerMapper;
 import no.nav.varsel.jms.producer.varselutsending.support.VarselutsendingMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +33,7 @@ public class JmsProducerConfig {
 	}
 
 	@Bean
-	public VarselbestillingMapper varselbestillingMapper() {
-		return new VarselbestillingMapper();
+	public BestillVarselProducerMapper bestillVarselProducerMapper() {
+		return new BestillVarselProducerMapper();
 	}
 }

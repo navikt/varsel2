@@ -203,7 +203,6 @@ public class Varselbestilling extends AbstractDomainObject {
 				.add("bestillingTidspunkt", bestillingTidspunkt)
 				.add("nesteVarslingDato", nesteVarslingDato)
 				.add("varsels", varsels)
-				.add("fletteparametere", fletteparametere)
 				.toString();
 	}
 }

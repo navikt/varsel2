@@ -3,6 +3,7 @@ package no.nav.varsel.batch.bvarsel001.itest;
 import static no.nav.varsel.repo.TestdataUtil.ANTALL_REVARSLINGER;
 import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
 import static no.nav.varsel.repo.TestdataUtil.createVarselbestillingBuilder;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -12,7 +13,7 @@ import no.nav.varsel.batch.common.JmsQueueItemWriter;
 import no.nav.varsel.config.BatchTestConfig;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.object.worktable.ArbeidStatus;
-import no.nav.varsel.jms.producer.varselbestilling.support.VarselbestillingMapper;
+import no.nav.varsel.jms.producer.varselbestilling.support.BestillVarselProducerMapper;
 import no.nav.varsel.jms.producer.varselbestilling.to.VarselbestillingTo;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +34,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.inject.Inject;
 import javax.jms.Queue;
-import java.util.UUID;
+import java.util.List;
 
 /**
  * Itest for Failure in jobtest
@@ -48,12 +49,11 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 	private static final String FAILONSECOND = "FAILONSECOND";
 	private static int triggerFailure;
 	private static int failureCount;
-	private static int okwrite;
 
 	private static final Logger LOG = LoggerFactory.getLogger(Bvarsel001JobFailureTest.class);
 
 	@Inject
-	TransactionTemplate transactionTemplate;
+	private TransactionTemplate transactionTemplate;
 
 	@Configuration
 	public static class Config {
@@ -82,10 +82,10 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 		@Bean
 		public JmsQueueItemWriter<VarselbestillingTo> jmsTestWriter(
 				Queue bestillVarselQueue,
-				VarselbestillingMapper varselbestillingMapper) {
+				BestillVarselProducerMapper bestillVarselProducerMapper) {
 			JmsQueueItemWriter<VarselbestillingTo> jmsQueueItemWriter = new JmsQueueItemWriter<>();
 			jmsQueueItemWriter.setDestination(bestillVarselQueue);
-			jmsQueueItemWriter.setMapper(varselbestillingMapper);
+			jmsQueueItemWriter.setMapper(bestillVarselProducerMapper);
 			return jmsQueueItemWriter;
 		}
 	}
@@ -99,7 +99,9 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 
 	@Test
 	public void shouldRollbackOnFailureIfFailedTwice() throws Exception {
-		varselbestillingRepo.save(createVarselbestillingBuilder().fnr(FAIL).build());
+		varselbestillingRepo.save(createVarselbestillingBuilder()
+				.varselbestillingId(VARSELBESTILLING_ID)
+				.fnr(FAIL).build());
 
 		JobExecution jobExecution = launchJob(defaultJobParams());
 		assertThat(jobExecution.getStatus(), is(BatchStatus.FAILED));
@@ -111,7 +113,7 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 	@Test
 	public void shouldRollbackJms() throws Exception {
 		varselbestillingRepo.save(createVarselbestillingBuilder().fnr(FAILONSECOND).build());
-		varselbestillingRepo.save(createVarselbestillingBuilder().varselbestillingId(UUID.randomUUID().toString())
+		varselbestillingRepo.save(createVarselbestillingBuilder().varselbestillingId(VARSELBESTILLING_ID)
 				.fnr(FAILONSECOND).build());
 
 		JobExecution jobExecution = launchJob(defaultJobParams());
@@ -124,17 +126,41 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 	@Test
 	public void shouldRetryOnSingleFailureAndBeOk() throws Exception {
 		varselbestillingRepo.save(createVarselbestillingBuilder().fnr(FAILONLYONCE).build());
-		varselbestillingRepo.save(createVarselbestillingBuilder().varselbestillingId(UUID.randomUUID().toString())
-				.fnr(FAILONLYONCE).build());
+		varselbestillingRepo.save(createVarselbestillingBuilder().fnr(FAILONLYONCE).build());
 
 		JobExecution jobExecution = launchJob(defaultJobParams());
 		assertThat(jobExecution.getStatus(), is(BatchStatus.COMPLETED));
 		assertThat(bvarsel001Repo.count(), is(0L));
-		assertThat(varselbestillingRepo.findByVarselbestillingId(VARSELBESTILLING_ID).getAntallRevarslinger(),
-				is(ANTALL_REVARSLINGER - 1));
+		List<Varselbestilling> all = varselbestillingRepo.findAll();
+		assertThat(all, hasSize(2));
+		for (Varselbestilling varselbestilling : all) {
+			assertThat(varselbestilling.getAntallRevarslinger(), is(ANTALL_REVARSLINGER - 1));
+		}
 
 		assertJms(2);
 		assertThat(failureCount, is(1));
+	}
+
+	@Test
+	public void shouldBeAbleToRestartJob() throws Exception {
+		JobParameters jobParameters = defaultJobParams();
+		varselbestillingRepo.save(createVarselbestillingBuilder()
+				.varselbestillingId(VARSELBESTILLING_ID).fnr(FAIL).build());
+
+		JobExecution jobExecution = launchJob(jobParameters);
+		assertThat(jobExecution.getStatus(), is(BatchStatus.FAILED));
+		assertThat(failureCount, is(2));
+		assertJms(0);
+
+		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingId(VARSELBESTILLING_ID);
+		varselbestilling.setFnr("oknow");
+		varselbestillingRepo.saveAndFlush(varselbestilling);
+
+		jobExecution = launchJob(jobParameters);
+		assertThat(jobExecution.getStatus(), is(BatchStatus.COMPLETED));
+		assertThat(bvarsel001Repo.count(), is(0L));
+		assertJms(1);
+		assertThat(failureCount, is(2));
 	}
 
 	private void assertJms(int i) {
@@ -153,27 +179,6 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 			}
 		});
 
-	}
-
-	@Test
-	public void shouldBeAbleToRestartJob() throws Exception {
-		JobParameters jobParameters = defaultJobParams();
-		varselbestillingRepo.save(createVarselbestillingBuilder().fnr(FAIL).build());
-
-		JobExecution jobExecution = launchJob(jobParameters);
-		assertThat(jobExecution.getStatus(), is(BatchStatus.FAILED));
-		assertThat(failureCount, is(2));
-		assertJms(0);
-
-		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingId(VARSELBESTILLING_ID);
-		varselbestilling.setFnr("oknow");
-		varselbestillingRepo.saveAndFlush(varselbestilling);
-
-		jobExecution = launchJob(jobParameters);
-		assertThat(jobExecution.getStatus(), is(BatchStatus.COMPLETED));
-		assertThat(bvarsel001Repo.count(), is(0L));
-		assertJms(1);
-		assertThat(failureCount, is(2));
 	}
 
 }
