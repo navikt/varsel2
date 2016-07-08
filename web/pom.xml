@@ -76,10 +76,34 @@
 			<artifactId>modig-security-core</artifactId>
 		</dependency>
 
+		<!--provided-->
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.jms</groupId>
+			<artifactId>jboss-jms-api_1.1_spec</artifactId>
+		</dependency>
+
 		<!-- test -->
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-config</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>varsel-repo</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>varsel-jms</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
