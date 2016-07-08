@@ -1,4 +1,4 @@
-package no.nav.varsel.provider.map.support;
+package no.nav.varsel.provider.ws.brukervarsel.support;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -14,7 +14,7 @@ import java.util.GregorianCalendar;
 public class TestdataUtil {
 	public static DatatypeFactory DATATYPE_FACTORY;
 
-	static{
+	static {
 		try {
 			DATATYPE_FACTORY = DatatypeFactory.newInstance();
 		} catch (DatatypeConfigurationException e) {

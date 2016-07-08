@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 /**
  * Spring configuration for Web Service Provider.
  *
- * @author Lars Aune
+ * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration
 @Import({CxfConfig.class, ProviderEndpointConfig.class, Tvarsel005Config.class, ServiceConfig.class})

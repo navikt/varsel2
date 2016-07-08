@@ -3,6 +3,8 @@ package no.nav.varsel.service.tvarsel005.to;
 import java.time.LocalDateTime;
 
 /**
+ * Transfer object for HentVarselForBruker
+ *
  * @author Lars Aune
  */
 public class HentVarselForBrukerTo {
@@ -48,7 +50,11 @@ public class HentVarselForBrukerTo {
 		private String fnr;
 		private LocalDateTime datoFom;
 		private LocalDateTime datoTom;
+
 		public Builder() {
+		}
+		public static Builder aHentVarselForBrukerTo() {
+			return new Builder();
 		}
 
 		public Builder aktoerId(String aktoerId) {

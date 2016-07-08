@@ -1,4 +1,4 @@
-package no.nav.varsel.provider.map.support;
+package no.nav.varsel.provider.ws.brukervarsel.support;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 
 /**
+ * Unit test for {@link HentVarselForBrukerRequestMapper}
+ *
  * @author Lars Aune
  */
 public class HentVarselForBrukerRequestMapperTest {
@@ -32,9 +34,10 @@ public class HentVarselForBrukerRequestMapperTest {
 	public void onSetup() {
 		firstOfJune2016 = TestdataUtil.getXMLGregorianCalendar(2016, Calendar.JUNE, 1);
 		twentiethOfJune2016 = TestdataUtil.getXMLGregorianCalendar(2016, Calendar.JUNE, 20);
-		twentiethOfJune2016LocalDateTime = LocalDateTime.of(2016,6, 20, 0, 0, 0, 0);
+		twentiethOfJune2016LocalDateTime = LocalDateTime.of(2016, 6, 20, 0, 0, 0, 0);
 		firstOfJune2016LocalDateTime = LocalDateTime.of(2016, 6, 1, 0, 0, 0, 0);
 	}
+
 	@Test(expected = IllegalArgumentException.class)
 	public void throwsIllegalArgumentExceptionWhenNullIsParameter() {
 		mapper.map(null);

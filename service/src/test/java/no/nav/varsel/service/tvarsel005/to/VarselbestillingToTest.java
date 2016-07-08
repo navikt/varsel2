@@ -13,17 +13,18 @@ import java.util.List;
 
 /**
  * Unit test for VarselbestillingTo
- * author Lars Aune
+ *
+ * @author Lars Aune
  */
 public class VarselbestillingToTest {
 
 	public static final String VARSELTYPE_ID = "VARSELTYPE_ID";
 	public static final String FNR = "FNR";
-	public static final String AKTOER_ID = "AKTOER_ID";
+	private static final String AKTOER_ID = "AKTOER_ID";
 	private static final LocalDateTime BESTILLINGSTIDSPUNKT = LocalDateTime.of(2016, Month.JULY, 1, 0, 0, 0, 0);
 	private static final Integer REVARSLING_INTERVALL = 5;
 	private static final LocalDateTime SISTE_VARSEL_UTSENDELSE = LocalDateTime.of(2016, Month.JULY, 3, 0, 0, 0, 0);
-	public static final LocalDateTime DISTRIBUSJON_TIDSPUNKT_OLD = LocalDateTime.of(2016, Month.MAY, 3, 0, 0, 0, 0);
+	private static final LocalDateTime DISTRIBUSJON_TIDSPUNKT_OLD = LocalDateTime.of(2016, Month.MAY, 3, 0, 0, 0, 0);
 
 	@Test
 	public void shouldBuild() {

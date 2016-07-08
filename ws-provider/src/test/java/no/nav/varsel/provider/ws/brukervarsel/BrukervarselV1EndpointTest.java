@@ -5,10 +5,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Person;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
-import no.nav.varsel.provider.map.support.HentVarselForBrukerRequestValidator;
+import no.nav.varsel.provider.ws.brukervarsel.support.HentVarselForBrukerRequestValidator;
 import no.nav.varsel.provider.ws.brukervarsel.support.BrukervarselV1Provider;
 import org.junit.Test;
 import org.junit.runner.RunWith;

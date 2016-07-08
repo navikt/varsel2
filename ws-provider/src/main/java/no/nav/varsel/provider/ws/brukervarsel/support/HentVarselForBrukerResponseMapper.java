@@ -1,4 +1,4 @@
-package no.nav.varsel.provider.map.support;
+package no.nav.varsel.provider.ws.brukervarsel.support;
 
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Brukervarsel;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
@@ -8,6 +8,8 @@ import org.springframework.util.Assert;
 import javax.inject.Inject;
 
 /**
+ * Response Mapper for Tvarsel005 HentVarselForBruker
+ *
  * @author Lars Aune
  */
 public class HentVarselForBrukerResponseMapper {

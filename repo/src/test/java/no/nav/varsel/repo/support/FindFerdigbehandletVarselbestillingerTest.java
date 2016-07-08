@@ -28,6 +28,7 @@ import java.util.List;
  * Unit-test for VarselbestillingRepoImpl FindFerdigbehandletVarselbestillingerTest
  *
  * @author Lars Aune
+ * @author Andreas Skomedal, Visma Consulting
  */
 public class FindFerdigbehandletVarselbestillingerTest extends AbstractRepoTest {
 
@@ -84,7 +85,8 @@ public class FindFerdigbehandletVarselbestillingerTest extends AbstractRepoTest 
 		List<Varselbestilling> varselbestillinger =
 				varselbestillingRepo.findFerdigbehandletVarselbestillinger(FNR, datoFom, datoTom);
 
-		assertVarselbestillingerIs(varselbestillinger, "ferdigbehandletVarselbestilling", "varselbestillingMedVarslerDerMinstEttErFerdigbehandlet");
+		assertVarselbestillingerIs(varselbestillinger,
+				"ferdigbehandletVarselbestilling", "varselbestillingMedVarslerDerMinstEttErFerdigbehandlet");
 	}
 
 	@Test
@@ -92,7 +94,8 @@ public class FindFerdigbehandletVarselbestillingerTest extends AbstractRepoTest 
 		List<Varselbestilling> varselbestillinger =
 				varselbestillingRepo.findFerdigbehandletVarselbestillinger(AKTOR_ID, datoFom, datoTom);
 
-		assertVarselbestillingerIs(varselbestillinger, "ferdigbehandletVarselbestilling", "varselbestillingMedVarslerDerMinstEttErFerdigbehandlet");
+		assertVarselbestillingerIs(varselbestillinger,
+				"ferdigbehandletVarselbestilling", "varselbestillingMedVarslerDerMinstEttErFerdigbehandlet");
 	}
 
 	@Test
@@ -100,7 +103,9 @@ public class FindFerdigbehandletVarselbestillingerTest extends AbstractRepoTest 
 		List<Varselbestilling> varselbestillinger =
 				varselbestillingRepo.findFerdigbehandletVarselbestillinger(FNR, datoFom, null);
 
-		assertVarselbestillingerIs(varselbestillinger, "ferdigbehandletVarselbestilling", "ferdigbehandletVarselbestillingInFarFuture", "varselbestillingMedVarslerDerMinstEttErFerdigbehandlet");
+		assertVarselbestillingerIs(varselbestillinger,
+				"ferdigbehandletVarselbestilling", "ferdigbehandletVarselbestillingInFarFuture",
+				"varselbestillingMedVarslerDerMinstEttErFerdigbehandlet");
 	}
 
 	@Test
@@ -108,7 +113,9 @@ public class FindFerdigbehandletVarselbestillingerTest extends AbstractRepoTest 
 		List<Varselbestilling> varselbestillinger =
 				varselbestillingRepo.findFerdigbehandletVarselbestillinger(FNR, null, datoTom);
 
-		assertVarselbestillingerIs(varselbestillinger, "ferdigbehandletVarselbestilling", "ferdigbehandletVarselbestillingInFarPast", "varselbestillingMedVarslerDerMinstEttErFerdigbehandlet");
+		assertVarselbestillingerIs(varselbestillinger,
+				"ferdigbehandletVarselbestilling", "ferdigbehandletVarselbestillingInFarPast",
+				"varselbestillingMedVarslerDerMinstEttErFerdigbehandlet");
 	}
 
 	@Test
@@ -116,7 +123,9 @@ public class FindFerdigbehandletVarselbestillingerTest extends AbstractRepoTest 
 		List<Varselbestilling> varselbestillinger =
 				varselbestillingRepo.findFerdigbehandletVarselbestillinger(FNR, null, null);
 
-		assertVarselbestillingerIs(varselbestillinger, "ferdigbehandletVarselbestilling", "ferdigbehandletVarselbestillingInFarPast", "ferdigbehandletVarselbestillingInFarFuture", "varselbestillingMedVarslerDerMinstEttErFerdigbehandlet");
+		assertVarselbestillingerIs(varselbestillinger,
+				"ferdigbehandletVarselbestilling", "ferdigbehandletVarselbestillingInFarPast",
+				"ferdigbehandletVarselbestillingInFarFuture", "varselbestillingMedVarslerDerMinstEttErFerdigbehandlet");
 	}
 
 	private VarselbestillingBuilder createVarselBestilling(Varsel... varsels) {

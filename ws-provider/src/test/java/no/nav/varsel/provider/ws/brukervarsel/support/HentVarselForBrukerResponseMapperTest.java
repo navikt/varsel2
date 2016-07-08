@@ -1,15 +1,5 @@
-package no.nav.varsel.provider.map.support;
+package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import static no.nav.varsel.provider.map.support.VarselbestillingMapperTest.AKTOER_ID;
-import static no.nav.varsel.provider.map.support.VarselbestillingMapperTest.BESTILLINGSTIDSPUNKT;
-import static no.nav.varsel.provider.map.support.VarselbestillingMapperTest.FNR;
-import static no.nav.varsel.provider.map.support.VarselbestillingMapperTest.SISTE_VARSEL_UTSENDELSE;
-import static no.nav.varsel.provider.map.support.VarselbestillingMapperTest.assertAktoerHasNullValue;
-import static no.nav.varsel.provider.map.support.VarselbestillingMapperTest.assertAktoerHasValue;
-import static no.nav.varsel.provider.map.support.VarselbestillingMapperTest.assertPersonHasNullValue;
-import static no.nav.varsel.provider.map.support.VarselbestillingMapperTest.assertPersonHasValue;
-import static no.nav.varsel.provider.map.support.VarselbestillingMapperTest.assertRestOfCoreVarselbestilling;
-import static no.nav.varsel.provider.map.support.VarselbestillingMapperTest.assertVarsel;
 import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo.Builder.aHentVarselForBrukerResponseTo;
 import static no.nav.varsel.service.tvarsel005.to.VarselTo.Builder.aVarselTo;
 import static no.nav.varsel.service.tvarsel005.to.VarselbestillingTo.Builder.aVarselbestillingTo;
@@ -30,6 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  * Unit test for {@link VarselbestillingMapper}
+ *
  * @author Lars Aune
  */
 @RunWith(MockitoJUnitRunner.class)
@@ -65,7 +56,7 @@ public class HentVarselForBrukerResponseMapperTest {
 
 	@Test
 	public void shouldMapAktoerId() {
-		HentVarselForBrukerResponseTo responseTo = createResponseTo(null, AKTOER_ID);
+		HentVarselForBrukerResponseTo responseTo = createResponseTo(null, VarselbestillingMapperTest.AKTOER_ID);
 		HentVarselForBrukerResponse response = mapper.map(responseTo);
 
 		//assert response
@@ -75,15 +66,15 @@ public class HentVarselForBrukerResponseMapperTest {
 		Varselbestilling varselbestilling = brukervarsel.getVarselbestillingListe().get(0);
 
 		//assert Varselbestiling
-		assertAktoerHasValue(varselbestilling);
-		assertPersonHasNullValue(varselbestilling);
-		assertRestOfCoreVarselbestilling(varselbestilling);
-		assertVarsel(varselbestilling);
+		VarselbestillingMapperTest.assertAktoerHasValue(varselbestilling);
+		VarselbestillingMapperTest.assertPersonHasNullValue(varselbestilling);
+		VarselbestillingMapperTest.assertRestOfCoreVarselbestilling(varselbestilling);
+		VarselbestillingMapperTest.assertVarsel(varselbestilling);
 	}
 
 	@Test
 	public void shouldMapPerson() {
-		HentVarselForBrukerResponseTo responseTo = createResponseTo(FNR, null);
+		HentVarselForBrukerResponseTo responseTo = createResponseTo(VarselbestillingMapperTest.FNR, null);
 		HentVarselForBrukerResponse response = mapper.map(responseTo);
 
 		//assert response
@@ -93,10 +84,10 @@ public class HentVarselForBrukerResponseMapperTest {
 		Varselbestilling varselbestilling = brukervarsel.getVarselbestillingListe().get(0);
 
 		//assert Varselbestiling
-		assertAktoerHasNullValue(varselbestilling);
-		assertPersonHasValue(varselbestilling);
-		assertRestOfCoreVarselbestilling(varselbestilling);
-		assertVarsel(varselbestilling);
+		VarselbestillingMapperTest.assertAktoerHasNullValue(varselbestilling);
+		VarselbestillingMapperTest.assertPersonHasValue(varselbestilling);
+		VarselbestillingMapperTest.assertRestOfCoreVarselbestilling(varselbestilling);
+		VarselbestillingMapperTest.assertVarsel(varselbestilling);
 	}
 
 	private HentVarselForBrukerResponseTo createResponseTo(String fnr, String aktoer) {
@@ -105,9 +96,9 @@ public class HentVarselForBrukerResponseMapperTest {
 						varseltypeId(VARSELTYPE_ID).
 						fnr(fnr).
 						aktoerId(aktoer).
-						bestillingstidspunkt(BESTILLINGSTIDSPUNKT).
+						bestillingstidspunkt(VarselbestillingMapperTest.BESTILLINGSTIDSPUNKT).
 						revarslingIntervall(REVARSLINGSINTERVALL).
-						sisteVarselUtsendelse(SISTE_VARSEL_UTSENDELSE).
+						sisteVarselUtsendelse(VarselbestillingMapperTest.SISTE_VARSEL_UTSENDELSE).
 						varsler(aVarselTo().
 								kanal(KANAL).
 								sendtTidspunkt(VarselMapperTest.SENDT_TIDSPUNKT).

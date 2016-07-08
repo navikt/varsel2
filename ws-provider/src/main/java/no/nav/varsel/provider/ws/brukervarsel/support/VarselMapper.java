@@ -1,4 +1,4 @@
-package no.nav.varsel.provider.map.support;
+package no.nav.varsel.provider.ws.brukervarsel.support;
 
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varsel;
 import no.nav.varsel.domain.utility.XmlGregorianConverter;
@@ -6,6 +6,8 @@ import no.nav.varsel.service.tvarsel005.to.VarselTo;
 import org.springframework.util.Assert;
 
 /**
+ * Response mapper for Tvarsel005 HentVarselForBruker
+ *
  * @author Lars Aune
  */
 public class VarselMapper {

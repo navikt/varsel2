@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * Implementation of {@link VarselbestillingRepoCustom}
+ *
  * @author Lars Aune
+ * @author Andreas Skomedal, Visma Consulting
  */
 public class VarselbestillingRepoImpl implements VarselbestillingRepoCustom {
 
@@ -24,7 +27,7 @@ public class VarselbestillingRepoImpl implements VarselbestillingRepoCustom {
 	public List<Varselbestilling> findFerdigbehandletVarselbestillinger(String bruker,
 																		LocalDateTime datoFom,
 																		LocalDateTime datoTom) {
-		Assert.notNull(bruker, "bruker is null");
+		Assert.hasText(bruker, "bruker is null or empty");
 
 		String jpql = "select distinct vb from Varselbestilling vb join fetch vb.varsels v" +
 				" where " +

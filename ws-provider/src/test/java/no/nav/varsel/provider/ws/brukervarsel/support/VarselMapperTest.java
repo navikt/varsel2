@@ -1,4 +1,4 @@
-package no.nav.varsel.provider.map.support;
+package no.nav.varsel.provider.ws.brukervarsel.support;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -18,18 +18,18 @@ import java.time.Month;
  */
 public class VarselMapperTest {
 
-	public static final String KANAL = "KANAL";
-	public static final LocalDateTime SENDT_TIDSPUNKT = LocalDateTime.of(2016, Month.JULY, 1, 0, 0, 0, 0);
-	public static final LocalDateTime DISTRIBUSJON_TIDSPUNKT = LocalDateTime.of(2016, Month.JULY, 2, 0, 0, 0);
-	public static final String KONTAKT_INFO = "KONTAKT_INFO";
-	public static final String VARSEL_TITTEL = "VARSEL_TITTEL";
-	public static final String VARSEL_TEKST = "VARSEL_TEKST";
-	public static final String VARSEL_URL = "VARSEL_URL";
-	public static final boolean REVARSEL = true;
+	private static final String KANAL = "KANAL";
+	static final LocalDateTime SENDT_TIDSPUNKT = LocalDateTime.of(2016, Month.JULY, 1, 0, 0, 0, 0);
+	static final LocalDateTime DISTRIBUSJON_TIDSPUNKT = LocalDateTime.of(2016, Month.JULY, 2, 0, 0, 0);
+	private static final String KONTAKT_INFO = "KONTAKT_INFO";
+	private static final String VARSEL_TITTEL = "VARSEL_TITTEL";
+	private static final String VARSEL_TEKST = "VARSEL_TEKST";
+	private static final String VARSEL_URL = "VARSEL_URL";
+	private static final boolean REVARSEL = true;
 	private static XMLGregorianCalendar DISTRIBUERT;
 	private static XMLGregorianCalendar SENDT;
 
-	static{
+	static {
 		SENDT = TestdataUtil.getXMLGregorianCalendar(2016, 6, 1);
 		DISTRIBUERT = TestdataUtil.getXMLGregorianCalendar(2016, 6, 2);
 	}

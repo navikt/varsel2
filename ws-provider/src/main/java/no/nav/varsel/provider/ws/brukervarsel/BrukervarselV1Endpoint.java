@@ -7,7 +7,7 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.BrukervarselV1;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.HentVarselForBrukerUgyldigInput;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
-import no.nav.varsel.provider.map.support.HentVarselForBrukerRequestValidator;
+import no.nav.varsel.provider.ws.brukervarsel.support.HentVarselForBrukerRequestValidator;
 import no.nav.varsel.provider.ws.brukervarsel.support.BrukervarselV1Provider;
 
 import javax.inject.Inject;

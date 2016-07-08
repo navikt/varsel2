@@ -1,16 +1,18 @@
 package no.nav.varsel.config;
 
-import no.nav.varsel.provider.map.support.HentVarselForBrukerRequestMapper;
-import no.nav.varsel.provider.map.support.HentVarselForBrukerRequestValidator;
-import no.nav.varsel.provider.map.support.HentVarselForBrukerResponseMapper;
-import no.nav.varsel.provider.map.support.VarselMapper;
-import no.nav.varsel.provider.map.support.VarselbestillingMapper;
+import no.nav.varsel.provider.ws.brukervarsel.support.HentVarselForBrukerRequestMapper;
+import no.nav.varsel.provider.ws.brukervarsel.support.HentVarselForBrukerRequestValidator;
+import no.nav.varsel.provider.ws.brukervarsel.support.HentVarselForBrukerResponseMapper;
+import no.nav.varsel.provider.ws.brukervarsel.support.VarselMapper;
+import no.nav.varsel.provider.ws.brukervarsel.support.VarselbestillingMapper;
 import no.nav.varsel.provider.ws.brukervarsel.BrukervarselV1Endpoint;
 import no.nav.varsel.provider.ws.brukervarsel.support.BrukervarselV1Provider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * Config for Tvarsel005 HentVarselForBruker
+ *
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration

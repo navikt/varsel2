@@ -36,23 +36,17 @@ import java.time.LocalDateTime;
  */
 public class BrukervarselMapperTest {
 
-	public static final LocalDateTime DISTRIBUSJON_TIDSPUNKT_NEWEST = DISTRIBUSJON_TIDSPUNKT.plusDays(1);
+	private static final LocalDateTime DISTRIBUSJON_TIDSPUNKT_NEWEST = DISTRIBUSJON_TIDSPUNKT.plusDays(1);
 	private BrukervarselMapper mapper = new BrukervarselMapper();
 
 	@Test
 	public void shouldmap() throws Exception {
 		HentVarselForBrukerResponseTo map = mapper.map(Lists.newArrayList(
 				createVarselbestillingBuilder().varsels(
-						// Remove opprettet
+						// Opprettet should be removed
 						createVarselBuilder().status(StatusCode.OPPRETTET).build(),
-						createVarselBuilder().status(StatusCode.FERDIGBEHANDLET).build(),
-						createVarselBuilder().distribusjonTidspunkt(DISTRIBUSJON_TIDSPUNKT_NEWEST).status(StatusCode.FERDIGBEHANDLET).build()
-				).build(),
-				// Remove varselbestilling with no varsels
-				createVarselbestillingBuilder().varsels(
-						// Remove sendt and feilet
-						createVarselBuilder().status(StatusCode.SENDT).build(),
-						createVarselBuilder().status(StatusCode.FEILET).build()
+						createVarselBuilder().build(),
+						createVarselBuilder().distribusjonTidspunkt(DISTRIBUSJON_TIDSPUNKT_NEWEST).build()
 				).build()
 		));
 
@@ -85,4 +79,18 @@ public class BrukervarselMapperTest {
 		);
 	}
 
+	@Test
+	public void shouldFilterEmptyBestilling() throws Exception {
+		HentVarselForBrukerResponseTo map = mapper.map(Lists.newArrayList(
+				// Remove varselbestilling with no varsels
+				createVarselbestillingBuilder().varsels(
+						// Remove sendt, opprettet and feilet
+						createVarselBuilder().status(StatusCode.SENDT).build(),
+						createVarselBuilder().status(StatusCode.FEILET).build(),
+						createVarselBuilder().status(StatusCode.OPPRETTET).build()
+				).build()
+		));
+
+		assertThat(map.getVarselbestillingTos(), hasSize(0));
+	}
 }

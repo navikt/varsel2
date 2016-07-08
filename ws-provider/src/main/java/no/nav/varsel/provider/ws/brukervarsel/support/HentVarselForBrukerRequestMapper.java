@@ -1,4 +1,4 @@
-package no.nav.varsel.provider.map.support;
+package no.nav.varsel.provider.ws.brukervarsel.support;
 
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
 
@@ -10,6 +10,8 @@ import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo;
 import org.springframework.util.Assert;
 
 /**
+ * Request mapper for Tvarsel005 HentVarselForBruker
+ *
  * @author Lars Aune
  */
 public class HentVarselForBrukerRequestMapper {

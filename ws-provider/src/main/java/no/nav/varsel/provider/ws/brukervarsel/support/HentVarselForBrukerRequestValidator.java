@@ -1,4 +1,4 @@
-package no.nav.varsel.provider.map.support;
+package no.nav.varsel.provider.ws.brukervarsel.support;
 
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.HentVarselForBrukerUgyldigInput;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.feil.UgydigInput;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.GregorianCalendar;
 
 /**
- * Validator for MottaDigitalPostKvitteringRequest
+ * Validator for Tvarsel005 HentVarselForBruker
  *
  * @author Lars Aune
  */

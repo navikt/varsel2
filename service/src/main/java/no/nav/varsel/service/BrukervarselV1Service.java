@@ -10,7 +10,9 @@ import javax.inject.Inject;
 import java.util.List;
 
 /**
- * @author Lars Aune
+ * Service For HentVarselForBruker Tvarsel005
+ *
+ * @author Andreas Skomedal, Visma Consulting.
  */
 public class BrukervarselV1Service {
 

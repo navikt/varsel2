@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Unit test for HentVarselForBrukerResponseTo
+ *
  * @author Lars Aune
  */
 public class HentVarselForBrukerResponseToTest {

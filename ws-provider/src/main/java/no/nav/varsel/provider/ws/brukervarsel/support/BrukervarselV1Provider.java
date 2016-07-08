@@ -4,14 +4,14 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.BrukervarselV1;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.HentVarselForBrukerUgyldigInput;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
-import no.nav.varsel.provider.map.support.HentVarselForBrukerRequestMapper;
-import no.nav.varsel.provider.map.support.HentVarselForBrukerResponseMapper;
 import no.nav.varsel.service.BrukervarselV1Service;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 
 import javax.inject.Inject;
 
 /**
+ * Provider for Tvarsel005 HentVarselForBruker
+ *
  * @author Lars Aune
  */
 public class BrukervarselV1Provider implements BrukervarselV1 {

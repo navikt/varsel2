@@ -1,4 +1,4 @@
-package no.nav.varsel.provider.map.support;
+package no.nav.varsel.provider.ws.brukervarsel.support;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.nullValue;
@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Unit test for {@link VarselbestillingMapperTest}
+ *
  * @author Lars Aune
  */
 @RunWith(MockitoJUnitRunner.class)
@@ -29,7 +31,7 @@ public class VarselbestillingMapperTest {
 	public static final String AKTOER_ID = "AKTOER_ID";
 	public static final LocalDateTime BESTILLINGSTIDSPUNKT = LocalDateTime.of(2016, Month.JULY, 1, 0, 0, 0, 0);
 	public static final int REVARSLING_INTERVALL = 5;
-	public static final LocalDateTime SISTE_VARSEL_UTSENDELSE = LocalDateTime.of(2016, Month.JULY, 4, 0, 0 , 0, 0);
+	public static final LocalDateTime SISTE_VARSEL_UTSENDELSE = LocalDateTime.of(2016, Month.JULY, 4, 0, 0, 0, 0);
 	private static final XMLGregorianCalendar BESTILT = XmlGregorianConverter.toXmlGregorianCalendar(BESTILLINGSTIDSPUNKT);
 	private static final XMLGregorianCalendar SISTE_VARSEL_UTSENDELSE_XML_GREGORIAN_CALENDAR =
 			XmlGregorianConverter.toXmlGregorianCalendar(SISTE_VARSEL_UTSENDELSE);
