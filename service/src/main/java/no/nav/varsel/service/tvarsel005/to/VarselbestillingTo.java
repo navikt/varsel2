@@ -103,12 +103,12 @@ public class VarselbestillingTo {
 
 		public VarselbestillingTo buildAndCalculateSisteVarselUtsendelse() {
 			VarselbestillingTo result = build();
-			LocalDateTime sisteVarselUtsendelse = varsler.stream()
+			LocalDateTime calculatedSisteVarselUtsendelse = varsler.stream()
 					.map(VarselTo::getDistribusjonsTidspunkt)
 					.filter(v -> v != null)
 					.max(naturalOrder())
 					.orElse(null);
-			result.setSisteVarselUtsendelse(sisteVarselUtsendelse);
+			result.setSisteVarselUtsendelse(calculatedSisteVarselUtsendelse);
 			return result;
 		}
 
