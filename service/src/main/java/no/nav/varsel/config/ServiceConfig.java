@@ -3,7 +3,6 @@ package no.nav.varsel.config;
 import no.nav.varsel.service.AktoerService;
 import no.nav.varsel.service.BestillVarselService;
 import no.nav.varsel.service.BrukervarselV1Service;
-import no.nav.varsel.service.BestillVarselService;
 import no.nav.varsel.service.MottaVarselKvitteringService;
 import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.StoppReVarselService;

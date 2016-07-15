@@ -1,7 +1,6 @@
 package no.nav.varsel.domain.object;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
 import org.hibernate.annotations.Type;
 

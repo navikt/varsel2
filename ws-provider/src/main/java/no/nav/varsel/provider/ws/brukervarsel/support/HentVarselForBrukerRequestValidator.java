@@ -18,11 +18,11 @@ import java.util.GregorianCalendar;
  */
 public class HentVarselForBrukerRequestValidator {
 
-	public static final String PAAKREVD_INPUTPARAMETER_ER_IKKE_SATT_FEILMELDING = "Påkrevd inputparameter er ikke satt";
-	public static final String INPUTPARAMETER_BRUKER_MANGLER_FEILAARSAK = "Inputparameter Bruker mangler";
-	public static final String UGYLDIG_BRUK_AV_DATO_FOM_OG_DATO_TOM_FEILMELDING = "Ugyldig bruk av DatoFom og DatoTom";
-	public static final String PERIODENS_TOM_KAN_IKKE_VÆRE_SENERE_ENN_DAGENS_DATO_FEILAARSAK = "Periodens DatoTom kan ikke være senere enn dagens dato";
-	public static final String PERIODENS_DATO_FOM_KAN_IKKE_VÆRE_SENERE_ENN_PERIODENS_DATO_TOM_FEILAARSAK = "Periodens DatoFom kan ikke være senere enn periodens DatoTom";
+	private static final String PAAKREVD_INPUTPARAMETER_ER_IKKE_SATT_FEILMELDING = "Påkrevd inputparameter er ikke satt";
+	private static final String INPUTPARAMETER_BRUKER_MANGLER_FEILAARSAK = "Inputparameter Bruker mangler";
+	private static final String UGYLDIG_BRUK_AV_DATO_FOM_OG_DATO_TOM_FEILMELDING = "Ugyldig bruk av DatoFom og DatoTom";
+	private static final String PERIODENS_TOM_KAN_IKKE_VAERE_SENERE_ENN_DAGENS_DATO_FEILAARSAK = "Periodens DatoTom kan ikke være senere enn dagens dato";
+	private static final String PERIODENS_DATO_FOM_KAN_IKKE_VAERE_SENERE_ENN_PERIODENS_DATO_TOM_FEILAARSAK = "Periodens DatoFom kan ikke være senere enn periodens DatoTom";
 
 	public void validate(HentVarselForBrukerRequest request) throws HentVarselForBrukerUgyldigInput {
 		validateBruker(request.getBruker());
@@ -39,7 +39,7 @@ public class HentVarselForBrukerRequestValidator {
 				periode.getFom().toGregorianCalendar().after(periode.getTom().toGregorianCalendar())) {
 			throwValidationException(UGYLDIG_BRUK_AV_DATO_FOM_OG_DATO_TOM_FEILMELDING,
 					UGYLDIG_BRUK_AV_DATO_FOM_OG_DATO_TOM_FEILMELDING,
-					PERIODENS_DATO_FOM_KAN_IKKE_VÆRE_SENERE_ENN_PERIODENS_DATO_TOM_FEILAARSAK,
+					PERIODENS_DATO_FOM_KAN_IKKE_VAERE_SENERE_ENN_PERIODENS_DATO_TOM_FEILAARSAK,
 					now());
 		}
 	}
@@ -50,7 +50,7 @@ public class HentVarselForBrukerRequestValidator {
 				periode.getTom().toGregorianCalendar().after(GregorianCalendar.getInstance())) {
 			throwValidationException(UGYLDIG_BRUK_AV_DATO_FOM_OG_DATO_TOM_FEILMELDING,
 					UGYLDIG_BRUK_AV_DATO_FOM_OG_DATO_TOM_FEILMELDING,
-					PERIODENS_TOM_KAN_IKKE_VÆRE_SENERE_ENN_DAGENS_DATO_FEILAARSAK,
+					PERIODENS_TOM_KAN_IKKE_VAERE_SENERE_ENN_DAGENS_DATO_FEILAARSAK,
 					now());
 		}
 	}
