@@ -24,7 +24,7 @@ import javax.jws.WebService;
 		serviceName = "Brukervarsel_v1",
 		portName = "Brukervarsel_v1Port"
 )
-@HandlerChain(file = "/modig-jboss-provider-handlers.xml")
+@HandlerChain(file = "/jboss-provider-handlers.xml")
 public class BrukervarselV1Endpoint implements BrukervarselV1 {
 
 	private static final String BRUKERVARSEL_V1 = "BrukervarselV1";

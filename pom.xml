@@ -225,11 +225,6 @@
 			</dependency>
 			<dependency>
 				<groupId>no.nav.modig</groupId>
-				<artifactId>modig-log-jaxws-config</artifactId>
-				<version>${modig-log.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.modig</groupId>
 				<artifactId>modig-security-filter</artifactId>
 				<version>${modig-security.version}</version>
 			</dependency>

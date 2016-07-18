@@ -35,10 +35,6 @@
 		</dependency>
 		<dependency>
 			<groupId>no.nav.modig</groupId>
-			<artifactId>modig-log-jaxws-config</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.modig</groupId>
 			<artifactId>modig-security-ws</artifactId>
 		</dependency>
 		<dependency>
