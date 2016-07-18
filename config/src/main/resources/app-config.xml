@@ -49,7 +49,11 @@
 					 wsdlVersion="${nav-brukervarsel-v1-tjenestespesifikasjon.version}"/>
 	</exposed-services>
 
-	<security serviceUserResourceAlias="srvVarsel"/>
+	<security serviceUserResourceAlias="srvVarsel">
+		<logins>
+			<saml/>
+		</logins>
+	</security>
 
 	<monitoring>
 		<metric path="/varsel/internal/metrics"/>
