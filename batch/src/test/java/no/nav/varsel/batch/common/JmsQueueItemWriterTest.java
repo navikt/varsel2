@@ -35,17 +35,17 @@ public class JmsQueueItemWriterTest {
 
 	@Test
 	public void shouldMapAndQueue() throws Exception {
-		Object o1 = new Object();
-		Object o2 = new Object();
-		Object o3 = new Object();
-		Object o4 = new Object();
-		when(mapper.apply(o1)).thenReturn(o3);
-		when(mapper.apply(o2)).thenReturn(o4);
+		Object inObject1 = new Object();
+		Object outObject1 = new Object();
+		Object inObject2 = new Object();
+		Object outObject2 = new Object();
+		when(mapper.apply(inObject1)).thenReturn(outObject1);
+		when(mapper.apply(inObject2)).thenReturn(outObject2);
 
-		writer.write(Lists.newArrayList(o1, o2));
+		writer.write(Lists.newArrayList(inObject1, inObject2));
 
-		verify(jmsTemplate).convertAndSend(destination, o3);
-		verify(jmsTemplate).convertAndSend(destination, o4);
+		verify(jmsTemplate).convertAndSend(destination, outObject1);
+		verify(jmsTemplate).convertAndSend(destination, outObject2);
 		verifyNoMoreInteractions(jmsTemplate);
 	}
 
