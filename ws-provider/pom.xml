@@ -45,7 +45,15 @@
 			<groupId>no.nav.modig</groupId>
 			<artifactId>modig-security-loginmodule</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>no.nav.modig</groupId>
+			<artifactId>modig-security-authorization</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.modig</groupId>
+			<artifactId>modig-security-core</artifactId>
+			<classifier>tests</classifier>
+		</dependency>
 		<dependency>
 			<groupId>no.nav.tjenester</groupId>
 			<artifactId>nav-brukervarsel-v1-tjenestespesifikasjon</artifactId>

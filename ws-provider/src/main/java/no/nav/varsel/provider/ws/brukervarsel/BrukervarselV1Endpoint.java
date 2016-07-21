@@ -3,12 +3,16 @@ package no.nav.varsel.provider.ws.brukervarsel;
 import com.codahale.metrics.annotation.Counted;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
+import no.nav.modig.core.context.SubjectHandler;
+import no.nav.modig.core.exception.AuthorizationException;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.BrukervarselV1;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.HentVarselForBrukerUgyldigInput;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
-import no.nav.varsel.provider.ws.brukervarsel.support.HentVarselForBrukerRequestValidator;
 import no.nav.varsel.provider.ws.brukervarsel.support.BrukervarselV1Provider;
+import no.nav.varsel.provider.ws.brukervarsel.support.HentVarselForBrukerRequestValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.jws.HandlerChain;
@@ -27,9 +31,12 @@ import javax.jws.WebService;
 @HandlerChain(file = "/jboss-provider-handlers.xml")
 public class BrukervarselV1Endpoint implements BrukervarselV1 {
 
+	private static final Logger log = LoggerFactory.getLogger(BrukervarselV1Endpoint.class);
+
 	private static final String BRUKERVARSEL_V1 = "BrukervarselV1";
 	private static final String BRUKERVARSEL_V1_PING = BRUKERVARSEL_V1 + ".ping";
 	private static final String BRUKERVARSEL_V1_HENT_VARSEL_FOR_BRUKER = BRUKERVARSEL_V1 + ".hentVarselForBruker";
+	static final String ACCESS_DENIED = "Access denied";
 
 	@Inject
 	private BrukervarselV1Provider brukervarselV1Provider;
@@ -51,6 +58,13 @@ public class BrukervarselV1Endpoint implements BrukervarselV1 {
 	@ExceptionMetered(name = BRUKERVARSEL_V1_HENT_VARSEL_FOR_BRUKER + ".exceptions", absolute = true)
 	public HentVarselForBrukerResponse hentVarselForBruker(HentVarselForBrukerRequest hentVarselForBrukerRequest) throws HentVarselForBrukerUgyldigInput {
 		hentVarselForBrukerRequestValidator.validate(hentVarselForBrukerRequest);
-		return brukervarselV1Provider.hentVarselForBruker(hentVarselForBrukerRequest);
+		try {
+			return brukervarselV1Provider.hentVarselForBruker(hentVarselForBrukerRequest);
+		} catch (AuthorizationException e) {
+			log.warn(String.format("Access denied in operation %s. LoggedOnUser=%s. IdentType=%s", BRUKERVARSEL_V1_HENT_VARSEL_FOR_BRUKER,
+					SubjectHandler.getSubjectHandler().getUid(), SubjectHandler.getSubjectHandler().getIdentType()), e);
+			throw new AuthorizationException(ACCESS_DENIED); //NOSONAR
+		}
+
 	}
 }

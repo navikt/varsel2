@@ -2,6 +2,7 @@ package no.nav.varsel.service;
 
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.VarselbestillingRepo;
+import no.nav.varsel.service.interfaces.BrukervarselService;
 import no.nav.varsel.service.tvarsel005.support.BrukervarselMapper;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo;
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public class BrukervarselV1Service {
+public class BrukervarselV1Service implements BrukervarselService {
 
 	@Inject
 	private VarselbestillingRepo varselbestillingRepo;
