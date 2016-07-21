@@ -1,5 +1,8 @@
 package no.nav.varsel.provider;
 
+import no.nav.modig.core.context.SubjectHandlerUtils;
+import no.nav.modig.core.context.ThreadLocalSubjectHandler;
+import no.nav.modig.testcertificates.TestCertificates;
 import no.nav.varsel.config.JmsTestConfig;
 import no.nav.varsel.config.WsProviderTestConfig;
 import no.nav.varsel.domain.Constants;
@@ -36,6 +39,11 @@ public abstract class AbstractWsProviderITest {
 
 	@BeforeClass
 	public static void setUpStatic() throws Exception {
+		System.setProperty("no.nav.modig.core.context.subjectHandlerImplementationClass", ThreadLocalSubjectHandler.class.getName());
+		System.setProperty("no.nav.modig.security.systemuser.username", "varsel");
+		System.setProperty("no.nav.modig.security.systemuser.password", "passord");
+		TestCertificates.setupKeyAndTrustStore();
+		SubjectHandlerUtils.setInternBruker(Constants.USER_ID);
 		JmsTestConfig.mockJndi();
 	}
 

@@ -245,6 +245,18 @@
 			</dependency>
 			<dependency>
 				<groupId>no.nav.modig</groupId>
+				<artifactId>modig-security-core</artifactId>
+				<version>${modig-security.version}</version>
+				<classifier>tests</classifier>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.modig</groupId>
+				<artifactId>modig-security-authorization</artifactId>
+				<version>${modig-security.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.modig</groupId>
 				<artifactId>modig-testcertificates</artifactId>
 				<version>1.0.0</version>
 			</dependency>

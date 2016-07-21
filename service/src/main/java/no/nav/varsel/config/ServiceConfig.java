@@ -7,6 +7,7 @@ import no.nav.varsel.service.MottaVarselKvitteringService;
 import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.StoppReVarselService;
 import no.nav.varsel.service.VarselFletter;
+import no.nav.varsel.service.interfaces.BrukervarselService;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
 import no.nav.varsel.service.tvarsel005.support.BrukervarselMapper;
@@ -64,7 +65,7 @@ public class ServiceConfig {
 	}
 
 	@Bean
-	public BrukervarselV1Service brukervarselV1Service() {
+	public BrukervarselService brukervarselV1Service() {
 		return new BrukervarselV1Service();
 	}
 

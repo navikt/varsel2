@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Import;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration
-@Import({CxfConfig.class, ProviderEndpointConfig.class, Tvarsel005Config.class, ServiceConfig.class})
+@Import({CxfConfig.class, ProviderEndpointConfig.class, Tvarsel005Config.class, ServiceConfig.class, XacmlConfig.class})
 public class ProviderWsConfig {
 
 	@Bean
