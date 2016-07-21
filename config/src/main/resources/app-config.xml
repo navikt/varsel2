@@ -3,7 +3,7 @@
 			 xmlns="http://appconfig.aura.nav.no"
 			 xsi:schemaLocation="http://appconfig.aura.nav.no http://maven.adeo.no/xsd/appconfig.xsd">
 
-	<name>Varsel</name>
+	<name>varsel</name>
 
 	<selftest>
 		<path>/varsel/internal/selftest?status</path>
