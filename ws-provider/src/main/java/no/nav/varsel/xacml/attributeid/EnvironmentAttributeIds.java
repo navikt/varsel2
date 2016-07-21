@@ -10,7 +10,7 @@ import no.nav.modig.security.tilgangskontroll.URN;
  * FIXME: NB! Det er bug i modig-security som gjør at alle environment-attributter må settes som en annen type.
  * (Se http://jira.adeo.no/browse/PKFEIL-15603)
  * Feilen gjør at ingen environment-attributter blir satt på XACML-requesten ved evaluering.
- * Denne feilen ligger i {@link no.nav.modig.security.tilgangskontroll.policy.pdp.picketlink.RequestTypeFactory}
+ * Denne feilen ligger i no.nav.modig.security.tilgangskontroll.policy.pdp.picketlink.RequestTypeFactory
  *
  * @author Roar Bjurstrom, Visma Consulting.
  */
