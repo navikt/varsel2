@@ -16,12 +16,15 @@ import java.io.IOException;
 @Configuration
 public class KodeverkV2Endpoint extends AbstractCxfEndpointConfig {
 
+	private static final String WSDL_URL = "wsdl/no/nav/tjeneste/virksomhet/kodeverk/v2/Kodeverk.wsdl";
+
 	@Value("${kodeverkv2.ws.url}")
 	private String kodeverkUrl;
 
 	@Bean
 	public KodeverkPortType kodeverkPortType() throws IOException {
 		setAdress(kodeverkUrl);
+		setWsdlUrl(WSDL_URL);
 		return createPort(KodeverkPortType.class);
 	}
 }

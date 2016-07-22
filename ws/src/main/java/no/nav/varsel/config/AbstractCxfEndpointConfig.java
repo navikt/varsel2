@@ -9,6 +9,7 @@ import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.message.Message;
 
 import javax.inject.Inject;
+import java.net.URL;
 import java.util.HashMap;
 
 /**
@@ -37,6 +38,10 @@ public abstract class AbstractCxfEndpointConfig {
 		factoryBean.setAddress(aktoerUrl);
 	}
 
+	protected void setWsdlUrl(String classPathResourceWsdlUrl) {
+		factoryBean.setWsdlURL(getUrlFromClasspathResource(classPathResourceWsdlUrl));
+	}
+
 	protected void addOutInterceptor(Interceptor<? extends Message> interceptor) {
 		factoryBean.getOutInterceptors().add(interceptor);
 	}
@@ -48,6 +53,14 @@ public abstract class AbstractCxfEndpointConfig {
 	protected <T> T createPort(Class<T> portType) {
 		factoryBean.getFeatures().add(new TimeoutFeature(timeout, timeout));
 		return factoryBean.create(portType);
+	}
+
+	private static String getUrlFromClasspathResource(String classpathResource) {
+		URL url = AbstractCxfEndpointConfig.class.getClassLoader().getResource(classpathResource);
+		if (url != null) {
+			return url.toString();
+		}
+		throw new IllegalStateException("Failed to find resource: " + classpathResource);
 	}
 
 	protected void enableMtom() {
