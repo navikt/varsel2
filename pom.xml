@@ -5,7 +5,7 @@
 	<groupId>no.nav.varsel</groupId>
 	<artifactId>varsel</artifactId>
 	<packaging>pom</packaging>
-	<version>1.1.1-SNAPSHOT</version>
+	<version>1.1.1</version>
 
 	<modules>
 		<module>config</module>
@@ -485,7 +485,7 @@
 	<scm>
 		<developerConnection>scm:git:http://stash.devillo.no/scm/boaf/varsel.git</developerConnection>
 		<url>http://stash.devillo.no/projects/BOAF/repos/varsel.git</url>
-		<tag>HEAD</tag>
+		<tag>varsel-1.1.1</tag>
 	</scm>
 
 	<distributionManagement>
