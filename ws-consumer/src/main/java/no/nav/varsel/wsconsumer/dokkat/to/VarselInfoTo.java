@@ -12,10 +12,12 @@ import java.util.Set;
  */
 public class VarselInfoTo {
 	private Set<KanalCode> preferertKanal = Sets.newHashSet();
+	private String varselNavn;
 	private String varseltypeId;
 	private String varselForDistKanal;
 	private String varselKategori;
 	private boolean inaktiv;
+	private String varselUrl;
 	private int revarslingIntervall;
 	private int antallRevarsling;
 	private Set<VarselMalTo> maler;
@@ -34,6 +36,14 @@ public class VarselInfoTo {
 
 	public void setPreferertKanal(Set<KanalCode> preferertKanal) {
 		this.preferertKanal = preferertKanal;
+	}
+
+	public String getVarselNavn() {
+		return varselNavn;
+	}
+
+	public void setVarselNavn(String varselNavn) {
+		this.varselNavn = varselNavn;
 	}
 
 	public String getVarseltypeId() {
@@ -68,6 +78,14 @@ public class VarselInfoTo {
 		this.inaktiv = inaktiv;
 	}
 
+	public String getVarselUrl() {
+		return varselUrl;
+	}
+
+	public void setVarselUrl(String varselUrl) {
+		this.varselUrl = varselUrl;
+	}
+
 	public int getRevarslingIntervall() {
 		return revarslingIntervall;
 	}
@@ -95,9 +113,11 @@ public class VarselInfoTo {
 	public static final class VarselInfoToBuilder {
 		private Set<KanalCode> preferertKanal = Sets.newHashSet();
 		private String varseltypeId;
+		private String varselNavn;
 		private String varselForDistKanal;
 		private String varselKategori;
 		private boolean inaktiv;
+		private String varselUrl;
 		private int revarslingIntervall;
 		private int antallRevarsling;
 		private Set<VarselMalTo> maler;
@@ -119,6 +139,11 @@ public class VarselInfoTo {
 			return this;
 		}
 
+		public VarselInfoToBuilder varselNavn(String varselNavn) {
+			this.varselNavn = varselNavn;
+			return this;
+		}
+
 		public VarselInfoToBuilder varselForDistKanal(String varselForDistKanal) {
 			this.varselForDistKanal = varselForDistKanal;
 			return this;
@@ -131,6 +156,11 @@ public class VarselInfoTo {
 
 		public VarselInfoToBuilder inaktiv(boolean inaktiv) {
 			this.inaktiv = inaktiv;
+			return this;
+		}
+
+		public VarselInfoToBuilder varselUrl(String varselUrl) {
+			this.varselUrl = varselUrl;
 			return this;
 		}
 
@@ -153,9 +183,11 @@ public class VarselInfoTo {
 			VarselInfoTo varselInfoTo = new VarselInfoTo();
 			varselInfoTo.setPreferertKanal(preferertKanal);
 			varselInfoTo.setVarseltypeId(varseltypeId);
+			varselInfoTo.setVarselNavn(varselNavn);
 			varselInfoTo.setVarselForDistKanal(varselForDistKanal);
 			varselInfoTo.setVarselKategori(varselKategori);
 			varselInfoTo.setInaktiv(inaktiv);
+			varselInfoTo.setVarselUrl(varselUrl);
 			varselInfoTo.setRevarslingIntervall(revarslingIntervall);
 			varselInfoTo.setAntallRevarsling(antallRevarsling);
 			varselInfoTo.setMaler(maler);

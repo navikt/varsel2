@@ -10,10 +10,13 @@ import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.ANTALL_REVARSLING;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST_VARSEL_URL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.PREFERERT_KANAL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.REVARSLING_INTERVALL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.REVARSLING_TEKST;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -108,7 +111,23 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestillingRepo.count(), is(0L));
 	}
 
-	protected Varsel assertDatabaseFoerstegangVarsel(Varselbestilling varselbestilling) {
+	@Test
+	public void shouldWeaveVarselUrl() throws Exception {
+		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling();
+		varselBestilling.setVarseltypeId("varsel_varselUrl");
+		varselBestilling.getParameterListe().clear();
+		varselBestilling.setReVarsel(false);
+		JmsReply response = sendMessage(bestillVarselQueue, new ObjectFactory().createVarselMedHandling(varselBestilling));
+
+		isOk(response);
+		assertThat(varselbestillingRepo.count(), is(1L));
+
+		String varselTekst = FOERSTE_GANG_TEKST_VARSEL_URL.replace("{varselUrl}", VARSEL_URL);
+		Varselutsending varselutsending = receive(varselutsendingQueue);
+		assertThat(varselutsending.getVarselTekst(), equalTo(varselTekst));
+	}
+
+	private Varsel assertDatabaseFoerstegangVarsel(Varselbestilling varselbestilling) {
 		assertThat(varselbestilling, notNullValue());
 		assertThat(varselbestilling.getVarselbestillingId(), is(VARSELBESTILLING_ID));
 		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
@@ -137,7 +156,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		return varsel;
 	}
 
-	protected Varsel assertDatabaseRevarsel(String varselIdFoersteVarsel, Varselbestilling varselbestilling) {
+	private Varsel assertDatabaseRevarsel(String varselIdFoersteVarsel, Varselbestilling varselbestilling) {
 		assertThat(varselbestilling, notNullValue());
 		assertThat(varselbestilling.getVarselbestillingId(), is(VARSELBESTILLING_ID));
 		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
@@ -169,7 +188,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		return varsel;
 	}
 
-	protected void assertVarselutsending(Varselbestilling varselbestilling, Varsel varsel) {
+	private void assertVarselutsending(Varselbestilling varselbestilling, Varsel varsel) {
 		Varselutsending varselutsending = receive(varselutsendingQueue);
 
 		assertThat(varselutsending.getVarselId(), is(varsel.getVarselId()));

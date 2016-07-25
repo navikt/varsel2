@@ -26,11 +26,13 @@ public class VarselInfoMapper {
 
 		return aVarselInfoTo()
 				.varseltypeId(varselInfo.getVarseltypeId())
+				.varselNavn(varselInfo.getVarselNavn())
 				.varselForDistKanal(varselInfo.getVarselForDistribusjonKanal())
 				.varselKategori(varselInfo.getVarselKategori())
 				.inaktiv(varselInfo.getInaktiv())
 				.revarslingIntervall(varselInfo.getRevarslingIntervall())
 				.antallRevarsling(varselInfo.getAntallRevarslinger())
+				.varselUrl(varselInfo.getVarselURL())
 				.preferertKanal(mapKanals(varselInfo.getPreferertKanal()))
 				.maler(varselmals == null ? null : varselmals.stream().map(this::mapMal).collect(toSet()))
 				.build();

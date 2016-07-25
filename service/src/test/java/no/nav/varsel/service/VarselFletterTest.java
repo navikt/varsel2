@@ -1,5 +1,6 @@
 package no.nav.varsel.service;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -21,6 +22,8 @@ public class VarselFletterTest {
 
 	private static final String NAVN = "Even Lagsdel";
 	private static final String AAR = "2016";
+	private static final String VARSEL_URL = "http://nav.no";
+	private static final String DEFAULT_TEXT = "dette er en tekst om året ";
 
 	private VarselFletter fletter = new VarselFletter();
 
@@ -33,7 +36,7 @@ public class VarselFletterTest {
 		map.put("navn", NAVN);
 		map.put("aarstall", AAR);
 
-		assertThat(fletter.flettVarsel("dette er en tekst om {navn} i {aarstall}", map),
+		assertThat(fletter.weaveVarsel("dette er en tekst om {navn} i {aarstall}", map, VARSEL_URL),
 				is("dette er en tekst om Even Lagsdel i 2016"));
 	}
 
@@ -45,7 +48,7 @@ public class VarselFletterTest {
 		Map<String, String> map = new HashMap<>();
 		map.put("aarstall", AAR);
 
-		fletter.flettVarsel("dette er en tekst om {navn} i {aarstall} angående {tema}", map);
+		fletter.weaveVarsel("dette er en tekst om {navn} i {aarstall} angående {tema}", map, VARSEL_URL);
 	}
 
 	@Test
@@ -57,6 +60,26 @@ public class VarselFletterTest {
 		map.put("aarstall", AAR);
 		map.put("tema", "klage");
 
-		fletter.flettVarsel("dette er en tekst om året {aarstall}", map);
+		fletter.weaveVarsel(DEFAULT_TEXT + "{aarstall}", map, VARSEL_URL);
+	}
+
+	@Test
+	public void shouldAllowVarselUrlToBeUnused() throws Exception {
+		fletter.weaveVarsel("dette er en tekst om året", new HashMap<>(), VARSEL_URL);
+	}
+
+	@Test
+	public void shouldThrowIfVarselUrlParameterIsMissing() throws Exception {
+		expectedException.expect(FletteparameterMissingException.class);
+		expectedException.expectMessage("missing: varselUrl");
+
+		fletter.weaveVarsel(DEFAULT_TEXT + "{varselUrl}", new HashMap<>(), null);
+	}
+
+	@Test
+	public void shouldFletteVarselUrl() throws Exception {
+		String varsel = fletter.weaveVarsel(DEFAULT_TEXT + "{varselUrl}", new HashMap<>(), VARSEL_URL);
+
+		assertThat(varsel, equalTo(DEFAULT_TEXT + VARSEL_URL));
 	}
 }
