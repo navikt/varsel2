@@ -168,7 +168,7 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	@Test
-	public void shouldUseFasitPropertyWhenVarselUrlContains$navnobaseurl$() throws Exception {
+	public void shouldWeaveFasitPropertyWhenVarselUrlContains$navnobaseurl$() throws Exception {
 		String postfix = "/din-innboks";
 		String prefix = "prefix";
 
