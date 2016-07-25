@@ -13,7 +13,9 @@ import static no.nav.varsel.repo.TestdataUtil.TEKNISK_FEIL;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST_VARSEL_URL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -23,6 +25,7 @@ import static org.junit.Assert.assertThat;
 import no.nav.melding.virksomhet.varsel.v1.varsel.AktoerId;
 import no.nav.melding.virksomhet.varsel.v1.varsel.ObjectFactory;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
+import no.nav.melding.virksomhet.varsel.v1.varsel.Varslingstyper;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
@@ -46,7 +49,6 @@ import java.util.UUID;
  */
 public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
-
 	@Inject
 	private Queue bestillServicemeldingQueue;
 	@Inject
@@ -55,6 +57,40 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	@Test
 	public void shouldReceieveJms() throws Exception {
 		JmsReply response = sendMessage(bestillServicemeldingQueue, createVarsel());
+
+		isOk(response);
+		assertThat(varselbestillingRepo.count(), is(1L));
+
+		String varselTekst = FOERSTE_GANG_TEKST.replace("{mottaker}", VAL);
+		String varselId = assertDb(varselTekst).getVarselId();
+		assertVarselutsendingQueue(varselTekst, varselId);
+	}
+
+	@Test
+	public void shouldWeaveVarselUrl() throws Exception {
+		Varsel varsel = BestillServicemeldingMapperTest.createVarsel();
+		Varslingstyper varslingstype = new Varslingstyper();
+		varslingstype.setValue("varsel_varselUrl");
+		varsel.setVarslingstype(varslingstype);
+		varsel.getParameterListe().clear();
+		JmsReply response = sendMessage(bestillServicemeldingQueue, new ObjectFactory().createVarsel(varsel));
+
+		isOk(response);
+		assertThat(varselbestillingRepo.count(), is(1L));
+
+		String varselTekst = FOERSTE_GANG_TEKST_VARSEL_URL.replace("{varselUrl}", VARSEL_URL);
+		Varselutsending varselutsending = receive(varselutsendingQueue);
+		assertThat(varselutsending.getVarselTekst(), equalTo(varselTekst));
+	}
+
+	@Test
+	public void shouldWeaveVarselurl() throws Exception {
+		Varsel varsel1 = BestillServicemeldingMapperTest.createVarsel();
+		varsel1.getParameterListe().clear();
+
+
+		JAXBElement<Varsel> varsel = createVarsel();
+		JmsReply response = sendMessage(bestillServicemeldingQueue, varsel);
 
 		isOk(response);
 		assertThat(varselbestillingRepo.count(), is(1L));

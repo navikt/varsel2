@@ -5,8 +5,10 @@ import static org.mockito.Mockito.when;
 
 import com.google.common.collect.Sets;
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
+import no.nav.dokkat.schemas.tkat021.VarselMalRestTo;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.wsconsumer.dokkat.support.VarselInfoMapper;
+import no.nav.varsel.wsconsumer.dokkat.support.VarselInfoMapperTest;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
 import org.junit.Assert;
@@ -35,6 +37,11 @@ public class VarselInfoConsumerTest {
 	public static final int REVARSLING_INTERVALL = 4;
 	public static final int ANTALL_REVARSLING = 2;
 	public static final KanalCode PREFERERT_KANAL = KanalCode.EPOST;
+	public static final String VARSEL_NAVN = "varselnavn";
+	public static final String VARSEL_URL = "http://nav.no";
+
+	public static final String FOERSTE_GANG_TEKST_VARSEL_URL = "test tekst {varselUrl}";
+	public static final String REVARSLING_TEKST_VARSEL_URL = "varsel_varselUrl";
 
 	private static final String VARSELTYPE_ID = "varseltypeIden";
 	private static final String DOKKAT_URL = "http://nav.no/varselinfo";
@@ -68,11 +75,13 @@ public class VarselInfoConsumerTest {
 	public static VarselInfoTo createVarselInfoTo(String varseltype) {
 		VarselInfoTo varselInfoTo = new VarselInfoTo();
 		varselInfoTo.setVarseltypeId(varseltype);
+		varselInfoTo.setVarselNavn(VARSEL_NAVN);
 		varselInfoTo.setVarselForDistKanal(VARSEL_FOR_DIST_KANAL);
 		varselInfoTo.setVarselKategori(VARSEL_KATEGORI);
 		varselInfoTo.setInaktiv(INAKTIV);
 		varselInfoTo.setRevarslingIntervall(REVARSLING_INTERVALL);
 		varselInfoTo.setAntallRevarsling(ANTALL_REVARSLING);
+		varselInfoTo.setVarselUrl(VARSEL_URL);
 		varselInfoTo.addPreferertKanal(PREFERERT_KANAL);
 
 		VarselMalTo varselMalTo = new VarselMalTo();
