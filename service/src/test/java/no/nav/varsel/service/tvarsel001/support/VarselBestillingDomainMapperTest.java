@@ -159,13 +159,27 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	@Test
-	public void shouldUseFasitPropertyWhen$navnobaseurl$() throws Exception {
+	public void shouldUseFasitPropertyWhenVarselUrlEquals$navnobaseurl$() throws Exception {
 		VarselInfoTo varselTo = createVarselTo();
 		varselTo.setVarselUrl("$navnobaseurl$");
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 
 		assertThat(varsel.getVarselUrl(), is("baseurl/" + varsel.getVarselId()));
 	}
+
+	@Test
+	public void shouldUseFasitPropertyWhenVarselUrlContains$navnobaseurl$() throws Exception {
+		String postfix = "/din-innboks";
+		String prefix = "prefix";
+
+		VarselInfoTo varselTo = createVarselTo();
+		varselTo.setVarselUrl(prefix + "$navnobaseurl$" + postfix);
+
+		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
+
+		assertThat(varsel.getVarselUrl(), equalTo(prefix + "baseurl/" + varsel.getVarselId() + postfix));
+	}
+
 
 	@Test
 	public void shouldUseVarselUrlFromDokkat() throws Exception {

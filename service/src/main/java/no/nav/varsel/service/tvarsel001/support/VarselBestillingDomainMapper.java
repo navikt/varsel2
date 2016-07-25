@@ -128,10 +128,12 @@ public class VarselBestillingDomainMapper implements InitializingBean {
 
 	private String findVarselUrl(VarselInfoTo varselInfoTo, String varselId) {
 		String varselUrl = varselInfoTo.getVarselUrl();
-		if (varselUrl == null || BASE_URL_IDENTIFIER.equals(varselInfoTo.getVarselUrl())) {
+		if (varselUrl == null) {
 			varselUrl = varselUrlFromFasit;
 		}
-		return varselUrl.replace(ID_REPLACE, varselId);
+		return varselUrl
+				.replace(BASE_URL_IDENTIFIER, varselUrlFromFasit)
+				.replace(ID_REPLACE, varselId);
 	}
 
 	@Inject
