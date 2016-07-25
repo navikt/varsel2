@@ -84,23 +84,6 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	public void shouldWeaveVarselurl() throws Exception {
-		Varsel varsel1 = BestillServicemeldingMapperTest.createVarsel();
-		varsel1.getParameterListe().clear();
-
-
-		JAXBElement<Varsel> varsel = createVarsel();
-		JmsReply response = sendMessage(bestillServicemeldingQueue, varsel);
-
-		isOk(response);
-		assertThat(varselbestillingRepo.count(), is(1L));
-
-		String varselTekst = FOERSTE_GANG_TEKST.replace("{mottaker}", VAL);
-		String varselId = assertDb(varselTekst).getVarselId();
-		assertVarselutsendingQueue(varselTekst, varselId);
-	}
-
-	@Test
 	public void shouldPutOnBackoutIfFailedWs() throws Exception {
 		JAXBElement<Varsel> varsel = createVarsel();
 		((AktoerId) varsel.getValue().getMottaker()).setAktoerId(TEKNISK_FEIL);
