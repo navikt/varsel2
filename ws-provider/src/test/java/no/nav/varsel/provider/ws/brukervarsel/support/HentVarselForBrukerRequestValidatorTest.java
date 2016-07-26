@@ -70,6 +70,12 @@ public class HentVarselForBrukerRequestValidatorTest {
 		validator.validate(request);
 	}
 
+	@Test
+	public void shouldValidateWhenPeriodeNotSet() throws HentVarselForBrukerUgyldigInput {
+		HentVarselForBrukerRequest request = createRequest(aktoer);
+		validator.validate(request);
+	}
+
 	private void validate(HentVarselForBrukerRequest request, String message, String feilaarsak) {
 		try {
 			validator.validate(request);
@@ -91,6 +97,12 @@ public class HentVarselForBrukerRequestValidatorTest {
 		periode.setFom(tenDaysAgo);
 		periode.setTom(tenDaysIntoTheFuture);
 		request.setPeriode(periode);
+		return request;
+	}
+
+	private HentVarselForBrukerRequest createRequest(AktoerId aktoer) {
+		HentVarselForBrukerRequest request = new HentVarselForBrukerRequest();
+		request.setBruker(aktoer);
 		return request;
 	}
 }

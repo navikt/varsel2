@@ -26,7 +26,9 @@ public class HentVarselForBrukerRequestValidator {
 
 	public void validate(HentVarselForBrukerRequest request) throws HentVarselForBrukerUgyldigInput {
 		validateBruker(request.getBruker());
-		validatePeriode(request.getPeriode());
+		if (request.getPeriode() != null) {
+			validatePeriode(request.getPeriode());
+		}
 	}
 
 	private void validatePeriode(Periode periode) throws HentVarselForBrukerUgyldigInput {
