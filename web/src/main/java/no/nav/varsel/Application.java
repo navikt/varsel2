@@ -2,6 +2,7 @@ package no.nav.varsel;
 
 import com.codahale.metrics.servlets.MetricsServlet;
 import no.nav.varsel.config.AppConfig;
+import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
@@ -32,6 +33,16 @@ public class Application extends SpringBootServletInitializer {
 						.addResourceLocations("classpath:/web/static/css/");
 			}
 		};
+	}
+
+	@Bean(name = "webServiceServlet")
+	public ServletRegistrationBean webServiceServlet() {
+		ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean();
+		servletRegistrationBean.setServlet(new CXFServlet());
+		servletRegistrationBean.setName("webServiceServlet");
+		servletRegistrationBean.addUrlMappings("/ws/*");
+		servletRegistrationBean.setLoadOnStartup(2);
+		return servletRegistrationBean;
 	}
 
 	@Bean

@@ -4,6 +4,7 @@
 	<deployment>
 		<exclude-subsystems>
 			<subsystem name="jpa"/>
+			<subsystem name="webservices"/>
 		</exclude-subsystems>
 		<exclusions>
 			<module name="javaee.api"/>
@@ -20,6 +21,7 @@
 	<sub-deployment name="varsel-web.war">
 		<exclude-subsystems>
 			<subsystem name="jpa"/>
+			<subsystem name="webservices"/>
 		</exclude-subsystems>
 		<exclusions>
 			<module name="javaee.api"/>

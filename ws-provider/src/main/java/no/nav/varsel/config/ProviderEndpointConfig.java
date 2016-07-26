@@ -18,9 +18,9 @@ import org.springframework.context.annotation.Configuration;
 public class ProviderEndpointConfig {
 
 	@Bean
-	public EndpointImpl sanntidPdfKonvertererV1Endpoint(Bus bus, BrukervarselV1Endpoint brukervarselV1Endpoint) {
+	public EndpointImpl brukervarselV1EndpointImpl(Bus bus, BrukervarselV1Endpoint brukervarselV1Endpoint) {
 		EndpointImpl endpoint = newEndpoint(bus, brukervarselV1Endpoint);
-		endpoint.publish("/ws/Brukervarsel/v1");
+		endpoint.publish("/Brukervarsel/v1");
 		return endpoint;
 	}
 
