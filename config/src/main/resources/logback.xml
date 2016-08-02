@@ -93,10 +93,11 @@
 		<appender-ref ref="SYSLOG"/>
 	</logger>
 
-	<logger name="no.nav.dokdist.batch" additivity="false" level="INFO">
+	<logger name="no.nav.varsel.batch" additivity="false" level="INFO">
 		<appender-ref ref="BATCH-SIFT" />
 		<appender-ref ref="SYSLOG" />
 	</logger>
+
 	<logger name="org.springframework.batch" additivity="false" level="INFO">
 		<appender-ref ref="BATCH-SIFT" />
 		<appender-ref ref="SYSLOG" />
