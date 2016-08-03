@@ -14,9 +14,6 @@ import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.Assert;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -29,12 +26,8 @@ import java.util.UUID;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public class VarselBestillingDomainMapper implements InitializingBean {
+public class VarselBestillingDomainMapper {
 
-	private static final String ID_REPLACE = "{id}";
-	private static final String BASE_URL_IDENTIFIER = "$navnobaseurl$";
-
-	private String varselUrlFromFasit;
 	@Inject
 	private VarselFletter varselFletter;
 
@@ -110,7 +103,7 @@ public class VarselBestillingDomainMapper implements InitializingBean {
 								null;
 		String tekstMal = revarsel ? mal.getRevarslingTekst() : mal.getFoerstegangsTekst();
 		String varselId = UUID.randomUUID().toString();
-		String varselUrl = findVarselUrl(varselInfoTo, varselId);
+		String varselUrl = varselFletter.weaveVarselUrl(varselInfoTo.getVarselUrl(), bestillServicemeldingTo.getParameters());
 		return aVarsel()
 				.varselId(varselId)
 				.kanal(kanalCode)
@@ -120,29 +113,10 @@ public class VarselBestillingDomainMapper implements InitializingBean {
 				.status(StatusCode.SENDT)
 				.feilbeskrivelse(null)
 				.varselTittel(mal.getTittel())
-				.varselTekst(varselFletter.weaveVarsel(tekstMal, bestillServicemeldingTo.getParameters(), varselUrl))
+				.varselTekst(varselFletter.weaveVarsel(tekstMal, bestillServicemeldingTo.getParameters()))
 				.varselUrl(kanalCode == KanalCode.DITT_NAV ? varselUrl : null)
 				.erRevarsel(revarsel)
 				.build();
 	}
 
-	private String findVarselUrl(VarselInfoTo varselInfoTo, String varselId) {
-		String varselUrl = varselInfoTo.getVarselUrl();
-		if (varselUrl == null) {
-			varselUrl = varselUrlFromFasit;
-		}
-		return varselUrl
-				.replace(BASE_URL_IDENTIFIER, varselUrlFromFasit)
-				.replace(ID_REPLACE, varselId);
-	}
-
-	@Inject
-	public void setVarselUrlFromFasit(@Value("${varsel.url}") String varselUrlFromFasit) {
-		this.varselUrlFromFasit = varselUrlFromFasit;
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		Assert.isTrue(varselUrlFromFasit.contains(ID_REPLACE));
-	}
 }

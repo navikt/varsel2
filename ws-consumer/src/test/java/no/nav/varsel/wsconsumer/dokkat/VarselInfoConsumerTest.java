@@ -5,10 +5,8 @@ import static org.mockito.Mockito.when;
 
 import com.google.common.collect.Sets;
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
-import no.nav.dokkat.schemas.tkat021.VarselMalRestTo;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.wsconsumer.dokkat.support.VarselInfoMapper;
-import no.nav.varsel.wsconsumer.dokkat.support.VarselInfoMapperTest;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
 import org.junit.Assert;
@@ -40,8 +38,8 @@ public class VarselInfoConsumerTest {
 	public static final String VARSEL_NAVN = "varselnavn";
 	public static final String VARSEL_URL = "http://nav.no";
 
-	public static final String FOERSTE_GANG_TEKST_VARSEL_URL = "test tekst {varselUrl}";
-	public static final String REVARSLING_TEKST_VARSEL_URL = "varsel_varselUrl";
+	public static final String VARSEL_URL_MED_FLETTING = VARSEL_URL + "/{param}";
+	public static final KanalCode VARSEL_URL_PREFERERT_KANAL = KanalCode.DITT_NAV;
 
 	private static final String VARSELTYPE_ID = "varseltypeIden";
 	private static final String DOKKAT_URL = "http://nav.no/varselinfo";
@@ -85,7 +83,7 @@ public class VarselInfoConsumerTest {
 		varselInfoTo.addPreferertKanal(PREFERERT_KANAL);
 
 		VarselMalTo varselMalTo = new VarselMalTo();
-		varselMalTo.setKanal(KanalCode.EPOST);
+		varselMalTo.setKanal(PREFERERT_KANAL);
 		varselMalTo.setTittel(VARSEL_TITTEL);
 		varselMalTo.setFoerstegangsTekst(FOERSTE_GANG_TEKST);
 		varselMalTo.setRevarslingTekst(REVARSLING_TEKST);

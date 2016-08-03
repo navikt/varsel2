@@ -3,17 +3,17 @@ package no.nav.varsel.wsconsumer.dokkat.support;
 import static no.nav.varsel.repo.TestdataUtil.ANTALL_REVARSLINGER;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST_VARSEL_URL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.INAKTIV;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.PREFERERT_KANAL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.REVARSLING_INTERVALL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.REVARSLING_TEKST;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.REVARSLING_TEKST_VARSEL_URL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_FOR_DIST_KANAL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_KATEGORI;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_NAVN;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL_MED_FLETTING;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL_PREFERERT_KANAL;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -26,6 +26,8 @@ import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
 import org.junit.Test;
+
+import java.util.Collections;
 
 /**
  * Unit test for {@link VarselInfoMapper}
@@ -80,11 +82,11 @@ public class VarselInfoMapperTest {
 		return varselInfo;
 	}
 
-	public static VarselInfoRestTo createVarselInfoWithVarselUrlInText() {
+	public static VarselInfoRestTo createVarselInfoWithVarselUrl() {
 		VarselInfoRestTo varselInfo = createVarselInfo();
-		VarselMalRestTo varselMal = varselInfo.getVarselmals().iterator().next();
-		varselMal.setFoerstegangsvarselTekst(FOERSTE_GANG_TEKST_VARSEL_URL);
-		varselMal.setRevarslingTekst(REVARSLING_TEKST_VARSEL_URL);
+		varselInfo.setVarselURL(VARSEL_URL_MED_FLETTING);
+		varselInfo.setPreferertKanal(Collections.singleton(VARSEL_URL_PREFERERT_KANAL.name()));
+		varselInfo.getVarselmals().iterator().next().setKanal(VARSEL_URL_PREFERERT_KANAL.name());
 		return varselInfo;
 	}
 }

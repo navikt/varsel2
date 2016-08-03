@@ -2,10 +2,13 @@ package no.nav.varsel.service;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import com.google.common.collect.Maps;
 import no.nav.varsel.service.support.exception.FletteparameterMissingException;
 import no.nav.varsel.service.support.exception.FletteparameterNotUsedException;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -22,13 +25,20 @@ public class VarselFletterTest {
 
 	private static final String NAVN = "Even Lagsdel";
 	private static final String AAR = "2016";
-	private static final String VARSEL_URL = "http://nav.no";
 	private static final String DEFAULT_TEXT = "dette er en tekst om året ";
+
+	private static final String DEFAULT_URL = "http://nav.no";
+	private static final String URL_FROM_FASIT = "http://fasit.adeo.no";
 
 	private VarselFletter fletter = new VarselFletter();
 
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
+
+	@Before
+	public void setUp() throws Exception {
+		fletter.setVarselUrlFromFasit(URL_FROM_FASIT);
+	}
 
 	@Test
 	public void shouldFlett() throws Exception {
@@ -36,7 +46,7 @@ public class VarselFletterTest {
 		map.put("navn", NAVN);
 		map.put("aarstall", AAR);
 
-		assertThat(fletter.weaveVarsel("dette er en tekst om {navn} i {aarstall}", map, VARSEL_URL),
+		assertThat(fletter.weaveVarsel("dette er en tekst om {navn} i {aarstall}", map),
 				is("dette er en tekst om Even Lagsdel i 2016"));
 	}
 
@@ -48,7 +58,7 @@ public class VarselFletterTest {
 		Map<String, String> map = new HashMap<>();
 		map.put("aarstall", AAR);
 
-		fletter.weaveVarsel("dette er en tekst om {navn} i {aarstall} angående {tema}", map, VARSEL_URL);
+		fletter.weaveVarsel("dette er en tekst om {navn} i {aarstall} angående {tema}", map);
 	}
 
 	@Test
@@ -60,26 +70,63 @@ public class VarselFletterTest {
 		map.put("aarstall", AAR);
 		map.put("tema", "klage");
 
-		fletter.weaveVarsel(DEFAULT_TEXT + "{aarstall}", map, VARSEL_URL);
+		fletter.weaveVarsel(DEFAULT_TEXT + "{aarstall}", map);
 	}
 
 	@Test
-	public void shouldAllowVarselUrlToBeUnused() throws Exception {
-		fletter.weaveVarsel("dette er en tekst om året", new HashMap<>(), VARSEL_URL);
+	public void shouldDoNothingWhenNoFletteparameters() throws Exception {
+		String varselUrl = fletter.weaveVarselUrl(DEFAULT_URL, Maps.newHashMap());
+
+		assertThat(varselUrl, equalTo(DEFAULT_URL));
 	}
 
 	@Test
-	public void shouldThrowIfVarselUrlParameterIsMissing() throws Exception {
+	public void shouldFletteUrl() throws Exception {
+		Map<String, String> map = new HashMap<>();
+		map.put("param1", "p1");
+		map.put("param2", "p2");
+
+		String varselUrl = fletter.weaveVarselUrl("http://nav.no/{param1}/{param2}", map);
+
+		assertThat(varselUrl, equalTo("http://nav.no/p1/p2"));
+		assertThat(map.size(), is(0));
+	}
+
+	@Test
+	public void shouldDoNothingIfParamIsNull() throws Exception {
+		assertThat(fletter.weaveVarselUrl(null, Maps.newHashMap()), nullValue());
+	}
+
+	@Test
+	public void shouldUseFasitPropertyWhenVarselUrlContains$navnobaseurl$() throws Exception {
+		String postfix = "/din-innboks";
+		String prefix = "prefix";
+
+		String varselUrl = fletter.weaveVarselUrl(prefix + "$navnobaseurl$" + postfix, Maps.newHashMap());
+
+		assertThat(varselUrl, equalTo(prefix + URL_FROM_FASIT + postfix));
+	}
+
+	@Test
+	public void shouldThrowIfMissingParameterInVarselUrl() throws Exception {
 		expectedException.expect(FletteparameterMissingException.class);
-		expectedException.expectMessage("missing: varselUrl");
+		expectedException.expectMessage("missing: param2");
 
-		fletter.weaveVarsel(DEFAULT_TEXT + "{varselUrl}", new HashMap<>(), null);
+		Map<String, String> map = new HashMap<>();
+		map.put("param1", "p1");
+
+		fletter.weaveVarselUrl("http://nav.no/{param1}/{param2}", map);
 	}
 
 	@Test
-	public void shouldFletteVarselUrl() throws Exception {
-		String varsel = fletter.weaveVarsel(DEFAULT_TEXT + "{varselUrl}", new HashMap<>(), VARSEL_URL);
+	public void shouldConsumeInputMap() throws Exception {
+		Map<String, String> map = new HashMap<>();
+		map.put("param1", "p1");
+		map.put("param2", "p2");
 
-		assertThat(varsel, equalTo(DEFAULT_TEXT + VARSEL_URL));
+		fletter.weaveVarselUrl("http://nav.no/{param1}/", map);
+
+		assertThat(map.size(), equalTo(1));
+		assertThat(map.get("param2"), equalTo("p2"));
 	}
 }
