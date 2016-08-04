@@ -10,12 +10,11 @@ import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.ANTALL_REVARSLING;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST_VARSEL_URL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.PREFERERT_KANAL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.REVARSLING_INTERVALL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.REVARSLING_TEKST;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL_MED_FLETTING;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -24,6 +23,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.ObjectFactory;
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Parameter;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Person;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
@@ -115,16 +115,21 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 	public void shouldWeaveVarselUrl() throws Exception {
 		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling();
 		varselBestilling.setVarseltypeId("varsel_varselUrl");
-		varselBestilling.getParameterListe().clear();
 		varselBestilling.setReVarsel(false);
+
+		Parameter parameter = new Parameter();
+		parameter.setKey("param");
+		parameter.setValue("p1");
+		varselBestilling.getParameterListe().add(parameter);
+
 		JmsReply response = sendMessage(bestillVarselQueue, new ObjectFactory().createVarselMedHandling(varselBestilling));
 
 		isOk(response);
 		assertThat(varselbestillingRepo.count(), is(1L));
 
-		String varselTekst = FOERSTE_GANG_TEKST_VARSEL_URL.replace("{varselUrl}", VARSEL_URL);
+		String expectedVarselUrl = VARSEL_URL_MED_FLETTING.replace("{param}", "p1");
 		Varselutsending varselutsending = receive(varselutsendingQueue);
-		assertThat(varselutsending.getVarselTekst(), equalTo(varselTekst));
+		assertThat(varselutsending.getVarselURL(), equalTo(expectedVarselUrl));
 	}
 
 	private Varsel assertDatabaseFoerstegangVarsel(Varselbestilling varselbestilling) {

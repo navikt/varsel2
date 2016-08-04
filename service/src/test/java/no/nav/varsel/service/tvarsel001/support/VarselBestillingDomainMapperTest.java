@@ -22,7 +22,9 @@ import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
@@ -30,6 +32,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -61,6 +64,10 @@ public class VarselBestillingDomainMapperTest {
 	private static final int REVARSLING_INTERVALL = 4;
 	private static final int ANTALL_REVARSLING = 2;
 	private static final KanalCode PREFERERT_KANAL = KanalCode.DITT_NAV;
+	private static final String BASE_URL = "baseurl";
+
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
 
 	@Spy
 	private VarselFletter varselFletter;
@@ -69,8 +76,7 @@ public class VarselBestillingDomainMapperTest {
 
 	@Before
 	public void setUp() throws Exception {
-		mapper.setVarselUrlFromFasit("baseurl/{id}");
-		mapper.afterPropertiesSet();
+		varselFletter.setVarselUrlFromFasit(BASE_URL);
 	}
 
 	@Test
@@ -164,7 +170,7 @@ public class VarselBestillingDomainMapperTest {
 		varselTo.setVarselUrl("$navnobaseurl$");
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 
-		assertThat(varsel.getVarselUrl(), is("baseurl/" + varsel.getVarselId()));
+		assertThat(varsel.getVarselUrl(), is(BASE_URL));
 	}
 
 	@Test
@@ -177,17 +183,16 @@ public class VarselBestillingDomainMapperTest {
 
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 
-		assertThat(varsel.getVarselUrl(), equalTo(prefix + "baseurl/" + varsel.getVarselId() + postfix));
+		assertThat(varsel.getVarselUrl(), equalTo(prefix + BASE_URL + postfix));
 	}
-
 
 	@Test
 	public void shouldUseVarselUrlFromDokkat() throws Exception {
 		VarselInfoTo varselTo = createVarselTo();
-		varselTo.setVarselUrl("dokkat/{id}");
+		varselTo.setVarselUrl("dokkat");
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 
-		assertThat(varsel.getVarselUrl(), is("dokkat/" + varsel.getVarselId()));
+		assertThat(varsel.getVarselUrl(), is("dokkat"));
 	}
 
 	@Test
@@ -200,30 +205,19 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	@Test
-	public void shouldUseFasitPropertyWhenVarselUrlIsNull() throws Exception {
+	public void shouldFletteUrl() throws Exception {
 		VarselInfoTo varselTo = createVarselTo();
-		varselTo.setVarselUrl(null);
-		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
-
-		assertThat(varsel.getVarselUrl(), is("baseurl/" + varsel.getVarselId()));
-	}
-
-	@Test
-	public void shouldWeaveVarselUrl() throws Exception {
-		String testTekst = "test tekst ";
+		varselTo.setVarselUrl("dokkat/{id}");
 
 		BestillVarselTo bestillTo = createBestillTo();
-		bestillTo.setParameters(Maps.newHashMap());
-
-		VarselInfoTo varselTo = createVarselInfoTo();
-		varselTo.setVarselUrl("$navnobaseurl$");
-		VarselMalTo varselMalTo = createVarselMalTo(KanalCode.DITT_NAV);
-		varselMalTo.setRevarslingTekst(testTekst + "{varselUrl}");
-		varselTo.setMaler(Sets.newHashSet(varselMalTo));
+		HashMap<String, String> map = Maps.newHashMap();
+		map.put("id", "1234");
+		map.put(KEY, VALUE);
+		bestillTo.setParameters(map);
 
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, bestillTo, varselTo, createDigitalKontaktinfoTo());
 
-		assertThat(varsel.getVarselTekst(), equalTo(testTekst + "baseurl/" + varsel.getVarselId()));
+		assertThat(varsel.getVarselUrl(), is("dokkat/1234"));
 	}
 
 	private BestillVarselTo createBestillTo() {
@@ -277,5 +271,4 @@ public class VarselBestillingDomainMapperTest {
 		to.setEpostadresse(EPOSTADRESSE);
 		return to;
 	}
-
 }
