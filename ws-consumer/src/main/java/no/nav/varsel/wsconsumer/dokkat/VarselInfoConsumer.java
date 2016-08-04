@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.inject.Inject;
 
 /**
- * VarselInfo Stub
+ * VarselInfo rest consumer
  *
  * @author Andreas Skomedal, Visma Consulting.
  */

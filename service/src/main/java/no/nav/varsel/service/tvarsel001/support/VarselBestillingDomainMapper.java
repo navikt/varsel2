@@ -103,7 +103,9 @@ public class VarselBestillingDomainMapper {
 								null;
 		String tekstMal = revarsel ? mal.getRevarslingTekst() : mal.getFoerstegangsTekst();
 		String varselId = UUID.randomUUID().toString();
-		String varselUrl = varselFletter.weaveVarselUrl(varselInfoTo.getVarselUrl(), bestillServicemeldingTo.getParameters());
+		String varselUrl = varselFletter.weaveText(varselInfoTo.getVarselUrl(), bestillServicemeldingTo.getParameters());
+		String varselTekst = varselFletter.weaveText(tekstMal, bestillServicemeldingTo.getParameters());
+		String varselTittel = mal.getTittel();
 		return aVarsel()
 				.varselId(varselId)
 				.kanal(kanalCode)
@@ -112,8 +114,8 @@ public class VarselBestillingDomainMapper {
 				.kontaktInfo(kontaktInfo)
 				.status(StatusCode.SENDT)
 				.feilbeskrivelse(null)
-				.varselTittel(mal.getTittel())
-				.varselTekst(varselFletter.weaveVarsel(tekstMal, bestillServicemeldingTo.getParameters()))
+				.varselTittel(varselTittel)
+				.varselTekst(varselTekst)
 				.varselUrl(kanalCode == KanalCode.DITT_NAV ? varselUrl : null)
 				.erRevarsel(revarsel)
 				.build();

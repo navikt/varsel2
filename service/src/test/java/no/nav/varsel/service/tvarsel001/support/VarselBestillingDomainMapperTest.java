@@ -17,7 +17,6 @@ import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.VarselFletter;
-import no.nav.varsel.service.support.exception.FletteparameterNotUsedException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
@@ -219,20 +218,6 @@ public class VarselBestillingDomainMapperTest {
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, bestillTo, varselTo, createDigitalKontaktinfoTo());
 
 		assertThat(varsel.getVarselUrl(), is("dokkat/1234"));
-	}
-
-	@Test
-	public void shouldThrowIfNotAllParamtersIsUsed() throws Exception {
-		BestillVarselTo bestillTo = createBestillTo();
-		HashMap<String, String> map = Maps.newHashMap();
-		map.put(KEY, VALUE);
-		map.put(KEY + "12345", VALUE);
-		bestillTo.setParameters(map);
-
-		expectedException.expect(FletteparameterNotUsedException.class);
-		expectedException.expectMessage("Not all parameters used for varsel, unused: key12345");
-
-		mapper.mapReVarsel(KanalCode.DITT_NAV, bestillTo, createVarselTo(), createDigitalKontaktinfoTo());
 	}
 
 	private BestillVarselTo createBestillTo() {
