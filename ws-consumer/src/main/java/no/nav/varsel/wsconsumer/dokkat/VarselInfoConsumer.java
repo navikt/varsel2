@@ -24,7 +24,12 @@ public class VarselInfoConsumer {
 	private VarselInfoMapper varselInfoMapper;
 
 	public VarselInfoTo hentVarselInfo(String varseltypeId) {
-		VarselInfoRestTo varselInfo = restTemplate.getForObject(varselinfoUrlGet, VarselInfoRestTo.class, varseltypeId);
+		VarselInfoRestTo varselInfo;
+		try {
+			varselInfo = restTemplate.getForObject(varselinfoUrlGet, VarselInfoRestTo.class, varseltypeId);
+		} catch (Exception e) {
+			throw new RuntimeException("Could not find varseltypeId=" + varseltypeId + " from url=" + varselinfoUrlGet, e);
+		}
 		return varselInfoMapper.map(varselInfo);
 	}
 
