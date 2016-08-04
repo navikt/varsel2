@@ -33,7 +33,7 @@ public class BrukervarselV1Endpoint implements BrukervarselV1 {
 
 	private static final Logger log = LoggerFactory.getLogger(BrukervarselV1Endpoint.class);
 
-	private static final String BRUKERVARSEL_V1 = "BrukervarselV1";
+	private static final String BRUKERVARSEL_V1 = "varsel.tvarsel005.BrukervarselV1";
 	private static final String BRUKERVARSEL_V1_PING = BRUKERVARSEL_V1 + ".ping";
 	private static final String BRUKERVARSEL_V1_HENT_VARSEL_FOR_BRUKER = BRUKERVARSEL_V1 + ".hentVarselForBruker";
 	static final String ACCESS_DENIED = "Access denied";
