@@ -11,11 +11,15 @@ import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -44,6 +48,8 @@ public class VarselInfoConsumerTest {
 	private static final String VARSELTYPE_ID = "varseltypeIden";
 	private static final String DOKKAT_URL = "http://nav.no/varselinfo";
 
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
 
 	@Mock
 	private RestTemplate restTemplate;
@@ -68,6 +74,17 @@ public class VarselInfoConsumerTest {
 
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID);
 		Assert.assertThat(varselInfoTo, is(mock));
+	}
+
+	@Test
+	public void shouldGiveVarseltypeIdInExceptionMessageWhen404() throws Exception {
+		when(restTemplate.getForObject(DOKKAT_URL + "/{varseltypeId}", VarselInfoRestTo.class, VARSELTYPE_ID))
+				.thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
+
+		expectedException.expect(RuntimeException.class);
+		expectedException.expectMessage("Could not find varseltypeId=varseltypeIden from url=http://nav.no/varselinfo/{varseltypeId}");
+
+		varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID);
 	}
 
 	public static VarselInfoTo createVarselInfoTo(String varseltype) {
