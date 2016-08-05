@@ -37,17 +37,20 @@ public class VarselFletter {
 	/**
 	 * Replaces values (identified by surrounding curly brackets) in a string.
 	 *
-	 * @param tekst           The string to replace
-	 * @param flettedataInput The parameters to replace the values with
+	 * @param text The string to replace
+	 * @param weavedataInput The parameters to replace the values with
 	 * @return A new string with the replaced values
 	 * @throws FletteparameterMissingException Thrown if there exists a value in the text that lacks a corresponding parameter
-	 *                                         in flettedataInput
-	 * @throws InvalidDateTimeFormatException  Thrown if a given dateTime is invalid or if the format pattern is invalid
+	 * in weavedataInput
+	 * @throws InvalidDateTimeFormatException Thrown if a given dateTime is invalid or if the format pattern is invalid
 	 */
-	public String weaveText(String tekst, Map<String, String> flettedataInput)
+	public String weaveText(String text, Map<String, String> weavedataInput)
 			throws FletteparameterMissingException, InvalidDateTimeFormatException {
-		String fletteTekst = tekst.replace(BASE_URL_IDENTIFIER, varselUrlFromFasit);
-		String string = weave(fletteTekst, flettedataInput);
+		if (text == null) {
+			return null;
+		}
+		String fletteText = text.replace(BASE_URL_IDENTIFIER, varselUrlFromFasit);
+		String string = weave(fletteText, weavedataInput);
 
 		assertNoMissedParameters(string);
 		return string;

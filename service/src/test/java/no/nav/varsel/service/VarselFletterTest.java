@@ -2,6 +2,7 @@ package no.nav.varsel.service;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import com.google.common.collect.Maps;
@@ -82,6 +83,13 @@ public class VarselFletterTest {
 		map.put("aarstall", AAR);
 
 		fletter.weaveText("dette er en tekst om {navn} i {aarstall} angående {tema} {tid:dd.MM.yyyy}", map);
+	}
+
+	@Test
+	public void shouldReturnNullWhenTextIsNull() throws Exception {
+		String varselUrl = fletter.weaveText(null, Maps.newHashMap());
+
+		assertThat(varselUrl, nullValue());
 	}
 
 	@Test
