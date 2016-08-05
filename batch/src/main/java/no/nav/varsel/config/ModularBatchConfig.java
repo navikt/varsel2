@@ -89,14 +89,14 @@ public class ModularBatchConfig {
 	}
 
 	@Bean
-	public StepScope stepScope() {
+	public static StepScope stepScope() {
 		StepScope stepScope = new StepScope();
 		stepScope.setAutoProxy(false);
 		return stepScope;
 	}
 
 	@Bean
-	public JobScope jobScope() {
+	public static JobScope jobScope() {
 		JobScope jobScope = new JobScope();
 		jobScope.setAutoProxy(false);
 		return jobScope;
