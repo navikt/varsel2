@@ -17,6 +17,7 @@ import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL_
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import com.google.common.collect.Sets;
@@ -58,6 +59,24 @@ public class VarselInfoMapperTest {
 		assertThat(malTo.getTittel(), is(VARSEL_TITTEL));
 		assertThat(malTo.getFoerstegangsTekst(), is(FOERSTE_GANG_TEKST));
 		assertThat(malTo.getRevarslingTekst(), is(REVARSLING_TEKST));
+	}
+
+	@Test
+	public void shouldHandleNullRevarslingIntervall() throws Exception {
+		VarselInfoRestTo varselInfo = createVarselInfo();
+		varselInfo.setRevarslingIntervall(null);
+		VarselInfoTo to = mapper.map(varselInfo);
+
+		assertThat(to.getRevarslingIntervall(), nullValue());
+	}
+
+	@Test
+	public void shouldHandleNullAntallRevarslinger() throws Exception {
+		VarselInfoRestTo varselInfo = createVarselInfo();
+		varselInfo.setAntallRevarslinger(null);
+		VarselInfoTo to = mapper.map(varselInfo);
+
+		assertThat(to.getAntallRevarsling(), nullValue());
 	}
 
 	public static VarselInfoRestTo createVarselInfo() {

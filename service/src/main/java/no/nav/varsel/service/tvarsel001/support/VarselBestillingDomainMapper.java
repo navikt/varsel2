@@ -43,6 +43,13 @@ public class VarselBestillingDomainMapper {
 		return mapVarselbestilling(bestillingTo, varselInfoTo, kontaktregisterTo, false);
 	}
 
+	public Varsel mapReVarsel(KanalCode kanalCode,
+							  BestillVarselTo bestillServicemeldingTo,
+							  VarselInfoTo varselInfoTo,
+							  KontaktregisterTo kontaktregisterTo) {
+		return mapVarsel(kanalCode, bestillServicemeldingTo, varselInfoTo, kontaktregisterTo, true);
+	}
+
 	private Varselbestilling mapVarselbestilling(BestillVarselTo bestillingTo,
 												 VarselInfoTo varselInfoTo,
 												 KontaktregisterTo kontaktregisterTo,
@@ -58,7 +65,7 @@ public class VarselBestillingDomainMapper {
 				.parameters(bestillingTo.getParameters().entrySet().stream()
 						.collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
-		if (withRevarsel) {
+		if (withRevarsel && varselInfoTo.getRevarslingIntervall() != null && varselInfoTo.getAntallRevarsling() != null) {
 			builder.revarslingIntervall(varselInfoTo.getRevarslingIntervall())
 					.antallRevarslinger(varselInfoTo.getAntallRevarsling())
 					.nesteVarslingDato(LocalDate.now().plusDays(varselInfoTo.getRevarslingIntervall()));
@@ -79,14 +86,6 @@ public class VarselBestillingDomainMapper {
 							 VarselInfoTo varselInfoTo,
 							 KontaktregisterTo kontaktregisterTo) {
 		return mapVarsel(kanalCode, bestillServicemeldingTo, varselInfoTo, kontaktregisterTo, false);
-
-	}
-
-	public Varsel mapReVarsel(KanalCode kanalCode,
-							  BestillVarselTo bestillServicemeldingTo,
-							  VarselInfoTo varselInfoTo,
-							  KontaktregisterTo kontaktregisterTo) {
-		return mapVarsel(kanalCode, bestillServicemeldingTo, varselInfoTo, kontaktregisterTo, true);
 
 	}
 

@@ -18,8 +18,8 @@ public class VarselInfoTo {
 	private String varselKategori;
 	private boolean inaktiv;
 	private String varselUrl;
-	private int revarslingIntervall;
-	private int antallRevarsling;
+	private Integer revarslingIntervall;
+	private Integer antallRevarsling;
 	private Set<VarselMalTo> maler;
 
 	public void addPreferertKanal(KanalCode kanal) {
@@ -86,19 +86,19 @@ public class VarselInfoTo {
 		this.varselUrl = varselUrl;
 	}
 
-	public int getRevarslingIntervall() {
+	public Integer getRevarslingIntervall() {
 		return revarslingIntervall;
 	}
 
-	public void setRevarslingIntervall(int revarslingIntervall) {
+	public void setRevarslingIntervall(Integer revarslingIntervall) {
 		this.revarslingIntervall = revarslingIntervall;
 	}
 
-	public int getAntallRevarsling() {
+	public Integer getAntallRevarsling() {
 		return antallRevarsling;
 	}
 
-	public void setAntallRevarsling(int antallRevarsling) {
+	public void setAntallRevarsling(Integer antallRevarsling) {
 		this.antallRevarsling = antallRevarsling;
 	}
 
@@ -118,8 +118,8 @@ public class VarselInfoTo {
 		private String varselKategori;
 		private boolean inaktiv;
 		private String varselUrl;
-		private int revarslingIntervall;
-		private int antallRevarsling;
+		private Integer revarslingIntervall;
+		private Integer antallRevarsling;
 		private Set<VarselMalTo> maler;
 
 		private VarselInfoToBuilder() {
@@ -164,12 +164,12 @@ public class VarselInfoTo {
 			return this;
 		}
 
-		public VarselInfoToBuilder revarslingIntervall(int revarslingIntervall) {
+		public VarselInfoToBuilder revarslingIntervall(Integer revarslingIntervall) {
 			this.revarslingIntervall = revarslingIntervall;
 			return this;
 		}
 
-		public VarselInfoToBuilder antallRevarsling(int antallRevarsling) {
+		public VarselInfoToBuilder antallRevarsling(Integer antallRevarsling) {
 			this.antallRevarsling = antallRevarsling;
 			return this;
 		}

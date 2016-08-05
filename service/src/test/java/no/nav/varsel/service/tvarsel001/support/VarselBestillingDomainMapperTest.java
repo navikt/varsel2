@@ -220,6 +220,34 @@ public class VarselBestillingDomainMapperTest {
 		assertThat(varsel.getVarselUrl(), is("dokkat/1234"));
 	}
 
+	@Test
+	public void shouldNotSetRevarslingsfieldsWhenRevarslingIntervallIsNull() throws Exception {
+		VarselInfoTo varselTo = createVarselTo();
+		varselTo.setRevarslingIntervall(null);
+
+		Varselbestilling varselbestilling = mapper.mapVarselbestillingFoerstegangVarselMedRevarsel(createBestillTo(),
+				varselTo,
+				createDigitalKontaktinfoTo());
+
+		assertThat(varselbestilling.getNesteVarslingDato(), nullValue());
+		assertThat(varselbestilling.getRevarslingIntervall(), nullValue());
+		assertThat(varselbestilling.getAntallRevarslinger(), nullValue());
+	}
+
+	@Test
+	public void shouldNotSetRevarslingsfieldsWhenAntallRevarslingIsNull() throws Exception {
+		VarselInfoTo varselTo = createVarselTo();
+		varselTo.setAntallRevarsling(null);
+
+		Varselbestilling varselbestilling = mapper.mapVarselbestillingFoerstegangVarselMedRevarsel(createBestillTo(),
+				varselTo,
+				createDigitalKontaktinfoTo());
+
+		assertThat(varselbestilling.getNesteVarslingDato(), nullValue());
+		assertThat(varselbestilling.getRevarslingIntervall(), nullValue());
+		assertThat(varselbestilling.getAntallRevarslinger(), nullValue());
+	}
+
 	private BestillVarselTo createBestillTo() {
 		BestillVarselTo to = new BestillVarselTo();
 		to.setVarselBestillingId(BESTILLING_ID);
