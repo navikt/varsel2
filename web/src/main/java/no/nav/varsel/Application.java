@@ -4,6 +4,7 @@ import com.codahale.metrics.servlets.MetricsServlet;
 import no.nav.varsel.config.AppConfig;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
@@ -19,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration
-@EnableAutoConfiguration(exclude = DataSourceTransactionManagerAutoConfiguration.class)
+@EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class, DataSourceAutoConfiguration.class})
 @Import(AppConfig.class)
 public class Application extends SpringBootServletInitializer {
 

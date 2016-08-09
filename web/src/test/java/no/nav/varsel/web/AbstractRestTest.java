@@ -2,6 +2,7 @@ package no.nav.varsel.web;
 
 import no.nav.varsel.config.BatchConfig;
 import no.nav.varsel.config.JmsTestConfig;
+import no.nav.varsel.config.RepoTestConfig;
 import no.nav.varsel.config.WebConfig;
 import no.nav.varsel.config.local.LocalTomcatConfiguration;
 import no.nav.varsel.repo.VarselbestillingRepo;
@@ -10,6 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.annotation.DirtiesContext;
@@ -31,8 +33,8 @@ import javax.inject.Inject;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {
 		LocalTomcatConfiguration.class, BatchConfig.class,
-		JmsTestConfig.class, WebConfig.class})
-@EnableAutoConfiguration(exclude = DataSourceTransactionManagerAutoConfiguration.class)
+		JmsTestConfig.class, RepoTestConfig.class, WebConfig.class})
+@EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class, DataSourceAutoConfiguration.class})
 @ActiveProfiles({"itest"})
 @DirtiesContext
 public abstract class AbstractRestTest {

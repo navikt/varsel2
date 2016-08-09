@@ -1,6 +1,7 @@
 package no.nav.varsel.config;
 
 import static no.nav.brevogarkiv.batch.common.CommonBatchInputParameters.TRANSACTION_TIMEOUT_KEY;
+import static no.nav.brevogarkiv.batch.common.CommonBatchInputParameters.WORK_UNIT_KEY;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.Lists;
@@ -34,7 +35,6 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.listener.CompositeJobExecutionListener;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.HibernateCursorItemReader;
@@ -130,7 +130,7 @@ public class Bvarsel001Config {
 	@Bean
 	@JobScope
 	public Step enqueueVarselbestillingStep(
-			ItemReader<Varselbestilling> opprettetVarselbestillingWithFletteparameterReader,
+			HibernateCursorItemReaderVarselbestilling opprettetVarselbestillingWithFletteparameterReader,
 			ItemWriter<VarselbestillingTo> enqueueVarselCompositeWriter,
 			TransactionAttribute transactionAttribute
 	) {
@@ -152,17 +152,20 @@ public class Bvarsel001Config {
 	}
 
 	@Bean
-	public HibernateCursorItemReader<Varselbestilling> opprettetVarselbestillingWithFletteparameterReader(
-			SessionFactory sessionFactory) {
-		HibernateCursorItemReader<Varselbestilling> reader = new HibernateCursorItemReader<>();
+	@JobScope
+	public HibernateCursorItemReaderVarselbestilling opprettetVarselbestillingWithFletteparameterReader(
+			SessionFactory nonxaSessionFactory,
+			@Value("#{jobParameters[" + WORK_UNIT_KEY + "]}") int workUnit) {
+		HibernateCursorItemReaderVarselbestilling reader = new HibernateCursorItemReaderVarselbestilling();
 		reader.setQueryString("select vb from Varselbestilling vb " +
 				"left join fetch vb.fletteparametere " +
 				"where vb.varselbestillingId in " +
 				"(select arbtb.varselbestillingId from Bvarsel001WorkTable arbtb where " +
 				"arbtb.arbeidStatus = 'OPPRETTET')");
-		reader.setSessionFactory(sessionFactory);
+		reader.setSessionFactory(nonxaSessionFactory);
 		reader.setUseStatelessSession(true);
 		reader.setSaveState(false);
+		reader.setFetchSize(workUnit);
 		return reader;
 	}
 
@@ -205,7 +208,7 @@ public class Bvarsel001Config {
 
 	@Bean
 	public Step updateVarselbestillingStep(
-			ItemReader<Varselbestilling> sendtVarselbestillingReader,
+			HibernateCursorItemReaderVarselbestilling sendtVarselbestillingReader,
 			ItemProcessor<Varselbestilling, Varselbestilling> updateVarselbestillingProcessor,
 			ItemWriter<? super AbstractDomainObject> jpaItemWriter,
 			TransactionAttribute transactionAttribute) {
@@ -222,14 +225,18 @@ public class Bvarsel001Config {
 	}
 
 	@Bean
-	public HibernateCursorItemReader<Varselbestilling> sendtVarselbestillingReader(SessionFactory sessionFactory) {
-		HibernateCursorItemReader<Varselbestilling> reader = new HibernateCursorItemReader<>();
+	@JobScope
+	public HibernateCursorItemReaderVarselbestilling sendtVarselbestillingReader(
+			SessionFactory nonxaSessionFactory,
+			@Value("#{jobParameters[" + WORK_UNIT_KEY + "]}") int workUnit) {
+		HibernateCursorItemReaderVarselbestilling reader = new HibernateCursorItemReaderVarselbestilling();
 		reader.setQueryString("select vb from Varselbestilling vb " +
 				"where vb.varselbestillingId in " +
 				"(select arbtb.varselbestillingId from Bvarsel001WorkTable arbtb where " +
 				"arbtb.arbeidStatus = 'SENDT')");
-		reader.setSessionFactory(sessionFactory);
+		reader.setSessionFactory(nonxaSessionFactory);
 		reader.setUseStatelessSession(true);
+		reader.setFetchSize(workUnit);
 		return reader;
 	}
 
@@ -317,5 +324,11 @@ public class Bvarsel001Config {
 			MetricRegistry metricRegistry
 	) {
 		return new MetricsEnabledBatchStatusReportLoggerListener(LOGNAME, dataSource, metricRegistry);
+	}
+
+	/**
+	 * generic beans in job/step-scope doesn't work due to bug in springbatch in spring4, see BATCH-2413
+	 */
+	private class HibernateCursorItemReaderVarselbestilling extends HibernateCursorItemReader<Varselbestilling> {
 	}
 }

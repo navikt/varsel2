@@ -102,9 +102,10 @@ public class VarselBestillingDomainMapper {
 								null;
 		String tekstMal = revarsel ? mal.getRevarslingTekst() : mal.getFoerstegangsTekst();
 		String varselId = UUID.randomUUID().toString();
-		String varselUrl = varselFletter.weaveText(varselInfoTo.getVarselUrl(), bestillServicemeldingTo.getParameters());
-		String varselTekst = varselFletter.weaveText(tekstMal, bestillServicemeldingTo.getParameters());
-		String varselTittel = mal.getTittel();
+		Map<String, String> params = bestillServicemeldingTo.getParameters();
+		String varselUrl = varselFletter.weaveText(varselInfoTo.getVarselUrl(), params);
+		String varselTekst = varselFletter.weaveText(tekstMal, params);
+		String varselTittel = varselFletter.weaveText(mal.getTittel(), params);
 		return aVarsel()
 				.varselId(varselId)
 				.kanal(kanalCode)

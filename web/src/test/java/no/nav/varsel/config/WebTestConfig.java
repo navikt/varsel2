@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@Import({JmsTestConfig.class, Application.class})
+@Import({JmsTestConfig.class, RepoTestConfig.class, Application.class})
 @Configuration
 public class WebTestConfig {
 

@@ -3,6 +3,7 @@ package no.nav.varsel.config;
 import no.nav.brevogarkiv.batch.common.CommonBatchInputParameters;
 import no.nav.brevogarkiv.batch.common.validator.CommonJobParametersValidator;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +15,8 @@ import org.springframework.context.annotation.Import;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration
-@EnableAutoConfiguration(exclude = DataSourceTransactionManagerAutoConfiguration.class)
-@Import({JmsTestConfig.class, BatchConfig.class, Bvarsel001Config.class})
+@EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class, DataSourceAutoConfiguration.class})
+@Import({JmsTestConfig.class, RepoTestConfig.class, BatchConfig.class, Bvarsel001Config.class})
 public class BatchTestConfig {
 
 	public static final String START_TIME_FORMAT_TEST = "dd.MM.yyyy-HH:mm:ss.SSS";
