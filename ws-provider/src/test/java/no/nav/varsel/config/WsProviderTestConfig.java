@@ -1,6 +1,7 @@
 package no.nav.varsel.config;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -10,8 +11,8 @@ import org.springframework.context.annotation.Import;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@EnableAutoConfiguration(exclude = DataSourceTransactionManagerAutoConfiguration.class)
-@Import({JmsTestConfig.class, ProviderWsConfig.class})
+@EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class, DataSourceAutoConfiguration.class})
+@Import({JmsTestConfig.class, RepoTestConfig.class, ProviderWsConfig.class})
 @Configuration
 public class WsProviderTestConfig {
 

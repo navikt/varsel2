@@ -43,7 +43,10 @@ public class Bvarsel001JobTest extends AbstractBvarsel001Test {
 				.varseltypeId(IGNORED).nesteVarslingDato(null).build());
 
 		// create varsling which will be it's last varsling
+		// and have several parameters
 		varselbestillingRepo.save(createVarselbestillingBuilder()
+				.parameter("key1", "val1")
+				.parameter("key2", "val2")
 				.varselbestillingId(VARSELBESTILLING_ID)
 				.antallRevarslinger(1).build());
 		// create four more to test chunking
@@ -97,7 +100,7 @@ public class Bvarsel001JobTest extends AbstractBvarsel001Test {
 		assertThat(varsel.getVarselbestillingId(), notNullValue());
 		assertThat(varsel.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(((Person) varsel.getMottaker()).getIdent(), is(TestdataUtil.FNR));
-		assertThat(varsel.getParameterListe(), hasSize(1));
+		assertThat(varsel.getParameterListe(), hasSize(3));
 		assertThat(varsel.getParameterListe().get(0).getKey(), is(TestdataUtil.PARAMETERKEY));
 		assertThat(varsel.getParameterListe().get(0).getValue(), is(TestdataUtil.PARAMETERVALUE));
 

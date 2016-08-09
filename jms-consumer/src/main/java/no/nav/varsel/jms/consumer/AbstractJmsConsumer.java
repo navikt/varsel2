@@ -83,6 +83,8 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 		MDC.put(Constants.USER_ID, jmsConsumer.getServiceName());
 		try {
 			timer.time(() -> unmarshalAndHandle(message));
+		} catch (RuntimeException e) {
+			throw e;
 		} catch (Exception e) {
 			// This will never happen as unmarshalAndHandle doesnt throw checked exceptions
 			throw new RuntimeException(e);
