@@ -50,6 +50,15 @@ public class VarselFletterTest {
 	}
 
 	@Test
+	public void shouldFletteSameParameterMultipleTimes() throws Exception {
+		Map<String, String> map = new HashMap<>();
+		map.put("navn", NAVN);
+		map.put("aarstall", AAR);
+
+		assertThat(fletter.weaveText("{navn} og {navn}", map), is(NAVN + " og " + NAVN));
+	}
+
+	@Test
 	public void shouldFlettTimeParameter() throws Exception {
 		Map<String, String> map = new HashMap<>();
 		map.put("tid", TIME);
