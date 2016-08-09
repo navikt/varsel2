@@ -52,7 +52,7 @@ public class VarselBestillingDomainMapperTest {
 	private static final String VALUE = "val";
 	private static final String FOERSTEGANGS_TEKST = "foreste tekst for {key}";
 	private static final String REVARSLING_TEKST = "revarsling tekst for {key}";
-	private static final String TITTEL = "tittel";
+	private static final String TITTEL = "tittel {key}";
 	private static final String MOBILTELEFONNUMMER = "12345678";
 	private static final String EPOSTADRESSE = "epost@epost.no";
 	private static final HashSet<KanalCode> KANALER = Sets.newHashSet(KanalCode.EPOST, KanalCode.SMS);
@@ -129,7 +129,7 @@ public class VarselBestillingDomainMapperTest {
 		assertThat(smsVarsel.getKanal(), is(KanalCode.SMS));
 		assertThat(smsVarsel.getKontaktInfo(), is(MOBILTELEFONNUMMER));
 		assertThat(smsVarsel.getStatus(), is(StatusCode.SENDT));
-		assertThat(smsVarsel.getVarselTittel(), is(TITTEL));
+		assertThat(smsVarsel.getVarselTittel(), is(TITTEL.replace("{key}", VALUE)));
 		assertThat(smsVarsel.getVarselTekst(), is(FOERSTEGANGS_TEKST.replace("{key}", VALUE)));
 		assertThat(smsVarsel.getVarselUrl(), nullValue());
 		assertThat(smsVarsel.getSendtTidspunkt(), aboutNow());
