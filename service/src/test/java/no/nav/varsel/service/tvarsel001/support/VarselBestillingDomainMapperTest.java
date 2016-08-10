@@ -97,7 +97,7 @@ public class VarselBestillingDomainMapperTest {
 		assertThat(smsVarsel.getKanal(), is(KanalCode.SMS));
 		assertThat(smsVarsel.getKontaktInfo(), is(MOBILTELEFONNUMMER));
 		assertThat(smsVarsel.getStatus(), is(StatusCode.SENDT));
-		assertThat(smsVarsel.getVarselTittel(), is(TITTEL));
+		assertThat(smsVarsel.getVarselTittel(), is(TITTEL.replace("{key}", VALUE)));
 		assertThat(smsVarsel.getVarselTekst(), is(FOERSTEGANGS_TEKST.replace("{key}", VALUE)));
 		assertThat(smsVarsel.getVarselUrl(), nullValue());
 		assertThat(smsVarsel.getSendtTidspunkt(), aboutNow());
@@ -148,7 +148,7 @@ public class VarselBestillingDomainMapperTest {
 		assertThat(varsel.getKanal(), is(KanalCode.EPOST));
 		assertThat(varsel.getKontaktInfo(), is(EPOSTADRESSE));
 		assertThat(varsel.getStatus(), is(StatusCode.SENDT));
-		assertThat(varsel.getVarselTittel(), is(TITTEL));
+		assertThat(varsel.getVarselTittel(), is(TITTEL.replace("{key}", VALUE)));
 		assertThat(varsel.getVarselTekst(), is(REVARSLING_TEKST.replace("{key}", VALUE)));
 		assertThat(varsel.getVarselUrl(), nullValue());
 		assertThat(varsel.getSendtTidspunkt(), aboutNow());
