@@ -65,7 +65,7 @@
 		<nav-virksomhet-varselMedHandling-v1.version>1.0.0</nav-virksomhet-varselMedHandling-v1.version>
 		<dokkat-schemas.version>6.0.3</dokkat-schemas.version>
 		<nav-fim-kodeverk-v2-tjenestespesifikasjon.version>2.0.0-alpha004</nav-fim-kodeverk-v2-tjenestespesifikasjon.version>
-		<nav-brukervarsel-v1-tjenestespesifikasjon.version>1.0.2</nav-brukervarsel-v1-tjenestespesifikasjon.version>
+		<nav-brukervarsel-v1-tjenestespesifikasjon.version>1.0.4</nav-brukervarsel-v1-tjenestespesifikasjon.version>
 	</properties>
 
 	<dependencyManagement>
