@@ -2,6 +2,7 @@ package no.nav.varsel.service;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import static java.util.regex.Pattern.compile;
+import static no.nav.varsel.domain.Constants.LOCALE_NO;
 import static org.apache.commons.lang3.text.StrMatcher.stringMatcher;
 
 import com.google.common.base.Joiner;
@@ -77,7 +78,7 @@ public class VarselFletter {
 				String replacement;
 				try {
 					LocalDateTime parsedDateTime = LocalDateTime.parse(dateTime);
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern).withLocale(LOCALE_NO);
 					replacement = parsedDateTime.format(formatter);
 				} catch (DateTimeParseException e) {
 					throw InvalidDateTimeFormatException.invalidDateTime(key, dateTime, e);

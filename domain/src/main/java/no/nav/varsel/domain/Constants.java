@@ -1,5 +1,7 @@
 package no.nav.varsel.domain;
 
+import java.util.Locale;
+
 /**
  * Constants used across application layers.
  *
@@ -8,6 +10,7 @@ package no.nav.varsel.domain;
 public final class Constants {
 
 	public static final String USER_ID = "brevOgArkivUserId";
+	public static final Locale LOCALE_NO = Locale.forLanguageTag("no-nb");
 
 	private Constants() {
 	}

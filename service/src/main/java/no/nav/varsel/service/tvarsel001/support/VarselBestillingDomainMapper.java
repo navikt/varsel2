@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toMap;
 import static no.nav.varsel.domain.builder.VarselBuilder.aVarsel;
 import static no.nav.varsel.domain.builder.VarselbestillingBuilder.aVarselbestilling;
 
+import com.google.common.collect.Maps;
 import no.nav.varsel.domain.builder.VarselbestillingBuilder;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
@@ -102,7 +103,7 @@ public class VarselBestillingDomainMapper {
 								null;
 		String tekstMal = revarsel ? mal.getRevarslingTekst() : mal.getFoerstegangsTekst();
 		String varselId = UUID.randomUUID().toString();
-		Map<String, String> params = bestillServicemeldingTo.getParameters();
+		Map<String, String> params = Maps.newHashMap(bestillServicemeldingTo.getParameters());
 		String varselUrl = varselFletter.weaveText(varselInfoTo.getVarselUrl(), params);
 		String varselTekst = varselFletter.weaveText(tekstMal, params);
 		String varselTittel = varselFletter.weaveText(mal.getTittel(), params);

@@ -36,6 +36,10 @@ public class RepoConfig {
 		return emf.unwrap(SessionFactory.class);
 	}
 
+	/**
+	 * Sessionfactory for nonxa entity manager, used by hibernate cursors in batch, cursor used on same datasource that is
+	 * committed in spring batch doesnt work with jboss/oracle/xa
+	 */
 	@Bean
 	public SessionFactory nonxaSessionFactory(@Named("nonxaEntityManagerFactory") EntityManagerFactory emf) {
 		return emf.unwrap(SessionFactory.class);
