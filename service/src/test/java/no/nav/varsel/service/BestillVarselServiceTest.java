@@ -3,12 +3,18 @@ package no.nav.varsel.service;
 import static no.nav.varsel.domain.to.AktoerTo.newAktoerId;
 import static no.nav.varsel.domain.to.AktoerTo.newPersonIdent;
 import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
+import static no.nav.varsel.repo.TestdataUtil.ANTALL_REVARSLINGER;
 import static no.nav.varsel.repo.TestdataUtil.FNR;
 import static no.nav.varsel.repo.TestdataUtil.KANAL_CODE;
+import static no.nav.varsel.repo.TestdataUtil.NESTE_VARSLING_DATO;
 import static no.nav.varsel.repo.TestdataUtil.PREFERERT_KANAL;
+import static no.nav.varsel.repo.TestdataUtil.REVARSLING_INTERVALL;
 import static no.nav.varsel.repo.TestdataUtil.UTLOP_TIDSPUNKT;
 import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,6 +46,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.time.LocalDate;
+
 /**
  * Unit test for {@link BestillVarselService}
  *
@@ -48,7 +56,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class BestillVarselServiceTest {
 
-	public static final String NEW_BESTILLING_ID = "newBestillingId";
+	private static final String NEW_BESTILLING_ID = "newBestillingId";
 
 	@Mock
 	private VarselbestillingRepo varselbestillingRepoMock;
@@ -86,6 +94,10 @@ public class BestillVarselServiceTest {
 	public void setUp() throws Exception {
 		bestillingTo = new BestillVarselTo();
 		existingVarselbestilling.setFnr(FNR);
+		existingVarselbestilling.setRevarslingIntervall(REVARSLING_INTERVALL);
+		existingVarselbestilling.setAntallRevarslinger(ANTALL_REVARSLINGER);
+		existingVarselbestilling.setNesteVarslingDato(NESTE_VARSLING_DATO);
+
 		when(varselbestillingRepoMock.findByVarselbestillingIdEager(VARSELBESTILLING_ID)).thenReturn(existingVarselbestilling);
 
 		when(aktoerService.completeAktoerPersonIdent(bestillingTo)).thenAnswer(
@@ -115,10 +127,24 @@ public class BestillVarselServiceTest {
 	}
 
 	@Test
-	public void shouldBestillRevarsel() throws Exception {
+	public void shouldBestillRevarselNotLastRevarsel() throws Exception {
 		createBestillingTo(VARSELBESTILLING_ID, true);
 		bestillVarselService.bestillVarsel(bestillingTo);
 
+		assertThat(existingVarselbestilling.getAntallRevarslinger(), is(ANTALL_REVARSLINGER - 1));
+		assertThat(existingVarselbestilling.getNesteVarslingDato(), is(LocalDate.now().plusDays(REVARSLING_INTERVALL)));
+		verify(varselbestillingRepoMock).saveAndFlush(existingVarselbestilling);
+		verify(varselutsendingProducer).produce(varselutsendingTo);
+	}
+
+	@Test
+	public void shouldBestillRevarselLastRevarsel() throws Exception {
+		createBestillingTo(VARSELBESTILLING_ID, true);
+		existingVarselbestilling.setAntallRevarslinger(1);
+		bestillVarselService.bestillVarsel(bestillingTo);
+
+		assertThat(existingVarselbestilling.getAntallRevarslinger(), nullValue());
+		assertThat(existingVarselbestilling.getNesteVarslingDato(), nullValue());
 		verify(varselbestillingRepoMock).saveAndFlush(existingVarselbestilling);
 		verify(varselutsendingProducer).produce(varselutsendingTo);
 	}
@@ -145,6 +171,37 @@ public class BestillVarselServiceTest {
 		expectedException.expect(VarselbestillingAlreadyExistException.class);
 
 		createBestillingTo(VARSELBESTILLING_ID, false);
+		bestillVarselService.bestillVarsel(bestillingTo);
+	}
+
+	@Test
+	public void shouldThrowFunctionalForVarsel_VarselEksistererAllerede_antallRevarselNull() throws Exception {
+		expectedException.expectMessage("already sendt, antallRevarslinger=null, nesteVarslingDato=" + NESTE_VARSLING_DATO);
+		expectedException.expect(VarselbestillingAlreadyExistException.class);
+
+		existingVarselbestilling.setAntallRevarslinger(null);
+		createBestillingTo(VARSELBESTILLING_ID, true);
+		bestillVarselService.bestillVarsel(bestillingTo);
+	}
+
+	@Test
+	public void shouldThrowFunctionalForVarsel_VarselEksistererAllerede_nesteRevarselNull() throws Exception {
+		expectedException.expectMessage("already sendt, antallRevarslinger=2, nesteVarslingDato=null");
+		expectedException.expect(VarselbestillingAlreadyExistException.class);
+
+		existingVarselbestilling.setNesteVarslingDato(null);
+		createBestillingTo(VARSELBESTILLING_ID, true);
+		bestillVarselService.bestillVarsel(bestillingTo);
+	}
+
+	@Test
+	public void shouldThrowFunctionalForVarsel_VarselEksistererAllerede_nesteRevarselInFuture() throws Exception {
+		LocalDate futureTime = LocalDate.now().plusDays(1);
+		expectedException.expectMessage("already sendt, antallRevarslinger=2, nesteVarslingDato=" + futureTime);
+		expectedException.expect(VarselbestillingAlreadyExistException.class);
+
+		existingVarselbestilling.setNesteVarslingDato(futureTime);
+		createBestillingTo(VARSELBESTILLING_ID, true);
 		bestillVarselService.bestillVarsel(bestillingTo);
 	}
 
