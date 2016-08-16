@@ -63,7 +63,7 @@ public class SelftestResponse {
 		return result;
 	}
 
-	@JsonProperty("aggregate_result")
+	@JsonProperty("aggregateResult")
 	public Integer getAggregateResultVal() {
 		return getAggregateResult().auraCode;
 	}
