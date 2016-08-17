@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
 
-	<property name="BATCH_LOG_HOME" value="${APP_LOG_HOME}/../batch" />
+	<property name="BATCH_LOG_HOME" value="${APP_LOG_HOME}/../batch"/>
 
 	<!-- Appender for batch info logging; applies to all batches -->
 	<appender name="BATCH-SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
@@ -22,6 +22,21 @@
 				</rollingPolicy>
 			</appender>
 		</sift>
+	</appender>
+
+	<appender name="servicelogger" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<Append>true</Append>
+		<File>${APP_LOG_HOME}/servicelogger.log</File>
+		<encoder>
+			<pattern>[%d, %-5p, %C:%L] - [%X{consumerId}, %X{callId}, %X{userId}] - %m%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<maxIndex>10</maxIndex>
+			<FileNamePattern>${APP_LOG_HOME}/servicelogger.%i.log.zip</FileNamePattern>
+		</rollingPolicy>
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>10MB</MaxFileSize>
+		</triggeringPolicy>
 	</appender>
 
 	<appender name="nobackoutlog" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -94,13 +109,18 @@
 	</logger>
 
 	<logger name="no.nav.varsel.batch" additivity="false" level="INFO">
-		<appender-ref ref="BATCH-SIFT" />
-		<appender-ref ref="SYSLOG" />
+		<appender-ref ref="BATCH-SIFT"/>
+		<appender-ref ref="SYSLOG"/>
 	</logger>
 
 	<logger name="org.springframework.batch" additivity="false" level="INFO">
-		<appender-ref ref="BATCH-SIFT" />
-		<appender-ref ref="SYSLOG" />
+		<appender-ref ref="BATCH-SIFT"/>
+		<appender-ref ref="SYSLOG"/>
+	</logger>
+
+	<logger name="no.nav.modig.jaxws.handlers.ServiceLoggerHandler" additivity="false" level="INFO">
+		<appender-ref ref="servicelogger"/>
+		<appender-ref ref="SYSLOG"/>
 	</logger>
 
 </configuration>
