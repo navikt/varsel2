@@ -71,14 +71,16 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		// setup
 		sendMessage(bestillVarselQueue, createVarselBestilling(false));
 		receive(varselutsendingQueue);
-		String varselIdFoersteVarsel = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID)
-				.getVarsels().iterator().next().getVarselId();
+		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
+		varselbestilling.setNesteVarslingDato(LocalDate.now().minusDays(1));
+		varselbestillingRepo.save(varselbestilling);
+		String varselIdFoersteVarsel = varselbestilling.getVarsels().iterator().next().getVarselId();
 
 		// run
 		JmsReply jmsReply = sendMessage(bestillVarselQueue, createVarselBestilling(true));
 		isOk(jmsReply);
 
-		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
+		varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
 		Varsel varsel = assertDatabaseRevarsel(varselIdFoersteVarsel, varselbestilling);
 
 		assertVarselutsending(varselbestilling, varsel);
@@ -170,7 +172,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
 		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
 		assertThat(varselbestilling.getRevarslingIntervall(), is(REVARSLING_INTERVALL));
-		assertThat(varselbestilling.getAntallRevarslinger(), is(ANTALL_REVARSLING));
+		assertThat(varselbestilling.getAntallRevarslinger(), is(ANTALL_REVARSLING - 1));
 		assertThat(varselbestilling.getNesteVarslingDato(), is(LocalDate.now().plusDays(REVARSLING_INTERVALL)));
 
 		assertThat(varselbestilling.getVarsels(), hasSize(2));

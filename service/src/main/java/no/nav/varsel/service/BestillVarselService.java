@@ -19,6 +19,7 @@ import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -49,17 +50,33 @@ public class BestillVarselService {
 	public void bestillVarsel(BestillVarselTo to) {
 		Varselbestilling existingVarsel = varselbestillingRepo.findByVarselbestillingIdEager(to.getVarselBestillingId());
 
-		boolean revarsling = to.isRevarsling();
-		if (revarsling && existingVarsel == null) {
-			throw new VarselbestillingNotExistException(to.getVarselBestillingId());
-		} else if (!revarsling && existingVarsel != null) {
+		if (to.isRevarsling())
+			assertRevarsel(to, existingVarsel);
+		else if (existingVarsel != null) {
 			throw new VarselbestillingAlreadyExistException(to.getVarselBestillingId());
 		}
 
-		if (revarsling) {
+		if (to.isRevarsling()) {
 			bestillRevarsel(to, existingVarsel);
 		} else {
 			bestillFoerstegangsVarsel(to);
+		}
+	}
+
+	private void assertRevarsel(BestillVarselTo to, Varselbestilling existingVarsel) {
+		if (existingVarsel == null) {
+			throw new VarselbestillingNotExistException(to.getVarselBestillingId());
+		} else {
+			Integer antallRevarslinger = existingVarsel.getAntallRevarslinger();
+			LocalDate nesteVarslingDato = existingVarsel.getNesteVarslingDato();
+
+			// Check to prevent errors from accidentally sending duplicate varsels, or secondary revarsel too early.
+			// Could happen if BVARSEL001 is run twice in a short amount of time, before TVARSEL003 processes all the messages
+			if (antallRevarslinger == null || antallRevarslinger <= 0 ||
+					nesteVarslingDato == null || nesteVarslingDato.isAfter(LocalDate.now())) {
+				throw new VarselbestillingAlreadyExistException(
+						to.getVarselBestillingId(), antallRevarslinger, nesteVarslingDato);
+			}
 		}
 	}
 
@@ -89,10 +106,22 @@ public class BestillVarselService {
 				.map((kanalCode) -> domainMapper.mapReVarsel(kanalCode, to, varselInfoTo, kontaktregisterTo))
 				.peek(existingVarsel::addVarsel)
 				.collect(toSet());
+		updateRevarselFeilds(existingVarsel);
 
 		varselbestillingRepo.saveAndFlush(existingVarsel);
 
 		sendToVarselutsending(to, origAktoer, to.getVarseltypeId(), varsels);
+	}
+
+	private void updateRevarselFeilds(Varselbestilling item) {
+		Integer nyAntallRevarslinger = item.getAntallRevarslinger() - 1;
+		if (nyAntallRevarslinger <= 0) {
+			item.setAntallRevarslinger(null);
+			item.setNesteVarslingDato(null);
+		} else {
+			item.setAntallRevarslinger(nyAntallRevarslinger);
+			item.setNesteVarslingDato(LocalDate.now().plusDays(item.getRevarslingIntervall()));
+		}
 	}
 
 	private void sendToVarselutsending(BestillVarselTo to, AktoerTo origAktoer, String varseltypeId, Set<Varsel> varsels) {

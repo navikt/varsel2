@@ -1,9 +1,6 @@
 package no.nav.varsel.batch.bvarsel001.itest;
 
 import static java.time.LocalDate.now;
-import static java.util.stream.Collectors.toList;
-import static no.nav.varsel.repo.TestdataUtil.ANTALL_REVARSLINGER;
-import static no.nav.varsel.repo.TestdataUtil.REVARSLING_INTERVALL;
 import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static no.nav.varsel.repo.TestdataUtil.createVarselbestillingBuilder;
@@ -16,14 +13,11 @@ import static org.junit.Assert.assertThat;
 
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Person;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
-import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.TestdataUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
-
-import java.util.List;
 
 /**
  * Jobtest for Bvarsel001
@@ -42,8 +36,7 @@ public class Bvarsel001JobTest extends AbstractBvarsel001Test {
 		varselbestillingRepo.save(createVarselbestillingBuilder()
 				.varseltypeId(IGNORED).nesteVarslingDato(null).build());
 
-		// create varsling which will be it's last varsling
-		// and have several parameters
+		// create varsling which will have several parameters
 		varselbestillingRepo.save(createVarselbestillingBuilder()
 				.parameter("key1", "val1")
 				.parameter("key2", "val2")
@@ -66,7 +59,6 @@ public class Bvarsel001JobTest extends AbstractBvarsel001Test {
 
 		assertThat(jobExecution.getExitStatus(), is(ExitStatus.COMPLETED));
 		assertThat(metricRegistry.counter("BVARSEL001.enqueueVarselbestillingStep.write").getCount(), is(5L));
-		assertThat(metricRegistry.counter("BVARSEL001.updateVarselbestillingStep.write").getCount(), is(5L));
 
 		assertWorktableEmpty();
 		assertDb();
@@ -78,20 +70,8 @@ public class Bvarsel001JobTest extends AbstractBvarsel001Test {
 	}
 
 	private void assertDb() {
-		Varselbestilling lastVarsling = varselbestillingRepo.findByVarselbestillingId(VARSELBESTILLING_ID);
-		assertThat(lastVarsling.getAntallRevarslinger(), nullValue());
-		assertThat(lastVarsling.getNesteVarslingDato(), nullValue());
-
-		List<Varselbestilling> varselbestillings = varselbestillingRepo.findAll().stream()
-				.filter(v -> !v.getVarselbestillingId().equals(VARSELBESTILLING_ID)
-						&& !v.getVarseltypeId().equals(IGNORED)
-				).collect(toList());
-
-		assertThat(varselbestillings, hasSize(4));
-		varselbestillings.forEach(varselbestilling -> {
-			assertThat(varselbestilling.getAntallRevarslinger(), is(ANTALL_REVARSLINGER - 1));
-			assertThat(varselbestilling.getNesteVarslingDato(), is(now().plusDays(REVARSLING_INTERVALL)));
-		});
+		assertThat(varselbestillingRepo.findAll().stream()
+				.filter(v -> !v.getVarseltypeId().equals(IGNORED)).count(), is(5L));
 	}
 
 	private void assertMq() {

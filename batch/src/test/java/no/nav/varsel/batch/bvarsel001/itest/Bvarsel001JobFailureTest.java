@@ -1,6 +1,5 @@
 package no.nav.varsel.batch.bvarsel001.itest;
 
-import static no.nav.varsel.repo.TestdataUtil.ANTALL_REVARSLINGER;
 import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
 import static no.nav.varsel.repo.TestdataUtil.createVarselbestillingBuilder;
 import static org.hamcrest.Matchers.hasSize;
@@ -133,9 +132,6 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 		assertThat(bvarsel001Repo.count(), is(0L));
 		List<Varselbestilling> all = varselbestillingRepo.findAll();
 		assertThat(all, hasSize(2));
-		for (Varselbestilling varselbestilling : all) {
-			assertThat(varselbestilling.getAntallRevarslinger(), is(ANTALL_REVARSLINGER - 1));
-		}
 
 		assertJms(2);
 		assertThat(failureCount, is(1));

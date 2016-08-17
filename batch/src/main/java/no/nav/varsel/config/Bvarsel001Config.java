@@ -18,10 +18,8 @@ import no.nav.brevogarkiv.batch.common.TableFormatter;
 import no.nav.brevogarkiv.batch.common.UserIdMdcJobExecutionListener;
 import no.nav.brevogarkiv.batch.common.validator.CommonJobParametersValidator;
 import no.nav.varsel.batch.bvarsel001.BestillReVarselMapper;
-import no.nav.varsel.batch.bvarsel001.UpdateVarselbestillingProcessor;
 import no.nav.varsel.batch.common.JmsQueueItemWriter;
 import no.nav.varsel.batch.support.JdbcTasklet;
-import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.jms.producer.varselbestilling.support.BestillVarselProducerMapper;
 import no.nav.varsel.jms.producer.varselbestilling.to.VarselbestillingTo;
@@ -34,12 +32,10 @@ import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.listener.CompositeJobExecutionListener;
 import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.HibernateCursorItemReader;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
-import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.support.CompositeItemWriter;
 import org.springframework.batch.repeat.exception.ExceptionHandler;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,7 +48,6 @@ import org.springframework.transaction.support.AbstractPlatformTransactionManage
 
 import javax.inject.Inject;
 import javax.jms.Queue;
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 
@@ -76,8 +71,6 @@ public class Bvarsel001Config {
 	private ExecutionContextWorkUnitCompletionPolicy workUnitCompletionPolicy;
 	@Inject
 	private LogContextListener logContextListener;
-	@Inject
-	private EntityManagerFactory entityManagerFactory;
 
 	@Bean
 	public Job bvarsel001Job(
@@ -87,7 +80,6 @@ public class Bvarsel001Config {
 			MetricsEnabledBatchStatusReportLoggerListener metricsEnabledBatchStatusReportLoggerListener,
 			Step populateArbeidsTabellStep,
 			Step enqueueVarselbestillingStep,
-			Step updateVarselbestillingStep,
 			Step cleanArbeidsTabellStep
 	) {
 		return jobBuilder.get(JOB_NAME)
@@ -100,7 +92,6 @@ public class Bvarsel001Config {
 
 				.start(populateArbeidsTabellStep)
 				.next(enqueueVarselbestillingStep)
-				.next(updateVarselbestillingStep)
 				.next(cleanArbeidsTabellStep)
 
 				.build();
@@ -204,52 +195,6 @@ public class Bvarsel001Config {
 		jmsQueueItemWriter.setDestination(bestillVarselQueue);
 		jmsQueueItemWriter.setMapper(bestillVarselProducerMapper);
 		return jmsQueueItemWriter;
-	}
-
-	@Bean
-	public Step updateVarselbestillingStep(
-			HibernateCursorItemReaderVarselbestilling sendtVarselbestillingReader,
-			ItemProcessor<Varselbestilling, Varselbestilling> updateVarselbestillingProcessor,
-			ItemWriter<? super AbstractDomainObject> jpaItemWriter,
-			TransactionAttribute transactionAttribute) {
-		return stepBuilder.get("updateVarselbestillingStep")
-				.<Varselbestilling, Varselbestilling>chunk(workUnitCompletionPolicy)
-				.reader(sendtVarselbestillingReader)
-				.processor(updateVarselbestillingProcessor)
-				.writer(jpaItemWriter)
-				.exceptionHandler(bvarsel001ExceptionHandler())
-				.listener(logContextListener)
-				.listener(workUnitCompletionPolicy)
-				.transactionAttribute(transactionAttribute)
-				.build();
-	}
-
-	@Bean
-	@JobScope
-	public HibernateCursorItemReaderVarselbestilling sendtVarselbestillingReader(
-			SessionFactory nonxaSessionFactory,
-			@Value("#{jobParameters[" + WORK_UNIT_KEY + "]}") int workUnit) {
-		HibernateCursorItemReaderVarselbestilling reader = new HibernateCursorItemReaderVarselbestilling();
-		reader.setQueryString("select vb from Varselbestilling vb " +
-				"where vb.varselbestillingId in " +
-				"(select arbtb.varselbestillingId from Bvarsel001WorkTable arbtb where " +
-				"arbtb.arbeidStatus = 'SENDT')");
-		reader.setSessionFactory(nonxaSessionFactory);
-		reader.setUseStatelessSession(true);
-		reader.setFetchSize(workUnit);
-		return reader;
-	}
-
-	@Bean
-	public UpdateVarselbestillingProcessor updateVarselbestillingProcessor() {
-		return new UpdateVarselbestillingProcessor();
-	}
-
-	@Bean
-	public JpaItemWriter<? super AbstractDomainObject> jpaItemWriter() {
-		JpaItemWriter<AbstractDomainObject> writer = new JpaItemWriter<>();
-		writer.setEntityManagerFactory(entityManagerFactory);
-		return writer;
 	}
 
 	@Bean
