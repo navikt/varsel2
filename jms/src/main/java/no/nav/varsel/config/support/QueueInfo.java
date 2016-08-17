@@ -9,20 +9,22 @@ import static no.nav.varsel.config.support.QueueInfo.Direction.OUT;
  * @author Andreas Skomedal, Visma Consulting.
  */
 public enum QueueInfo {
-	BESTILL_SERVICEMELDING("VARSELPRODUKSJON.VARSLINGER", "bestillServicemelding", IN),
-	VARSEL_KVITTERING("VARSELPRODUKSJON.KVITTERING", "varselKvittering", IN),
-	VARSELUTSENDING("VARSEL_INN", "varselutsending", OUT),
-	BESTILL_VARSEL("VARSELPRODUKSJON.BEST_VARSEL_M_HANDLING", "bestillVarsel", IN),
-	REVARSEL_STOPP("VARSELPRODUKSJON.STOPP_VARSEL_UTSENDING", "revarselStopp", IN);
+	BESTILL_SERVICEMELDING("VARSELPRODUKSJON.VARSLINGER", "bestillServicemelding", IN, false),
+	VARSEL_KVITTERING("VARSELPRODUKSJON.KVITTERING", "varselKvittering", IN, false),
+	VARSELUTSENDING("VARSEL_INN", "varselutsending", OUT, false),
+	BESTILL_VARSEL("VARSELPRODUKSJON.BEST_VARSEL_M_HANDLING", "bestillVarsel", IN, false),
+	REVARSEL_STOPP("VARSELPRODUKSJON.STOPP_VARSEL_UTSENDING", "revarselStopp", IN, false);
 
 	private final String fasitName;
 	private final String internalName;
 	private final Direction direction;
+	private boolean remote;
 
-	QueueInfo(String fasitName, String internalName, Direction direction) {
+	QueueInfo(String fasitName, String internalName, Direction direction, boolean remote) {
 		this.fasitName = fasitName;
 		this.internalName = internalName;
 		this.direction = direction;
+		this.remote = remote;
 	}
 
 	public String getFasitName() {
@@ -39,6 +41,10 @@ public enum QueueInfo {
 
 	public String getDescription() {
 		return String.format("direction=%s fasitAlias=%s", getDirection(), getFasitName());
+	}
+
+	public boolean isRemote() {
+		return remote;
 	}
 
 	public enum Direction {

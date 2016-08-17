@@ -12,6 +12,7 @@ import org.slf4j.MDC;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.util.Assert;
 
 import javax.inject.Inject;
 import javax.jms.Destination;
@@ -36,12 +37,9 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 	private final JmsConsumer jmsConsumer;
 	private final Class<T> inputType;
 
-	@Inject
 	private Jaxb2Marshaller marshaller;
-	@Inject
 	private JmsConsumerManager jmsConsumerManager;
 
-	@Inject
 	private MetricRegistry metricRegistry;
 	private Timer timer;
 	private Meter exceptionMeter;
@@ -58,6 +56,10 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 		timer = metricRegistry.timer(metricBase + ".timer");
 		exceptionMeter = metricRegistry.meter(metricBase + ".excpetionMeter");
 		noBackoutExceptionMeter = metricRegistry.meter(metricBase + ".noBackoutExceptionMeter");
+
+		Assert.notNull(marshaller, "marshaller cannot be null");
+		Assert.notNull(jmsConsumerManager, "jmsConsumerManager cannot be null");
+		Assert.notNull(metricRegistry, "metricRegistry cannot be null");
 	}
 
 	/**
@@ -154,5 +156,20 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 			LOG.trace("cannot create jms reply", e);
 		}
 		return null;
+	}
+
+	@Inject
+	public void setMarshaller(Jaxb2Marshaller marshaller) {
+		this.marshaller = marshaller;
+	}
+
+	@Inject
+	public void setJmsConsumerManager(JmsConsumerManager jmsConsumerManager) {
+		this.jmsConsumerManager = jmsConsumerManager;
+	}
+
+	@Inject
+	public void setMetricRegistry(MetricRegistry metricRegistry) {
+		this.metricRegistry = metricRegistry;
 	}
 }

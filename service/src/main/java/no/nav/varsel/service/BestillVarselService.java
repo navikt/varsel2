@@ -52,8 +52,7 @@ public class BestillVarselService {
 
 		if (to.isRevarsling()) {
 			assertRevarsel(to, existingVarsel);
-		}
-		else if (existingVarsel != null) {
+		} else if (existingVarsel != null) {
 			throw new VarselbestillingAlreadyExistException(to.getVarselBestillingId());
 		}
 

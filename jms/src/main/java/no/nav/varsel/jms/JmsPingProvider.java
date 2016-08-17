@@ -1,6 +1,5 @@
 package no.nav.varsel.jms;
 
-import com.google.common.collect.Sets;
 import no.nav.varsel.config.support.QueueInfo;
 import no.nav.varsel.domain.to.Ping;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +15,6 @@ import javax.jms.Queue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Jms Ping Provider
@@ -29,7 +27,6 @@ public class JmsPingProvider {
 
 	@Resource
 	private Map<QueueInfo, Queue> queueOverview;
-	private Set<QueueInfo> remoteQueues = Sets.newHashSet();
 
 	@Inject
 	private JmsTemplate jmsTemplate;
@@ -43,9 +40,8 @@ public class JmsPingProvider {
 			QueueInfo queueInfo = entry.getKey();
 			Queue queue = entry.getValue();
 			String queueName = getQueueName(queue);
-			boolean isRemoteQueue = remoteQueues.contains(queueInfo);
 			Runnable pinger = null;
-			if (!isRemoteQueue) {
+			if (!queueInfo.isRemote()) {
 				pinger = () -> {
 					try {
 						checkQueue(queue);
@@ -55,7 +51,7 @@ public class JmsPingProvider {
 					}
 				};
 			}
-			Ping.Type type = isRemoteQueue ? Ping.Type.RemoteQueue : Ping.Type.Queue;
+			Ping.Type type = queueInfo.isRemote() ? Ping.Type.RemoteQueue : Ping.Type.Queue;
 			pings.add(new Ping(type, queueInfo.getInternalName(), queueInfo.getDescription(), queueName, pinger));
 		}
 		return pings;
