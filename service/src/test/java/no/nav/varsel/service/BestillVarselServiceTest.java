@@ -185,6 +185,16 @@ public class BestillVarselServiceTest {
 	}
 
 	@Test
+	public void shouldThrowFunctionalForVarsel_VarselEksistererAllerede_antallRevarselZero() throws Exception {
+		expectedException.expectMessage("already sendt, antallRevarslinger=0, nesteVarslingDato=" + NESTE_VARSLING_DATO);
+		expectedException.expect(VarselbestillingAlreadyExistException.class);
+
+		existingVarselbestilling.setAntallRevarslinger(0);
+		createBestillingTo(VARSELBESTILLING_ID, true);
+		bestillVarselService.bestillVarsel(bestillingTo);
+	}
+
+	@Test
 	public void shouldThrowFunctionalForVarsel_VarselEksistererAllerede_nesteRevarselNull() throws Exception {
 		expectedException.expectMessage("already sendt, antallRevarslinger=2, nesteVarslingDato=null");
 		expectedException.expect(VarselbestillingAlreadyExistException.class);

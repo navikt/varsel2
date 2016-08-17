@@ -70,7 +70,10 @@ public class BestillVarselService {
 			Integer antallRevarslinger = existingVarsel.getAntallRevarslinger();
 			LocalDate nesteVarslingDato = existingVarsel.getNesteVarslingDato();
 
-			if (antallRevarslinger == null || nesteVarslingDato == null || nesteVarslingDato.isAfter(LocalDate.now())) {
+			// Check to prevent errors from accidentally sending duplicate varsels, or secondary revarsel too early.
+			// Could happen if BVARSEL001 is run twice in a short amount of time, before TVARSEL003 processes all the messages
+			if (antallRevarslinger == null || antallRevarslinger <= 0 ||
+					nesteVarslingDato == null || nesteVarslingDato.isAfter(LocalDate.now())) {
 				throw new VarselbestillingAlreadyExistException(
 						to.getVarselBestillingId(), antallRevarslinger, nesteVarslingDato);
 			}
