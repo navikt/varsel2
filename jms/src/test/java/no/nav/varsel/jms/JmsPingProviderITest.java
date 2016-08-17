@@ -39,7 +39,7 @@ public class JmsPingProviderITest {
 	private JmsPingProvider jmsPingProvider;
 
 	@Resource
-	private Map<QueueInfo, Queue> queueMap;
+	private Map<QueueInfo, Queue> queueOverview;
 
 	@BeforeClass
 	public static void setUpStatic() throws Exception {
@@ -55,7 +55,7 @@ public class JmsPingProviderITest {
 	public void shouldPing() throws Exception {
 		List<Ping> ping = jmsPingProvider.ping();
 
-		assertThat(ping, hasSize(((int) queueMap.keySet().stream().filter(q -> !q.isRemote()).count())));
+		assertThat(ping, hasSize(((int) queueOverview.keySet().stream().filter(q -> !q.isRemote()).count())));
 		ping.forEach(p -> {
 			assertThat(p.getType(), anyOf(is(Ping.Type.Queue), is(Ping.Type.RemoteQueue)));
 			assertThat(p.getAddress(), startsWith("mq_"));
