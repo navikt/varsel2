@@ -17,7 +17,6 @@ import no.nav.varsel.web.selftest.support.Result;
 import org.junit.Test;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 /**
  * Itest for {@link SelftestController}
@@ -44,7 +43,6 @@ public class SelftestControllerTest extends AbstractRestTest {
 	public void shouldSelftestJsonAndGiveErrorCode() throws Exception {
 		mockMvc.perform(get("/internal/selftest").accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isInternalServerError())
-				.andDo(MockMvcResultHandlers.print())
 				.andExpect(jsonPath("$.application", is("varsel")))
 				.andExpect(jsonPath("$.version", notNullValue()))
 				.andExpect(jsonPath("$.node", notNullValue()))
