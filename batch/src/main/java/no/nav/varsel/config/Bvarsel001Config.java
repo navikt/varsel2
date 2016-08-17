@@ -274,6 +274,6 @@ public class Bvarsel001Config {
 	/**
 	 * generic beans in job/step-scope doesn't work due to bug in springbatch in spring4, see BATCH-2413
 	 */
-	private class HibernateCursorItemReaderVarselbestilling extends HibernateCursorItemReader<Varselbestilling> {
+	private static class HibernateCursorItemReaderVarselbestilling extends HibernateCursorItemReader<Varselbestilling> {
 	}
 }

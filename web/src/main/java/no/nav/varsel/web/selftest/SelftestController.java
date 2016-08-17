@@ -98,6 +98,9 @@ public class SelftestController {
 		// Datasource
 		response.addCheck(dbSelftest.check());
 
+		// Self
+		response.addCheck(new HttpSelftest("Batch", "Internal Batch Controller", "http://localhost:8080/varsel/batch/ping").check());
+
 		// Webservice
 		response.addCheck(new PingSelftest(wsPingProvider.pingAktoerV2()).check());
 		response.addCheck(new PingSelftest(wsPingProvider.pingDigitalKontaktinformasjonV1()).check());
@@ -106,9 +109,6 @@ public class SelftestController {
 
 		// Jms
 		jmsPingProvider.ping().forEach(p -> response.addCheck(new PingSelftest(p).check()));
-
-		// Self
-		response.addCheck(new HttpSelftest("batch", "Batch Controller", "http://localhost:8080/varsel/batch/ping").check());
 	}
 
 	private String getServerAddress() {

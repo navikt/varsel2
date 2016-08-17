@@ -19,7 +19,6 @@ import org.springframework.context.annotation.Import;
 		ProviderWsConfig.class,
 		SelftestConfig.class,
 		BatchConfig.class,
-		SelftestConfig.class,
 		WebConfig.class
 })
 public class AppConfig {

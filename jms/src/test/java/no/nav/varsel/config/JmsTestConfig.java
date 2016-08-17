@@ -55,11 +55,11 @@ public class JmsTestConfig {
 		ctx.createSubcontext("java:/jboss");
 
 		// Queue mocks
-		ctx.bind("java:/jboss/bestillServicemelding", new ActiveMQQueue("bestillServicemelding"));
-		ctx.bind("java:/jboss/varselKvittering", new ActiveMQQueue("varselKvittering"));
-		ctx.bind("java:/jboss/varselutsending", new ActiveMQQueue("varselutsending"));
-		ctx.bind("java:/jboss/bestillVarsel", new ActiveMQQueue("bestillVarsel"));
-		ctx.bind("java:/jboss/revarselStopp", new ActiveMQQueue("revarselStopp"));
+		ctx.bind("java:/jboss/bestillServicemelding", new ActiveMQQueue("mq_bestillServicemelding"));
+		ctx.bind("java:/jboss/varselKvittering", new ActiveMQQueue("mq_varselKvittering"));
+		ctx.bind("java:/jboss/varselutsending", new ActiveMQQueue("mq_varselutsending"));
+		ctx.bind("java:/jboss/bestillVarsel", new ActiveMQQueue("mq_bestillVarsel"));
+		ctx.bind("java:/jboss/revarselStopp", new ActiveMQQueue("mq_revarselStopp"));
 
 		// Test queues
 		ctx.bind("java:/jboss/backout", new ActiveMQQueue("backout"));

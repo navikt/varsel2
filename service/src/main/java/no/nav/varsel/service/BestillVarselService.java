@@ -50,8 +50,9 @@ public class BestillVarselService {
 	public void bestillVarsel(BestillVarselTo to) {
 		Varselbestilling existingVarsel = varselbestillingRepo.findByVarselbestillingIdEager(to.getVarselBestillingId());
 
-		if (to.isRevarsling())
+		if (to.isRevarsling()) {
 			assertRevarsel(to, existingVarsel);
+		}
 		else if (existingVarsel != null) {
 			throw new VarselbestillingAlreadyExistException(to.getVarselBestillingId());
 		}

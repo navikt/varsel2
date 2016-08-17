@@ -19,7 +19,7 @@ public class HttpSelftest extends AbstractSelftest {
 	private final String url;
 
 	public HttpSelftest(String name, String description, String url) {
-		super(Ping.Type.Rest, name, description);
+		super(Ping.Type.Rest, name, url, description);
 		this.url = url;
 	}
 
