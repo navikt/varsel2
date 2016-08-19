@@ -11,6 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 
 /**
@@ -27,6 +29,8 @@ public abstract class AbstractRepoTest {
 	protected VarselbestillingRepo varselbestillingRepo;
 	@Inject
 	protected VarselRepo varselRepo;
+	@PersistenceContext(unitName = "primary")
+	protected EntityManager entityManager;
 
 	@Before
 	public void setUpAbstract() throws Exception {

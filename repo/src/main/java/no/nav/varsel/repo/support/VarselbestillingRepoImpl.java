@@ -5,7 +5,6 @@ import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.VarselbestillingRepoCustom;
 import org.springframework.util.Assert;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
  */
 public class VarselbestillingRepoImpl implements VarselbestillingRepoCustom {
 
-	@Inject
 	@PersistenceContext(unitName = "primary")
 	private EntityManager entityManager;
 

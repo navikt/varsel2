@@ -9,6 +9,8 @@ import static org.junit.Assert.assertThat;
 import no.nav.varsel.domain.object.Varselbestilling;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
  * Itest for {@link VarselbestillingRepo}
  *
@@ -31,6 +33,15 @@ public class VarselbestillingRepoTest extends AbstractRepoTest {
 	}
 
 	@Test
+	public void shouldFindyByVarselbestillingIdWhenNoVarsel() throws Exception {
+		Varselbestilling varselbestilling = createVarselbestilling();
+		varselbestilling.getVarsels().clear();
+		varselbestillingRepo.saveAndFlush(varselbestilling);
+
+		assertThat(varselbestillingRepo.findByVarselbestillingId(VARSELBESTILLING_ID), notNullValue());
+	}
+
+	@Test
 	public void shouldFindOneEager() throws Exception {
 		varselbestillingRepo.saveAndFlush(createVarselbestilling());
 
@@ -40,10 +51,36 @@ public class VarselbestillingRepoTest extends AbstractRepoTest {
 	}
 
 	@Test
+	public void shouldFindOneEagerWhenNoVarsel() throws Exception {
+		Varselbestilling varselbestilling = createVarselbestilling();
+		varselbestilling.getVarsels().clear();
+		varselbestillingRepo.saveAndFlush(varselbestilling);
+
+		varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
+		assertThat(varselbestilling, notNullValue());
+		assertThat(varselbestilling.getVarsels(), notNullValue());
+	}
+
+	@Test
 	public void shouldFindAllEager() throws Exception {
 		varselbestillingRepo.saveAndFlush(createVarselbestilling());
 
-		Varselbestilling varselbestilling = varselbestillingRepo.findAllEager().get(0);
+		List<Varselbestilling> allEager = varselbestillingRepo.findAllEager();
+		assertThat(allEager, hasSize(1));
+		Varselbestilling varselbestilling = allEager.get(0);
+		assertThat(varselbestilling, notNullValue());
+		assertThat(varselbestilling.getVarsels(), notNullValue());
+	}
+
+	@Test
+	public void shouldFindAllEagerWhenNoVarsel() throws Exception {
+		Varselbestilling varselbestilling = createVarselbestilling();
+		varselbestilling.getVarsels().clear();
+		varselbestillingRepo.saveAndFlush(varselbestilling);
+
+		List<Varselbestilling> allEager = varselbestillingRepo.findAllEager();
+		assertThat(allEager, hasSize(1));
+		varselbestilling = allEager.get(0);
 		assertThat(varselbestilling, notNullValue());
 		assertThat(varselbestilling.getVarsels(), notNullValue());
 	}

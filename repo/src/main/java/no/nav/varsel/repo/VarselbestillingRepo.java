@@ -28,7 +28,7 @@ public interface VarselbestillingRepo extends JpaRepository<Varselbestilling, Lo
 	 * @param id the varselbestillingId
 	 * @return the {@link Varselbestilling} or null if not found
 	 */
-	@Query("select vb from Varselbestilling vb join fetch vb.varsels where vb.varselbestillingId = (:id)")
+	@Query("select vb from Varselbestilling vb left join fetch vb.varsels where vb.varselbestillingId = (:id)")
 	Varselbestilling findByVarselbestillingIdEager(@Param("id") String id);
 
 	/**
@@ -36,6 +36,6 @@ public interface VarselbestillingRepo extends JpaRepository<Varselbestilling, Lo
 	 *
 	 * @return the a list of {@link Varselbestilling}
 	 */
-	@Query("select vb from Varselbestilling vb join fetch vb.varsels")
+	@Query("select vb from Varselbestilling vb left join fetch vb.varsels")
 	List<Varselbestilling> findAllEager();
 }

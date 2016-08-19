@@ -2,7 +2,6 @@ package no.nav.varsel.repo.support;
 
 import no.nav.varsel.repo.VarselRepoCustom;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -13,7 +12,6 @@ import javax.persistence.PersistenceContext;
  */
 public class VarselRepoImpl implements VarselRepoCustom {
 
-	@Inject
 	@PersistenceContext(unitName = "primary")
 	private EntityManager entityManager;
 
