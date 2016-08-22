@@ -2,6 +2,7 @@ package no.nav.varsel.service;
 
 import static java.util.stream.Collectors.toSet;
 
+import com.google.common.collect.Maps;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.to.AktoerTo;
@@ -102,6 +103,7 @@ public class BestillVarselService {
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
 				.hentDigitalKontaktinformasjonAndDecideKanal(existingVarsel.getFnr(), varselInfoTo.getPreferertKanal());
 
+		to.setParameters(Maps.newHashMap(existingVarsel.getFletteParametere()));
 		Set<Varsel> varsels = kontaktregisterTo.getKanaler().stream()
 				.map((kanalCode) -> domainMapper.mapReVarsel(kanalCode, to, varselInfoTo, kontaktregisterTo))
 				.peek(existingVarsel::addVarsel)

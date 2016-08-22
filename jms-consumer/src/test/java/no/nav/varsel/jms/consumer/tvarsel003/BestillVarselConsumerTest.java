@@ -212,6 +212,9 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 
 	private JAXBElement<VarselMedHandling> createVarselBestilling(boolean revarsel) {
 		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling();
+		if (revarsel) {
+			varselBestilling.getParameterListe().clear();
+		}
 		varselBestilling.setReVarsel(revarsel);
 		return new ObjectFactory().createVarselMedHandling(varselBestilling);
 	}
