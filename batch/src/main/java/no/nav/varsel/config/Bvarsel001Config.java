@@ -1,7 +1,9 @@
 package no.nav.varsel.config;
 
+import static no.nav.brevogarkiv.batch.common.CommonBatchInputParameters.PROGRESS_INTERVAL_KEY;
 import static no.nav.brevogarkiv.batch.common.CommonBatchInputParameters.TRANSACTION_TIMEOUT_KEY;
 import static no.nav.brevogarkiv.batch.common.CommonBatchInputParameters.WORK_UNIT_KEY;
+import static no.nav.brevogarkiv.batch.common.MetricsEnabledBatchStatusReportLoggerListener.StepCountType.WRITE;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.Lists;
@@ -11,7 +13,6 @@ import no.nav.brevogarkiv.batch.common.ExitStatusJobExecutionListener;
 import no.nav.brevogarkiv.batch.common.LogContextListener;
 import no.nav.brevogarkiv.batch.common.LoggingExceptionHandler;
 import no.nav.brevogarkiv.batch.common.MetricsEnabledBatchStatusReportLoggerListener;
-import no.nav.brevogarkiv.batch.common.MultiStepBatchStatusReportLoggerListener;
 import no.nav.brevogarkiv.batch.common.ProgressListener;
 import no.nav.brevogarkiv.batch.common.ProgressLoggerListener;
 import no.nav.brevogarkiv.batch.common.TableFormatter;
@@ -76,8 +77,7 @@ public class Bvarsel001Config {
 	public Job bvarsel001Job(
 			CommonJobParametersValidator bvarsel001JobParametersValidator,
 			UserIdMdcJobExecutionListener userIdMdcJobExecutionListener,
-			JobExecutionListener bvarsel001BatchExitListener,
-			MetricsEnabledBatchStatusReportLoggerListener metricsEnabledBatchStatusReportLoggerListener,
+			JobExecutionListener bvarsel001ExecutionListener,
 			Step populateArbeidsTabellStep,
 			Step enqueueVarselbestillingStep,
 			Step cleanArbeidsTabellStep
@@ -87,8 +87,7 @@ public class Bvarsel001Config {
 				.listener(bvarsel001JobParametersValidator)
 				.listener(logContextListener)
 				.listener(userIdMdcJobExecutionListener)
-				.listener(bvarsel001BatchExitListener)
-				.listener(metricsEnabledBatchStatusReportLoggerListener)
+				.listener(bvarsel001ExecutionListener)
 
 				.start(populateArbeidsTabellStep)
 				.next(enqueueVarselbestillingStep)
@@ -123,7 +122,8 @@ public class Bvarsel001Config {
 	public Step enqueueVarselbestillingStep(
 			HibernateCursorItemReaderVarselbestilling opprettetVarselbestillingWithFletteparameterReader,
 			ItemWriter<VarselbestillingTo> enqueueVarselCompositeWriter,
-			TransactionAttribute transactionAttribute
+			TransactionAttribute transactionAttribute,
+			MetricsEnabledBatchStatusReportLoggerListener metricsEnabledBatchStatusReportLoggerListener
 	) {
 		return
 				stepBuilder.get("enqueueVarselbestillingStep")
@@ -138,6 +138,7 @@ public class Bvarsel001Config {
 						.exceptionHandler(bvarsel001ExceptionHandler())
 						.listener(logContextListener)
 						.listener(workUnitCompletionPolicy)
+						.listener(metricsEnabledBatchStatusReportLoggerListener)
 						.transactionAttribute(transactionAttribute)
 						.build();
 	}
@@ -248,12 +249,7 @@ public class Bvarsel001Config {
 	}
 
 	@Bean
-	public BatchStatusReportLoggerListener bvarsel001BatchStatusReportLoggerListener(DataSource dataSource) {
-		return new MultiStepBatchStatusReportLoggerListener(LOGNAME, dataSource);
-	}
-
-	@Bean
-	public CompositeJobExecutionListener bvarsel001BatchExitListener(
+	public CompositeJobExecutionListener bvarsel001ExecutionListener(
 			BatchStatusReportLoggerListener bvarsel001BatchStatusReportLoggerListener,
 			ExitStatusJobExecutionListener exitStatusJobExecutionListener
 	) {
@@ -263,12 +259,17 @@ public class Bvarsel001Config {
 		return listener;
 	}
 
+	@JobScope
 	@Bean
 	public MetricsEnabledBatchStatusReportLoggerListener metricsEnabledBatchStatusReportLoggerListener(
 			DataSource dataSource,
-			MetricRegistry metricRegistry
+			MetricRegistry metricRegistry,
+			@Value("#{jobParameters[" + PROGRESS_INTERVAL_KEY + "]}") int progressInterval
 	) {
-		return new MetricsEnabledBatchStatusReportLoggerListener(LOGNAME, dataSource, metricRegistry);
+		MetricsEnabledBatchStatusReportLoggerListener listener = new MetricsEnabledBatchStatusReportLoggerListener(LOGNAME, dataSource, metricRegistry);
+		listener.addProgressCounter("enqueueVarselbestillingStep", "Revarsel bestilt", WRITE);
+		listener.setProgressInterval(progressInterval);
+		return listener;
 	}
 
 	/**

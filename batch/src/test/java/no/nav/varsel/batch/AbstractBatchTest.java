@@ -39,6 +39,7 @@ import java.time.format.DateTimeFormatter;
 public abstract class AbstractBatchTest extends JobLauncherTestUtils {
 
 	protected static final String DEFAULT_WORK_UNIT = "2";
+	protected static final String DEFAULT_PROGRESS_INTERVAL = "1";
 
 	@Inject
 	protected VarselbestillingRepo varselbestillingRepo;
@@ -84,7 +85,7 @@ public abstract class AbstractBatchTest extends JobLauncherTestUtils {
 	}
 
 	protected String getProgressInterval() {
-		return DEFAULT_WORK_UNIT;
+		return DEFAULT_PROGRESS_INTERVAL;
 	}
 
 	protected String getStartTime() {
