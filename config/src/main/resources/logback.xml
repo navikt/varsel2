@@ -113,6 +113,11 @@
 		<appender-ref ref="SYSLOG"/>
 	</logger>
 
+	<logger name="no.nav.brevogarkiv.batch" additivity="false" level="INFO">
+		<appender-ref ref="BATCH-SIFT"/>
+		<appender-ref ref="SYSLOG"/>
+	</logger>
+
 	<logger name="org.springframework.batch" additivity="false" level="INFO">
 		<appender-ref ref="BATCH-SIFT"/>
 		<appender-ref ref="SYSLOG"/>

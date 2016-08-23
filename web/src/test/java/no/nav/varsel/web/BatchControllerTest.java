@@ -25,17 +25,14 @@ public class BatchControllerTest extends AbstractRestTest {
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@Test
+	public void shouldPing() throws Exception {
+		mockMvc.perform(get("/batch/ping")).andExpect(status().isOk());
+	}
+
+	@Test
 	public void shouldBeAbleToStartBatch() throws Exception {
-		HashMap<String, String> parameters = new HashMap<>();
-		String startTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern(BatchConfig.START_TIME_FORMAT));
-		parameters.put("startTime", startTime);
-		parameters.put("workUnit", "2");
-
-		String parameterString = Joiner.on(",").join(parameters.entrySet().stream()
-				.map(e -> e.getKey() + "=" + e.getValue()).collect(toList()));
-
 		HashMap<String, String> var = new HashMap<>();
-		var.put("jobParameters", parameterString);
+		var.put("jobParameters", createParamString(createParams()));
 		byte[] content = objectMapper.writeValueAsBytes(var);
 		mockMvc.perform(post("/batch/launch/BVARSEL001")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -43,8 +40,16 @@ public class BatchControllerTest extends AbstractRestTest {
 				.andExpect(status().isOk());
 	}
 
-	@Test
-	public void shouldPing() throws Exception {
-		mockMvc.perform(get("/batch/ping")).andExpect(status().isOk());
+	private HashMap<String, String> createParams() {
+		HashMap<String, String> parameters = new HashMap<>();
+		String startTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern(BatchConfig.START_TIME_FORMAT));
+		parameters.put("startTime", startTime);
+		parameters.put("workUnit", "2");
+		return parameters;
+	}
+
+	private String createParamString(HashMap<String, String> parameters) {
+		return Joiner.on(",").join(parameters.entrySet().stream()
+				.map(e -> e.getKey() + "=" + e.getValue()).collect(toList()));
 	}
 }

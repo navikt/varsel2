@@ -7,7 +7,6 @@ import static no.nav.brevogarkiv.batch.common.MetricsEnabledBatchStatusReportLog
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.Lists;
-import no.nav.brevogarkiv.batch.common.BatchStatusReportLoggerListener;
 import no.nav.brevogarkiv.batch.common.ExecutionContextWorkUnitCompletionPolicy;
 import no.nav.brevogarkiv.batch.common.ExitStatusJobExecutionListener;
 import no.nav.brevogarkiv.batch.common.LogContextListener;
@@ -20,6 +19,7 @@ import no.nav.brevogarkiv.batch.common.UserIdMdcJobExecutionListener;
 import no.nav.brevogarkiv.batch.common.validator.CommonJobParametersValidator;
 import no.nav.varsel.batch.bvarsel001.BestillReVarselMapper;
 import no.nav.varsel.batch.common.JmsQueueItemWriter;
+import no.nav.varsel.batch.support.FaultTolerantStepBuilderLazyTransactionAttribute;
 import no.nav.varsel.batch.support.JdbcTasklet;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.jms.producer.varselbestilling.support.BestillVarselProducerMapper;
@@ -32,6 +32,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.listener.CompositeJobExecutionListener;
+import org.springframework.batch.core.step.builder.FaultTolerantStepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
@@ -118,29 +119,30 @@ public class Bvarsel001Config {
 	}
 
 	@Bean
-	@JobScope
 	public Step enqueueVarselbestillingStep(
 			HibernateCursorItemReaderVarselbestilling opprettetVarselbestillingWithFletteparameterReader,
 			ItemWriter<VarselbestillingTo> enqueueVarselCompositeWriter,
 			TransactionAttribute transactionAttribute,
-			MetricsEnabledBatchStatusReportLoggerListener metricsEnabledBatchStatusReportLoggerListener
+			JobExecutionListener bvarsel001BatchStatusReportLoggerListener
 	) {
-		return
-				stepBuilder.get("enqueueVarselbestillingStep")
-						.<Varselbestilling, VarselbestillingTo>chunk(workUnitCompletionPolicy)
-						.faultTolerant().retryLimit(2)
-						.retry(JmsException.class)
+		FaultTolerantStepBuilder<Varselbestilling, VarselbestillingTo> builder =
+				new FaultTolerantStepBuilderLazyTransactionAttribute<>(stepBuilder.get("enqueueVarselbestillingStep")
+						.chunk(workUnitCompletionPolicy));
 
-						.reader(opprettetVarselbestillingWithFletteparameterReader)
-						.processor(bestillReVarselMapper())
-						.writer(enqueueVarselCompositeWriter)
+		return builder
+				.retryLimit(2)
+				.retry(JmsException.class)
 
-						.exceptionHandler(bvarsel001ExceptionHandler())
-						.listener(logContextListener)
-						.listener(workUnitCompletionPolicy)
-						.listener(metricsEnabledBatchStatusReportLoggerListener)
-						.transactionAttribute(transactionAttribute)
-						.build();
+				.reader(opprettetVarselbestillingWithFletteparameterReader)
+				.processor(bestillReVarselMapper())
+				.writer(enqueueVarselCompositeWriter)
+
+				.exceptionHandler(bvarsel001ExceptionHandler())
+				.listener(logContextListener)
+				.listener(workUnitCompletionPolicy)
+				.listener(bvarsel001BatchStatusReportLoggerListener)
+				.transactionAttribute(transactionAttribute)
+				.build();
 	}
 
 	@Bean
@@ -250,7 +252,7 @@ public class Bvarsel001Config {
 
 	@Bean
 	public CompositeJobExecutionListener bvarsel001ExecutionListener(
-			BatchStatusReportLoggerListener bvarsel001BatchStatusReportLoggerListener,
+			JobExecutionListener bvarsel001BatchStatusReportLoggerListener,
 			ExitStatusJobExecutionListener exitStatusJobExecutionListener
 	) {
 		CompositeJobExecutionListener listener = new CompositeJobExecutionListener();
@@ -261,10 +263,10 @@ public class Bvarsel001Config {
 
 	@JobScope
 	@Bean
-	public MetricsEnabledBatchStatusReportLoggerListener metricsEnabledBatchStatusReportLoggerListener(
+	public MetricsEnabledBatchStatusReportLoggerListener bvarsel001BatchStatusReportLoggerListener(
 			DataSource dataSource,
 			MetricRegistry metricRegistry,
-			@Value("#{jobParameters[" + PROGRESS_INTERVAL_KEY + "]}") int progressInterval
+			@Value("#{jobParameters[" + PROGRESS_INTERVAL_KEY + "] ?: 1}") int progressInterval
 	) {
 		MetricsEnabledBatchStatusReportLoggerListener listener = new MetricsEnabledBatchStatusReportLoggerListener(LOGNAME, dataSource, metricRegistry);
 		listener.addProgressCounter("enqueueVarselbestillingStep", "Revarsel bestilt", WRITE);
