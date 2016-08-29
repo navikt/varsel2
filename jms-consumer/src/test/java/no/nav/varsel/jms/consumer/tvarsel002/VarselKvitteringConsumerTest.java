@@ -36,6 +36,7 @@ import java.util.UUID;
  * @author Roar Bjurstrom, Visma Consulting.
  */
 public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
+	private static final String STATUS_ERROR = "Error";
 
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
@@ -63,7 +64,7 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 		String varselId = varselbestilling.getVarsels().iterator().next().getVarselId();
 
 		VarselKvittering kvittering = createVarselKvittering(varselId);
-		kvittering.setStatus("feilet");
+		kvittering.setStatus(STATUS_ERROR);
 		JAXBElement<VarselKvittering> varselKvittering = createVarselKvitteringJaxBElement(kvittering);
 		JmsReply response = sendMessage(varselKvitteringQueue, varselKvittering);
 		assertMessageNotOnBq(response);

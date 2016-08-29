@@ -70,7 +70,7 @@ public class MottaVarselKvitteringServiceTest {
 	}
 
 	@Test
-	public void shouldUpdateVarselWhenStatusPlukket() throws Exception {
+	public void shouldUpdateVarselWhenStatusOK() throws Exception {
 		MottaVarselKvitteringTo to = MottaVarselKvitteringToTest.createTo();
 
 		Varsel varsel = createVarsel(to.getVarselId());
@@ -84,9 +84,24 @@ public class MottaVarselKvitteringServiceTest {
 	}
 
 	@Test
-	public void shouldUpdateVarselWhenStatusFeilet() throws Exception {
+	public void shouldUpdateVarselWhenStatusError() throws Exception {
 		MottaVarselKvitteringTo to = MottaVarselKvitteringToTest.createTo();
-		to.setStatus(MottaVarselKvitteringStatusTo.FEILET);
+		to.setStatus(MottaVarselKvitteringStatusTo.ERROR);
+
+		Varsel varsel = createVarsel(to.getVarselId());
+		when(varselRepo.findByVarselId(to.getVarselId())).thenReturn(varsel);
+
+		mottaVarselKvitteringService.behandleKvitteringsmelding(to);
+
+		assertThat(varsel.getStatus(), equalTo(StatusCode.FEILET));
+		assertThat(varsel.getFeilbeskrivelse(), equalTo(to.getFeilmelding()));
+		assertThat(varsel.getKvitteringTidspunkt(), aboutNow());
+	}
+
+	@Test
+	public void shouldUpdateVarselWhenStatusExpired() throws Exception {
+		MottaVarselKvitteringTo to = MottaVarselKvitteringToTest.createTo();
+		to.setStatus(MottaVarselKvitteringStatusTo.EXPIRED);
 
 		Varsel varsel = createVarsel(to.getVarselId());
 		when(varselRepo.findByVarselId(to.getVarselId())).thenReturn(varsel);
@@ -101,7 +116,7 @@ public class MottaVarselKvitteringServiceTest {
 	@Test
 	public void shouldCropFeilmeldingWhenTooLong() throws Exception {
 		MottaVarselKvitteringTo to = MottaVarselKvitteringToTest.createTo();
-		to.setStatus(MottaVarselKvitteringStatusTo.FEILET);
+		to.setStatus(MottaVarselKvitteringStatusTo.ERROR);
 		to.setFeilmelding(StringUtils.repeat("a", MAX_LENGTH_FEILMELDING + 1));
 
 		Varsel varsel = createVarsel(to.getVarselId());
@@ -118,7 +133,7 @@ public class MottaVarselKvitteringServiceTest {
 	@Test
 	public void shouldOnlyCropFeilmeldingWhenTooLong() throws Exception {
 		MottaVarselKvitteringTo to = MottaVarselKvitteringToTest.createTo();
-		to.setStatus(MottaVarselKvitteringStatusTo.FEILET);
+		to.setStatus(MottaVarselKvitteringStatusTo.ERROR);
 		to.setFeilmelding(StringUtils.repeat("a", MAX_LENGTH_FEILMELDING));
 
 		Varsel varsel = createVarsel(to.getVarselId());

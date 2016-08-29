@@ -20,7 +20,7 @@ public class MottaVarselKvitteringToTest {
 	public static final String VARSEL_ID = UUID.randomUUID().toString();
 	public static final String MOTTAKERINFORMASJON = "Mottakerinformasjon";
 	public static final LocalDateTime UTSENDINGSTIDSPUNKT = LocalDateTime.of(2016, 1, 1, 1, 1);
-	public static final MottaVarselKvitteringStatusTo STATUS = MottaVarselKvitteringStatusTo.PLUKKET;
+	public static final MottaVarselKvitteringStatusTo STATUS_OK = MottaVarselKvitteringStatusTo.OK;
 	public static final String FEILMELDING = "Feilmelding";
 
 	@Rule
@@ -89,7 +89,7 @@ public class MottaVarselKvitteringToTest {
 		to.setVarselId(VARSEL_ID);
 		to.setMottakerInformasjon(MOTTAKERINFORMASJON);
 		to.setUtsendingstidspunkt(UTSENDINGSTIDSPUNKT);
-		to.setStatus(STATUS);
+		to.setStatus(STATUS_OK);
 		to.setFeilmelding(FEILMELDING);
 		return to;
 	}
