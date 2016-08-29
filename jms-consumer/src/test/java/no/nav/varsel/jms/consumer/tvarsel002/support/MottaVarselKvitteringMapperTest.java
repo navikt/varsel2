@@ -25,7 +25,9 @@ public class MottaVarselKvitteringMapperTest {
 	public static final LocalDateTime DATE_UTSENDINGSSTIDSPUNKT = LocalDateTime.parse("2016-04-24T15:22:45");
 	public static final String VARSEL_ID = UUID.randomUUID().toString();
 	public static final String MOTTAKERINFORMASJON = "0000000000";
-	public static final String STATUS = "plukket";
+	public static final String STATUS_OK = "ok";
+	public static final String STATUS_ERROR = "Error";
+	public static final String STATUS_EXPIRED = "EXPIRED";
 	public static final String FEILMELDING = "feilmelding";
 
 	@Rule
@@ -40,7 +42,7 @@ public class MottaVarselKvitteringMapperTest {
 		assertThat(mapped.getVarselId(), equalTo(VARSEL_ID));
 		assertThat(mapped.getMottakerInformasjon(), equalTo(MOTTAKERINFORMASJON));
 		assertThat(mapped.getUtsendingstidspunkt(), equalTo(DATE_UTSENDINGSSTIDSPUNKT));
-		assertThat(mapped.getStatus(), equalTo(MottaVarselKvitteringStatusTo.PLUKKET));
+		assertThat(mapped.getStatus(), equalTo(MottaVarselKvitteringStatusTo.OK));
 		assertThat(mapped.getFeilmelding(), equalTo(FEILMELDING));
 	}
 
@@ -65,13 +67,23 @@ public class MottaVarselKvitteringMapperTest {
 	}
 
 	@Test
-	public void shouldMapStatusFeilet() throws Exception {
+	public void shouldMapStatusError() throws Exception {
 		VarselKvittering kvittering = createVarselKvittering();
-		kvittering.setStatus("feilet");
+		kvittering.setStatus(STATUS_ERROR);
 
 		MottaVarselKvitteringTo mapped = mapper.map(kvittering);
 
-		assertThat(mapped.getStatus(), equalTo(MottaVarselKvitteringStatusTo.FEILET));
+		assertThat(mapped.getStatus(), equalTo(MottaVarselKvitteringStatusTo.ERROR));
+	}
+
+	@Test
+	public void shouldMapStatusExpired() throws Exception {
+		VarselKvittering kvittering = createVarselKvittering();
+		kvittering.setStatus(STATUS_EXPIRED);
+
+		MottaVarselKvitteringTo mapped = mapper.map(kvittering);
+
+		assertThat(mapped.getStatus(), equalTo(MottaVarselKvitteringStatusTo.EXPIRED));
 	}
 
 	@Test
@@ -89,7 +101,7 @@ public class MottaVarselKvitteringMapperTest {
 		kvittering.setVarselId(VARSEL_ID);
 		kvittering.setMottakerinformasjon(MOTTAKERINFORMASJON);
 		kvittering.setUtsendingstidspunkt(toXmlGregorianCalendar(DATE_UTSENDINGSSTIDSPUNKT));
-		kvittering.setStatus(STATUS);
+		kvittering.setStatus(STATUS_OK);
 		kvittering.setFeilmelding(FEILMELDING);
 		return kvittering;
 	}

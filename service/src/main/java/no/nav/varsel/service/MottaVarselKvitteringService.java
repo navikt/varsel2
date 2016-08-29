@@ -49,10 +49,11 @@ public class MottaVarselKvitteringService {
 
 	private void updateVarsel(MottaVarselKvitteringTo mottaVarselKvitteringTo, Varsel varsel) {
 		varsel.setKvitteringTidspunkt(LocalDateTime.now());
-		if (mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.PLUKKET) {
+		if (mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.OK) {
 			varsel.setStatus(StatusCode.FERDIGBEHANDLET);
 			varsel.setDistribusjonTidspunkt(mottaVarselKvitteringTo.getUtsendingstidspunkt());
-		} else if (mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.FEILET) {
+		} else if (mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.ERROR
+				|| mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.EXPIRED) {
 			varsel.setStatus(StatusCode.FEILET);
 			varsel.setFeilbeskrivelse(StringUtils.abbreviate(mottaVarselKvitteringTo.getFeilmelding(),
 					MAX_LENGTH_FEILMELDING));
