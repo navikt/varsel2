@@ -63,7 +63,7 @@ public class MottaVarselKvitteringToTest {
 	}
 
 	@Test
-	public void shouldValidateMissingUtsendingsTidspunkt() throws Exception {
+	public void shouldValidateMissingUtsendingsTidspunktWhenOk() throws Exception {
 		MottaVarselKvitteringTo to = createTo();
 		to.setUtsendingstidspunkt(null);
 
@@ -80,6 +80,24 @@ public class MottaVarselKvitteringToTest {
 
 		expectedException.expect(IllegalArgumentException.class);
 		expectedException.expectMessage("status cannot be null");
+
+		to.validateTo();
+	}
+
+	@Test
+	public void allowUtsendingsTidspunktToBeNullWhenExpired() {
+		MottaVarselKvitteringTo to = createTo();
+		to.setStatus(MottaVarselKvitteringStatusTo.EXPIRED);
+		to.setUtsendingstidspunkt(null);
+
+		to.validateTo();
+	}
+
+	@Test
+	public void allowUtsendingsTidspunktToBeNullWhenError() {
+		MottaVarselKvitteringTo to = createTo();
+		to.setStatus(MottaVarselKvitteringStatusTo.ERROR);
+		to.setUtsendingstidspunkt(null);
 
 		to.validateTo();
 	}
