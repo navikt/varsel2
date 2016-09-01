@@ -64,7 +64,6 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 		String varselId = varselbestilling.getVarsels().iterator().next().getVarselId();
 
 		VarselKvittering kvittering = createVarselKvittering(varselId);
-		kvittering.setUtsendingstidspunkt(null);
 		kvittering.setStatus(STATUS_ERROR);
 		JAXBElement<VarselKvittering> varselKvittering = createVarselKvitteringJaxBElement(kvittering);
 		JmsReply response = sendMessage(varselKvitteringQueue, varselKvittering);

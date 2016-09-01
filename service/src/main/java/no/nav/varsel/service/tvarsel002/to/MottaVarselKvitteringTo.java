@@ -20,10 +20,8 @@ public class MottaVarselKvitteringTo {
 
 	public void validateTo() {
 		hasText(varselId, "varselId");
+		notNull(utsendingstidspunkt, "utsendingstidspunkt");
 		notNull(status, "status");
-		if(status == MottaVarselKvitteringStatusTo.OK) {
-			notNull(utsendingstidspunkt, "utsendingstidspunkt");
-		}
 	}
 
 	public String getVarselId() {
