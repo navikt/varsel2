@@ -34,7 +34,9 @@ import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest;
 import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.to.xml.JmsReply;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import javax.inject.Inject;
 import javax.jms.Message;
@@ -54,6 +56,13 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 	private Queue bestillVarselQueue;
 	@Inject
 	private Queue varselutsendingQueue;
+
+	private Message message;
+
+	@Before
+	public void beforeTestMethod() {
+		message = Mockito.mock(Message.class);
+	}
 
 	@Test
 	public void shouldBestillFoerstegangVarsel() throws Exception {
@@ -115,7 +124,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 
 	@Test
 	public void shouldWeaveVarselUrl() throws Exception {
-		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling();
+		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling(message).getObject();
 		varselBestilling.setVarseltypeId("varsel_varselUrl");
 		varselBestilling.setReVarsel(false);
 
@@ -211,7 +220,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	private JAXBElement<VarselMedHandling> createVarselBestilling(boolean revarsel) {
-		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling();
+		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling(message).getObject();
 		if (revarsel) {
 			varselBestilling.getParameterListe().clear();
 		}

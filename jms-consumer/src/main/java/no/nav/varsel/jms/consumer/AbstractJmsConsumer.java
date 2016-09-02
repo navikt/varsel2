@@ -65,9 +65,9 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 	/**
 	 * Method that handles a message
 	 *
-	 * @param message message unmarshalled in the type of this consumer
+	 * @param objectMessageWrapper message unmarshalled in the type of this consumer
 	 */
-	protected abstract void handleMessage(T message);
+	protected abstract void handleMessage(ObjectMessageWrapper<T> objectMessageWrapper);
 
 	/**
 	 * Listener annotate with @{@link JmsListener}.
@@ -98,7 +98,7 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 		T unmarshalledObject = null;
 		try {
 			unmarshalledObject = unmarshal(message);
-			handleMessage(unmarshalledObject);
+			handleMessage(new ObjectMessageWrapper<>(unmarshalledObject, message));
 		} catch (NoJmsBackoutException e) {
 			noBackoutExceptionMeter.mark();
 			NO_BACKOUTLOG.warn("Nonbackout " + errorFor(message), e);

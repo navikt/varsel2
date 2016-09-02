@@ -3,6 +3,7 @@ package no.nav.varsel.service;
 import static java.util.stream.Collectors.toSet;
 
 import com.google.common.collect.Maps;
+import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.to.AktoerTo;
@@ -11,6 +12,7 @@ import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.support.exception.VarselbestillingAlreadyExistException;
+import no.nav.varsel.service.support.exception.VarselbestillingInaktivVarselmalException;
 import no.nav.varsel.service.support.exception.VarselbestillingNotExistException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
@@ -21,6 +23,8 @@ import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -85,6 +89,8 @@ public class BestillVarselService {
 		AktoerTo origAktoer = aktoerService.completeAktoerPersonIdent(to);
 
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(to.getVarseltypeId());
+		validateVarselInfoForBestilling(to, varselInfoTo);
+		applyPreferertKanalForTestmelding(to, varselInfoTo);
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
 				.hentDigitalKontaktinformasjonAndDecideKanal(to.getPersonIdent(), varselInfoTo.getPreferertKanal());
 
@@ -96,10 +102,24 @@ public class BestillVarselService {
 		sendToVarselutsending(to, origAktoer, to.getVarseltypeId(), varselbestilling.getVarsels());
 	}
 
+	private void validateVarselInfoForBestilling(BestillVarselTo to, VarselInfoTo varselInfoTo) {
+		if (varselInfoTo.isInaktiv() && !to.isTestvarsel()) {
+			throw new VarselbestillingInaktivVarselmalException(to.getVarselBestillingId(),to.getVarseltypeId());
+		}
+	}
+
+	private void applyPreferertKanalForTestmelding(BestillVarselTo to, VarselInfoTo varselInfoTo) {
+		if (to.isTestvarsel()) {
+			varselInfoTo.setPreferertKanal(new HashSet<>(Arrays.asList(KanalCode.values())));
+		}
+	}
+
 	private void bestillRevarsel(BestillVarselTo to, Varselbestilling existingVarsel) {
 		AktoerTo origAktoer = to.createAktoerTo();
 
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(to.getVarseltypeId());
+		validateVarselInfoForBestilling(to, varselInfoTo);
+		applyPreferertKanalForTestmelding(to, varselInfoTo);
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
 				.hentDigitalKontaktinformasjonAndDecideKanal(existingVarsel.getFnr(), varselInfoTo.getPreferertKanal());
 

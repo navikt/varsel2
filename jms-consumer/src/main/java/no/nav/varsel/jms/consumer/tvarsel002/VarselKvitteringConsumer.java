@@ -6,6 +6,7 @@ import static no.nav.varsel.jms.consumer.JmsConsumer.VARSEL_KVITTERING;
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
 import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
+import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.jms.consumer.tvarsel002.support.MottaVarselKvitteringMapper;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.service.MottaVarselKvitteringService;
@@ -49,7 +50,8 @@ public class VarselKvitteringConsumer extends AbstractJmsConsumer<VarselKvitteri
 	}
 
 	@Override
-	protected void handleMessage(VarselKvittering kvittering) {
+	protected void handleMessage(ObjectMessageWrapper<VarselKvittering> wrappedKvittering) {
+		VarselKvittering kvittering = wrappedKvittering.getObject();
 		LOGG.debug("Mottatt kvittering " + kvittering.getStatus() + " , varselId=" + kvittering.getVarselId());
 		try {
 			MottaVarselKvitteringTo to = mottaVarselKvitteringMapper.map(kvittering);

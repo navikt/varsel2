@@ -6,6 +6,7 @@ import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_VARSE
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
 import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
+import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapper;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.service.BestillVarselService;
@@ -47,7 +48,7 @@ public class BestillVarselConsumer extends AbstractJmsConsumer<VarselMedHandling
 	}
 
 	@Override
-	protected void handleMessage(VarselMedHandling message) {
+	protected void handleMessage(ObjectMessageWrapper<VarselMedHandling> message) {
 		try {
 			BestillVarselTo to = bestillVarselMapper.map(message);
 			to.validateTvarsel003Input();

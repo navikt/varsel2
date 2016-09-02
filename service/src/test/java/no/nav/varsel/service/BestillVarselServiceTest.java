@@ -12,23 +12,29 @@ import static no.nav.varsel.repo.TestdataUtil.REVARSLING_INTERVALL;
 import static no.nav.varsel.repo.TestdataUtil.UTLOP_TIDSPUNKT;
 import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
+import no.nav.varsel.repo.TestdataUtil;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.support.exception.VarselbestillingAlreadyExistException;
+import no.nav.varsel.service.support.exception.VarselbestillingInaktivVarselmalException;
 import no.nav.varsel.service.support.exception.VarselbestillingNotExistException;
 import no.nav.varsel.service.to.AktoerBestillingTo;
 import no.nav.varsel.service.to.BestillVarselTo;
@@ -47,6 +53,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Unit test for {@link BestillVarselService}
@@ -110,7 +118,7 @@ public class BestillVarselServiceTest {
 		);
 
 		varselInfoTo.setPreferertKanal(PREFERERT_KANAL);
-		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(varselInfoConsumer.hentVarselInfo(TestdataUtil.VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		kontaktregisterTo.setKanaler(PREFERERT_KANAL);
 		when(dkifConsumer.hentDigitalKontaktinformasjonAndDecideKanal(FNR, varselInfoTo.getPreferertKanal()))
 				.thenReturn(kontaktregisterTo);
@@ -122,7 +130,7 @@ public class BestillVarselServiceTest {
 		when(domainMapper.mapReVarsel(KANAL_CODE, bestillingTo, varselInfoTo, kontaktregisterTo))
 				.thenReturn(varsel);
 		when(varselutsendingToMapper
-				.mapVarsels(eq(aktoerTo), eq(UTLOP_TIDSPUNKT), eq(VARSELTYPE_ID), eq(Sets.newHashSet(varsel))))
+				.mapVarsels(eq(aktoerTo), eq(UTLOP_TIDSPUNKT), eq(TestdataUtil.VARSELTYPE_ID), eq(Sets.newHashSet(varsel))))
 				.thenReturn(Lists.newArrayList(varselutsendingTo));
 	}
 
@@ -215,12 +223,104 @@ public class BestillVarselServiceTest {
 		bestillVarselService.bestillVarsel(bestillingTo);
 	}
 
+	@Test
+	public void throwsInaktivVarselmalExceptionForInaktivVarselmal() {
+		expectedException.expectMessage(
+				"Varselbestilling med id " +
+						NEW_BESTILLING_ID +
+						" bruker inaktiv varselmal med id " +
+						TestdataUtil.VARSELTYPE_ID + ".");
+
+		expectedException.expect(VarselbestillingInaktivVarselmalException.class);
+		createBestillingTo(NEW_BESTILLING_ID, false, false);
+		varselInfoTo.setInaktiv(true);
+		varselInfoTo.setVarseltypeId(VARSELTYPE_ID);
+		bestillVarselService.bestillVarsel(bestillingTo);
+	}
+
+	@Test
+	public void doesNotStoreVarselbestillingWhenInaktivVarselmal() {
+		createBestillingTo(NEW_BESTILLING_ID, false, false);
+		varselInfoTo.setInaktiv(true);
+		varselInfoTo.setVarseltypeId(VARSELTYPE_ID);
+		try {
+			bestillVarselService.bestillVarsel(bestillingTo);
+			fail();
+		} catch(VarselbestillingInaktivVarselmalException ive) {
+			verify(varselbestillingRepoMock,times(0)).saveAndFlush(newVarselbestilling);
+		}
+	}
+
+	@Test
+	public void throwsInaktivVarselmalExceptionForRevarslingWithInaktivVarselmal() {
+		expectedException.expectMessage(
+				"Varselbestilling med id " +
+						VARSELBESTILLING_ID +
+						" bruker inaktiv varselmal med id " +
+						TestdataUtil.VARSELTYPE_ID +".");
+
+		expectedException.expect(VarselbestillingInaktivVarselmalException.class);
+		createBestillingTo(VARSELBESTILLING_ID, true, false);
+		varselInfoTo.setInaktiv(true);
+		varselInfoTo.setVarseltypeId(VARSELTYPE_ID);
+		bestillVarselService.bestillVarsel(bestillingTo);
+	}
+
+	@Test
+	public void doesNotStoreVarselbestillingWhenRevarslingWithInaktivVarselmal() {
+		createBestillingTo(VARSELBESTILLING_ID, true, false);
+		varselInfoTo.setInaktiv(true);
+		varselInfoTo.setVarseltypeId(VARSELTYPE_ID);
+		try {
+			bestillVarselService.bestillVarsel(bestillingTo);
+			fail();
+		} catch(VarselbestillingInaktivVarselmalException ive) {
+			verify(varselbestillingRepoMock,times(0)).saveAndFlush(newVarselbestilling);
+		}
+	}
+
+	@Test
+	public void processesTestvarselIfVarselMalIsInaktiv() {
+		when(dkifConsumer.hentDigitalKontaktinformasjonAndDecideKanal(FNR, Stream.of(KanalCode.values()).collect(Collectors.toSet())))
+				.thenReturn(kontaktregisterTo);
+		createBestillingTo(NEW_BESTILLING_ID, false, true);
+		varselInfoTo.setInaktiv(true);
+		varselInfoTo.setVarseltypeId(VARSELTYPE_ID);
+
+		bestillVarselService.bestillVarsel(bestillingTo);
+
+		assertThat(varselInfoTo.getPreferertKanal(), containsInAnyOrder(KanalCode.DITT_NAV, KanalCode.EPOST, KanalCode.SMS));
+		verify(varselbestillingRepoMock,times(1)).saveAndFlush(newVarselbestilling);
+	}
+
+	@Test
+	public void processesTestvarselRevarslingIfVarselMalIsInaktiv() {
+		when(dkifConsumer.hentDigitalKontaktinformasjonAndDecideKanal(FNR, Stream.of(KanalCode.values()).collect(Collectors.toSet())))
+				.thenReturn(kontaktregisterTo);
+		createBestillingTo(VARSELBESTILLING_ID, true, true);
+		varselInfoTo.setInaktiv(true);
+		varselInfoTo.setVarseltypeId(VARSELTYPE_ID);
+
+		bestillVarselService.bestillVarsel(bestillingTo);
+
+		assertThat(varselInfoTo.getPreferertKanal(), containsInAnyOrder(KanalCode.DITT_NAV, KanalCode.EPOST, KanalCode.SMS));
+		verify(varselbestillingRepoMock,times(1)).saveAndFlush(existingVarselbestilling);
+	}
+
+
+
 	private BestillVarselTo createBestillingTo(String bestillingId, boolean revarsling) {
 		bestillingTo.setVarselBestillingId(bestillingId);
 		bestillingTo.setRevarsling(revarsling);
 		bestillingTo.setMottaker(aktoerTo);
 		bestillingTo.setUtloepstidspunkt(UTLOP_TIDSPUNKT);
-		bestillingTo.setVarseltypeId(VARSELTYPE_ID);
+		bestillingTo.setVarseltypeId(TestdataUtil.VARSELTYPE_ID);
+		return bestillingTo;
+	}
+
+	private BestillVarselTo createBestillingTo(String bestillingId, boolean revarsling, boolean testvarsel) {
+		createBestillingTo(bestillingId, revarsling);
+		bestillingTo.setTestvarsel(testvarsel);
 		return bestillingTo;
 	}
 }
