@@ -48,7 +48,7 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 
 	@Override
 	protected void handleMessage(ObjectMessageWrapper<Varsel> varsel) {
-		BestillVarselTo to = bestillServicemeldingMapper.map(varsel.getObject());
+		BestillVarselTo to = bestillServicemeldingMapper.map(varsel);
 		to.validateTvarsel001Input();
 		LOGG.debug(String.format("Mottatt varsel %s til %s", to.getVarseltypeId(), to.createAktoerTo()));
 

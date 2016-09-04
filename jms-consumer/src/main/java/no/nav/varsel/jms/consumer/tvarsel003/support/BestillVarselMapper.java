@@ -11,9 +11,6 @@ import no.nav.varsel.jms.consumer.tvarsel001.BestillServicemeldingConsumer;
 import no.nav.varsel.service.to.BestillVarselTo;
 
 import javax.jms.JMSException;
-import javax.jms.MessageFormatException;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,28 +37,11 @@ public class BestillVarselMapper {
 	}
 
 	private boolean getTestVarselValue(ObjectMessageWrapper<VarselMedHandling> varselBestilling) {
-		Enumeration<String> propertyNames;
 		try {
-			propertyNames = varselBestilling.getMessage().getPropertyNames();
+			return varselBestilling.getMessage().getBooleanProperty(BestillVarselTo.TESTVARSEL);
 		} catch (JMSException jmse) {
-			throw new RuntimeException(jmse);
+			throw new  RuntimeException(jmse);
 		}
-		return Collections.list(propertyNames).
-				stream().
-				filter(propertyName -> propertyName != null && BestillVarselTo.TESTVARSEL.equals(propertyName.toUpperCase())).
-				anyMatch(testvarselPropertyName -> {
-					boolean result;
-					try {
-						result = varselBestilling.getMessage().getBooleanProperty(testvarselPropertyName);
-					} catch (MessageFormatException mfe) {
-						//Parameter Testvarsel with wrong type, for instance Long should not
-						//put the message on the backout-queue, instead ignore the property
-						result = false;
-					} catch (JMSException jmse) {
-						throw new RuntimeException(jmse);
-					}
-					return result;
-				});
 	}
 
 

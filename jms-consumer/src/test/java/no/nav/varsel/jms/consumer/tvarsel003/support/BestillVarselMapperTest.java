@@ -66,17 +66,6 @@ public class BestillVarselMapperTest {
 	}
 
 	@Test
-	public void mapsTestvarselWithDifferentCaps() throws JMSException {
-		Message messageWithTestvarselWithDifferentCaps = new ActiveMQMessage();
-		messageWithTestvarselWithDifferentCaps.setBooleanProperty(TESTVARSEL_WITH_DIFFERENT_CAPS, true);
-
-		BestillVarselTo to = mapper.map(createVarselBestilling(messageWithTestvarselWithDifferentCaps));
-
-		assertCoreProperties(to);
-		assertThat(to.isTestvarsel(), is(true));
-	}
-
-	@Test
 	public void mapsTestvarselAsTrueWhenStringTypeOfPropertyAndValueIsTrue() throws JMSException {
 		Message messageWithTestvarselWithStringType = new ActiveMQMessage();
 		messageWithTestvarselWithStringType.setStringProperty(BestillVarselTo.TESTVARSEL, "trUe");
@@ -87,39 +76,12 @@ public class BestillVarselMapperTest {
 		assertThat(to.isTestvarsel(), is(true));
 	}
 
-	@Test
-	public void mapsTestvarselAsFalseWhenSomeWrongTypeOfProperty() throws JMSException {
-		Message messageWithTestvarselWithWrongType = new ActiveMQMessage();
-		messageWithTestvarselWithWrongType.setLongProperty(BestillVarselTo.TESTVARSEL, 1L);
-
-		BestillVarselTo to = mapper.map(createVarselBestilling(messageWithTestvarselWithWrongType));
-
-		assertCoreProperties(to);
-		assertThat(to.isTestvarsel(), is(false));
-	}
-
-	@Test
-	public void mapsTestvarselAsTrueWhenSomeWrongTypeOfPropertyAndOneOtherWithCorrectTypeHasTrue() throws JMSException {
+	@Test(expected = RuntimeException.class)
+	public void mapsTestvarselAsTrueWhenSomeWrongTypeOfProperty() throws JMSException {
 		Message msgTestvarselWithWrongTypeAndOneWithCorrectTypeHasTrue = new ActiveMQMessage();
 		msgTestvarselWithWrongTypeAndOneWithCorrectTypeHasTrue.setLongProperty(BestillVarselTo.TESTVARSEL, 1L);
-		msgTestvarselWithWrongTypeAndOneWithCorrectTypeHasTrue.setBooleanProperty(TESTVARSEL_WITH_DIFFERENT_CAPS,true);
 
 		BestillVarselTo to = mapper.map(createVarselBestilling(msgTestvarselWithWrongTypeAndOneWithCorrectTypeHasTrue));
-
-		assertCoreProperties(to);
-		assertThat(to.isTestvarsel(), is(true));
-	}
-
-	@Test
-	public void mapsTestvarselAsTrueWhenOnePropetyHasTrueAndAnotherValueHasFalseRegardlesCaps() throws JMSException {
-		Message msgOnePropetyHasTrueAndAnotherValueHasFalseRegardlesCaps = new ActiveMQMessage();
-		msgOnePropetyHasTrueAndAnotherValueHasFalseRegardlesCaps.setBooleanProperty(TESTVARSEL_WITH_DIFFERENT_CAPS, true);
-		msgOnePropetyHasTrueAndAnotherValueHasFalseRegardlesCaps.setBooleanProperty(BestillVarselTo.TESTVARSEL,false);
-
-		BestillVarselTo to = mapper.map(createVarselBestilling(msgOnePropetyHasTrueAndAnotherValueHasFalseRegardlesCaps));
-
-		assertCoreProperties(to);
-		assertThat(to.isTestvarsel(), is(true));
 	}
 
 	@Test

@@ -8,7 +8,10 @@ import static no.nav.varsel.repo.TestdataUtil.PREFERERT_KANAL;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -21,6 +24,7 @@ import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 import no.nav.varsel.repo.TestdataUtil;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
+import no.nav.varsel.service.support.exception.VarselInaktivVarselmalException;
 import no.nav.varsel.service.to.AktoerBestillingTo;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
@@ -30,7 +34,9 @@ import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -79,6 +85,10 @@ public class ServicemeldingServiceTest {
 	private AktoerTo aktoerTo = newAktoerId(TestdataUtil.AKTOR_ID);
 	private VarselInfoTo varselInfoTo = new VarselInfoTo();
 
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
+
+
 	@Before
 	public void setUp() throws Exception {
 		// reset
@@ -115,6 +125,34 @@ public class ServicemeldingServiceTest {
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjonAndDecideKanal(TEKNISK, PREFERERT_KANAL)).thenThrow(new ArithmeticException(TEKNISK));
 		bestilling.setPersonIdent(TEKNISK);
 		servicemeldingService.bestillServicemelding(bestilling);
+	}
+
+	@Test
+	public void throwsInaktivVarselmalExceptionForInaktivVarselmal() {
+		expectedException.expectMessage(
+				"Mottaker med id " +
+						FNR +
+						" bruker inaktiv varselmal med id " +
+						TestdataUtil.VARSELTYPE_ID + ".");
+
+		expectedException.expect(VarselInaktivVarselmalException.class);
+		bestilling.setTestvarsel(false);
+		varselInfoTo.setInaktiv(true);
+		varselInfoTo.setVarseltypeId(VARSELTYPE_ID);
+		servicemeldingService.bestillServicemelding(bestilling);
+	}
+
+	@Test
+	public void doesNotStoreVarselbestillingWhenInaktivVarselmal() {
+		bestilling.setTestvarsel(false);
+		varselInfoTo.setInaktiv(true);
+		varselInfoTo.setVarseltypeId(VARSELTYPE_ID);
+		try {
+			servicemeldingService.bestillServicemelding(bestilling);
+			fail();
+		} catch(VarselInaktivVarselmalException ive) {
+			verify(varselbestillingRepo,times(0)).saveAndFlush(anyObject());
+		}
 	}
 
 	private void assertOK() {

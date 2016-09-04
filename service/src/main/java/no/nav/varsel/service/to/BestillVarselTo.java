@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class BestillVarselTo extends AktoerBestillingTo {
 
-	public static final String TESTVARSEL = "TESTVARSEL";
+	public static final String TESTVARSEL = "Testvarsel";
 	private String varselBestillingId;
 	private LocalDateTime utsendelsesTidspunkt;
 	private Boolean revarsling;

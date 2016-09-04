@@ -34,9 +34,8 @@ import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest;
 import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.to.xml.JmsReply;
-import org.junit.Before;
+import org.apache.activemq.command.ActiveMQMessage;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import javax.inject.Inject;
 import javax.jms.Message;
@@ -57,12 +56,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 	@Inject
 	private Queue varselutsendingQueue;
 
-	private Message message;
-
-	@Before
-	public void beforeTestMethod() {
-		message = Mockito.mock(Message.class);
-	}
+	private Message message = new ActiveMQMessage();
 
 	@Test
 	public void shouldBestillFoerstegangVarsel() throws Exception {
