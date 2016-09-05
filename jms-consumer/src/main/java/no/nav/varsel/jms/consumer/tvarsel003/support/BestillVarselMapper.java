@@ -6,11 +6,9 @@ import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Paramete
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Person;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
 import no.nav.varsel.domain.utility.XmlGregorianConverter;
-import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.jms.consumer.tvarsel001.BestillServicemeldingConsumer;
 import no.nav.varsel.service.to.BestillVarselTo;
 
-import javax.jms.JMSException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,28 +20,18 @@ import java.util.Map;
  */
 public class BestillVarselMapper {
 
-	public BestillVarselTo map(ObjectMessageWrapper<VarselMedHandling> varselBestilling) {
-		VarselMedHandling varsel = varselBestilling.getObject();
-		BestillVarselTo result = new BestillVarselTo();
+	public BestillVarselTo map(VarselMedHandling varsel) {
+		BestillVarselTo to = new BestillVarselTo();
 
-		result.setVarselBestillingId(varsel.getVarselbestillingId());
-		result.setRevarsling(varsel.isReVarsel());
-		map(varsel.getMottaker(), result);
-		result.setVarseltypeId(varsel.getVarseltypeId());
-		result.setParameters(map(varsel.getParameterListe()));
-		result.setUtloepstidspunkt(XmlGregorianConverter.toLocalDateTime(varsel.getUtloepstidspunkt()));
-		result.setTestvarsel(getTestVarselValue(varselBestilling));
-		return result;
+		to.setVarselBestillingId(varsel.getVarselbestillingId());
+		to.setRevarsling(varsel.isReVarsel());
+		map(varsel.getMottaker(), to);
+		to.setVarseltypeId(varsel.getVarseltypeId());
+		to.setParameters(map(varsel.getParameterListe()));
+		to.setUtloepstidspunkt(XmlGregorianConverter.toLocalDateTime(varsel.getUtloepstidspunkt()));
+
+		return to;
 	}
-
-	private boolean getTestVarselValue(ObjectMessageWrapper<VarselMedHandling> varselBestilling) {
-		try {
-			return varselBestilling.getMessage().getBooleanProperty(BestillVarselTo.TESTVARSEL);
-		} catch (JMSException jmse) {
-			throw new  RuntimeException(jmse);
-		}
-	}
-
 
 	private Map<String, String> map(List<Parameter> parameterListe) {
 		HashMap<String, String> map = new HashMap<>();

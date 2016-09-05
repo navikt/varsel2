@@ -34,7 +34,6 @@ import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest;
 import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.to.xml.JmsReply;
-import org.apache.activemq.command.ActiveMQMessage;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -55,8 +54,6 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 	private Queue bestillVarselQueue;
 	@Inject
 	private Queue varselutsendingQueue;
-
-	private Message message = new ActiveMQMessage();
 
 	@Test
 	public void shouldBestillFoerstegangVarsel() throws Exception {
@@ -118,7 +115,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 
 	@Test
 	public void shouldWeaveVarselUrl() throws Exception {
-		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling(message).getObject();
+		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling();
 		varselBestilling.setVarseltypeId("varsel_varselUrl");
 		varselBestilling.setReVarsel(false);
 
@@ -214,7 +211,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	private JAXBElement<VarselMedHandling> createVarselBestilling(boolean revarsel) {
-		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling(message).getObject();
+		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling();
 		if (revarsel) {
 			varselBestilling.getParameterListe().clear();
 		}

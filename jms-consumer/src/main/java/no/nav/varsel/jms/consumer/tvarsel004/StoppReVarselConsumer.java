@@ -4,13 +4,11 @@ import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.REVARSEL_STOP
 import static no.nav.varsel.jms.consumer.JmsConsumer.REVARSEL_STOPP;
 
 import no.nav.melding.virksomhet.stopprevarsel.v1.stopprevarsel.StoppReVarsel;
-import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.jms.consumer.tvarsel004.support.StoppReVarselMapper;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.service.StoppReVarselService;
-import no.nav.varsel.service.support.exception.FunctionalVarselException;
 import no.nav.varsel.service.tvarsel004.to.StoppReVarselTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,12 +48,8 @@ public class StoppReVarselConsumer extends AbstractJmsConsumer<StoppReVarsel> {
 	protected void handleMessage(ObjectMessageWrapper<StoppReVarsel> stoppReVarselWithMessage) {
 		StoppReVarsel stoppRevarsel = stoppReVarselWithMessage.getObject();
 		LOGG.debug("Behandle stoppReVarsel " + stoppRevarsel.getVarselbestillingId());
-		try {
-			StoppReVarselTo stoppReVarselTo = stoppReVarselMapper.map(stoppRevarsel);
-			stoppReVarselTo.validateTo();
-			stoppReVarselService.behandleVarselbestilling(stoppReVarselTo);
-		} catch (FunctionalVarselException e) {
-			throw new NoJmsBackoutException(e);
-		}
+		StoppReVarselTo stoppReVarselTo = stoppReVarselMapper.map(stoppRevarsel);
+		stoppReVarselTo.validateTo();
+		stoppReVarselService.behandleVarselbestilling(stoppReVarselTo);
 	}
 }

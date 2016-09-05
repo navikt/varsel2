@@ -10,7 +10,6 @@ import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.jms.consumer.tvarsel002.support.MottaVarselKvitteringMapper;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.service.MottaVarselKvitteringService;
-import no.nav.varsel.service.support.exception.FunctionalVarselException;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +56,7 @@ public class VarselKvitteringConsumer extends AbstractJmsConsumer<VarselKvitteri
 			MottaVarselKvitteringTo to = mottaVarselKvitteringMapper.map(kvittering);
 			to.validateTo();
 			mottaVarselKvitteringService.behandleKvitteringsmelding(to);
-		} catch (IllegalArgumentException | FunctionalVarselException e) {
+		} catch (IllegalArgumentException e) {
 			throw new NoJmsBackoutException(e);
 		}
 	}

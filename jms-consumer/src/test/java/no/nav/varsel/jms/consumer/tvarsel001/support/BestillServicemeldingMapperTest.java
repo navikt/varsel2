@@ -142,7 +142,4 @@ public class BestillServicemeldingMapperTest {
 		varsel.getParameterListe().add(parameter);
 		return varsel;
 	}
-
-
-
 }
