@@ -52,7 +52,6 @@ public class ServicemeldingService {
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestilling.getVarseltypeId());
 		validateVarselInfoForBestilling(bestilling, varselInfoTo);
 		applyPreferertKanalForTestmelding(bestilling, varselInfoTo);
-		applyPreferertKanalForTestmelding(bestilling, varselInfoTo);
 
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
 				.hentDigitalKontaktinformasjonAndDecideKanal(bestilling.getPersonIdent(), varselInfoTo.getPreferertKanal());
