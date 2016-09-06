@@ -28,6 +28,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -123,7 +124,7 @@ public class Bvarsel001Config {
 			HibernateCursorItemReaderVarselbestilling opprettetVarselbestillingWithFletteparameterReader,
 			ItemWriter<VarselbestillingTo> enqueueVarselCompositeWriter,
 			TransactionAttribute transactionAttribute,
-			JobExecutionListener bvarsel001BatchStatusReportLoggerListener
+			StepExecutionListener bvarsel001BatchStatusReportLoggerListener
 	) {
 		FaultTolerantStepBuilder<Varselbestilling, VarselbestillingTo> builder =
 				new FaultTolerantStepBuilderLazyTransactionAttribute<>(stepBuilder.get("enqueueVarselbestillingStep")
