@@ -47,7 +47,7 @@ public class StoppReVarselConsumer extends AbstractJmsConsumer<StoppReVarsel> {
 	@Override
 	protected void handleMessage(ObjectMessageWrapper<StoppReVarsel> stoppReVarselWithMessage) {
 		StoppReVarsel stoppRevarsel = stoppReVarselWithMessage.getObject();
-		LOGG.debug("Behandle stoppReVarsel " + stoppRevarsel.getVarselbestillingId());
+		LOGG.debug("Behandle stoppReVarsel, varselbestillingId=" + stoppRevarsel.getVarselbestillingId());
 		StoppReVarselTo stoppReVarselTo = stoppReVarselMapper.map(stoppRevarsel);
 		stoppReVarselTo.validateTo();
 		stoppReVarselService.behandleVarselbestilling(stoppReVarselTo);
