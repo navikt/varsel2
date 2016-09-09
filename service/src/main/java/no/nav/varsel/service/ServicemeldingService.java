@@ -51,7 +51,7 @@ public class ServicemeldingService {
 
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestilling.getVarseltypeId());
 		validateVarselInfoForBestilling(bestilling, varselInfoTo);
-		applyPreferertKanalForTestmelding(bestilling, varselInfoTo);
+		overridePreferertKanalForTestmelding(bestilling, varselInfoTo);
 
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
 				.hentDigitalKontaktinformasjonAndDecideKanal(bestilling.getPersonIdent(), varselInfoTo.getPreferertKanal());
@@ -69,11 +69,11 @@ public class ServicemeldingService {
 
 	private void validateVarselInfoForBestilling(BestillVarselTo to, VarselInfoTo varselInfoTo) {
 		if (varselInfoTo.isInaktiv() && !to.isTestvarsel()) {
-			throw new VarselInaktivVarselmalException(to.getPersonIdent(), to.getVarseltypeId());
+			throw new VarselInaktivVarselmalException(to.getPersonIdent(), to.getVarseltypeId(), to.getVarselBestillingId());
 		}
 	}
 
-	private void applyPreferertKanalForTestmelding(BestillVarselTo to, VarselInfoTo varselInfoTo) {
+	private void overridePreferertKanalForTestmelding(BestillVarselTo to, VarselInfoTo varselInfoTo) {
 		if (to.isTestvarsel()) {
 			varselInfoTo.setPreferertKanal(new HashSet<>(Arrays.asList(KanalCode.values())));
 		}

@@ -4,13 +4,16 @@ import static no.nav.varsel.domain.to.AktoerTo.newAktoerId;
 import static no.nav.varsel.domain.to.AktoerTo.newPersonIdent;
 import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
 import static no.nav.varsel.repo.TestdataUtil.FNR;
+import static no.nav.varsel.repo.TestdataUtil.OVERSTYRT_PREFERERT_KANAL;
 import static no.nav.varsel.repo.TestdataUtil.PREFERERT_KANAL;
+import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -108,6 +111,7 @@ public class ServicemeldingServiceTest {
 		);
 		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjonAndDecideKanal(FNR, PREFERERT_KANAL)).thenReturn(kontaktregisterTo);
+		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjonAndDecideKanal(FNR, OVERSTYRT_PREFERERT_KANAL)).thenReturn(kontaktregisterTo);
 		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
 		when(varselutsendingToMapper.map(eq(varselbestilling), eq(aktoerTo))).thenReturn(varselutsendingTos);
 	}
@@ -130,13 +134,16 @@ public class ServicemeldingServiceTest {
 	@Test
 	public void throwsInaktivVarselmalExceptionForInaktivVarselmal() {
 		expectedException.expectMessage(
-				"Mottaker med id " +
+				"Det er ikke mulig å bestille servicemelding for mottaker med mottakerId=" +
 						FNR +
-						" bruker inaktiv varselmal med id " +
-						TestdataUtil.VARSELTYPE_ID + ".");
+						" og bestillingId=" + VARSELBESTILLING_ID +
+						" med inaktiv varselmal med varseltypeId=" +
+						TestdataUtil.VARSELTYPE_ID + "."
+		);
 
 		expectedException.expect(VarselInaktivVarselmalException.class);
 		bestilling.setTestvarsel(false);
+		bestilling.setVarselBestillingId(VARSELBESTILLING_ID);
 		varselInfoTo.setInaktiv(true);
 		varselInfoTo.setVarseltypeId(VARSELTYPE_ID);
 		servicemeldingService.bestillServicemelding(bestilling);
@@ -151,9 +158,28 @@ public class ServicemeldingServiceTest {
 			servicemeldingService.bestillServicemelding(bestilling);
 			fail();
 		} catch(VarselInaktivVarselmalException ive) {
-			verify(varselbestillingRepo,times(0)).saveAndFlush(anyObject());
+			verify(varselbestillingRepo, never()).saveAndFlush(anyObject());
 		}
 	}
+
+	@Test
+	public void preferertKanallisteBlirOverstyrtNaarTestvarsel() {
+		bestilling.setTestvarsel(true);
+		varselInfoTo.setInaktiv(false);
+		servicemeldingService.bestillServicemelding(bestilling);
+		verify(digitalKontaktinformasjonConsumer, never()).hentDigitalKontaktinformasjonAndDecideKanal(FNR, PREFERERT_KANAL);
+		verify(digitalKontaktinformasjonConsumer, times(1)).hentDigitalKontaktinformasjonAndDecideKanal(FNR, OVERSTYRT_PREFERERT_KANAL);
+	}
+
+	@Test
+	public void preferertKanallisteHentesFraVarselInfoConsumerNaarVanligMelding() {
+		bestilling.setTestvarsel(false);
+		varselInfoTo.setInaktiv(false);
+		servicemeldingService.bestillServicemelding(bestilling);
+		verify(digitalKontaktinformasjonConsumer, times(1)).hentDigitalKontaktinformasjonAndDecideKanal(FNR, PREFERERT_KANAL);
+		verify(digitalKontaktinformasjonConsumer, never()).hentDigitalKontaktinformasjonAndDecideKanal(FNR, OVERSTYRT_PREFERERT_KANAL);
+	}
+
 
 	private void assertOK() {
 		assertThat(UUID.fromString(bestilling.getVarselBestillingId()).toString(), is(bestilling.getVarselBestillingId()));
