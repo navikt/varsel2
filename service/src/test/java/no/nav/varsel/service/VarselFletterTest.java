@@ -102,6 +102,23 @@ public class VarselFletterTest {
 	}
 
 	@Test
+	public void shouldWorkWithLongFlettedata() {
+		String template = "Hei! Du har fått et spørsmål fra NAV. Du får se spørsmålet ved å logge deg inn i " +
+				"Innboks på Ditt NAV eller følge denne lenken {url}.\n\nVennlig hilsen NAV";
+
+		String excpectedResult = "Hei! Du har fått et spørsmål fra NAV. Du får se spørsmålet ved å logge deg inn i " +
+				"Innboks på Ditt NAV eller følge denne lenken https://somesubdomain.nav.no/mininnboks/traad/10005WTVQ.\n\nVennlig hilsen NAV";
+
+		Map<String, String> map = new HashMap<>();
+		map.put("url", "https://somesubdomain.nav.no/mininnboks/traad/10005WTVQ");
+		String varsel = fletter.weaveText(template, map);
+
+		assertThat(fletter.weaveText(template, map),
+				is(excpectedResult));
+
+	}
+
+	@Test
 	public void shouldDoNothingWhenNoFletteparameters() throws Exception {
 		String varselUrl = fletter.weaveText(DEFAULT_URL, Maps.newHashMap());
 
