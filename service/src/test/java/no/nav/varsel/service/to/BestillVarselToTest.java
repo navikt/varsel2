@@ -26,7 +26,10 @@ public class BestillVarselToTest {
 
 	@Test
 	public void shouldCreateAktoerTo() throws Exception {
-		AktoerTo aktoerTo = createTo().createAktoerTo();
+		BestillVarselTo to = createTo();
+		Assert.assertThat(to.isTestvarsel(), is(true));
+
+		AktoerTo aktoerTo = to.createAktoerTo();
 
 		Assert.assertThat(aktoerTo.getIdent(), is(MOTTAKER));
 		Assert.assertThat(aktoerTo.getMottakerType(), is(MOTTAKER_TYPE));
@@ -38,7 +41,7 @@ public class BestillVarselToTest {
 		to.setVarseltypeId("varsel");
 		to.setUtloepstidspunkt(LocalDateTime.now());
 		to.getParameters().put("key", "val");
+		to.setTestvarsel(true);
 		return to;
 	}
-
 }

@@ -11,9 +11,13 @@ import no.nav.melding.virksomhet.varsel.v1.varsel.Parameter;
 import no.nav.melding.virksomhet.varsel.v1.varsel.PersonIdent;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varslingstyper;
+import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.service.to.BestillVarselTo;
+import org.apache.activemq.command.ActiveMQMessage;
 import org.junit.Test;
 
+import javax.jms.JMSException;
+import javax.jms.Message;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import java.time.LocalDateTime;
@@ -33,6 +37,7 @@ public class BestillServicemeldingMapperTest {
 	private static DatatypeFactory datatypeFactory;
 
 	private BestillServicemeldingMapper mapper = new BestillServicemeldingMapper();
+	private Message defaultMessage = new ActiveMQMessage();
 
 	public static final String VARSELTYPE_ID = "varseltypeId";
 
@@ -46,7 +51,7 @@ public class BestillServicemeldingMapperTest {
 
 	@Test
 	public void shouldMap() throws Exception {
-		BestillVarselTo to = mapper.map(createVarsel());
+		BestillVarselTo to = mapper.map(createVarsel(defaultMessage));
 
 		assertThat(to.getAktoerId(), is(MOTTAKER));
 		assertThat(to.getPersonIdent(), nullValue());
@@ -54,14 +59,15 @@ public class BestillServicemeldingMapperTest {
 		assertThat(to.getUtloepstidspunkt(), equalTo(UTLOEPSTIDSPUNKT_LDT));
 		assertThat(to.getParameters().keySet(), hasSize(1));
 		assertThat(to.getParameters().get(KEY), is(VAL));
+		assertThat(to.isTestvarsel(), is(false));
 	}
 
 	@Test
 	public void shouldMapPerson() throws Exception {
-		Varsel varsel = createVarsel();
+		ObjectMessageWrapper<Varsel> varsel = createVarsel(defaultMessage);
 		PersonIdent personIdent = new PersonIdent();
 		personIdent.setPersonIdent(MOTTAKER);
-		varsel.setMottaker(personIdent);
+		varsel.getObject().setMottaker(personIdent);
 		BestillVarselTo to = mapper.map(varsel);
 
 		assertThat(to.getPersonIdent(), is(MOTTAKER));
@@ -70,8 +76,8 @@ public class BestillServicemeldingMapperTest {
 
 	@Test
 	public void shouldMapNullMottaker() throws Exception {
-		Varsel varsel = createVarsel();
-		varsel.setMottaker(null);
+		ObjectMessageWrapper<Varsel> varsel = createVarsel(defaultMessage);
+		varsel.getObject().setMottaker(null);
 		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getPersonIdent(), nullValue());
 		assertThat(to.getAktoerId(), nullValue());
@@ -79,26 +85,46 @@ public class BestillServicemeldingMapperTest {
 
 	@Test
 	public void shouldMapNullVarseltype() throws Exception {
-		Varsel varsel = createVarsel();
-		varsel.setVarslingstype(null);
+		ObjectMessageWrapper<Varsel> varsel = createVarsel(defaultMessage);
+		varsel.getObject().setVarslingstype(null);
 		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getVarseltypeId(), nullValue());
 	}
 
 	@Test
 	public void shouldMapNullUtlop() throws Exception {
-		Varsel varsel = createVarsel();
-		varsel.setUtloepstidspunkt(null);
+		ObjectMessageWrapper<Varsel> varsel = createVarsel(defaultMessage);
+		varsel.getObject().setUtloepstidspunkt(null);
 		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getUtloepstidspunkt(), nullValue());
 	}
 
 	@Test
 	public void shouldMapEmptyParameter() throws Exception {
-		Varsel varsel = createVarsel();
-		varsel.getParameterListe().clear();
+		ObjectMessageWrapper<Varsel> varsel = createVarsel(defaultMessage);
+		varsel.getObject().getParameterListe().clear();
 		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getParameters().keySet(), hasSize(0));
+	}
+
+	@Test
+	public void mapsTestvarselToTrue() throws JMSException {
+		Message messageWithTestvarselTrue = new ActiveMQMessage();
+		messageWithTestvarselTrue.setBooleanProperty(BestillVarselTo.TESTVARSEL, true);
+		BestillVarselTo to = mapper.map(createVarsel(messageWithTestvarselTrue));
+		assertThat(to.isTestvarsel(), is(true));
+	}
+
+	@Test
+	public void mapsTestvarselToFalse() throws JMSException {
+		Message messageWithTestvarselTrue = new ActiveMQMessage();
+		messageWithTestvarselTrue.setBooleanProperty(BestillVarselTo.TESTVARSEL, false);
+		BestillVarselTo to = mapper.map(createVarsel(messageWithTestvarselTrue));
+		assertThat(to.isTestvarsel(), is(false));
+	}
+
+	public static ObjectMessageWrapper<Varsel> createVarsel(Message message) {
+		return new ObjectMessageWrapper<>(createVarsel(), message);
 	}
 
 	public static Varsel createVarsel() {
@@ -116,5 +142,4 @@ public class BestillServicemeldingMapperTest {
 		varsel.getParameterListe().add(parameter);
 		return varsel;
 	}
-
 }

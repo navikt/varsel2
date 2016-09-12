@@ -4,12 +4,11 @@ import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_VARSEL;
 import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_VARSEL_NAME;
 
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
-import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
+import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapper;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.service.BestillVarselService;
-import no.nav.varsel.service.support.exception.FunctionalVarselException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,15 +46,11 @@ public class BestillVarselConsumer extends AbstractJmsConsumer<VarselMedHandling
 	}
 
 	@Override
-	protected void handleMessage(VarselMedHandling message) {
-		try {
-			BestillVarselTo to = bestillVarselMapper.map(message);
-			to.validateTvarsel003Input();
-			LOGG.debug(String.format("Mottatt varsel %s til %s", to.getVarseltypeId(), to.createAktoerTo()));
+	protected void handleMessage(ObjectMessageWrapper<VarselMedHandling> message) {
+		BestillVarselTo to = bestillVarselMapper.map(message.getObject());
+		to.validateTvarsel003Input();
+		LOGG.debug(String.format("Mottatt varsel %s til %s", to.getVarseltypeId(), to.createAktoerTo()));
 
-			bestillVarselService.bestillVarsel(to);
-		} catch (FunctionalVarselException e) {
-			throw new NoJmsBackoutException(e);
-		}
+		bestillVarselService.bestillVarsel(to);
 	}
 }

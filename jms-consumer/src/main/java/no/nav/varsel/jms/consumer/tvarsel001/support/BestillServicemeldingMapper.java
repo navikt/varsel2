@@ -7,10 +7,12 @@ import no.nav.melding.virksomhet.varsel.v1.varsel.AktoerId;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Parameter;
 import no.nav.melding.virksomhet.varsel.v1.varsel.PersonIdent;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
+import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.jms.consumer.tvarsel001.BestillServicemeldingConsumer;
 import no.nav.varsel.service.to.BestillVarselTo;
 import org.springframework.util.Assert;
 
+import javax.jms.JMSException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,18 +23,26 @@ import java.util.Map;
  * @author Andreas Skomedal, Visma Consulting.
  */
 public class BestillServicemeldingMapper {
-
-	public BestillVarselTo map(Varsel varsel) {
-		Assert.notNull(varsel, "Varsel er null");
+	public BestillVarselTo map(ObjectMessageWrapper<Varsel> varselWithMessage) {
+		Assert.notNull(varselWithMessage, "varselWithMessage er null");
 		BestillVarselTo to = new BestillVarselTo();
 
+		Varsel varsel = varselWithMessage.getObject();
 		map(varsel.getMottaker(), to);
 		to.setVarseltypeId(varsel.getVarslingstype() == null ? null :
 				varsel.getVarslingstype().getValue());
 		to.setUtloepstidspunkt(toLocalDateTime(varsel.getUtloepstidspunkt()));
 		to.setParameters(map(varsel.getParameterListe()));
-
+		to.setTestvarsel(getTestVarselValue(varselWithMessage));
 		return to;
+	}
+
+	private boolean getTestVarselValue(ObjectMessageWrapper<Varsel> varsel) {
+		try {
+			return varsel.getMessage().getBooleanProperty(BestillVarselTo.TESTVARSEL);
+		} catch (JMSException e) {
+			return false;
+		}
 	}
 
 	private Map<String, String> map(List<Parameter> parameterListe) {

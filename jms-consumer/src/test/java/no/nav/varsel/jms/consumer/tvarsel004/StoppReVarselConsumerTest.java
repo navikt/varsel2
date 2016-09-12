@@ -7,7 +7,15 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.LoggingEvent;
+import ch.qos.logback.core.Appender;
 import no.nav.melding.virksomhet.stopprevarsel.v1.stopprevarsel.ObjectFactory;
 import no.nav.melding.virksomhet.stopprevarsel.v1.stopprevarsel.StoppReVarsel;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
@@ -19,6 +27,9 @@ import no.nav.varsel.jms.to.xml.JmsReply;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.ArgumentMatcher;
+import org.mockito.Mockito;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.jms.Queue;
@@ -33,6 +44,7 @@ import java.util.List;
  */
 public class StoppReVarselConsumerTest extends AbstractConsumerJmsTest {
 
+	public static final String VARSELBESTILLING_ID = "VARSELBESTILLING_ID";
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
 
@@ -52,6 +64,18 @@ public class StoppReVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(processedVarselbestilling.getAntallRevarslinger(), equalTo(0));
 		assertThat(processedVarselbestilling.getNesteVarslingDato(), is(nullValue()));
 		assertThat(processedVarselbestilling.getChangeStamp().getEndretAv(), is(TVARSEL004));
+	}
+
+	@Test
+	public void logsMelding() {
+		Varselbestilling varselbestilling = persistVarselbestilling();
+		varselbestilling.setVarselbestillingId(VARSELBESTILLING_ID);
+		JAXBElement<StoppReVarsel> stoppReVarsel = createStoppReVarselJaxBElement(varselbestilling.getVarselbestillingId());
+		Appender<ILoggingEvent> loggerAppender = getMockedAppender();
+
+		sendMessage(revarselStoppQueue, stoppReVarsel);
+
+		verify(loggerAppender, times(1)).doAppend(argThat(hasMessageContaining("Behandle stoppReVarsel, varselbestillingId=VARSELBESTILLING_ID")));
 	}
 
 	public static JAXBElement<StoppReVarsel> createStoppReVarselJaxBElement(String varselbestillingId) {
@@ -79,5 +103,23 @@ public class StoppReVarselConsumerTest extends AbstractConsumerJmsTest {
 
 	public static JAXBElement<Varsel> createVarsel() {
 		return new no.nav.melding.virksomhet.varsel.v1.varsel.ObjectFactory().createVarsel(BestillServicemeldingMapperTest.createVarsel());
+	}
+
+	private Appender<ILoggingEvent> getMockedAppender() {
+		Logger testLogger = (Logger) LoggerFactory.getLogger(StoppReVarselConsumer.class);
+		Appender<ILoggingEvent> mockAppender = Mockito.mock(Appender.class);
+		when(mockAppender.getName()).thenReturn("MOCK");
+		testLogger.addAppender(mockAppender);
+
+		return mockAppender;
+	}
+
+	private ArgumentMatcher<ILoggingEvent> hasMessageContaining(final String token) {
+		return new ArgumentMatcher<ILoggingEvent>() {
+			@Override
+			public boolean matches(final Object argument) {
+				return ((LoggingEvent) argument).getFormattedMessage().contains(token);
+			}
+		};
 	}
 }

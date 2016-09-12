@@ -6,6 +6,7 @@ import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_SERVI
 
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
+import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapper;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.service.ServicemeldingService;
@@ -46,7 +47,7 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 	}
 
 	@Override
-	protected void handleMessage(Varsel varsel) {
+	protected void handleMessage(ObjectMessageWrapper<Varsel> varsel) {
 		BestillVarselTo to = bestillServicemeldingMapper.map(varsel);
 		to.validateTvarsel001Input();
 		LOGG.debug(String.format("Mottatt varsel %s til %s", to.getVarseltypeId(), to.createAktoerTo()));

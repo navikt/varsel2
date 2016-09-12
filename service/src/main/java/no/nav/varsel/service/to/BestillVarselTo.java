@@ -17,12 +17,14 @@ import java.util.Map;
  */
 public class BestillVarselTo extends AktoerBestillingTo {
 
+	public static final String TESTVARSEL = "Testvarsel";
 	private String varselBestillingId;
 	private LocalDateTime utsendelsesTidspunkt;
 	private Boolean revarsling;
 	private String varseltypeId;
 	private Map<String, String> parameters = new HashMap<>();
 	private LocalDateTime utloepstidspunkt;
+	private Boolean testvarsel = false;
 
 	public String getVarselBestillingId() {
 		return varselBestillingId;
@@ -72,6 +74,14 @@ public class BestillVarselTo extends AktoerBestillingTo {
 		this.utloepstidspunkt = utloepstidspunkt;
 	}
 
+	public boolean isTestvarsel() {
+		return testvarsel;
+	}
+
+	public void setTestvarsel(boolean testvarsel) {
+		this.testvarsel = testvarsel;
+	}
+
 	public void validateTvarsel001Input() {
 		try {
 			assertHasOneIdent();
@@ -99,5 +109,4 @@ public class BestillVarselTo extends AktoerBestillingTo {
 			throw new NoJmsBackoutException("Validation failed for input, " + e.getMessage(), e);
 		}
 	}
-
 }

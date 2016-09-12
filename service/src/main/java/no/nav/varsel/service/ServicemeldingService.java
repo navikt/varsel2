@@ -1,11 +1,13 @@
 package no.nav.varsel.service;
 
+import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
+import no.nav.varsel.service.support.exception.VarselInaktivVarselmalException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
@@ -14,6 +16,8 @@ import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 
 import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,6 +50,9 @@ public class ServicemeldingService {
 		AktoerTo origAktoer = aktoerService.completeAktoerPersonIdent(bestilling);
 
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestilling.getVarseltypeId());
+		validateVarselInfoForBestilling(bestilling, varselInfoTo);
+		overridePreferertKanalForTestmelding(bestilling, varselInfoTo);
+
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
 				.hentDigitalKontaktinformasjonAndDecideKanal(bestilling.getPersonIdent(), varselInfoTo.getPreferertKanal());
 
@@ -60,4 +67,15 @@ public class ServicemeldingService {
 		}
 	}
 
+	private void validateVarselInfoForBestilling(BestillVarselTo to, VarselInfoTo varselInfoTo) {
+		if (varselInfoTo.isInaktiv() && !to.isTestvarsel()) {
+			throw new VarselInaktivVarselmalException(to.getPersonIdent(), to.getVarseltypeId(), to.getVarselBestillingId());
+		}
+	}
+
+	private void overridePreferertKanalForTestmelding(BestillVarselTo to, VarselInfoTo varselInfoTo) {
+		if (to.isTestvarsel()) {
+			varselInfoTo.setPreferertKanal(new HashSet<>(Arrays.asList(KanalCode.values())));
+		}
+	}
 }
