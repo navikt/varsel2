@@ -63,9 +63,9 @@ public class VarselFletter {
 		flettedata.forEach((key, val) -> {
 			sb.setLength(sb.length() + val.length());
 			String replace = "{" + key + "}";
-			sb.replace(stringMatcher(replace), val, 0, sb.length(), -1).trim();
+			sb.replace(stringMatcher(replace), val, 0, sb.length(), -1);
 		});
-		return sb.toString();
+		return sb.toString().trim();
 	}
 
 	private String weaveTimeParams(String tekst, Map<String, String> flettedata) {
