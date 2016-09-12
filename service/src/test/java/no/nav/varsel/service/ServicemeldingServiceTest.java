@@ -91,7 +91,6 @@ public class ServicemeldingServiceTest {
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
 
-
 	@Before
 	public void setUp() throws Exception {
 		// reset
@@ -179,7 +178,6 @@ public class ServicemeldingServiceTest {
 		verify(digitalKontaktinformasjonConsumer, times(1)).hentDigitalKontaktinformasjonAndDecideKanal(FNR, PREFERERT_KANAL);
 		verify(digitalKontaktinformasjonConsumer, never()).hentDigitalKontaktinformasjonAndDecideKanal(FNR, OVERSTYRT_PREFERERT_KANAL);
 	}
-
 
 	private void assertOK() {
 		assertThat(UUID.fromString(bestilling.getVarselBestillingId()).toString(), is(bestilling.getVarselBestillingId()));

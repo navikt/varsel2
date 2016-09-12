@@ -6,6 +6,7 @@ import javax.jms.Message;
 
 /**
  * Wrapper that holds the message and the unmarshalled object of the message
+ *
  * @author Lars Aune
  */
 public class ObjectMessageWrapper<T> {

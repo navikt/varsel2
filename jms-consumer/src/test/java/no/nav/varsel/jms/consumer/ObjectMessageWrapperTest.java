@@ -15,7 +15,7 @@ import javax.jms.Message;
  * @author Lars Aune
  */
 public class ObjectMessageWrapperTest {
-	Message messageMock = Mockito.mock(Message.class);
+	private Message messageMock = Mockito.mock(Message.class);
 	private Varsel varsel = new Varsel();
 
 	@Test(expected = IllegalArgumentException.class)
