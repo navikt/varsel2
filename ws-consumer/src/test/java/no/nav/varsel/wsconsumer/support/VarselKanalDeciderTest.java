@@ -22,10 +22,10 @@ public class VarselKanalDeciderTest {
 	private static final String EPOST = "epost@epost.no";
 	private static final String MOBIL = "12345678";
 
-	public static final HashSet<KanalCode> PREFERERT_SMS = Sets.newHashSet(KanalCode.SMS);
-	public static final HashSet<KanalCode> PREFERERT_EPOST = Sets.newHashSet(KanalCode.EPOST);
-	public static final HashSet<KanalCode> PREFERERT_SMS_EPOST = Sets.newHashSet(KanalCode.SMS, KanalCode.EPOST);
-	public static final HashSet<KanalCode> PREFERERT_DITTNAV = Sets.newHashSet(KanalCode.DITT_NAV);
+	private static final HashSet<KanalCode> PREFERERT_SMS = Sets.newHashSet(KanalCode.SMS);
+	private static final HashSet<KanalCode> PREFERERT_EPOST = Sets.newHashSet(KanalCode.EPOST);
+	private static final HashSet<KanalCode> PREFERERT_SMS_EPOST = Sets.newHashSet(KanalCode.SMS, KanalCode.EPOST);
+	private static final HashSet<KanalCode> PREFERERT_DITTNAV = Sets.newHashSet(KanalCode.DITT_NAV);
 
 	private VarselKanalDecider decider = new VarselKanalDecider();
 
@@ -33,6 +33,12 @@ public class VarselKanalDeciderTest {
 	public void shouldPrefDittNav() throws Exception {
 		Collection<KanalCode> kanaler = decider.decideKanaler(createKontaktTo(EPOST, MOBIL), PREFERERT_DITTNAV);
 		assertThat(kanaler, containsInAnyOrder(KanalCode.DITT_NAV));
+	}
+
+	@Test
+	public void shouldPrefAll() throws Exception {
+		Collection<KanalCode> kanaler = decider.decideKanaler(createKontaktTo(EPOST, MOBIL), Sets.newHashSet(KanalCode.SMS, KanalCode.EPOST, KanalCode.DITT_NAV));
+		assertThat(kanaler, containsInAnyOrder(KanalCode.SMS, KanalCode.EPOST, KanalCode.DITT_NAV));
 	}
 
 	@Test

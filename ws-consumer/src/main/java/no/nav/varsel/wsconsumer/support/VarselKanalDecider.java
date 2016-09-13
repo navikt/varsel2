@@ -29,6 +29,10 @@ public class VarselKanalDecider {
 			preferertKanal.add(EPOST);
 		}
 
+		if (preferertKanal.contains(DITT_NAV)) {
+			kanaler.add(DITT_NAV);
+		}
+
 		if (preferertKanal.contains(SMS) && preferertKanal.contains(EPOST)) {
 			tryEpost(kanaler, kontaktregisterTo);
 			trySms(kanaler, kontaktregisterTo);
