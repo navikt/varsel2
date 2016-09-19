@@ -20,10 +20,10 @@ public class AktoerService {
 	private AktoerConsumer aktoerConsumer;
 
 	/**
-	 * Fetch missing aktoer component and return the original
+	 * Fetch missing aktoer component
 	 *
 	 * @param aktoerBestillingTo the bestilling
-	 * @return the original aktoer used in lookup
+	 * @return the fetched aktoer
 	 */
 	public AktoerTo findMissingAktoer(AktoerBestillingTo aktoerBestillingTo) {
 		AktoerTo origAktoer = aktoerBestillingTo.createAktoerTo();
