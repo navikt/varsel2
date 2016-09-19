@@ -25,15 +25,13 @@ public class AktoerService {
 	 * @param aktoerBestillingTo the bestilling
 	 * @return the original aktoer used in lookup
 	 */
-	public AktoerTo completeAktoerPersonIdent(AktoerBestillingTo aktoerBestillingTo) {
+	public AktoerTo findMissingAktoer(AktoerBestillingTo aktoerBestillingTo) {
 		AktoerTo origAktoer = aktoerBestillingTo.createAktoerTo();
-		AktoerTo fetchedAktoer;
 		try {
-			fetchedAktoer = aktoerConsumer.hentIdent(origAktoer);
+			return aktoerConsumer.hentIdent(origAktoer);
 		} catch (HentIdentForAktoerIdPersonIkkeFunnet | HentAktoerIdForIdentPersonIkkeFunnet e) {
 			throw new AktoerIkkeFunnetException("Kunne ikke hente manglende ident for " + origAktoer, e);
 		}
-		aktoerBestillingTo.setMottaker(fetchedAktoer);
-		return origAktoer;
+
 	}
 }

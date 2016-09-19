@@ -30,7 +30,6 @@ import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.support.exception.VarselbestillingAlreadyExistException;
 import no.nav.varsel.service.support.exception.VarselbestillingNotExistException;
-import no.nav.varsel.service.to.AktoerBestillingTo;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
@@ -100,14 +99,7 @@ public class BestillVarselServiceTest {
 
 		when(varselbestillingRepoMock.findByVarselbestillingIdEager(VARSELBESTILLING_ID)).thenReturn(existingVarselbestilling);
 
-		when(aktoerService.completeAktoerPersonIdent(bestillingTo)).thenAnswer(
-				invocation -> {
-					if (invocation.getArgumentAt(0, AktoerBestillingTo.class).getPersonIdent() == null) {
-						bestillingTo.setMottaker(newPersonIdent(FNR));
-					}
-					return aktoerTo;
-				}
-		);
+		when(aktoerService.findMissingAktoer(bestillingTo)).thenReturn(newPersonIdent(FNR));
 
 		varselInfoTo.setPreferertKanal(PREFERERT_KANAL);
 		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
@@ -122,7 +114,7 @@ public class BestillVarselServiceTest {
 		when(domainMapper.mapReVarsel(KANAL_CODE, bestillingTo, varselInfoTo, kontaktregisterTo))
 				.thenReturn(varsel);
 		when(varselutsendingToMapper
-				.mapVarsels(eq(aktoerTo), eq(UTLOP_TIDSPUNKT), eq(VARSELTYPE_ID), eq(Sets.newHashSet(varsel))))
+				.mapVarsels(eq(existingVarselbestilling), eq(UTLOP_TIDSPUNKT), eq(Sets.newHashSet(varsel))))
 				.thenReturn(Lists.newArrayList(varselutsendingTo));
 	}
 
@@ -151,6 +143,10 @@ public class BestillVarselServiceTest {
 
 	@Test
 	public void shouldBestillFoerstegangsvarsel() throws Exception {
+		when(varselutsendingToMapper
+				.mapVarsels(eq(newVarselbestilling), eq(UTLOP_TIDSPUNKT), eq(Sets.newHashSet(varsel))))
+				.thenReturn(Lists.newArrayList(varselutsendingTo));
+
 		createBestillingTo(NEW_BESTILLING_ID, false);
 		bestillVarselService.bestillVarsel(bestillingTo);
 

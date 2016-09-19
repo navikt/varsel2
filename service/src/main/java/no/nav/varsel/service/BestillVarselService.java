@@ -21,6 +21,7 @@ import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -82,7 +83,8 @@ public class BestillVarselService {
 	}
 
 	private void bestillFoerstegangsVarsel(BestillVarselTo to) {
-		AktoerTo origAktoer = aktoerService.completeAktoerPersonIdent(to);
+		AktoerTo fetchedAktoerTo = aktoerService.findMissingAktoer(to);
+		to.setMottaker(fetchedAktoerTo);
 
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(to.getVarseltypeId());
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
@@ -93,12 +95,10 @@ public class BestillVarselService {
 
 		varselbestillingRepo.saveAndFlush(varselbestilling);
 
-		sendToVarselutsending(to, origAktoer, to.getVarseltypeId(), varselbestilling.getVarsels());
+		sendToVarselutsending(varselbestilling, to.getUtloepstidspunkt(), varselbestilling.getVarsels());
 	}
 
 	private void bestillRevarsel(BestillVarselTo to, Varselbestilling existingVarsel) {
-		AktoerTo origAktoer = to.createAktoerTo();
-
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(to.getVarseltypeId());
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
 				.hentDigitalKontaktinformasjonAndDecideKanal(existingVarsel.getFnr(), varselInfoTo.getPreferertKanal());
@@ -112,7 +112,7 @@ public class BestillVarselService {
 
 		varselbestillingRepo.saveAndFlush(existingVarsel);
 
-		sendToVarselutsending(to, origAktoer, to.getVarseltypeId(), varsels);
+		sendToVarselutsending(existingVarsel, to.getUtloepstidspunkt(), varsels);
 	}
 
 	private void updateRevarselFeilds(Varselbestilling item) {
@@ -126,9 +126,9 @@ public class BestillVarselService {
 		}
 	}
 
-	private void sendToVarselutsending(BestillVarselTo to, AktoerTo origAktoer, String varseltypeId, Set<Varsel> varsels) {
+	private void sendToVarselutsending(Varselbestilling varselbestilling, LocalDateTime utloepstidspunkt, Set<Varsel> varsels) {
 		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper
-				.mapVarsels(origAktoer, to.getUtloepstidspunkt(), varseltypeId, varsels);
+				.mapVarsels(varselbestilling, utloepstidspunkt, varsels);
 
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
 			varselutsendingProducer.produce(varselutsendingTo);

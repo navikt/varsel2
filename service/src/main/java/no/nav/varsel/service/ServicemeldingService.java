@@ -47,7 +47,8 @@ public class ServicemeldingService {
 	private VarselbestillingRepo varselbestillingRepo;
 
 	public void bestillServicemelding(BestillVarselTo bestilling) {
-		AktoerTo origAktoer = aktoerService.completeAktoerPersonIdent(bestilling);
+		AktoerTo fetchedAktoerTo = aktoerService.findMissingAktoer(bestilling);
+		bestilling.setMottaker(fetchedAktoerTo);
 
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestilling.getVarseltypeId());
 		validateVarselInfoForBestilling(bestilling, varselInfoTo);
@@ -61,7 +62,7 @@ public class ServicemeldingService {
 
 		varselbestillingRepo.saveAndFlush(varselbestilling);
 
-		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper.map(varselbestilling, origAktoer);
+		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper.map(varselbestilling);
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
 			varselutsendingProducer.produce(varselutsendingTo);
 		}

@@ -3,6 +3,7 @@ package no.nav.varsel.service.support;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.to.AktoerTo;
+import no.nav.varsel.domain.to.MottakerType;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 
 import java.time.LocalDateTime;
@@ -17,26 +18,43 @@ import java.util.stream.Collectors;
  */
 public class VarselutsendingToMapper {
 
-	public List<VarselutsendingTo> map(Varselbestilling varselbestilling, AktoerTo aktoer) {
+	public List<VarselutsendingTo> map(Varselbestilling varselbestilling) {
 		LocalDateTime utlopTidspunkt = varselbestilling.getUtlopTidspunkt();
-		String varseltypeId = varselbestilling.getVarseltypeId();
 		Set<Varsel> varsels = varselbestilling.getVarsels();
-		return mapVarsels(aktoer, utlopTidspunkt, varseltypeId, varsels);
+		return mapVarsels(varselbestilling, utlopTidspunkt, varsels);
 	}
 
-	public List<VarselutsendingTo> mapVarsels(AktoerTo aktoer, LocalDateTime utlopTidspunkt, String varseltypeId, Set<Varsel> varsels) {
+	public List<VarselutsendingTo> mapVarsels(Varselbestilling varselbestilling, LocalDateTime utlopTidspunkt, Set<Varsel> varsels) {
 		return varsels.stream().map(varsel -> {
 			VarselutsendingTo to = new VarselutsendingTo();
 			to.setUtloepstidspunkt(utlopTidspunkt);
-			to.setVarseltypeId(varseltypeId);
+			to.setVarseltypeId(varselbestilling.getVarseltypeId());
 			to.setKanal(varsel.getKanal());
 			to.setKontaktInformasjon(varsel.getKontaktInfo());
-			to.setMottaker(aktoer);
+			if(varsel.getKanal().hasExternalUtsendingskanal()) {
+				to.setMottaker(createPerson(varselbestilling.getFnr()));
+			} else {
+				to.setMottaker(createAktoer(varselbestilling.getAktorId()));
+			}
 			to.setVarselId(varsel.getVarselId());
 			to.setVarselUrl(varsel.getVarselUrl());
 			to.setVarselTekst(varsel.getVarselTekst());
 			to.setVarselTittel(varsel.getVarselTittel());
 			return to;
 		}).collect(Collectors.toList());
+	}
+
+	private AktoerTo createAktoer(String aktoerId) {
+		AktoerTo aktoerTo = new AktoerTo();
+		aktoerTo.setIdent(aktoerId);
+		aktoerTo.setMottakerType(MottakerType.AKTOER);
+		return aktoerTo;
+	}
+
+	private AktoerTo createPerson(String fnr) {
+		AktoerTo aktoerTo = new AktoerTo();
+		aktoerTo.setIdent(fnr);
+		aktoerTo.setMottakerType(MottakerType.PERSON);
+		return aktoerTo;
 	}
 }

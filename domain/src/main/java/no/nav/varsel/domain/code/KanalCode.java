@@ -29,4 +29,8 @@ public enum KanalCode {
 	public String getKommunikasjonskanal() {
 		return kommunikasjonskanal;
 	}
+
+	public boolean hasExternalUtsendingskanal() {
+		return this != DITT_NAV;
+	}
 }

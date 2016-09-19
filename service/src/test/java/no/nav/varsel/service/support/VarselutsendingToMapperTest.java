@@ -1,5 +1,7 @@
 package no.nav.varsel.service.support;
 
+import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
+import static no.nav.varsel.repo.TestdataUtil.FNR;
 import static no.nav.varsel.repo.TestdataUtil.KANAL_CODE;
 import static no.nav.varsel.repo.TestdataUtil.KONTAKT_INFO;
 import static no.nav.varsel.repo.TestdataUtil.UTLOP_TIDSPUNKT;
@@ -13,7 +15,9 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import no.nav.varsel.domain.to.AktoerTo;
+import no.nav.varsel.domain.code.KanalCode;
+import no.nav.varsel.domain.object.Varselbestilling;
+import no.nav.varsel.domain.to.MottakerType;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 import org.junit.Test;
 
@@ -26,35 +30,60 @@ import java.util.List;
  */
 public class VarselutsendingToMapperTest {
 
-	private final AktoerTo aktoerTo = new AktoerTo();
 	private VarselutsendingToMapper mapper = new VarselutsendingToMapper();
 
 	@Test
 	public void shouldMapVarselbestilling() throws Exception {
-		List<VarselutsendingTo> tos = mapper.map(createVarselbestilling(), aktoerTo);
+		List<VarselutsendingTo> tos = mapper.map(createVarselbestilling());
 
 		assertThat(tos, hasSize(1));
 		assertVarselTo(tos.get(0));
+		assertMottakerPerson(tos.get(0));
 	}
 
 	@Test
 	public void shouldMapVarsel() throws Exception {
-		List<VarselutsendingTo> tos = mapper.mapVarsels(aktoerTo, UTLOP_TIDSPUNKT, VARSELTYPE_ID,
-				createVarselbestilling().getVarsels());
+		Varselbestilling varselbestilling = createVarselbestilling();
+
+		List<VarselutsendingTo> tos = mapper.mapVarsels(varselbestilling, UTLOP_TIDSPUNKT,
+				varselbestilling.getVarsels());
 
 		assertThat(tos, hasSize(1));
 		assertVarselTo(tos.get(0));
+		assertMottakerPerson(tos.get(0));
+	}
+
+	@Test
+	public void shouldSetAktoerWhenDittNav() throws Exception {
+		Varselbestilling varselbestilling = createVarselbestilling();
+		varselbestilling.getVarsels().iterator().next().setKanal(KanalCode.DITT_NAV);
+
+		List<VarselutsendingTo> tos = mapper.mapVarsels(varselbestilling, UTLOP_TIDSPUNKT, varselbestilling.getVarsels());
+
+		assertThat(tos, hasSize(1));
+		assertVarselTo(tos.get(0));
+		assertMottakerAktoer(tos.get(0));
 	}
 
 	private void assertVarselTo(VarselutsendingTo to) {
 		assertThat(to.getVarselId(), is(VARSEL_ID));
-		assertThat(to.getMottaker(), is(aktoerTo));
 		assertThat(to.getUtloepstidspunkt(), is(UTLOP_TIDSPUNKT));
-		assertThat(to.getKanal(), is(KANAL_CODE));
 		assertThat(to.getKontaktInformasjon(), is(KONTAKT_INFO));
 		assertThat(to.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(to.getVarselTittel(), is(VARSEL_TITTEL));
 		assertThat(to.getVarselTekst(), is(VARSEL_TEKST));
 		assertThat(to.getVarselUrl(), is(VARSEL_URL));
+	}
+
+	private void assertMottakerPerson(VarselutsendingTo to) {
+		assertThat(to.getKanal(), is(KANAL_CODE));
+		assertThat(to.getMottaker().getMottakerType(), is(MottakerType.PERSON));
+		assertThat(to.getMottaker().getIdent(), is(FNR));
+	}
+
+	private void assertMottakerAktoer(VarselutsendingTo to) {
+		assertThat(to.getKanal(), is(KanalCode.DITT_NAV));
+		assertThat(to.getMottaker().getMottakerType(), is(MottakerType.AKTOER));
+		assertThat(to.getMottaker().getIdent(), is(AKTOR_ID));
 	}
 }

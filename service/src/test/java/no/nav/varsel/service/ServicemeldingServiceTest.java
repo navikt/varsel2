@@ -1,6 +1,5 @@
 package no.nav.varsel.service;
 
-import static no.nav.varsel.domain.to.AktoerTo.newAktoerId;
 import static no.nav.varsel.domain.to.AktoerTo.newPersonIdent;
 import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
 import static no.nav.varsel.repo.TestdataUtil.FNR;
@@ -21,14 +20,12 @@ import static org.mockito.Mockito.when;
 
 import com.google.common.collect.Lists;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 import no.nav.varsel.repo.TestdataUtil;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.support.exception.VarselInaktivVarselmalException;
-import no.nav.varsel.service.to.AktoerBestillingTo;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
@@ -85,7 +82,6 @@ public class ServicemeldingServiceTest {
 	private Varselbestilling varselbestilling = new Varselbestilling();
 	private BestillVarselTo bestilling = new BestillVarselTo();
 	private KontaktregisterTo kontaktregisterTo = new KontaktregisterTo();
-	private AktoerTo aktoerTo = newAktoerId(TestdataUtil.AKTOR_ID);
 	private VarselInfoTo varselInfoTo = new VarselInfoTo();
 
 	@Rule
@@ -101,18 +97,12 @@ public class ServicemeldingServiceTest {
 
 		varselInfoTo.setPreferertKanal(PREFERERT_KANAL);
 
-		when(aktoerService.completeAktoerPersonIdent(bestilling)).thenAnswer(
-				invocation -> {
-					if (invocation.getArgumentAt(0, AktoerBestillingTo.class).getPersonIdent() == null)
-						bestilling.setMottaker(newPersonIdent(FNR));
-					return aktoerTo;
-				}
-		);
+		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
 		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjonAndDecideKanal(FNR, PREFERERT_KANAL)).thenReturn(kontaktregisterTo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjonAndDecideKanal(FNR, OVERSTYRT_PREFERERT_KANAL)).thenReturn(kontaktregisterTo);
 		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
-		when(varselutsendingToMapper.map(eq(varselbestilling), eq(aktoerTo))).thenReturn(varselutsendingTos);
+		when(varselutsendingToMapper.map(eq(varselbestilling))).thenReturn(varselutsendingTos);
 	}
 
 	@Test
@@ -125,8 +115,8 @@ public class ServicemeldingServiceTest {
 
 	@Test(expected = ArithmeticException.class)
 	public void shouldThrowTekniskForTekniskFeilDkif() throws Exception {
+		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(TEKNISK));
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjonAndDecideKanal(TEKNISK, PREFERERT_KANAL)).thenThrow(new ArithmeticException(TEKNISK));
-		bestilling.setPersonIdent(TEKNISK);
 		servicemeldingService.bestillServicemelding(bestilling);
 	}
 
