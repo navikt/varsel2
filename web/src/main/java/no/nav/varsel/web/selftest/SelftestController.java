@@ -105,7 +105,6 @@ public class SelftestController {
 		response.addCheck(new PingSelftest(wsPingProvider.pingAktoerV2()).check());
 		response.addCheck(new PingSelftest(wsPingProvider.pingDigitalKontaktinformasjonV1()).check());
 		response.addCheck(new PingSelftest(wsPingProvider.pingVarselInfoV1()).check());
-		response.addCheck(new PingSelftest(wsPingProvider.pingKodeverkPortType()).check());
 
 		// Jms
 		jmsPingProvider.ping().forEach(p -> response.addCheck(new PingSelftest(p).check()));
