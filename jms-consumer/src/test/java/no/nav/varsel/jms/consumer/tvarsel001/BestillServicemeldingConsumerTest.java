@@ -135,8 +135,8 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		Varselutsending varselutsending = receive(varselutsendingQueue);
 
 		assertThat(varselutsending.getVarselId(), is(varselId));
-		assertThat(((no.nav.melding.virksomhet.varselutsending.v2.varselutsending.AktoerId)
-				varselutsending.getMottaker()).getAktoerId(), is(MOTTAKER));
+		assertThat(((no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Person)
+				varselutsending.getMottaker()).getIdent(), is(PERSON_IDENT));
 		assertThat(varselutsending.getUtloepstidspunkt(), equalTo(toXmlGregorianCalendar(UTLOEPSTIDSPUNKT_LDT)));
 		assertThat(varselutsending.getDistribusjon().getKanal().getValue(), is(EPOST.getKommunikasjonskanal()));
 		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), is(EPOSTADRESSE));

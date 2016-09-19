@@ -41,11 +41,12 @@ public class AktoerServiceTest {
 	private AktoerService aktoerService;
 
 	private AktoerTo origAktoerTo = newAktoerId(TestdataUtil.AKTOR_ID);
+	private AktoerTo fetchedAktoerTo = newPersonIdent(FNR);
 	private AktoerBestillingTo aktoerBestillingTo;
 
 	@Before
 	public void setUp() throws Exception {
-		when(aktoerConsumer.hentIdent(eq(origAktoerTo))).thenReturn(newPersonIdent(FNR));
+		when(aktoerConsumer.hentIdent(eq(origAktoerTo))).thenReturn(fetchedAktoerTo);
 
 		aktoerBestillingTo = new AktoerBestillingTo();
 		aktoerBestillingTo.setMottaker(origAktoerTo);
@@ -53,9 +54,8 @@ public class AktoerServiceTest {
 
 	@Test
 	public void shouldHentIdent() throws Exception {
-		AktoerTo aktoerTo = aktoerService.completeAktoerPersonIdent(aktoerBestillingTo);
-		assertThat(aktoerTo, is(origAktoerTo));
-		assertThat(aktoerBestillingTo.getPersonIdent(), is(FNR));
+		AktoerTo missingAktoer = aktoerService.findMissingAktoer(aktoerBestillingTo);
+		assertThat(missingAktoer, is(fetchedAktoerTo));
 	}
 
 	@Test(expected = AktoerIkkeFunnetException.class)
@@ -64,7 +64,7 @@ public class AktoerServiceTest {
 				.thenThrow(new HentAktoerIdForIdentPersonIkkeFunnet("", new PersonIkkeFunnet()));
 
 		aktoerBestillingTo.setAktoerId(FUNKSJONELL);
-		aktoerService.completeAktoerPersonIdent(aktoerBestillingTo);
+		aktoerService.findMissingAktoer(aktoerBestillingTo);
 	}
 
 	@Test(expected = ArithmeticException.class)
@@ -72,7 +72,7 @@ public class AktoerServiceTest {
 		when(aktoerConsumer.hentIdent(eq(newAktoerId(TEKNISK)))).thenThrow(teknisk);
 
 		aktoerBestillingTo.setAktoerId(TEKNISK);
-		aktoerService.completeAktoerPersonIdent(aktoerBestillingTo);
+		aktoerService.findMissingAktoer(aktoerBestillingTo);
 	}
 
 }

@@ -20,20 +20,18 @@ public class AktoerService {
 	private AktoerConsumer aktoerConsumer;
 
 	/**
-	 * Fetch missing aktoer component and return the original
+	 * Fetch missing aktoer component
 	 *
 	 * @param aktoerBestillingTo the bestilling
-	 * @return the original aktoer used in lookup
+	 * @return the fetched aktoer
 	 */
-	public AktoerTo completeAktoerPersonIdent(AktoerBestillingTo aktoerBestillingTo) {
+	public AktoerTo findMissingAktoer(AktoerBestillingTo aktoerBestillingTo) {
 		AktoerTo origAktoer = aktoerBestillingTo.createAktoerTo();
-		AktoerTo fetchedAktoer;
 		try {
-			fetchedAktoer = aktoerConsumer.hentIdent(origAktoer);
+			return aktoerConsumer.hentIdent(origAktoer);
 		} catch (HentIdentForAktoerIdPersonIkkeFunnet | HentAktoerIdForIdentPersonIkkeFunnet e) {
 			throw new AktoerIkkeFunnetException("Kunne ikke hente manglende ident for " + origAktoer, e);
 		}
-		aktoerBestillingTo.setMottaker(fetchedAktoer);
-		return origAktoer;
+
 	}
 }
