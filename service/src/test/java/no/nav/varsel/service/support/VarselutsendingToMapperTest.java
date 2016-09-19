@@ -42,7 +42,7 @@ public class VarselutsendingToMapperTest {
 	}
 
 	@Test
-	public void shouldMapVarsel() throws Exception {
+	public void shouldMapEpostVarsel() throws Exception {
 		Varselbestilling varselbestilling = createVarselbestilling();
 
 		List<VarselutsendingTo> tos = mapper.mapVarsels(varselbestilling, UTLOP_TIDSPUNKT,
@@ -54,7 +54,7 @@ public class VarselutsendingToMapperTest {
 	}
 
 	@Test
-	public void shouldSetAktoerWhenDittNav() throws Exception {
+	public void shouldMapDittNavVarsel() throws Exception {
 		Varselbestilling varselbestilling = createVarselbestilling();
 		varselbestilling.getVarsels().iterator().next().setKanal(KanalCode.DITT_NAV);
 

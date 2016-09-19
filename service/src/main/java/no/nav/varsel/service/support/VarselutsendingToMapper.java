@@ -3,7 +3,6 @@ package no.nav.varsel.service.support;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.to.AktoerTo;
-import no.nav.varsel.domain.to.MottakerType;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 
 import java.time.LocalDateTime;
@@ -32,9 +31,9 @@ public class VarselutsendingToMapper {
 			to.setKanal(varsel.getKanal());
 			to.setKontaktInformasjon(varsel.getKontaktInfo());
 			if(varsel.getKanal().hasExternalUtsendingskanal()) {
-				to.setMottaker(createPerson(varselbestilling.getFnr()));
+				to.setMottaker(AktoerTo.newPersonIdent(varselbestilling.getFnr()));
 			} else {
-				to.setMottaker(createAktoer(varselbestilling.getAktorId()));
+				to.setMottaker(AktoerTo.newAktoerId((varselbestilling.getAktorId())));
 			}
 			to.setVarselId(varsel.getVarselId());
 			to.setVarselUrl(varsel.getVarselUrl());
@@ -42,19 +41,5 @@ public class VarselutsendingToMapper {
 			to.setVarselTittel(varsel.getVarselTittel());
 			return to;
 		}).collect(Collectors.toList());
-	}
-
-	private AktoerTo createAktoer(String aktoerId) {
-		AktoerTo aktoerTo = new AktoerTo();
-		aktoerTo.setIdent(aktoerId);
-		aktoerTo.setMottakerType(MottakerType.AKTOER);
-		return aktoerTo;
-	}
-
-	private AktoerTo createPerson(String fnr) {
-		AktoerTo aktoerTo = new AktoerTo();
-		aktoerTo.setIdent(fnr);
-		aktoerTo.setMottakerType(MottakerType.PERSON);
-		return aktoerTo;
 	}
 }
