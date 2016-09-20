@@ -20,14 +20,7 @@ public class VarselKanalDecider {
 
 	public Collection<KanalCode> decideKanaler(KontaktregisterTo kontaktregisterTo, Set<KanalCode> preferertKanalDki) {
 		Set<KanalCode> kanaler = new HashSet<>();
-		Set<KanalCode> preferertKanal = new HashSet<>();
-		if (preferertKanalDki != null) {
-			preferertKanal.addAll(preferertKanalDki);
-		}
-		if (preferertKanal.isEmpty()) {
-			preferertKanal.add(SMS);
-			preferertKanal.add(EPOST);
-		}
+		Set<KanalCode> preferertKanal = initializePreferertKanal(preferertKanalDki);
 
 		if (preferertKanal.contains(DITT_NAV)) {
 			kanaler.add(DITT_NAV);
@@ -52,6 +45,18 @@ public class VarselKanalDecider {
 			kanaler.add(DITT_NAV);
 		}
 		return kanaler;
+	}
+
+	private Set<KanalCode> initializePreferertKanal(Set<KanalCode> preferertKanalDki) {
+		Set<KanalCode> preferertKanal = new HashSet<>();
+		if (preferertKanalDki != null) {
+			preferertKanal.addAll(preferertKanalDki);
+		}
+		if (preferertKanal.isEmpty()) {
+			preferertKanal.add(SMS);
+			preferertKanal.add(EPOST);
+		}
+		return preferertKanal;
 	}
 
 	private void tryEpost(Set<KanalCode> kanaler, KontaktregisterTo kontaktregisterTo) {
