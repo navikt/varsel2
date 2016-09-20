@@ -61,6 +61,9 @@ public class Varselbestilling extends AbstractDomainObject {
 	@Column(name = "aktor_id", nullable = false)
 	private String aktorId;
 
+	@Column(name = "org_nr")
+	private String orgNr;
+
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
 	@Column(name = "bestilling_tidspunkt", nullable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime bestillingTidspunkt;
@@ -138,6 +141,14 @@ public class Varselbestilling extends AbstractDomainObject {
 
 	public void setAktorId(String aktorId) {
 		this.aktorId = aktorId;
+	}
+
+	public String getOrgNr() {
+		return orgNr;
+	}
+
+	public void setOrgNr(String orgNr) {
+		this.orgNr = orgNr;
 	}
 
 	public LocalDateTime getBestillingTidspunkt() {

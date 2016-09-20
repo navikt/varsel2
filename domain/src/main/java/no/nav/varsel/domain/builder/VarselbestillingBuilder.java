@@ -26,6 +26,7 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 	private LocalDateTime utlopTidspunkt;
 	private String fnr;
 	private String aktorId;
+	private String orgNr;
 	private LocalDateTime bestillingTidspunkt;
 	private Integer revarslingIntervall;
 	private Integer antallRevarslinger;
@@ -67,6 +68,11 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 
 	public VarselbestillingBuilder aktorId(String aktorId) {
 		this.aktorId = aktorId;
+		return this;
+	}
+
+	public VarselbestillingBuilder orgNr(String orgNr) {
+		this.orgNr = orgNr;
 		return this;
 	}
 
