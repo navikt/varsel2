@@ -18,9 +18,9 @@ import java.util.Set;
  */
 public class VarselKanalDecider {
 
-	public Collection<KanalCode> decideKanaler(KontaktregisterTo kontaktregisterTo, Set<KanalCode> preferertKanalDki) {
+	public Collection<KanalCode> decideKanaler(KontaktregisterTo kontaktregisterTo, Set<KanalCode> preferertKanalDokkat) {
 		Set<KanalCode> kanaler = new HashSet<>();
-		Set<KanalCode> preferertKanal = initializePreferertKanal(preferertKanalDki);
+		Set<KanalCode> preferertKanal = initializePreferertKanal(preferertKanalDokkat);
 
 		if (preferertKanal.contains(DITT_NAV)) {
 			kanaler.add(DITT_NAV);

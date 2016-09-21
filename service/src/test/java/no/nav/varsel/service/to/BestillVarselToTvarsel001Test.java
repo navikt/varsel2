@@ -11,7 +11,7 @@ import org.junit.rules.ExpectedException;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public class BestillVarselTvarsel001ToTest {
+public class BestillVarselToTvarsel001Test {
 
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();

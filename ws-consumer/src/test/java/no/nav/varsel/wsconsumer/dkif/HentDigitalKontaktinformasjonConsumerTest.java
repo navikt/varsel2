@@ -97,17 +97,26 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 
 	@Test
 	public void shouldReturnNullOn_NotFound() throws Exception {
-		assertThat(consumer.hentDigitalKontaktinformasjon(ID_404), nullValue());
+		KontaktregisterTo actual = consumer.hentDigitalKontaktinformasjon(ID_404);
+		assertKontaktRegisterToIsEmpty(actual);
 	}
 
 	@Test
 	public void shouldReturnNullOn_NotFoundKontaktInfo() throws Exception {
-		assertThat(consumer.hentDigitalKontaktinformasjon(ID_KON404), nullValue());
+		KontaktregisterTo actual = consumer.hentDigitalKontaktinformasjon(ID_KON404);
+		assertKontaktRegisterToIsEmpty(actual);
 	}
 
 	@Test
 	public void shouldReturnNullOn_Sikkerhetsbegrensning() throws Exception {
-		assertThat(consumer.hentDigitalKontaktinformasjon(ID_500), nullValue());
+		KontaktregisterTo actual = consumer.hentDigitalKontaktinformasjon(ID_500);
+		assertKontaktRegisterToIsEmpty(actual);
+	}
+
+	private void assertKontaktRegisterToIsEmpty(KontaktregisterTo actual) {
+		assertThat(actual.getKanaler(), nullValue());
+		assertThat(actual.getEpostadresse(), nullValue());
+		assertThat(actual.getMobiltelefonnummer(), nullValue());
 	}
 
 	private HentDigitalKontaktinformasjonRequest reqId(String ident) {

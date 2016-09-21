@@ -44,7 +44,8 @@ import java.util.List;
  */
 public class StoppReVarselConsumerTest extends AbstractConsumerJmsTest {
 
-	public static final String VARSELBESTILLING_ID = "VARSELBESTILLING_ID";
+	private static final String VARSELBESTILLING_ID = "VARSELBESTILLING_ID";
+
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
 

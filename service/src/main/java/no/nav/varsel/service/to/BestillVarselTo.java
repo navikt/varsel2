@@ -15,15 +15,13 @@ import java.util.Map;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public class BestillVarselTo extends AktoerBestillingTo {
+public class BestillVarselTo extends BestillVarselCommonTo {
 
 	public static final String TESTVARSEL = "Testvarsel";
 	private String varselBestillingId;
 	private LocalDateTime utsendelsesTidspunkt;
 	private Boolean revarsling;
-	private String varseltypeId;
-	private Map<String, String> parameters = new HashMap<>();
-	private LocalDateTime utloepstidspunkt;
+
 	private Boolean testvarsel = false;
 
 	public String getVarselBestillingId() {
@@ -50,30 +48,6 @@ public class BestillVarselTo extends AktoerBestillingTo {
 		this.revarsling = revarsling;
 	}
 
-	public String getVarseltypeId() {
-		return varseltypeId;
-	}
-
-	public void setVarseltypeId(String varseltypeId) {
-		this.varseltypeId = varseltypeId;
-	}
-
-	public Map<String, String> getParameters() {
-		return parameters;
-	}
-
-	public void setParameters(Map<String, String> parameters) {
-		this.parameters = parameters;
-	}
-
-	public LocalDateTime getUtloepstidspunkt() {
-		return utloepstidspunkt;
-	}
-
-	public void setUtloepstidspunkt(LocalDateTime utloepstidspunkt) {
-		this.utloepstidspunkt = utloepstidspunkt;
-	}
-
 	public boolean isTestvarsel() {
 		return testvarsel;
 	}
@@ -84,12 +58,7 @@ public class BestillVarselTo extends AktoerBestillingTo {
 
 	public void validateTvarsel001Input() {
 		try {
-			assertHasOneIdent();
-			hasText(varseltypeId, "varseltypeId");
-			parameters.forEach((key, val) -> {
-				hasText(key, "parameter.key");
-				hasText(val, "parameter.value");
-			});
+			validate();
 		} catch (Exception e) {
 			throw new NoJmsBackoutException("Validation failed for input, " + e.getMessage(), e);
 		}
@@ -97,14 +66,9 @@ public class BestillVarselTo extends AktoerBestillingTo {
 
 	public void validateTvarsel003Input() {
 		try {
+			validate();
 			hasText(varselBestillingId, "varselBestillingId");
 			notNull(revarsling, "revarsling");
-			assertHasOneIdent();
-			hasText(varseltypeId, "varseltypeId");
-			parameters.forEach((key, val) -> {
-				hasText(key, "parameter.key");
-				hasText(val, "parameter.value");
-			});
 		} catch (Exception e) {
 			throw new NoJmsBackoutException("Validation failed for input, " + e.getMessage(), e);
 		}
