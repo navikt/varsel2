@@ -30,9 +30,9 @@ public class StoppReVarselConsumer extends AbstractJmsConsumer<StoppReVarsel> {
 	static final String TVARSEL004 = "tvarsel004";
 
 	@Inject
-	StoppReVarselMapper stoppReVarselMapper;
+	private StoppReVarselMapper stoppReVarselMapper;
 	@Inject
-	StoppReVarselService stoppReVarselService;
+	private StoppReVarselService stoppReVarselService;
 
 	public StoppReVarselConsumer() {
 		super(REVARSEL_STOPP, StoppReVarsel.class);
