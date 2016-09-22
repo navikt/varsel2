@@ -26,6 +26,8 @@ public class VarselKanalDeciderTest {
 	private static final HashSet<KanalCode> PREFERERT_EPOST = Sets.newHashSet(KanalCode.EPOST);
 	private static final HashSet<KanalCode> PREFERERT_SMS_EPOST = Sets.newHashSet(KanalCode.SMS, KanalCode.EPOST);
 	private static final HashSet<KanalCode> PREFERERT_DITTNAV = Sets.newHashSet(KanalCode.DITT_NAV);
+	private static final HashSet<KanalCode> PREFERERT_DITTNAV_OG_EPOST = Sets.newHashSet(KanalCode.DITT_NAV, KanalCode.EPOST);
+	private static final HashSet<KanalCode> PREFERERT_DITTNAV_OG_SMS = Sets.newHashSet(KanalCode.DITT_NAV, KanalCode.SMS);
 
 	private VarselKanalDecider decider = new VarselKanalDecider();
 
@@ -108,11 +110,22 @@ public class VarselKanalDeciderTest {
 		assertThat(kanaler, containsInAnyOrder(KanalCode.DITT_NAV));
 	}
 
+	@Test
+	public void decidesOnDittNavAndSmsWhenOnlyMobilInfoIsValidAndUsersPrefersEpostAndDittNav() {
+		Collection<KanalCode> kanaler = decider.decideKanaler(createKontaktTo(null, MOBIL), PREFERERT_DITTNAV_OG_EPOST);
+		assertThat(kanaler, containsInAnyOrder(KanalCode.DITT_NAV, KanalCode.SMS));
+	}
+
+	@Test
+	public void decidesOnDittNavAndEpostWhenOnlyEpostInfoIsValidAndUsersPrefersSmsAndDittNav() {
+		Collection<KanalCode> kanaler = decider.decideKanaler(createKontaktTo(EPOST, null), PREFERERT_DITTNAV_OG_SMS);
+		assertThat(kanaler, containsInAnyOrder(KanalCode.DITT_NAV, KanalCode.EPOST));
+	}
+
 	private static KontaktregisterTo createKontaktTo(String epost, String mobil) {
 		return aKontaktregisterTo()
 				.epostadresse(epost)
 				.mobiltelefonnummer(mobil)
 				.build();
 	}
-
 }
