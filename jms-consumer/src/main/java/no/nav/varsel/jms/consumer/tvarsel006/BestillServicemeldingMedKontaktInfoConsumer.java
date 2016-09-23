@@ -6,7 +6,7 @@ import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_SERVI
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
-import no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTEMP;
+import no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapper;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.to.BestillVarselTo;
@@ -24,18 +24,18 @@ import javax.jms.TextMessage;
  * @author Roar Bjurstrom, Visma Consulting.
  */
 @Component
-public class ServiceMeldingMedKontaktInfoConsumerTEMP extends AbstractJmsConsumer<ServicemeldingMedKontaktinformasjon> {
+public class BestillServicemeldingMedKontaktInfoConsumer extends AbstractJmsConsumer<ServicemeldingMedKontaktinformasjon> {
 
-	private static final Logger LOGG = LoggerFactory.getLogger(ServiceMeldingMedKontaktInfoConsumerTEMP.class);
+	private static final Logger LOGG = LoggerFactory.getLogger(BestillServicemeldingMedKontaktInfoConsumer.class);
 
 	private static final String SERVICEMELDING_KONTAKT_INFO_QUEUE = "bestillServicemeldingKontaktInfoQueue";
 
 	@Inject
-	private ServiceMeldingMedKontaktInfoMapperTEMP mapper;
+	private BestillServicemeldingMedKontaktInfoMapper mapper;
 	@Inject
 	private ServicemeldingService servicemeldingService;
 
-	public ServiceMeldingMedKontaktInfoConsumerTEMP() {
+	public BestillServicemeldingMedKontaktInfoConsumer() {
 		super(BESTILL_SERVICEMELDING_KONTAKTINFO, ServicemeldingMedKontaktinformasjon.class);
 	}
 

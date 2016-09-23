@@ -20,7 +20,7 @@ import java.util.Map;
  *
  * @author Roar Bjurstrom, Visma Consulting.
  */
-public class ServiceMeldingMedKontaktInfoMapperTEMP {
+public class BestillServicemeldingMedKontaktInfoMapper {
 
 	public BestillVarselTo map(ServicemeldingMedKontaktinformasjon from) {
 		BestillVarselTo to = new BestillVarselTo();

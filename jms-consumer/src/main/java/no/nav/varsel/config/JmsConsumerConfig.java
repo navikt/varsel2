@@ -9,8 +9,8 @@ import no.nav.varsel.jms.consumer.tvarsel003.BestillVarselConsumer;
 import no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapper;
 import no.nav.varsel.jms.consumer.tvarsel004.StoppReVarselConsumer;
 import no.nav.varsel.jms.consumer.tvarsel004.support.StoppReVarselMapper;
-import no.nav.varsel.jms.consumer.tvarsel006.ServiceMeldingMedKontaktInfoConsumerTEMP;
-import no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTEMP;
+import no.nav.varsel.jms.consumer.tvarsel006.BestillServicemeldingMedKontaktInfoConsumer;
+import no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Import;
 		VarselKvitteringConsumer.class,
 		BestillVarselConsumer.class,
 		StoppReVarselConsumer.class,
-		ServiceMeldingMedKontaktInfoConsumerTEMP.class})
+		BestillServicemeldingMedKontaktInfoConsumer.class})
 @Configuration
 public class JmsConsumerConfig {
 
@@ -55,7 +55,7 @@ public class JmsConsumerConfig {
 	}
 
 	@Bean
-	public ServiceMeldingMedKontaktInfoMapperTEMP serviceMeldingMedKontaktInfoMapper() {
-		return new ServiceMeldingMedKontaktInfoMapperTEMP();
+	public BestillServicemeldingMedKontaktInfoMapper serviceMeldingMedKontaktInfoMapper() {
+		return new BestillServicemeldingMedKontaktInfoMapper();
 	}
 }
