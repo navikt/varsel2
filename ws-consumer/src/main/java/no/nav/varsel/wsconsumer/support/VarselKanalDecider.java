@@ -31,12 +31,12 @@ public class VarselKanalDecider {
 			trySms(kanaler, kontaktregisterTo);
 		} else if (preferertKanal.contains(EPOST)) {
 			tryEpost(kanaler, kontaktregisterTo);
-			if (kanaler.isEmpty()) {
+			if (!kanaler.contains(EPOST)) {
 				trySms(kanaler, kontaktregisterTo);
 			}
 		} else if (preferertKanal.contains(SMS)) {
 			trySms(kanaler, kontaktregisterTo);
-			if (kanaler.isEmpty()) {
+			if (!kanaler.contains(SMS)) {
 				tryEpost(kanaler, kontaktregisterTo);
 			}
 		}
