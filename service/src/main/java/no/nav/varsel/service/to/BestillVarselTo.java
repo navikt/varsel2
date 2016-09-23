@@ -15,14 +15,68 @@ import java.util.Map;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-public class BestillVarselTo extends BestillVarselCommonTo {
+public class BestillVarselTo extends AktoerBestillingTo {
 
 	public static final String TESTVARSEL = "Testvarsel";
+	protected String varseltypeId;
+	private Map<String, String> parameters = new HashMap<>();
+	private LocalDateTime utloepstidspunkt;
 	private String varselBestillingId;
 	private LocalDateTime utsendelsesTidspunkt;
 	private Boolean revarsling;
-
 	private Boolean testvarsel = false;
+	private String orgNr;
+	private String epost;
+	private String mobiltelefonnummer;
+
+	public String getOrgNr() {
+		return orgNr;
+	}
+
+	public void setOrgNr(String orgNr) {
+		this.orgNr = orgNr;
+	}
+
+	public String getEpost() {
+		return epost;
+	}
+
+	public void setEpost(String epost) {
+		this.epost = epost;
+	}
+
+	public String getMobiltelefonnummer() {
+		return mobiltelefonnummer;
+	}
+
+	public void setMobiltelefonnummer(String mobiltelefonnummer) {
+		this.mobiltelefonnummer = mobiltelefonnummer;
+	}
+
+
+	public String getVarseltypeId() {
+		return varseltypeId;
+	}
+
+	public void setVarseltypeId(String varseltypeId) {
+		this.varseltypeId = varseltypeId;
+	}
+
+	public Map<String, String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(Map<String, String> parameters) {
+		this.parameters = parameters;
+	}
+
+	public LocalDateTime getUtloepstidspunkt() {
+		return utloepstidspunkt;
+	}
+
+	public void setUtloepstidspunkt(LocalDateTime utloepstidspunkt) {
+		this.utloepstidspunkt = utloepstidspunkt;
+	}
 
 	public String getVarselBestillingId() {
 		return varselBestillingId;
@@ -30,6 +84,15 @@ public class BestillVarselTo extends BestillVarselCommonTo {
 
 	public void setVarselBestillingId(String varselBestillingId) {
 		this.varselBestillingId = varselBestillingId;
+	}
+
+	private void validate() {
+		assertHasOneIdent();
+		hasText(varseltypeId, "varseltypeId");
+		parameters.forEach((key, val) -> {
+			hasText(key, "parameter.key");
+			hasText(val, "parameter.value");
+		});
 	}
 
 	public LocalDateTime getUtsendelsesTidspunkt() {
@@ -69,6 +132,16 @@ public class BestillVarselTo extends BestillVarselCommonTo {
 			validate();
 			hasText(varselBestillingId, "varselBestillingId");
 			notNull(revarsling, "revarsling");
+		} catch (Exception e) {
+			throw new NoJmsBackoutException("Validation failed for input, " + e.getMessage(), e);
+		}
+	}
+
+	public void validateTvarsel006Input() {
+		try {
+			validate();
+			hasText(orgNr, "organisasjonsnummer");
+			hasText(epost == null ? mobiltelefonnummer : epost, "kontaktinformasjon");
 		} catch (Exception e) {
 			throw new NoJmsBackoutException("Validation failed for input, " + e.getMessage(), e);
 		}

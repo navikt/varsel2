@@ -15,7 +15,7 @@ import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicem
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.Person;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
 import no.nav.varsel.domain.code.KanalCode;
-import no.nav.varsel.service.tvarsel006.to.BestillServiceMeldingMedKontaktInfoTo;
+import no.nav.varsel.service.to.BestillVarselTo;
 import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,6 +24,8 @@ import org.junit.rules.ExpectedException;
 import java.time.LocalDateTime;
 
 /**
+ * Unit test for {@link ServiceMeldingMedKontaktInfoMapper}
+ *
  * @author Roar Bjurstrom, Visma Consulting.
  */
 public class ServiceMeldingMedKontaktInfoMapperTest {
@@ -34,9 +36,9 @@ public class ServiceMeldingMedKontaktInfoMapperTest {
 	public static final String PERSON_IDENT = "personIdent";
 	public static final String VARSELTYPE_ID = "varseltypeId";
 	public static final LocalDateTime UTLOEPS_TIDSPUNKT = LocalDateTime.parse("2016-06-06T21:21:42");
-	private static final String ORGNUMMER = "orgnummer";
-	private static final String EPOST = "test@test.no";
-	private static final String TLF = "11223344";
+	public static final String ORGNUMMER = "orgnummer";
+	public static final String EPOST = "test@test.no";
+	public static final String TLF = "11223344";
 
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
@@ -45,7 +47,7 @@ public class ServiceMeldingMedKontaktInfoMapperTest {
 
 	@Test
 	public void shouldMap() throws Exception {
-		BestillServiceMeldingMedKontaktInfoTo to = mapper.map(createServicemeldingMedKontaktinformasjon());
+		BestillVarselTo to = mapper.map(createServicemeldingMedKontaktinformasjon());
 
 		assertThat(to.getAktoerId(), is(AKTOER_ID));
 		assertThat(to.getOrgNr(), is(ORGNUMMER));
@@ -63,7 +65,7 @@ public class ServiceMeldingMedKontaktInfoMapperTest {
 		varsel.getParameterListe().clear();
 		varsel.setUtloepstidspunkt(null);
 
-		BestillServiceMeldingMedKontaktInfoTo to = mapper.map(varsel);
+		BestillVarselTo to = mapper.map(varsel);
 
 		assertThat(to.getUtloepstidspunkt(), nullValue());
 		assertThat(to.getParameters().size(), is(0));
@@ -74,7 +76,7 @@ public class ServiceMeldingMedKontaktInfoMapperTest {
 		ServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
 		varsel.setMottaker(createPerson());
 
-		BestillServiceMeldingMedKontaktInfoTo to = mapper.map(varsel);
+		BestillVarselTo to = mapper.map(varsel);
 
 		assertThat(to.getAktoerId(), is(nullValue()));
 		assertThat(to.getPersonIdent(), is(PERSON_IDENT));
@@ -85,7 +87,7 @@ public class ServiceMeldingMedKontaktInfoMapperTest {
 		ServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
 		varsel.setTilhoerendeOrganisasjon(null);
 
-		BestillServiceMeldingMedKontaktInfoTo to = mapper.map(varsel);
+		BestillVarselTo to = mapper.map(varsel);
 
 		assertThat(to.getOrgNr(), nullValue());
 	}

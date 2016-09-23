@@ -20,7 +20,6 @@ public class HentDigitalKontaktinformasjonMapper {
 		Kontaktinformasjon dki = response.getDigitalKontaktinformasjon();
 
 		KontaktregisterTo.KontaktregisterToBuilder builder = aKontaktregisterTo()
-				.personIdent(dki.getPersonident())
 				.reservasjon(mapStringToBool(dki.getReservasjon()));
 
 		if (dki.getEpostadresse() != null) {
@@ -50,5 +49,4 @@ public class HentDigitalKontaktinformasjonMapper {
 				return false;
 		}
 	}
-
 }

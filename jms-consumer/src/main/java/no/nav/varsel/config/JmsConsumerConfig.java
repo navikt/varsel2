@@ -9,6 +9,8 @@ import no.nav.varsel.jms.consumer.tvarsel003.BestillVarselConsumer;
 import no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapper;
 import no.nav.varsel.jms.consumer.tvarsel004.StoppReVarselConsumer;
 import no.nav.varsel.jms.consumer.tvarsel004.support.StoppReVarselMapper;
+import no.nav.varsel.jms.consumer.tvarsel006.ServiceMeldingMedKontaktInfoConsumer;
+import no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -22,7 +24,8 @@ import org.springframework.context.annotation.Import;
 		BestillServicemeldingConsumer.class,
 		VarselKvitteringConsumer.class,
 		BestillVarselConsumer.class,
-		StoppReVarselConsumer.class})
+		StoppReVarselConsumer.class,
+		ServiceMeldingMedKontaktInfoConsumer.class})
 @Configuration
 public class JmsConsumerConfig {
 
@@ -49,5 +52,10 @@ public class JmsConsumerConfig {
 	@Bean
 	public StoppReVarselMapper stoppReVarselMapper() {
 		return new StoppReVarselMapper();
+	}
+
+	@Bean
+	public ServiceMeldingMedKontaktInfoMapper serviceMeldingMedKontaktInfoMapper() {
+		return new ServiceMeldingMedKontaktInfoMapper();
 	}
 }

@@ -61,6 +61,7 @@ public class VarselBestillingDomainMapper {
 				.varseltypeId(bestillingTo.getVarseltypeId())
 				.utlopTidspunkt(bestillingTo.getUtloepstidspunkt())
 				.fnr(bestillingTo.getPersonIdent())
+				.orgNr(bestillingTo.getOrgNr())
 				.aktorId(bestillingTo.getAktoerId())
 				.bestillingTidspunkt(LocalDateTime.now())
 				.parameters(bestillingTo.getParameters().entrySet().stream()

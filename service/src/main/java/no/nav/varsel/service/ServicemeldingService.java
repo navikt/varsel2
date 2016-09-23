@@ -1,5 +1,7 @@
 package no.nav.varsel.service;
 
+import static org.springframework.util.StringUtils.hasText;
+
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.to.AktoerTo;
@@ -14,9 +16,11 @@ import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
 
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +38,8 @@ public class ServicemeldingService {
 	private VarselInfoConsumer varselInfoConsumer;
 	@Inject
 	private HentDigitalKontaktinformasjonConsumer dkifConsumer;
-
+	@Inject
+	private VarselKanalDecider varselKanalDecider;
 	@Inject
 	private VarselutsendingProducer varselutsendingProducer;
 	@Inject
@@ -53,10 +58,21 @@ public class ServicemeldingService {
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestilling.getVarseltypeId());
 		bestilling.setVarselBestillingId(UUID.randomUUID().toString());
 		validateVarselInfoForBestilling(bestilling, varselInfoTo);
+
 		overridePreferertKanalForTestmelding(bestilling, varselInfoTo);
 
-		KontaktregisterTo kontaktregisterTo = dkifConsumer
-				.hentDigitalKontaktinformasjonAndDecideKanal(bestilling.getPersonIdent(), varselInfoTo.getPreferertKanal());
+		KontaktregisterTo kontaktregisterTo;
+		if (hasKontaktInfo(bestilling)) {
+			varselInfoTo.getPreferertKanal().remove(KanalCode.DITT_NAV);
+			kontaktregisterTo = new KontaktregisterTo();
+			kontaktregisterTo.setMobiltelefonnummer(bestilling.getMobiltelefonnummer());
+			kontaktregisterTo.setEpostadresse(bestilling.getEpost());
+		} else {
+			kontaktregisterTo = dkifConsumer.hentDigitalKontaktinformasjon(bestilling.getPersonIdent());
+		}
+
+		Collection<KanalCode> kanalCodes = varselKanalDecider.decideKanaler(kontaktregisterTo, varselInfoTo.getPreferertKanal());
+		kontaktregisterTo.setKanaler(kanalCodes);
 
 		Varselbestilling varselbestilling = domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo);
 
@@ -66,6 +82,10 @@ public class ServicemeldingService {
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
 			varselutsendingProducer.produce(varselutsendingTo);
 		}
+	}
+
+	private boolean hasKontaktInfo(BestillVarselTo bestilling) {
+		return hasText(bestilling.getMobiltelefonnummer()) || hasText(bestilling.getEpost());
 	}
 
 	private void validateVarselInfoForBestilling(BestillVarselTo to, VarselInfoTo varselInfoTo) {

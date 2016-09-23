@@ -42,7 +42,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 		return kontaktregisterTo;
 	}
 
-	KontaktregisterTo hentDigitalKontaktinformasjon(String personIdent) {
+	public KontaktregisterTo hentDigitalKontaktinformasjon(String personIdent) {
 		HentDigitalKontaktinformasjonRequest request = new HentDigitalKontaktinformasjonRequest();
 		request.setPersonident(personIdent);
 		HentDigitalKontaktinformasjonResponse response;

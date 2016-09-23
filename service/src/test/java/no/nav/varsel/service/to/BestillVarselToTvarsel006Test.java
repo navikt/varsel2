@@ -1,4 +1,4 @@
-package no.nav.varsel.service.tvarsel006.to;
+package no.nav.varsel.service.to;
 
 import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.repo.TestdataUtil;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  *
  * @author Roar Bjurstrom, Visma Consulting.
  */
-public class BestillServiceMeldingMedKontaktInfoToTest {
+public class BestillVarselToTvarsel006Test {
 
 	private static final String ORG_NR = "orgnr";
 	private static final String VARSELTYPE_ID = "varsel";
@@ -29,7 +29,7 @@ public class BestillServiceMeldingMedKontaktInfoToTest {
 
 	@Test
 	public void shouldValidateMissingMottaker() throws Exception {
-		BestillServiceMeldingMedKontaktInfoTo to = createTo();
+		BestillVarselTo to = createTo();
 		to.setPersonIdent(null);
 		to.setAktoerId(null);
 
@@ -39,7 +39,7 @@ public class BestillServiceMeldingMedKontaktInfoToTest {
 
 	@Test
 	public void shouldValidateMissingVarseltypeId() throws Exception {
-		BestillServiceMeldingMedKontaktInfoTo to = createTo();
+		BestillVarselTo to = createTo();
 		to.setVarseltypeId(null);
 
 		expectedException.expectMessage("varseltypeId cannot be empty or missing");
@@ -48,7 +48,7 @@ public class BestillServiceMeldingMedKontaktInfoToTest {
 
 	@Test
 	public void shouldValidateMissingParamKey() throws Exception {
-		BestillServiceMeldingMedKontaktInfoTo to = createTo();
+		BestillVarselTo to = createTo();
 		to.getParameters().put(null, "val2");
 
 		expectedException.expectMessage("parameter.key cannot be empty or missing");
@@ -57,7 +57,7 @@ public class BestillServiceMeldingMedKontaktInfoToTest {
 
 	@Test
 	public void shouldValidateMissingParamValue() throws Exception {
-		BestillServiceMeldingMedKontaktInfoTo to = createTo();
+		BestillVarselTo to = createTo();
 		to.getParameters().put("key2", null);
 
 		expectedException.expectMessage("parameter.value cannot be empty or missing");
@@ -66,7 +66,7 @@ public class BestillServiceMeldingMedKontaktInfoToTest {
 
 	@Test
 	public void shouldValidateMissingEpostAndMobilnr() throws Exception {
-		BestillServiceMeldingMedKontaktInfoTo to = createTo();
+		BestillVarselTo to = createTo();
 		to.setMobiltelefonnummer(null);
 		to.setEpost(null);
 
@@ -76,15 +76,15 @@ public class BestillServiceMeldingMedKontaktInfoToTest {
 
 	@Test
 	public void shouldValidateMissingOrgNr() throws Exception {
-		BestillServiceMeldingMedKontaktInfoTo to = createTo();
+		BestillVarselTo to = createTo();
 		to.setOrgNr(null);
 
 		expectedException.expectMessage("organisasjonsnummer cannot be empty or missing");
 		to.validateTvarsel006Input();
 	}
 
-	private static BestillServiceMeldingMedKontaktInfoTo createTo() {
-		BestillServiceMeldingMedKontaktInfoTo to = new BestillServiceMeldingMedKontaktInfoTo();
+	private static BestillVarselTo createTo() {
+		BestillVarselTo to = new BestillVarselTo();
 		to.setMottaker(AktoerTo.newAktoerId(TestdataUtil.AKTOR_ID));
 		to.setOrgNr(ORG_NR);
 		to.setEpost(EPOST);

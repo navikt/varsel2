@@ -127,6 +127,7 @@ public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 		varselbestilling.setUtlopTidspunkt(utlopTidspunkt);
 		varselbestilling.setFnr(fnr);
 		varselbestilling.setAktorId(aktorId);
+		varselbestilling.setOrgNr(orgNr);
 		varselbestilling.setBestillingTidspunkt(bestillingTidspunkt);
 		varselbestilling.setRevarslingIntervall(revarslingIntervall);
 		varselbestilling.setAntallRevarslinger(antallRevarslinger);

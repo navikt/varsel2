@@ -9,21 +9,21 @@ import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicem
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.utility.XmlGregorianConverter;
 import no.nav.varsel.service.to.AktoerBestillingTo;
-import no.nav.varsel.service.tvarsel006.to.BestillServiceMeldingMedKontaktInfoTo;
+import no.nav.varsel.service.to.BestillVarselTo;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Maps {@link ServicemeldingMedKontaktinformasjon} to {@link BestillServiceMeldingMedKontaktInfoTo}
+ * Maps {@link ServicemeldingMedKontaktinformasjon} to {@link BestillVarselTo}
  *
  * @author Roar Bjurstrom, Visma Consulting.
  */
 public class ServiceMeldingMedKontaktInfoMapper {
 
-	public BestillServiceMeldingMedKontaktInfoTo map(ServicemeldingMedKontaktinformasjon from) {
-		BestillServiceMeldingMedKontaktInfoTo to = new BestillServiceMeldingMedKontaktInfoTo();
+	public BestillVarselTo map(ServicemeldingMedKontaktinformasjon from) {
+		BestillVarselTo to = new BestillVarselTo();
 		to.setOrgNr(from.getTilhoerendeOrganisasjon() != null ? from.getTilhoerendeOrganisasjon().getOrgnummer() : null);
 		mapKontaktInformasjon(from, to);
 		to.setVarseltypeId(from.getVarseltypeId());
@@ -33,7 +33,7 @@ public class ServiceMeldingMedKontaktInfoMapper {
 		return to;
 	}
 
-	private void mapKontaktInformasjon(ServicemeldingMedKontaktinformasjon input, BestillServiceMeldingMedKontaktInfoTo to) {
+	private void mapKontaktInformasjon(ServicemeldingMedKontaktinformasjon input, BestillVarselTo to) {
 		for (Kontaktinformasjon kontaktinformasjon : input.getKontaktinformasjonListe()) {
 			String kanal = kontaktinformasjon.getKanal() != null ? kontaktinformasjon.getKanal().getValue() : null;
 			if (KanalCode.SMS.getKommunikasjonskanal().equals(kanal)) {

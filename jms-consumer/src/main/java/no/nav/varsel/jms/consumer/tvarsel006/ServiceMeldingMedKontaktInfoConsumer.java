@@ -8,7 +8,8 @@ import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapper;
 import no.nav.varsel.jms.to.xml.JmsReply;
-import no.nav.varsel.service.tvarsel006.to.BestillServiceMeldingMedKontaktInfoTo;
+import no.nav.varsel.service.ServicemeldingService;
+import no.nav.varsel.service.to.BestillVarselTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListener;
@@ -31,6 +32,8 @@ public class ServiceMeldingMedKontaktInfoConsumer extends AbstractJmsConsumer<Se
 
 	@Inject
 	private ServiceMeldingMedKontaktInfoMapper mapper;
+	@Inject
+	private ServicemeldingService servicemeldingService;
 
 	public ServiceMeldingMedKontaktInfoConsumer() {
 		super(BESTILL_SERVICEMELDING_KONTAKTINFO, ServicemeldingMedKontaktinformasjon.class);
@@ -38,10 +41,12 @@ public class ServiceMeldingMedKontaktInfoConsumer extends AbstractJmsConsumer<Se
 
 	@Override
 	protected void handleMessage(ObjectMessageWrapper<ServicemeldingMedKontaktinformasjon> objectMessageWrapper) {
-		BestillServiceMeldingMedKontaktInfoTo to = mapper.map(objectMessageWrapper.getObject());
+		BestillVarselTo to = mapper.map(objectMessageWrapper.getObject());
 		to.validateTvarsel006Input();
 
-		//TODO Create service
+		LOGG.debug(String.format("Mottatt varsel %s til %s", to.getVarseltypeId(), to.createAktoerTo()));
+
+		servicemeldingService.bestillServicemelding(to);
 	}
 
 	@Override
