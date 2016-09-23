@@ -24,11 +24,11 @@ import org.junit.rules.ExpectedException;
 import java.time.LocalDateTime;
 
 /**
- * Unit test for {@link ServiceMeldingMedKontaktInfoMapper}
+ * Unit test for {@link ServiceMeldingMedKontaktInfoMapperTEMP}
  *
  * @author Roar Bjurstrom, Visma Consulting.
  */
-public class ServiceMeldingMedKontaktInfoMapperTest {
+public class ServiceMeldingMedKontaktInfoMapperTEMPTest {
 
 	public static final String KEY = "mottaker";
 	public static final String VAL = "val";
@@ -43,7 +43,7 @@ public class ServiceMeldingMedKontaktInfoMapperTest {
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
 
-	private ServiceMeldingMedKontaktInfoMapper mapper = new ServiceMeldingMedKontaktInfoMapper();
+	private ServiceMeldingMedKontaktInfoMapperTEMP mapper = new ServiceMeldingMedKontaktInfoMapperTEMP();
 
 	@Test
 	public void shouldMap() throws Exception {

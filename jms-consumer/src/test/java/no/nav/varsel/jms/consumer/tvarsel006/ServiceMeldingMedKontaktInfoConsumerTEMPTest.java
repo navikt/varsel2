@@ -2,13 +2,13 @@ package no.nav.varsel.jms.consumer.tvarsel006;
 
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static no.nav.varsel.jms.consumer.AbstractJmsConsumer.JMS_NOBACKOUTLOG;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTest.AKTOER_ID;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTest.EPOST;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTest.ORGNUMMER;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTest.UTLOEPS_TIDSPUNKT;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTest.VAL;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTest.VARSELTYPE_ID;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTest.createServicemeldingMedKontaktinformasjon;
+import static no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTEMPTest.AKTOER_ID;
+import static no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTEMPTest.EPOST;
+import static no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTEMPTest.ORGNUMMER;
+import static no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTEMPTest.UTLOEPS_TIDSPUNKT;
+import static no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTEMPTest.VAL;
+import static no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTEMPTest.VARSELTYPE_ID;
+import static no.nav.varsel.jms.consumer.tvarsel006.support.ServiceMeldingMedKontaktInfoMapperTEMPTest.createServicemeldingMedKontaktinformasjon;
 import static no.nav.varsel.jms.producer.VarselutsendingProducer.FEIL_MQ_UT;
 import static no.nav.varsel.mock.AktoerV2Mock.PERSON_IDENT;
 import static no.nav.varsel.repo.TestdataUtil.FUNKSJONELL_FEIL;
@@ -42,11 +42,11 @@ import javax.xml.bind.JAXBElement;
 import java.util.UUID;
 
 /**
- * ITest for {@link ServiceMeldingMedKontaktInfoConsumer}
+ * ITest for {@link ServiceMeldingMedKontaktInfoConsumerTEMP}
  *
  * @author Roar Bjurstrom, Visma Consulting.
  */
-public class ServiceMeldingMedKontaktInfoConsumerTest extends AbstractConsumerJmsTest {
+public class ServiceMeldingMedKontaktInfoConsumerTEMPTest extends AbstractConsumerJmsTest {
 
 	private TestUtils.MockAppender loggerMock = TestUtils.getMockedAppender(JMS_NOBACKOUTLOG);
 
