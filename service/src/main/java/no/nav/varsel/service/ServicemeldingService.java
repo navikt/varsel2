@@ -51,13 +51,13 @@ public class ServicemeldingService {
 		bestilling.setMottaker(fetchedAktoerTo);
 
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestilling.getVarseltypeId());
+		bestilling.setVarselBestillingId(UUID.randomUUID().toString());
 		validateVarselInfoForBestilling(bestilling, varselInfoTo);
 		overridePreferertKanalForTestmelding(bestilling, varselInfoTo);
 
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
 				.hentDigitalKontaktinformasjonAndDecideKanal(bestilling.getPersonIdent(), varselInfoTo.getPreferertKanal());
 
-		bestilling.setVarselBestillingId(UUID.randomUUID().toString());
 		Varselbestilling varselbestilling = domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo);
 
 		varselbestillingRepo.saveAndFlush(varselbestilling);

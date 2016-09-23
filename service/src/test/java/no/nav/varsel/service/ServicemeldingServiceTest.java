@@ -5,7 +5,6 @@ import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
 import static no.nav.varsel.repo.TestdataUtil.FNR;
 import static no.nav.varsel.repo.TestdataUtil.OVERSTYRT_PREFERERT_KANAL;
 import static no.nav.varsel.repo.TestdataUtil.PREFERERT_KANAL;
-import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -124,15 +123,11 @@ public class ServicemeldingServiceTest {
 	public void throwsInaktivVarselmalExceptionForInaktivVarselmal() {
 		expectedException.expectMessage(
 				"Det er ikke mulig å bestille servicemelding for mottaker med mottakerId=" +
-						FNR +
-						" og bestillingId=" + VARSELBESTILLING_ID +
-						" med inaktiv varselmal med varseltypeId=" +
-						TestdataUtil.VARSELTYPE_ID + "."
-		);
+						FNR + " og bestillingId=");
+		expectedException.expectMessage(" med inaktiv varselmal med varseltypeId=" + TestdataUtil.VARSELTYPE_ID + ".");
 
 		expectedException.expect(VarselInaktivVarselmalException.class);
 		bestilling.setTestvarsel(false);
-		bestilling.setVarselBestillingId(VARSELBESTILLING_ID);
 		varselInfoTo.setInaktiv(true);
 		varselInfoTo.setVarseltypeId(VARSELTYPE_ID);
 		servicemeldingService.bestillServicemelding(bestilling);
@@ -146,7 +141,7 @@ public class ServicemeldingServiceTest {
 		try {
 			servicemeldingService.bestillServicemelding(bestilling);
 			fail();
-		} catch(VarselInaktivVarselmalException ive) {
+		} catch (VarselInaktivVarselmalException ive) {
 			verify(varselbestillingRepo, never()).saveAndFlush(anyObject());
 		}
 	}
