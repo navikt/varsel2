@@ -17,6 +17,8 @@ import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -31,6 +33,8 @@ import java.util.UUID;
  * @author Andreas Skomedal, Visma Consulting.
  */
 public class ServicemeldingService {
+
+	private static final Logger LOGG = LoggerFactory.getLogger(ServicemeldingService.class);
 
 	@Inject
 	private AktoerService aktoerService;
@@ -81,6 +85,9 @@ public class ServicemeldingService {
 		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper.map(varselbestilling);
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
 			varselutsendingProducer.produce(varselutsendingTo);
+			LOGG.info("Sending servicevarsel with varselbestillingsId=" + varselbestilling.getVarselbestillingId()
+					+ ", varselTypeId=" + varselbestilling.getVarseltypeId()
+					+ " to kanal=" + varselutsendingTo.getKanal());
 		}
 	}
 
