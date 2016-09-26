@@ -48,10 +48,11 @@ public class VarselbestillingRepoImpl implements VarselbestillingRepoCustom {
 
 		List<Varselbestilling> resultList = query.getResultList();
 
-		return resultList.stream().filter(this::hasAtLeastOneFerdigbehandletVarsel).collect(Collectors.toList());
+		return resultList.stream().filter(this::hasNoOrgNrAndhasAtLeastOneFerdigbehandletVarsel).collect(Collectors.toList());
 	}
 
-	private boolean hasAtLeastOneFerdigbehandletVarsel(Varselbestilling vb) {
-		return vb.getVarsels().stream().anyMatch(v -> StatusCode.FERDIGBEHANDLET.equals(v.getStatus()));
+	private boolean hasNoOrgNrAndhasAtLeastOneFerdigbehandletVarsel(Varselbestilling vb) {
+		return vb.getOrgNr() == null
+				&& vb.getVarsels().stream().anyMatch(v -> StatusCode.FERDIGBEHANDLET.equals(v.getStatus()));
 	}
 }
