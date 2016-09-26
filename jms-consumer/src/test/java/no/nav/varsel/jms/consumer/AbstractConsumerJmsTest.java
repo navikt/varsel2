@@ -67,7 +67,7 @@ public abstract class AbstractConsumerJmsTest {
 		varselbestillingRepo.deleteAll();
 	}
 
-	protected JmsReply sendMessage(Queue queue, Object message) {
+	protected JmsReply sendMessage(Queue queue, JAXBElement<?> message) {
 		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
@@ -89,7 +89,7 @@ public abstract class AbstractConsumerJmsTest {
 		return (T) response;
 	}
 
-	protected Message sendMessageListenBoq(Queue queue, Object message) {
+	protected Message sendMessageListenBoq(Queue queue, JAXBElement<?> message) {
 		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {

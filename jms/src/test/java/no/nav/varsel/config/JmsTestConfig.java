@@ -60,6 +60,7 @@ public class JmsTestConfig {
 		ctx.bind("java:/jboss/varselutsending", new ActiveMQQueue("mq_varselutsending"));
 		ctx.bind("java:/jboss/bestillVarsel", new ActiveMQQueue("mq_bestillVarsel"));
 		ctx.bind("java:/jboss/revarselStopp", new ActiveMQQueue("mq_revarselStopp"));
+		ctx.bind("java:/jboss/bestillServicemeldingKontaktInfo", new ActiveMQQueue("mq_bestillServicemeldingKontaktInfo"));
 
 		// Test queues
 		ctx.bind("java:/jboss/backout", new ActiveMQQueue("backout"));

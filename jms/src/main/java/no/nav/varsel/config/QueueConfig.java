@@ -2,6 +2,7 @@ package no.nav.varsel.config;
 
 import static no.nav.varsel.config.JmsConfig.getJndiObject;
 import static no.nav.varsel.config.support.QueueInfo.BESTILL_SERVICEMELDING;
+import static no.nav.varsel.config.support.QueueInfo.BESTILL_SERVICEMELDING_KONTAKTINFO;
 import static no.nav.varsel.config.support.QueueInfo.BESTILL_VARSEL;
 import static no.nav.varsel.config.support.QueueInfo.REVARSEL_STOPP;
 import static no.nav.varsel.config.support.QueueInfo.VARSELUTSENDING;
@@ -50,6 +51,11 @@ public class QueueConfig {
 	}
 
 	@Bean
+	public Queue bestillServicemeldingKontaktInfoQueue() {
+		return getQueue("java:/jboss/bestillServicemeldingKontaktInfo");
+	}
+
+	@Bean
 	public Map<QueueInfo, Queue> queueOverview() {
 		HashMap<QueueInfo, Queue> map = Maps.newHashMap();
 		map.put(BESTILL_SERVICEMELDING, bestillServicemeldingQueue());
@@ -57,6 +63,7 @@ public class QueueConfig {
 		map.put(VARSEL_KVITTERING, varselKvitteringQueue());
 		map.put(VARSELUTSENDING, varselutsendingQueue());
 		map.put(REVARSEL_STOPP, revarselStoppQueue());
+		map.put(BESTILL_SERVICEMELDING_KONTAKTINFO, bestillServicemeldingKontaktInfoQueue());
 		return map;
 	}
 

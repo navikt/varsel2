@@ -4,7 +4,7 @@ import no.nav.melding.virksomhet.stopprevarsel.v1.stopprevarsel.StoppReVarsel;
 import no.nav.varsel.service.tvarsel004.to.StoppReVarselTo;
 
 /**
- * Mapper for {@link StoppReVarselMapper}
+ * Mapper for {@link StoppReVarsel}
  *
  * @author Hiep Luong Nguyen, Computas
  */

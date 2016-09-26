@@ -13,7 +13,8 @@ public enum QueueInfo {
 	VARSEL_KVITTERING("VARSELPRODUKSJON.KVITTERING", "varselKvittering", IN, false),
 	VARSELUTSENDING("VARSEL_INN", "varselutsending", OUT, false),
 	BESTILL_VARSEL("VARSELPRODUKSJON.BEST_VARSEL_M_HANDLING", "bestillVarsel", IN, false),
-	REVARSEL_STOPP("VARSELPRODUKSJON.STOPP_VARSEL_UTSENDING", "revarselStopp", IN, false);
+	REVARSEL_STOPP("VARSELPRODUKSJON.STOPP_VARSEL_UTSENDING", "revarselStopp", IN, false),
+	BESTILL_SERVICEMELDING_KONTAKTINFO("VARSELPRODUKSJON.BEST_SRVMLD_M_KONTAKT", "bestillServicemeldingMedKontaktInfo", IN, false);
 
 	private final String fasitName;
 	private final String internalName;

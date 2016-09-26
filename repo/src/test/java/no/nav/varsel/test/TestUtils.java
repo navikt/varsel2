@@ -1,8 +1,18 @@
 package no.nav.varsel.test;
 
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.when;
+
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.LoggingEvent;
+import ch.qos.logback.core.Appender;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.mockito.ArgumentMatcher;
+import org.mockito.Mockito;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -14,6 +24,54 @@ import java.time.temporal.Temporal;
  * @author Andreas Skomedal, Visma Consulting.
  */
 public class TestUtils {
+
+
+	/**
+	 * Get a log mock for a given class, use {@link MockAppender#verify(java.lang.String)} to assert logs
+	 */
+	public static MockAppender getMockedAppender(String name) {
+		Logger testLogger = (Logger) LoggerFactory.getLogger(name);
+		return getMockAppender(testLogger);
+	}
+
+	/**
+	 * Get a log mock for a given class, use {@link MockAppender#verify(java.lang.String)} to assert logs
+	 */
+	public static MockAppender getMockedAppender(Class clazz) {
+		Logger testLogger = (Logger) LoggerFactory.getLogger(clazz);
+		return getMockAppender(testLogger);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static MockAppender getMockAppender(Logger testLogger) {
+		Appender<ILoggingEvent> mockAppender = Mockito.mock(Appender.class);
+		when(mockAppender.getName()).thenReturn("MOCK");
+		testLogger.addAppender(mockAppender);
+		return new MockAppender(mockAppender);
+	}
+
+	public static class MockAppender {
+
+		private final Appender<ILoggingEvent> mockAppender;
+
+		MockAppender(Appender<ILoggingEvent> mockAppender) {
+			this.mockAppender = mockAppender;
+		}
+
+		public void verify(String token) {
+			Mockito.verify(mockAppender).doAppend(argThat(hasMessageContaining(token)));
+		}
+
+		private static ArgumentMatcher<ILoggingEvent> hasMessageContaining(final String token) {
+			return new ArgumentMatcher<ILoggingEvent>() {
+				@Override
+				public boolean matches(final Object argument) {
+					return ((LoggingEvent) argument).getFormattedMessage().contains(token);
+				}
+			};
+		}
+
+	}
 
 	public static Matcher<? super LocalDateTime> aboutNow() {
 		return new BaseMatcher<LocalDateTime>() {

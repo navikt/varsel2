@@ -31,7 +31,8 @@ import java.io.StringReader;
  */
 public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 
-	private static final Logger NO_BACKOUTLOG = LoggerFactory.getLogger("no.nav.varsel.jms.nobackoutlog");
+	public static final String JMS_NOBACKOUTLOG = "no.nav.varsel.jms.nobackoutlog";
+	private static final Logger NO_BACKOUTLOG = LoggerFactory.getLogger(JMS_NOBACKOUTLOG);
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractJmsConsumer.class);
 
 	private final JmsConsumer jmsConsumer;

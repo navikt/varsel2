@@ -27,12 +27,11 @@ import javax.jms.TextMessage;
 public class StoppReVarselConsumer extends AbstractJmsConsumer<StoppReVarsel> {
 	private static final Logger LOGG = LoggerFactory.getLogger(StoppReVarselConsumer.class);
 	private static final String REVARSEL_STOPP_QUEUE = "revarselStoppQueue";
-	static final String TVARSEL004 = "tvarsel004";
 
 	@Inject
-	StoppReVarselMapper stoppReVarselMapper;
+	private StoppReVarselMapper stoppReVarselMapper;
 	@Inject
-	StoppReVarselService stoppReVarselService;
+	private StoppReVarselService stoppReVarselService;
 
 	public StoppReVarselConsumer() {
 		super(REVARSEL_STOPP, StoppReVarsel.class);

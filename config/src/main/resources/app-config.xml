@@ -31,6 +31,7 @@
 			<queue alias="VARSEL_INN" jndi="java:/jboss/varselutsending"/>
 			<queue alias="VARSELPRODUKSJON.BEST_VARSEL_M_HANDLING" jndi="java:/jboss/bestillVarsel"/>
 			<queue alias="VARSELPRODUKSJON.STOPP_VARSEL_UTSENDING" jndi="java:/jboss/revarselStopp"/>
+			<queue alias="VARSELPRODUKSJON.BEST_SRVMLD_M_KONTAKT" jndi="java:/jboss/bestillServicemeldingKontaktInfo"/>
 		</queueManager>
 		<ldap alias="ldap" mapToProperty="ldap"/>
 		<webservice mapToProperty="aktoerv2.ws" alias="Aktoer_v2"/>

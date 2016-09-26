@@ -1,5 +1,7 @@
 package no.nav.varsel.service;
 
+import static org.springframework.util.StringUtils.hasText;
+
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.to.AktoerTo;
@@ -14,9 +16,13 @@ import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
@@ -28,13 +34,16 @@ import java.util.UUID;
  */
 public class ServicemeldingService {
 
+	private static final Logger LOGG = LoggerFactory.getLogger(ServicemeldingService.class);
+
 	@Inject
 	private AktoerService aktoerService;
 	@Inject
 	private VarselInfoConsumer varselInfoConsumer;
 	@Inject
 	private HentDigitalKontaktinformasjonConsumer dkifConsumer;
-
+	@Inject
+	private VarselKanalDecider varselKanalDecider;
 	@Inject
 	private VarselutsendingProducer varselutsendingProducer;
 	@Inject
@@ -51,13 +60,26 @@ public class ServicemeldingService {
 		bestilling.setMottaker(fetchedAktoerTo);
 
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestilling.getVarseltypeId());
+		bestilling.setVarselBestillingId(UUID.randomUUID().toString());
 		validateVarselInfoForBestilling(bestilling, varselInfoTo);
+
 		overridePreferertKanalForTestmelding(bestilling, varselInfoTo);
 
-		KontaktregisterTo kontaktregisterTo = dkifConsumer
-				.hentDigitalKontaktinformasjonAndDecideKanal(bestilling.getPersonIdent(), varselInfoTo.getPreferertKanal());
+		KontaktregisterTo kontaktregisterTo;
+		if (hasKontaktInfo(bestilling)) {
+			//TVARSEL006 Path
+			varselInfoTo.getPreferertKanal().remove(KanalCode.DITT_NAV);
+			kontaktregisterTo = new KontaktregisterTo();
+			kontaktregisterTo.setMobiltelefonnummer(bestilling.getMobiltelefonnummer());
+			kontaktregisterTo.setEpostadresse(bestilling.getEpost());
+		} else {
+			//TVARSEL001 Path
+			kontaktregisterTo = dkifConsumer.hentDigitalKontaktinformasjon(bestilling.getPersonIdent());
+		}
 
-		bestilling.setVarselBestillingId(UUID.randomUUID().toString());
+		Collection<KanalCode> kanalCodes = varselKanalDecider.decideKanaler(kontaktregisterTo, varselInfoTo.getPreferertKanal());
+		kontaktregisterTo.setKanaler(kanalCodes);
+
 		Varselbestilling varselbestilling = domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo);
 
 		varselbestillingRepo.saveAndFlush(varselbestilling);
@@ -65,7 +87,14 @@ public class ServicemeldingService {
 		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper.map(varselbestilling);
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
 			varselutsendingProducer.produce(varselutsendingTo);
+			LOGG.info("Sending servicevarsel with varselbestillingsId=" + varselbestilling.getVarselbestillingId()
+					+ ", varselTypeId=" + varselbestilling.getVarseltypeId()
+					+ " to kanal=" + varselutsendingTo.getKanal());
 		}
+	}
+
+	private boolean hasKontaktInfo(BestillVarselTo bestilling) {
+		return hasText(bestilling.getMobiltelefonnummer()) || hasText(bestilling.getEpost());
 	}
 
 	private void validateVarselInfoForBestilling(BestillVarselTo to, VarselInfoTo varselInfoTo) {
