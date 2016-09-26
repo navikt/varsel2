@@ -16,7 +16,6 @@ public class KontaktregisterTo implements Serializable {
 
 	public static final int DATE_VALID_MONTHS = 18;
 
-	private String personIdent;
 	private boolean reservasjon;
 	private String epostadresse;
 	private LocalDateTime epostSistOppdatert;
@@ -26,14 +25,6 @@ public class KontaktregisterTo implements Serializable {
 	private LocalDateTime mobiltelefonSistVerifisert;
 	private String kontaktInfo;
 	private Collection<KanalCode> kanaler;
-
-	public String getPersonIdent() {
-		return personIdent;
-	}
-
-	public void setPersonIdent(String personIdent) {
-		this.personIdent = personIdent;
-	}
 
 	public boolean isReservasjon() {
 		return reservasjon;
@@ -129,7 +120,6 @@ public class KontaktregisterTo implements Serializable {
 	}
 
 	public static final class KontaktregisterToBuilder {
-		private String personIdent;
 		private boolean reservasjon;
 		private String epostadresse;
 		private LocalDateTime epostSistOppdatert;
@@ -145,11 +135,6 @@ public class KontaktregisterTo implements Serializable {
 
 		public static KontaktregisterToBuilder aKontaktregisterTo() {
 			return new KontaktregisterToBuilder();
-		}
-
-		public KontaktregisterToBuilder personIdent(String personIdent) {
-			this.personIdent = personIdent;
-			return this;
 		}
 
 		public KontaktregisterToBuilder reservasjon(boolean reservasjon) {
@@ -199,7 +184,6 @@ public class KontaktregisterTo implements Serializable {
 
 		public KontaktregisterTo build() {
 			KontaktregisterTo kontaktregisterTo = new KontaktregisterTo();
-			kontaktregisterTo.setPersonIdent(personIdent);
 			kontaktregisterTo.setReservasjon(reservasjon);
 			kontaktregisterTo.setEpostadresse(epostadresse);
 			kontaktregisterTo.setEpostSistOppdatert(epostSistOppdatert);

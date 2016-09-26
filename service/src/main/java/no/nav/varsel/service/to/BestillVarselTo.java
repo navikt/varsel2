@@ -18,37 +18,42 @@ import java.util.Map;
 public class BestillVarselTo extends AktoerBestillingTo {
 
 	public static final String TESTVARSEL = "Testvarsel";
+	private static final String VALIDATION_FAILED_FOR_INPUT = "Validation failed for input, ";
+	protected String varseltypeId;
+	private Map<String, String> parameters = new HashMap<>();
+	private LocalDateTime utloepstidspunkt;
 	private String varselBestillingId;
 	private LocalDateTime utsendelsesTidspunkt;
 	private Boolean revarsling;
-	private String varseltypeId;
-	private Map<String, String> parameters = new HashMap<>();
-	private LocalDateTime utloepstidspunkt;
 	private Boolean testvarsel = false;
+	private String orgNr;
+	private String epost;
+	private String mobiltelefonnummer;
 
-	public String getVarselBestillingId() {
-		return varselBestillingId;
+	public String getOrgNr() {
+		return orgNr;
 	}
 
-	public void setVarselBestillingId(String varselBestillingId) {
-		this.varselBestillingId = varselBestillingId;
+	public void setOrgNr(String orgNr) {
+		this.orgNr = orgNr;
 	}
 
-	public LocalDateTime getUtsendelsesTidspunkt() {
-		return utsendelsesTidspunkt;
+	public String getEpost() {
+		return epost;
 	}
 
-	public void setUtsendelsesTidspunkt(LocalDateTime utsendelsesTidspunkt) {
-		this.utsendelsesTidspunkt = utsendelsesTidspunkt;
+	public void setEpost(String epost) {
+		this.epost = epost;
 	}
 
-	public Boolean isRevarsling() {
-		return revarsling;
+	public String getMobiltelefonnummer() {
+		return mobiltelefonnummer;
 	}
 
-	public void setRevarsling(Boolean revarsling) {
-		this.revarsling = revarsling;
+	public void setMobiltelefonnummer(String mobiltelefonnummer) {
+		this.mobiltelefonnummer = mobiltelefonnummer;
 	}
+
 
 	public String getVarseltypeId() {
 		return varseltypeId;
@@ -74,6 +79,39 @@ public class BestillVarselTo extends AktoerBestillingTo {
 		this.utloepstidspunkt = utloepstidspunkt;
 	}
 
+	public String getVarselBestillingId() {
+		return varselBestillingId;
+	}
+
+	public void setVarselBestillingId(String varselBestillingId) {
+		this.varselBestillingId = varselBestillingId;
+	}
+
+	private void validate() {
+		assertHasOneIdent();
+		hasText(varseltypeId, "varseltypeId");
+		parameters.forEach((key, val) -> {
+			hasText(key, "parameter.key");
+			hasText(val, "parameter.value");
+		});
+	}
+
+	public LocalDateTime getUtsendelsesTidspunkt() {
+		return utsendelsesTidspunkt;
+	}
+
+	public void setUtsendelsesTidspunkt(LocalDateTime utsendelsesTidspunkt) {
+		this.utsendelsesTidspunkt = utsendelsesTidspunkt;
+	}
+
+	public Boolean isRevarsling() {
+		return revarsling;
+	}
+
+	public void setRevarsling(Boolean revarsling) {
+		this.revarsling = revarsling;
+	}
+
 	public boolean isTestvarsel() {
 		return testvarsel;
 	}
@@ -84,29 +122,29 @@ public class BestillVarselTo extends AktoerBestillingTo {
 
 	public void validateTvarsel001Input() {
 		try {
-			assertHasOneIdent();
-			hasText(varseltypeId, "varseltypeId");
-			parameters.forEach((key, val) -> {
-				hasText(key, "parameter.key");
-				hasText(val, "parameter.value");
-			});
+			validate();
 		} catch (Exception e) {
-			throw new NoJmsBackoutException("Validation failed for input, " + e.getMessage(), e);
+			throw new NoJmsBackoutException(VALIDATION_FAILED_FOR_INPUT + e.getMessage(), e);
 		}
 	}
 
 	public void validateTvarsel003Input() {
 		try {
+			validate();
 			hasText(varselBestillingId, "varselBestillingId");
 			notNull(revarsling, "revarsling");
-			assertHasOneIdent();
-			hasText(varseltypeId, "varseltypeId");
-			parameters.forEach((key, val) -> {
-				hasText(key, "parameter.key");
-				hasText(val, "parameter.value");
-			});
 		} catch (Exception e) {
-			throw new NoJmsBackoutException("Validation failed for input, " + e.getMessage(), e);
+			throw new NoJmsBackoutException(VALIDATION_FAILED_FOR_INPUT + e.getMessage(), e);
+		}
+	}
+
+	public void validateTvarsel006Input() {
+		try {
+			validate();
+			hasText(orgNr, "organisasjonsnummer");
+			hasText(epost == null ? mobiltelefonnummer : epost, "kontaktinformasjon");
+		} catch (Exception e) {
+			throw new NoJmsBackoutException(VALIDATION_FAILED_FOR_INPUT + e.getMessage(), e);
 		}
 	}
 }

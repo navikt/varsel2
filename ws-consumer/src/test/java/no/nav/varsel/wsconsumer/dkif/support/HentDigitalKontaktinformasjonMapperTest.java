@@ -46,7 +46,6 @@ public class HentDigitalKontaktinformasjonMapperTest {
 	@Test
 	public void shouldMapResponse() throws Exception {
 		KontaktregisterTo map = mapper.map(createResponse());
-		assertThat(map.getPersonIdent(), is(ID));
 		assertThat(map.isReservasjon(), is(RESERVASJON));
 		assertThat(map.getEpostadresse(), is(EPOSTADRESSE));
 		assertThat(map.getEpostSistOppdatert(), is(toLocalDateTime(EPOST_OPPDATERT)));

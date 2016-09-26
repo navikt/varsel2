@@ -73,6 +73,17 @@ public class VarselKanalDeciderTest {
 		assertThat(kanaler, containsInAnyOrder(KanalCode.SMS, KanalCode.EPOST));
 	}
 
+	@Test
+	public void shouldPrefEpostOnNullOnlyEpost() throws Exception {
+		Collection<KanalCode> kanaler = decider.decideKanaler(createKontaktTo(EPOST, null), null);
+		assertThat(kanaler, containsInAnyOrder(KanalCode.EPOST));
+	}
+
+	@Test
+	public void shouldPrefSmsOnNullOnlySms() throws Exception {
+		Collection<KanalCode> kanaler = decider.decideKanaler(createKontaktTo(null, MOBIL), null);
+		assertThat(kanaler, containsInAnyOrder(KanalCode.SMS));
+	}
 
 	@Test
 	public void shouldPrefSms() throws Exception {

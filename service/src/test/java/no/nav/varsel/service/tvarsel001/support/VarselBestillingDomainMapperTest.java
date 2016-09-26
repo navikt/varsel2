@@ -46,6 +46,7 @@ public class VarselBestillingDomainMapperTest {
 
 	private static final LocalDateTime UTLOEPSTIDSPUNKT = LocalDateTime.parse("2013-12-03T21:25:45");
 	private static final String AKTOER_ID = "aktoerId";
+	private static final String ORG_NR = "org_nr";
 	private static final String PERSONIDENT = "personident";
 	private static final String VARSLIGNSTYPE = "varslignstype";
 	private static final String KEY = "key";
@@ -88,6 +89,7 @@ public class VarselBestillingDomainMapperTest {
 		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPSTIDSPUNKT));
 		assertThat(varselbestilling.getFnr(), is(PERSONIDENT));
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
+		assertThat(varselbestilling.getOrgNr(), is(ORG_NR));
 		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
 		assertThat(varselbestilling.getVarsels(), hasSize(2));
 
@@ -253,6 +255,7 @@ public class VarselBestillingDomainMapperTest {
 		to.setVarselBestillingId(BESTILLING_ID);
 		to.setPersonIdent(PERSONIDENT);
 		to.setAktoerId(AKTOER_ID);
+		to.setOrgNr(ORG_NR);
 		to.setUtloepstidspunkt(UTLOEPSTIDSPUNKT);
 		to.setParameters(singletonMap(KEY, VALUE));
 		to.setVarseltypeId(VARSLIGNSTYPE);

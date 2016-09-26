@@ -35,7 +35,7 @@ public class BestillVarselToTest {
 		Assert.assertThat(aktoerTo.getMottakerType(), is(MOTTAKER_TYPE));
 	}
 
-	public static BestillVarselTo createTo() {
+	static BestillVarselTo createTo() {
 		BestillVarselTo to = new BestillVarselTo();
 		to.setMottaker(AktoerTo.newAktoerId(MOTTAKER));
 		to.setVarseltypeId("varsel");

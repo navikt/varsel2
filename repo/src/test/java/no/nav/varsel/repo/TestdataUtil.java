@@ -28,6 +28,9 @@ public class TestdataUtil {
 
 	public static final String VARSELBESTILLING_ID = "d9f8f75e-13cb-4766-81c8-306d9d9385b2";
 	public static final String VARSELTYPE_ID = "UT";
+	public static final String ORG_NR = "orgnr";
+	public static final String TLF = "11112222";
+	public static final String EPOST = "test@test.no";
 	public static final Set<KanalCode> PREFERERT_KANAL = Sets.newHashSet(KanalCode.EPOST);
 	public static final Set<KanalCode> OVERSTYRT_PREFERERT_KANAL = Sets.newHashSet(KanalCode.values());
 	public static final LocalDateTime UTLOP_TIDSPUNKT = LocalDateTime.parse("2016-04-16T01:02:03");

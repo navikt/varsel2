@@ -36,14 +36,13 @@ public class HentDigitalKontaktinformasjonConsumer {
 
 	public KontaktregisterTo hentDigitalKontaktinformasjonAndDecideKanal(String personIdent, Set<KanalCode> preferertKanal) {
 		KontaktregisterTo kontaktregisterTo = hentDigitalKontaktinformasjon(personIdent);
-		kontaktregisterTo = kontaktregisterTo == null ? new KontaktregisterTo() : kontaktregisterTo;
 
 		Collection<KanalCode> kanaler = varselKanalDecider.decideKanaler(kontaktregisterTo, preferertKanal);
 		kontaktregisterTo.setKanaler(kanaler);
 		return kontaktregisterTo;
 	}
 
-	KontaktregisterTo hentDigitalKontaktinformasjon(String personIdent) {
+	public KontaktregisterTo hentDigitalKontaktinformasjon(String personIdent) {
 		HentDigitalKontaktinformasjonRequest request = new HentDigitalKontaktinformasjonRequest();
 		request.setPersonident(personIdent);
 		HentDigitalKontaktinformasjonResponse response;
@@ -53,7 +52,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 				HentDigitalKontaktinformasjonPersonIkkeFunnet |
 				HentDigitalKontaktinformasjonSikkerhetsbegrensing e) {
 			LOG.warn(String.format("Feil mot DKIF %s: %s %s", e.getClass().getSimpleName(), e.getMessage(), personIdent));
-			return null;
+			return new KontaktregisterTo();
 		}
 		KontaktregisterTo kontaktregisterTo = mapper.map(response);
 		kontaktregisterTo.cleanExpiredInfo();

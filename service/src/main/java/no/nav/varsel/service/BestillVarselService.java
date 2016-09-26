@@ -18,6 +18,8 @@ import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -31,6 +33,8 @@ import java.util.Set;
  * @author Andreas Skomedal, Visma Consulting.
  */
 public class BestillVarselService {
+
+	private static final Logger LOGG = LoggerFactory.getLogger(BestillVarselService.class);
 
 	@Inject
 	private AktoerService aktoerService;
@@ -132,6 +136,9 @@ public class BestillVarselService {
 
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
 			varselutsendingProducer.produce(varselutsendingTo);
+			LOGG.info("Sending distribusjonsvarsel with varselbestillingsId=" + varselbestilling.getVarselbestillingId()
+					+ ", varselTypeId=" + varselbestilling.getVarseltypeId()
+					+ " to kanal=" + varselutsendingTo.getKanal());
 		}
 	}
 }

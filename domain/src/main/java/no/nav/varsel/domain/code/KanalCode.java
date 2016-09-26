@@ -13,7 +13,7 @@ public enum KanalCode {
 	private String kommunikasjonskanal;
 
 	KanalCode() {
-		this.kommunikasjonskanal = this.toString();
+		this.kommunikasjonskanal = this.name();
 	}
 
 	/**
