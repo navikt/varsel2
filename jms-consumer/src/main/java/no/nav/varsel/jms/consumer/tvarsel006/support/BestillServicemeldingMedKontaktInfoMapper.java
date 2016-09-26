@@ -57,6 +57,8 @@ public class BestillServicemeldingMedKontaktInfoMapper {
 			to.setAktoerId(((AktoerId) fromAktoer).getAktoerId());
 		} else if (fromAktoer instanceof Person) {
 			to.setPersonIdent(((Person) fromAktoer).getIdent());
+		} else {
+			throw new IllegalArgumentException("Could not map invalid AktoerType=" + fromAktoer.getClass());
 		}
 	}
 }

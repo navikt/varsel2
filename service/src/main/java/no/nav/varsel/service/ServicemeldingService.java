@@ -67,11 +67,13 @@ public class ServicemeldingService {
 
 		KontaktregisterTo kontaktregisterTo;
 		if (hasKontaktInfo(bestilling)) {
+			//TVARSEL006 Path
 			varselInfoTo.getPreferertKanal().remove(KanalCode.DITT_NAV);
 			kontaktregisterTo = new KontaktregisterTo();
 			kontaktregisterTo.setMobiltelefonnummer(bestilling.getMobiltelefonnummer());
 			kontaktregisterTo.setEpostadresse(bestilling.getEpost());
 		} else {
+			//TVARSEL001 Path
 			kontaktregisterTo = dkifConsumer.hentDigitalKontaktinformasjon(bestilling.getPersonIdent());
 		}
 

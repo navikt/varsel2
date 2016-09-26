@@ -33,6 +33,7 @@ import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.JmsConsumer;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.test.TestUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -48,12 +49,17 @@ import java.util.UUID;
  */
 public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractConsumerJmsTest {
 
-	private TestUtils.MockAppender loggerMock = TestUtils.getMockedAppender(JMS_NOBACKOUTLOG);
+	private TestUtils.MockAppender loggerMock = null;
 
 	@Inject
 	private Queue bestillServicemeldingKontaktInfoQueue;
 	@Inject
 	private Queue varselutsendingQueue;
+
+	@Before
+	public void setUp() throws Exception {
+		loggerMock = TestUtils.getMockedAppender(JMS_NOBACKOUTLOG);
+	}
 
 	@Test
 	public void shouldNotPutInvalidInputOnBackout() throws Exception {
@@ -63,7 +69,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 
 		isOk(response);
 
-		loggerMock.verify("Nonbackout");
+		loggerMock.verify("Nonbackout Error in service=tvarsel006");
 	}
 
 	@Test
@@ -75,7 +81,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 
 		isOk(response);
 
-		loggerMock.verify("Nonbackout");
+		loggerMock.verify("Nonbackout Error in service=tvarsel006");
 	}
 
 	@Test
@@ -95,9 +101,6 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 
 		isOk(response);
 		assertThat(varselbestillingRepo.count(), is(0L));
-
-		Object receive = receive(varselutsendingQueue);
-		assertThat(receive, nullValue());
 	}
 
 	@Test

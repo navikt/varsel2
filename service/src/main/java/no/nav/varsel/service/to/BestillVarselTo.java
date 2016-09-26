@@ -18,6 +18,7 @@ import java.util.Map;
 public class BestillVarselTo extends AktoerBestillingTo {
 
 	public static final String TESTVARSEL = "Testvarsel";
+	private static final String VALIDATION_FAILED_FOR_INPUT = "Validation failed for input, ";
 	protected String varseltypeId;
 	private Map<String, String> parameters = new HashMap<>();
 	private LocalDateTime utloepstidspunkt;
@@ -123,7 +124,7 @@ public class BestillVarselTo extends AktoerBestillingTo {
 		try {
 			validate();
 		} catch (Exception e) {
-			throw new NoJmsBackoutException("Validation failed for input, " + e.getMessage(), e);
+			throw new NoJmsBackoutException(VALIDATION_FAILED_FOR_INPUT + e.getMessage(), e);
 		}
 	}
 
@@ -133,7 +134,7 @@ public class BestillVarselTo extends AktoerBestillingTo {
 			hasText(varselBestillingId, "varselBestillingId");
 			notNull(revarsling, "revarsling");
 		} catch (Exception e) {
-			throw new NoJmsBackoutException("Validation failed for input, " + e.getMessage(), e);
+			throw new NoJmsBackoutException(VALIDATION_FAILED_FOR_INPUT + e.getMessage(), e);
 		}
 	}
 
@@ -143,7 +144,7 @@ public class BestillVarselTo extends AktoerBestillingTo {
 			hasText(orgNr, "organisasjonsnummer");
 			hasText(epost == null ? mobiltelefonnummer : epost, "kontaktinformasjon");
 		} catch (Exception e) {
-			throw new NoJmsBackoutException("Validation failed for input, " + e.getMessage(), e);
+			throw new NoJmsBackoutException(VALIDATION_FAILED_FOR_INPUT + e.getMessage(), e);
 		}
 	}
 }
