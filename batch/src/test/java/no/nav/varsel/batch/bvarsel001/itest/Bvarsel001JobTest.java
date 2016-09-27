@@ -39,7 +39,7 @@ public class Bvarsel001JobTest extends AbstractBvarsel001Test {
 
 	@Test
 	public void shouldRunJob() throws Exception {
-		createMultipleVarselBestillinger();
+		createMultipleVarselbestillinger();
 		JobExecution jobExecution = launchJob(defaultJobParams());
 
 		assertThat(jobExecution.getExitStatus(), is(ExitStatus.COMPLETED));
@@ -65,7 +65,7 @@ public class Bvarsel001JobTest extends AbstractBvarsel001Test {
 		assertThat(varsel.getVarseltypeId(), is(IGNORED));
 	}
 
-	private void createMultipleVarselBestillinger() {
+	private void createMultipleVarselbestillinger() {
 		// create some that will not be picked
 		varselbestillingRepo.save(createVarselbestillingBuilder()
 				.varseltypeId(IGNORED).nesteVarslingDato(now().plusDays(1)).build());
