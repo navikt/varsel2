@@ -114,7 +114,7 @@ public class Bvarsel001Config {
 		jdbcTasklet.setSql("INSERT " +
 				"INTO ARBTB_BVARSEL001 (varselbestilling_id) " +
 				"SELECT varselbestilling_id FROM VARSELBESTILLING " +
-				"WHERE neste_varsling_dato < trunc(current_date) " +
+				"WHERE neste_varsling_dato <= trunc(current_date) " +
 				"AND varselbestilling_id NOT IN ( SELECT varselbestilling_id FROM ARBTB_BVARSEL001)");
 		return jdbcTasklet;
 	}

@@ -30,9 +30,45 @@ public class Bvarsel001JobTest extends AbstractBvarsel001Test {
 
 	@Before
 	public void setUp() throws Exception {
+		jmsTemplate.setReceiveTimeout(500L);
+	}
+
+	@Test
+	public void shouldStartContext() throws Exception {
+	}
+
+	@Test
+	public void shouldRunJob() throws Exception {
+		createMultipleVarselbestillinger();
+		JobExecution jobExecution = launchJob(defaultJobParams());
+
+		assertThat(jobExecution.getExitStatus(), is(ExitStatus.COMPLETED));
+		assertThat(metricRegistry.counter("BVARSEL001.enqueueVarselbestillingStep.write").getCount(), is(5L));
+
+		assertWorktableEmpty();
+		assertDb();
+		assertMq();
+	}
+
+	@Test
+	public void shouldSendVarselWithNesteRevarslingsDateToday() throws Exception {
+		varselbestillingRepo.save(createVarselbestillingBuilder()
+				.varseltypeId(IGNORED)
+				.nesteVarslingDato(now()).build());
+
+		JobExecution jobExecution = launchJob(defaultJobParams());
+		assertThat(jobExecution.getExitStatus(), is(ExitStatus.COMPLETED));
+
+		VarselMedHandling varsel = receive(bestillVarselQueue);
+		assertThat(varsel, notNullValue());
+		assertThat(varsel.getVarselbestillingId(), notNullValue());
+		assertThat(varsel.getVarseltypeId(), is(IGNORED));
+	}
+
+	private void createMultipleVarselbestillinger() {
 		// create some that will not be picked
 		varselbestillingRepo.save(createVarselbestillingBuilder()
-				.varseltypeId(IGNORED).nesteVarslingDato(now()).build());
+				.varseltypeId(IGNORED).nesteVarslingDato(now().plusDays(1)).build());
 		varselbestillingRepo.save(createVarselbestillingBuilder()
 				.varseltypeId(IGNORED).nesteVarslingDato(null).build());
 
@@ -46,23 +82,6 @@ public class Bvarsel001JobTest extends AbstractBvarsel001Test {
 		for (int i = 0; i < 4; i++) {
 			varselbestillingRepo.save(createVarselbestillingUnique());
 		}
-		jmsTemplate.setReceiveTimeout(500L);
-	}
-
-	@Test
-	public void shouldStartContext() throws Exception {
-	}
-
-	@Test
-	public void shouldRunJob() throws Exception {
-		JobExecution jobExecution = launchJob(defaultJobParams());
-
-		assertThat(jobExecution.getExitStatus(), is(ExitStatus.COMPLETED));
-		assertThat(metricRegistry.counter("BVARSEL001.enqueueVarselbestillingStep.write").getCount(), is(5L));
-
-		assertWorktableEmpty();
-		assertDb();
-		assertMq();
 	}
 
 	private void assertWorktableEmpty() {

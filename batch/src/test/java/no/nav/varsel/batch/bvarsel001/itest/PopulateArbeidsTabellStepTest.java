@@ -18,11 +18,12 @@ public class PopulateArbeidsTabellStepTest extends AbstractBvarsel001StepTest {
 
 	private static final String YESTERDAY = "yesterday";
 	private static final String LAST_WEEK = "last_week";
+	private static final String TODAY = "today";
 
 	@Before
 	public void setUp() throws Exception {
 		varselbestillingRepo.save(createVarselbestillingBuilder()
-				.varselbestillingId("today_not_picked").nesteVarslingDato(now()).build());
+				.varselbestillingId(TODAY).nesteVarslingDato(now()).build());
 		varselbestillingRepo.save(createVarselbestillingBuilder()
 				.varselbestillingId("tomorrow_not_picked").nesteVarslingDato(now().plusDays(1)).build());
 		varselbestillingRepo.save(createVarselbestillingBuilder()
@@ -40,6 +41,7 @@ public class PopulateArbeidsTabellStepTest extends AbstractBvarsel001StepTest {
 
 		assertThat(bvarsel001Repo.findOne(YESTERDAY).getArbeidStatus(), is(ArbeidStatus.OPPRETTET));
 		assertThat(bvarsel001Repo.findOne(LAST_WEEK).getArbeidStatus(), is(ArbeidStatus.OPPRETTET));
-		assertThat(bvarsel001Repo.count(), is(2L));
+		assertThat(bvarsel001Repo.findOne(TODAY).getArbeidStatus(), is(ArbeidStatus.OPPRETTET));
+		assertThat(bvarsel001Repo.count(), is(3L));
 	}
 }
