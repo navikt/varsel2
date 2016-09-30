@@ -100,7 +100,7 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 		kontaktinformasjon.setKanal(createKommunkasjonskanaler(KanalCode.DITT_NAV));
 		varsel.getKontaktinformasjonListe().add(kontaktinformasjon);
 
-		expectedException.expectMessage("Invalid kommunikajsonskanal=NAV_NO");
+		expectedException.expectMessage("Invalid kommunikajsonskanal=DITT_NAV");
 		expectedException.expect(IllegalArgumentException.class);
 		mapper.map(varsel);
 	}
@@ -159,7 +159,7 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 
 	private static Kommunikasjonskanaler createKommunkasjonskanaler(KanalCode kanalCode) {
 		Kommunikasjonskanaler kommunikasjonskanaler = new Kommunikasjonskanaler();
-		kommunikasjonskanaler.setValue(kanalCode.getKommunikasjonskanal());
+		kommunikasjonskanaler.setValue(kanalCode.name());
 		return kommunikasjonskanaler;
 	}
 

@@ -36,9 +36,9 @@ public class BestillServicemeldingMedKontaktInfoMapper {
 	private void mapKontaktInformasjon(ServicemeldingMedKontaktinformasjon input, BestillVarselTo to) {
 		for (Kontaktinformasjon kontaktinformasjon : input.getKontaktinformasjonListe()) {
 			String kanal = kontaktinformasjon.getKanal() != null ? kontaktinformasjon.getKanal().getValue() : null;
-			if (KanalCode.SMS.getKommunikasjonskanal().equals(kanal)) {
+			if (KanalCode.SMS.name().equals(kanal)) {
 				to.setMobiltelefonnummer(kontaktinformasjon.getKontaktinformasjon());
-			} else if (KanalCode.EPOST.getKommunikasjonskanal().equals(kanal)) {
+			} else if (KanalCode.EPOST.name().equals(kanal)) {
 				to.setEpost(kontaktinformasjon.getKontaktinformasjon());
 			} else {
 				throw new IllegalArgumentException("Invalid kommunikajsonskanal=" + kanal);
