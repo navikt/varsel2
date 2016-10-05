@@ -2,6 +2,8 @@ package no.nav.varsel.config;
 
 import static no.nav.varsel.wsconsumer.dokkat.support.VarselInfoMapperTest.createVarselInfo;
 import static no.nav.varsel.wsconsumer.dokkat.support.VarselInfoMapperTest.createVarselInfoWithVarselUrl;
+import static no.nav.varsel.wsconsumer.dokkat.support.VarselInfoMapperTest.createVarselInfoWithoutRevarslingstekst;
+
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
@@ -41,6 +43,8 @@ public class RestMock {
 				withSuccess(objectMapper.writeValueAsString(createVarselInfo()), APPLICATION_JSON));
 		mocks.put("http://localhost:8041/varsel/rest/varselInfoV1/varsel_varselUrl",
 				withSuccess(objectMapper.writeValueAsString(createVarselInfoWithVarselUrl()), APPLICATION_JSON));
+		mocks.put("http://localhost:8041/varsel/rest/varselInfoV1/varsel_missing",
+				withSuccess(objectMapper.writeValueAsString(createVarselInfoWithoutRevarslingstekst()), APPLICATION_JSON));
 
 		restTemplate.setRequestFactory((uri, httpMethod) -> {
 			MockClientHttpRequest mockClientHttpRequest = new MockClientHttpRequest(httpMethod, uri);

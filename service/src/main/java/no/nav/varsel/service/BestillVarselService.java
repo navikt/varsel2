@@ -3,6 +3,8 @@ package no.nav.varsel.service;
 import static java.util.stream.Collectors.toSet;
 
 import com.google.common.collect.Maps;
+
+import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.to.AktoerTo;
@@ -18,8 +20,14 @@ import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -38,20 +46,27 @@ public class BestillVarselService {
 
 	@Inject
 	private AktoerService aktoerService;
+
 	@Inject
 	private VarselbestillingRepo varselbestillingRepo;
 
 	@Inject
 	private VarselInfoConsumer varselInfoConsumer;
+
 	@Inject
 	private HentDigitalKontaktinformasjonConsumer dkifConsumer;
 
 	@Inject
 	private VarselBestillingDomainMapper domainMapper;
+
 	@Inject
 	private VarselutsendingProducer varselutsendingProducer;
+
 	@Inject
 	private VarselutsendingToMapper varselutsendingToMapper;
+
+	@Inject
+	private TransactionTemplate transactionTemplate;
 
 	public void bestillVarsel(BestillVarselTo to) {
 		Varselbestilling existingVarsel = varselbestillingRepo.findByVarselbestillingIdEager(to.getVarselBestillingId());
@@ -104,22 +119,40 @@ public class BestillVarselService {
 
 	private void bestillRevarsel(BestillVarselTo to, Varselbestilling existingVarsel) {
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(to.getVarseltypeId());
-		KontaktregisterTo kontaktregisterTo = dkifConsumer
-				.hentDigitalKontaktinformasjonAndDecideKanal(existingVarsel.getFnr(), varselInfoTo.getPreferertKanal());
 
-		to.setParameters(Maps.newHashMap(existingVarsel.getFletteParametere()));
-		Set<Varsel> varsels = kontaktregisterTo.getKanaler().stream()
-				.map((kanalCode) -> domainMapper.mapReVarsel(kanalCode, to, varselInfoTo, kontaktregisterTo))
-				.peek(existingVarsel::addVarsel)
-				.collect(toSet());
-		updateRevarselFeilds(existingVarsel);
+		boolean hasEmptyRevarslingsTekst = varselInfoTo.getMaler().stream()
+				.anyMatch(malTo -> malTo.getRevarslingTekst() == null || malTo.getRevarslingTekst().equals(""));
 
-		varselbestillingRepo.saveAndFlush(existingVarsel);
+		if(hasEmptyRevarslingsTekst) {
+			TransactionCallbackWithoutResult transactionCallbackWithoutResult =
+					new TransactionCallbackWithoutResult() {
+						@Override
+						protected void doInTransactionWithoutResult(TransactionStatus status) {
+							existingVarsel.setAntallRevarslinger(0);
+							varselbestillingRepo.saveAndFlush(existingVarsel);
+						}
+					};
+			transactionTemplate.execute(transactionCallbackWithoutResult);
+			throw new NoJmsBackoutException("Missing revarslingstekst in template.");
+			//FIXME clean up, kanskje egen exception
+		} else {
+			KontaktregisterTo kontaktregisterTo = dkifConsumer
+					.hentDigitalKontaktinformasjonAndDecideKanal(existingVarsel.getFnr(), varselInfoTo.getPreferertKanal());
 
-		sendToVarselutsending(existingVarsel, to.getUtloepstidspunkt(), varsels);
+			to.setParameters(Maps.newHashMap(existingVarsel.getFletteParametere()));
+			Set<Varsel> varsels = kontaktregisterTo.getKanaler().stream()
+					.map((kanalCode) -> domainMapper.mapReVarsel(kanalCode, to, varselInfoTo, kontaktregisterTo))
+					.peek(existingVarsel::addVarsel)
+					.collect(toSet());
+			updateRevarselFields(existingVarsel);
+
+			varselbestillingRepo.saveAndFlush(existingVarsel);
+
+			sendToVarselutsending(existingVarsel, to.getUtloepstidspunkt(), varsels);
+		}
 	}
 
-	private void updateRevarselFeilds(Varselbestilling item) {
+	private void updateRevarselFields(Varselbestilling item) {
 		Integer nyAntallRevarslinger = item.getAntallRevarslinger() - 1;
 		if (nyAntallRevarslinger <= 0) {
 			item.setAntallRevarslinger(null);

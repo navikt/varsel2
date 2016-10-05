@@ -50,6 +50,8 @@ import java.util.Iterator;
  */
 public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 
+	private final static String MISSING_TEXT = "varsel_missing";
+
 	@Inject
 	private Queue bestillVarselQueue;
 	@Inject
@@ -81,7 +83,27 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		isOk(jmsReply);
 
 		varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
-		Varsel varsel = assertDatabaseRevarsel(varselIdFoersteVarsel, varselbestilling);
+		Varsel varsel = assertDatabaseRevarsel(varselIdFoersteVarsel, varselbestilling, VARSELTYPE_ID);
+
+		assertVarselutsending(varselbestilling, varsel);
+	}
+
+	@Test
+	public void shouldNotBestillRevarselWhenEmptyText() {
+		sendMessage(bestillVarselQueue, createVarselBestillingFailing(false));
+		receive(varselutsendingQueue);
+		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
+		varselbestilling.setNesteVarslingDato(LocalDate.now().minusDays(1));
+		varselbestillingRepo.save(varselbestilling);
+		String varselIdFoersteVarsel = varselbestilling.getVarsels().iterator().next().getVarselId();
+
+		Message message = sendMessageListenBoq(bestillVarselQueue, createVarselBestillingFailing(true));
+		assertThat(message, is(nullValue()));
+
+		assertThat(receive(varselutsendingQueue), is(nullValue()));
+
+		varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
+		Varsel varsel = assertDatabaseRevarsel(varselIdFoersteVarsel, varselbestilling, MISSING_TEXT);
 
 		assertVarselutsending(varselbestilling, varsel);
 	}
@@ -163,10 +185,10 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		return varsel;
 	}
 
-	private Varsel assertDatabaseRevarsel(String varselIdFoersteVarsel, Varselbestilling varselbestilling) {
+	private Varsel assertDatabaseRevarsel(String varselIdFoersteVarsel, Varselbestilling varselbestilling, String varseltypeId) {
 		assertThat(varselbestilling, notNullValue());
 		assertThat(varselbestilling.getVarselbestillingId(), is(VARSELBESTILLING_ID));
-		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
+		assertThat(varselbestilling.getVarseltypeId(), is(varseltypeId));
 		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPS_TIDSPUNKT));
 		assertThat(varselbestilling.getFnr(), is(BestillVarselMapperTest.PERSON_IDENT));
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
@@ -212,6 +234,18 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 
 	private JAXBElement<VarselMedHandling> createVarselBestilling(boolean revarsel) {
 		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling();
+		if (revarsel) {
+			varselBestilling.getParameterListe().clear();
+		}
+		varselBestilling.setReVarsel(revarsel);
+		return new ObjectFactory().createVarselMedHandling(varselBestilling);
+	}
+
+	private JAXBElement<VarselMedHandling> createVarselBestillingFailing(boolean revarsel) {
+		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling();
+
+		varselBestilling.setVarseltypeId(MISSING_TEXT);
+
 		if (revarsel) {
 			varselBestilling.getParameterListe().clear();
 		}

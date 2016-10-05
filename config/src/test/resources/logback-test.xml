@@ -8,7 +8,7 @@
 	</appender>
 
 	<root level="WARN">
-		<!--<appender-ref ref="CONSOLE"/>-->
+		<appender-ref ref="CONSOLE"/>
 	</root>
 
 	<logger name="no.nav.varsel" level="DEBUG"/>

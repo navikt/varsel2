@@ -108,4 +108,10 @@ public class VarselInfoMapperTest {
 		varselInfo.getVarselmals().iterator().next().setKanal(VARSEL_URL_PREFERERT_KANAL.name());
 		return varselInfo;
 	}
+
+	public static VarselInfoRestTo createVarselInfoWithoutRevarslingstekst() {
+		VarselInfoRestTo varselInfo = createVarselInfo();
+		varselInfo.getVarselmals().iterator().next().setRevarslingTekst(null);
+		return varselInfo;
+	}
 }
