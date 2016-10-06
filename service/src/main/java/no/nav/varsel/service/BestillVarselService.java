@@ -4,7 +4,6 @@ import static java.util.stream.Collectors.toSet;
 
 import com.google.common.collect.Maps;
 
-import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.to.AktoerTo;
@@ -12,6 +11,7 @@ import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
+import no.nav.varsel.service.support.exception.RevarselTekstMissingException;
 import no.nav.varsel.service.support.exception.VarselbestillingAlreadyExistException;
 import no.nav.varsel.service.support.exception.VarselbestillingNotExistException;
 import no.nav.varsel.service.to.BestillVarselTo;
@@ -20,11 +20,9 @@ import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -124,17 +122,7 @@ public class BestillVarselService {
 				.anyMatch(malTo -> malTo.getRevarslingTekst() == null || malTo.getRevarslingTekst().equals(""));
 
 		if(hasEmptyRevarslingsTekst) {
-			TransactionCallbackWithoutResult transactionCallbackWithoutResult =
-					new TransactionCallbackWithoutResult() {
-						@Override
-						protected void doInTransactionWithoutResult(TransactionStatus status) {
-							existingVarsel.setAntallRevarslinger(0);
-							varselbestillingRepo.saveAndFlush(existingVarsel);
-						}
-					};
-			transactionTemplate.execute(transactionCallbackWithoutResult);
-			throw new NoJmsBackoutException("Missing revarslingstekst in template.");
-			//FIXME clean up, kanskje egen exception
+			resetRevarsel(existingVarsel);
 		} else {
 			KontaktregisterTo kontaktregisterTo = dkifConsumer
 					.hentDigitalKontaktinformasjonAndDecideKanal(existingVarsel.getFnr(), varselInfoTo.getPreferertKanal());
@@ -161,6 +149,19 @@ public class BestillVarselService {
 			item.setAntallRevarslinger(nyAntallRevarslinger);
 			item.setNesteVarslingDato(LocalDate.now().plusDays(item.getRevarslingIntervall()));
 		}
+	}
+
+	private void resetRevarsel(Varselbestilling existingVarsel) {
+		TransactionCallbackWithoutResult transactionCallbackWithoutResult =
+				new TransactionCallbackWithoutResult() {
+					@Override
+					protected void doInTransactionWithoutResult(TransactionStatus status) {
+						existingVarsel.setAntallRevarslinger(0);
+						varselbestillingRepo.saveAndFlush(existingVarsel);
+					}
+				};
+		transactionTemplate.execute(transactionCallbackWithoutResult);
+		throw new RevarselTekstMissingException(String.format("Missing revarslingstekst in varselbestilling {0}", existingVarsel.getId()));
 	}
 
 	private void sendToVarselutsending(Varselbestilling varselbestilling, LocalDateTime utloepstidspunkt, Set<Varsel> varsels) {

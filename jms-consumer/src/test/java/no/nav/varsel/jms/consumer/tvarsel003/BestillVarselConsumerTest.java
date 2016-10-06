@@ -83,29 +83,27 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		isOk(jmsReply);
 
 		varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
-		Varsel varsel = assertDatabaseRevarsel(varselIdFoersteVarsel, varselbestilling, VARSELTYPE_ID);
+		Varsel varsel = assertDatabaseRevarsel(varselIdFoersteVarsel, varselbestilling);
 
 		assertVarselutsending(varselbestilling, varsel);
 	}
 
 	@Test
-	public void shouldNotBestillRevarselWhenEmptyText() {
+	public void shouldNotBackoutWhenRevarselEmptyText() {
 		sendMessage(bestillVarselQueue, createVarselBestillingFailing(false));
 		receive(varselutsendingQueue);
 		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
 		varselbestilling.setNesteVarslingDato(LocalDate.now().minusDays(1));
 		varselbestillingRepo.save(varselbestilling);
-		String varselIdFoersteVarsel = varselbestilling.getVarsels().iterator().next().getVarselId();
 
-		Message message = sendMessageListenBoq(bestillVarselQueue, createVarselBestillingFailing(true));
-		assertThat(message, is(nullValue()));
+		sendMessage(bestillVarselQueue, createVarselBestillingFailing(true));
+
+		assertThat(receive(backoutQueue), is(nullValue()));
 
 		assertThat(receive(varselutsendingQueue), is(nullValue()));
 
 		varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
-		Varsel varsel = assertDatabaseRevarsel(varselIdFoersteVarsel, varselbestilling, MISSING_TEXT);
-
-		assertVarselutsending(varselbestilling, varsel);
+		assertDatabaseResetRevarsel(varselbestilling);
 	}
 
 	@Test
@@ -185,10 +183,10 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		return varsel;
 	}
 
-	private Varsel assertDatabaseRevarsel(String varselIdFoersteVarsel, Varselbestilling varselbestilling, String varseltypeId) {
+	private Varsel assertDatabaseRevarsel(String varselIdFoersteVarsel, Varselbestilling varselbestilling) {
 		assertThat(varselbestilling, notNullValue());
 		assertThat(varselbestilling.getVarselbestillingId(), is(VARSELBESTILLING_ID));
-		assertThat(varselbestilling.getVarseltypeId(), is(varseltypeId));
+		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPS_TIDSPUNKT));
 		assertThat(varselbestilling.getFnr(), is(BestillVarselMapperTest.PERSON_IDENT));
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
@@ -215,6 +213,35 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varsel.getVarselUrl(), nullValue());
 		assertThat(varsel.getErRevarsel(), is(true));
 		return varsel;
+	}
+
+	private void assertDatabaseResetRevarsel(Varselbestilling varselbestilling) {
+		assertThat(varselbestilling, notNullValue());
+		assertThat(varselbestilling.getVarselbestillingId(), is(VARSELBESTILLING_ID));
+		assertThat(varselbestilling.getVarseltypeId(), is(MISSING_TEXT));
+		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPS_TIDSPUNKT));
+		assertThat(varselbestilling.getFnr(), is(BestillVarselMapperTest.PERSON_IDENT));
+		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
+		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
+		assertThat(varselbestilling.getRevarslingIntervall(), is(REVARSLING_INTERVALL));
+		assertThat(varselbestilling.getAntallRevarslinger(), is(0));
+
+		assertThat(varselbestilling.getVarsels(), hasSize(1));
+		Iterator<Varsel> iterator = varselbestilling.getVarsels().iterator();
+		Varsel varsel = iterator.next();
+
+		//Should be førstegangsvarsel
+		assertThat(varsel.getVarselId(), notNullValue());
+		assertThat(varsel.getKanal(), is(PREFERERT_KANAL));
+		assertThat(varsel.getSendtTidspunkt(), aboutNow());
+		assertThat(varsel.getDistribusjonTidspunkt(), nullValue());
+		assertThat(varsel.getKontaktInfo(), is(EPOSTADRESSE));
+		assertThat(varsel.getStatus(), is(StatusCode.SENDT));
+		assertThat(varsel.getFeilbeskrivelse(), nullValue());
+		assertThat(varsel.getVarselTittel(), is(VARSEL_TITTEL));
+		assertThat(varsel.getVarselTekst(), is(FOERSTE_GANG_TEKST.replace("{mottaker}", VAL)));
+		assertThat(varsel.getVarselUrl(), nullValue());
+		assertThat(varsel.getErRevarsel(), is(false));
 	}
 
 	private void assertVarselutsending(Varselbestilling varselbestilling, Varsel varsel) {
