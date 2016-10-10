@@ -1,6 +1,7 @@
 package no.nav.varsel.jms.consumer.tvarsel003;
 
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
+import static no.nav.varsel.jms.consumer.AbstractJmsConsumer.JMS_NOBACKOUTLOG;
 import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.UTLOEPS_TIDSPUNKT;
 import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.VAL;
 import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.VARSELBESTILLING_ID;
@@ -34,6 +35,9 @@ import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest;
 import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.to.xml.JmsReply;
+import no.nav.varsel.test.TestUtils;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -52,10 +56,17 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 
 	private final static String MISSING_TEXT = "varsel_missing";
 
+	private TestUtils.MockAppender loggerMock = null;
+
 	@Inject
 	private Queue bestillVarselQueue;
 	@Inject
 	private Queue varselutsendingQueue;
+
+	@Before
+	public void setUp() throws Exception {
+		loggerMock = TestUtils.getMockedAppender(JMS_NOBACKOUTLOG);
+	}
 
 	@Test
 	public void shouldBestillFoerstegangVarsel() throws Exception {
@@ -98,12 +109,10 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 
 		sendMessage(bestillVarselQueue, createVarselBestillingFailing(true));
 
-		assertThat(receive(backoutQueue), is(nullValue()));
-
-		assertThat(receive(varselutsendingQueue), is(nullValue()));
-
 		varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
-		assertDatabaseResetRevarsel(varselbestilling);
+		assertDatabaseStoppedRevarsel(varselbestilling);
+
+		loggerMock.verify("Nonbackout Error in service=tvarsel003");
 	}
 
 	@Test
@@ -215,7 +224,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		return varsel;
 	}
 
-	private void assertDatabaseResetRevarsel(Varselbestilling varselbestilling) {
+	private void assertDatabaseStoppedRevarsel(Varselbestilling varselbestilling) {
 		assertThat(varselbestilling, notNullValue());
 		assertThat(varselbestilling.getVarselbestillingId(), is(VARSELBESTILLING_ID));
 		assertThat(varselbestilling.getVarseltypeId(), is(MISSING_TEXT));
@@ -224,24 +233,8 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
 		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
 		assertThat(varselbestilling.getRevarslingIntervall(), is(REVARSLING_INTERVALL));
+
 		assertThat(varselbestilling.getAntallRevarslinger(), is(0));
-
-		assertThat(varselbestilling.getVarsels(), hasSize(1));
-		Iterator<Varsel> iterator = varselbestilling.getVarsels().iterator();
-		Varsel varsel = iterator.next();
-
-		//Should be førstegangsvarsel
-		assertThat(varsel.getVarselId(), notNullValue());
-		assertThat(varsel.getKanal(), is(PREFERERT_KANAL));
-		assertThat(varsel.getSendtTidspunkt(), aboutNow());
-		assertThat(varsel.getDistribusjonTidspunkt(), nullValue());
-		assertThat(varsel.getKontaktInfo(), is(EPOSTADRESSE));
-		assertThat(varsel.getStatus(), is(StatusCode.SENDT));
-		assertThat(varsel.getFeilbeskrivelse(), nullValue());
-		assertThat(varsel.getVarselTittel(), is(VARSEL_TITTEL));
-		assertThat(varsel.getVarselTekst(), is(FOERSTE_GANG_TEKST.replace("{mottaker}", VAL)));
-		assertThat(varsel.getVarselUrl(), nullValue());
-		assertThat(varsel.getErRevarsel(), is(false));
 	}
 
 	private void assertVarselutsending(Varselbestilling varselbestilling, Varsel varsel) {

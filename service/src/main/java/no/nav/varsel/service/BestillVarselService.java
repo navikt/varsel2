@@ -118,16 +118,11 @@ public class BestillVarselService {
 	private void bestillRevarsel(BestillVarselTo to, Varselbestilling existingVarsel) {
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(to.getVarseltypeId());
 
-		boolean hasEmptyRevarslingsTekst = varselInfoTo.getMaler().stream()
-				.anyMatch(malTo -> malTo.getRevarslingTekst() == null || malTo.getRevarslingTekst().equals(""));
+		KontaktregisterTo kontaktregisterTo = dkifConsumer
+				.hentDigitalKontaktinformasjonAndDecideKanal(existingVarsel.getFnr(), varselInfoTo.getPreferertKanal());
 
-		if(hasEmptyRevarslingsTekst) {
-			resetRevarsel(existingVarsel);
-		} else {
-			KontaktregisterTo kontaktregisterTo = dkifConsumer
-					.hentDigitalKontaktinformasjonAndDecideKanal(existingVarsel.getFnr(), varselInfoTo.getPreferertKanal());
-
-			to.setParameters(Maps.newHashMap(existingVarsel.getFletteParametere()));
+		to.setParameters(Maps.newHashMap(existingVarsel.getFletteParametere()));
+		try {
 			Set<Varsel> varsels = kontaktregisterTo.getKanaler().stream()
 					.map((kanalCode) -> domainMapper.mapReVarsel(kanalCode, to, varselInfoTo, kontaktregisterTo))
 					.peek(existingVarsel::addVarsel)
@@ -137,6 +132,8 @@ public class BestillVarselService {
 			varselbestillingRepo.saveAndFlush(existingVarsel);
 
 			sendToVarselutsending(existingVarsel, to.getUtloepstidspunkt(), varsels);
+		} catch (RevarselTekstMissingException e) {
+			stopRevarsel(existingVarsel, e.getMessage());
 		}
 	}
 
@@ -151,7 +148,7 @@ public class BestillVarselService {
 		}
 	}
 
-	private void resetRevarsel(Varselbestilling existingVarsel) {
+	private void stopRevarsel(Varselbestilling existingVarsel, String errorMsg) {
 		TransactionCallbackWithoutResult transactionCallbackWithoutResult =
 				new TransactionCallbackWithoutResult() {
 					@Override
@@ -161,7 +158,7 @@ public class BestillVarselService {
 					}
 				};
 		transactionTemplate.execute(transactionCallbackWithoutResult);
-		throw new RevarselTekstMissingException(String.format("Missing revarslingstekst in varselbestilling {0}", existingVarsel.getId()));
+		throw new RevarselTekstMissingException(String.format("Missing revarslingstekst in varselbestilling id: %s, %s", existingVarsel.getId(), errorMsg));
 	}
 
 	private void sendToVarselutsending(Varselbestilling varselbestilling, LocalDateTime utloepstidspunkt, Set<Varsel> varsels) {

@@ -1,22 +1,26 @@
 package no.nav.varsel.service.tvarsel001.support;
 
 import static java.util.stream.Collectors.toMap;
+
 import static no.nav.varsel.domain.builder.VarselBuilder.aVarsel;
 import static no.nav.varsel.domain.builder.VarselbestillingBuilder.aVarselbestilling;
 
 import com.google.common.collect.Maps;
+
 import no.nav.varsel.domain.builder.VarselbestillingBuilder;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.VarselFletter;
+import no.nav.varsel.service.support.exception.RevarselTekstMissingException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
 
 import javax.inject.Inject;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -33,28 +37,38 @@ public class VarselBestillingDomainMapper {
 	private VarselFletter varselFletter;
 
 	public Varselbestilling mapVarselbestillingFoerstegangVarselMedRevarsel(BestillVarselTo bestillingTo,
-																			VarselInfoTo varselInfoTo,
-																			KontaktregisterTo kontaktregisterTo) {
+			VarselInfoTo varselInfoTo,
+			KontaktregisterTo kontaktregisterTo) {
 		return mapVarselbestilling(bestillingTo, varselInfoTo, kontaktregisterTo, true);
 	}
 
 	public Varselbestilling mapVarselbestillingFoerstegangVarselUtenRevarsel(BestillVarselTo bestillingTo,
-																			 VarselInfoTo varselInfoTo,
-																			 KontaktregisterTo kontaktregisterTo) {
+			VarselInfoTo varselInfoTo,
+			KontaktregisterTo kontaktregisterTo) {
 		return mapVarselbestilling(bestillingTo, varselInfoTo, kontaktregisterTo, false);
 	}
 
 	public Varsel mapReVarsel(KanalCode kanalCode,
-							  BestillVarselTo bestillServicemeldingTo,
-							  VarselInfoTo varselInfoTo,
-							  KontaktregisterTo kontaktregisterTo) {
+			BestillVarselTo bestillServicemeldingTo,
+			VarselInfoTo varselInfoTo,
+			KontaktregisterTo kontaktregisterTo) {
+
+		boolean hasEmptyRevarslingsTekst = varselInfoTo.getMaler().stream()
+				.anyMatch(malTo ->
+						malTo.getKanal().equals(kanalCode) && (malTo.getRevarslingTekst() == null || malTo.getRevarslingTekst().equals(""))
+				);
+
+		if (hasEmptyRevarslingsTekst) {
+			throw new RevarselTekstMissingException(String.format("missing revarslingstekst for '%s'", kanalCode));
+		}
+
 		return mapVarsel(kanalCode, bestillServicemeldingTo, varselInfoTo, kontaktregisterTo, true);
 	}
 
 	private Varselbestilling mapVarselbestilling(BestillVarselTo bestillingTo,
-												 VarselInfoTo varselInfoTo,
-												 KontaktregisterTo kontaktregisterTo,
-												 boolean withRevarsel) {
+			VarselInfoTo varselInfoTo,
+			KontaktregisterTo kontaktregisterTo,
+			boolean withRevarsel) {
 
 		VarselbestillingBuilder builder = aVarselbestilling()
 				.varselbestillingId(bestillingTo.getVarselBestillingId())
@@ -84,18 +98,17 @@ public class VarselBestillingDomainMapper {
 	}
 
 	private Varsel mapVarsel(KanalCode kanalCode,
-							 BestillVarselTo bestillServicemeldingTo,
-							 VarselInfoTo varselInfoTo,
-							 KontaktregisterTo kontaktregisterTo) {
+			BestillVarselTo bestillServicemeldingTo,
+			VarselInfoTo varselInfoTo,
+			KontaktregisterTo kontaktregisterTo) {
 		return mapVarsel(kanalCode, bestillServicemeldingTo, varselInfoTo, kontaktregisterTo, false);
-
 	}
 
 	private Varsel mapVarsel(KanalCode kanalCode,
-							 BestillVarselTo bestillServicemeldingTo,
-							 VarselInfoTo varselInfoTo,
-							 KontaktregisterTo kontaktregisterTo,
-							 boolean revarsel) {
+			BestillVarselTo bestillServicemeldingTo,
+			VarselInfoTo varselInfoTo,
+			KontaktregisterTo kontaktregisterTo,
+			boolean revarsel) {
 
 		VarselMalTo mal = varselInfoTo.getMal(kanalCode);
 		String kontaktInfo =
@@ -122,5 +135,4 @@ public class VarselBestillingDomainMapper {
 				.erRevarsel(revarsel)
 				.build();
 	}
-
 }

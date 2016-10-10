@@ -10,6 +10,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import static junit.framework.TestCase.fail;
+
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import no.nav.varsel.domain.code.KanalCode;
@@ -17,6 +19,7 @@ import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.VarselFletter;
+import no.nav.varsel.service.support.exception.RevarselTekstMissingException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
@@ -220,6 +223,19 @@ public class VarselBestillingDomainMapperTest {
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, bestillTo, varselTo, createDigitalKontaktinfoTo());
 
 		assertThat(varsel.getVarselUrl(), is("dokkat/1234"));
+	}
+
+	@Test
+	public void shouldStopRevarslingWhenMissingRevarslingstekst() {
+		VarselInfoTo varselTo = createVarselTo();
+		varselTo.getMal(KanalCode.EPOST).setRevarslingTekst(null);
+
+		try {
+			mapper.mapReVarsel(KanalCode.EPOST, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
+			fail("Should have thrown error");
+		} catch (RevarselTekstMissingException e) {
+			assertThat(e.getMessage(), is("missing revarslingstekst for 'EPOST'"));
+		}
 	}
 
 	@Test
