@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toMap;
 import static no.nav.varsel.domain.builder.VarselBuilder.aVarsel;
 import static no.nav.varsel.domain.builder.VarselbestillingBuilder.aVarselbestilling;
 
+import com.ctc.wstx.util.StringUtil;
 import com.google.common.collect.Maps;
 
 import no.nav.varsel.domain.builder.VarselbestillingBuilder;
@@ -13,7 +14,7 @@ import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.VarselFletter;
-import no.nav.varsel.service.support.exception.RevarselTekstMissingException;
+import no.nav.varsel.service.support.exception.VarselTekstMissingException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
@@ -25,6 +26,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Mapper for TVARSEL001
@@ -52,16 +55,6 @@ public class VarselBestillingDomainMapper {
 			BestillVarselTo bestillServicemeldingTo,
 			VarselInfoTo varselInfoTo,
 			KontaktregisterTo kontaktregisterTo) {
-
-		boolean hasEmptyRevarslingsTekst = varselInfoTo.getMaler().stream()
-				.anyMatch(malTo ->
-						malTo.getKanal().equals(kanalCode) && (malTo.getRevarslingTekst() == null || malTo.getRevarslingTekst().equals(""))
-				);
-
-		if (hasEmptyRevarslingsTekst) {
-			throw new RevarselTekstMissingException(String.format("missing revarslingstekst for '%s'", kanalCode));
-		}
-
 		return mapVarsel(kanalCode, bestillServicemeldingTo, varselInfoTo, kontaktregisterTo, true);
 	}
 
@@ -121,6 +114,11 @@ public class VarselBestillingDomainMapper {
 		String varselUrl = varselFletter.weaveText(varselInfoTo.getVarselUrl(), params);
 		String varselTekst = varselFletter.weaveText(tekstMal, params);
 		String varselTittel = varselFletter.weaveText(mal.getTittel(), params);
+
+		if (StringUtils.isEmpty(varselTekst)) {
+			throw new VarselTekstMissingException(String.format("missing varselTekst for '%s'", kanalCode));
+		}
+
 		return aVarsel()
 				.varselId(varselId)
 				.kanal(kanalCode)

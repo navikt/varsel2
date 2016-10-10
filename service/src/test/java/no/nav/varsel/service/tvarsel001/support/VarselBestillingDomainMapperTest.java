@@ -19,7 +19,7 @@ import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.VarselFletter;
-import no.nav.varsel.service.support.exception.RevarselTekstMissingException;
+import no.nav.varsel.service.support.exception.VarselTekstMissingException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
@@ -146,6 +146,18 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	@Test
+	public void shouldThrowWhenFoerstegangVarselMissingVarselTekst() {
+		VarselInfoTo varselTo = createVarselTo();
+		varselTo.getMal(KanalCode.EPOST).setFoerstegangsTekst(null);
+
+		expectedException.expect(VarselTekstMissingException.class);
+		expectedException.expectMessage("missing varselTekst for 'EPOST'");
+
+		mapper.mapVarselbestillingFoerstegangVarselMedRevarsel(createBestillTo(), varselTo, createDigitalKontaktinfoTo());
+
+	}
+
+	@Test
 	public void shouldMapRevarslingVarsel() throws Exception {
 		Varsel varsel = mapper.mapReVarsel(KanalCode.EPOST, createBestillTo(), createVarselTo(), createDigitalKontaktinfoTo());
 
@@ -230,8 +242,8 @@ public class VarselBestillingDomainMapperTest {
 		VarselInfoTo varselTo = createVarselTo();
 		varselTo.getMal(KanalCode.EPOST).setRevarslingTekst(null);
 
-		expectedException.expect(RevarselTekstMissingException.class);
-		expectedException.expectMessage("missing revarslingstekst for 'EPOST'");
+		expectedException.expect(VarselTekstMissingException.class);
+		expectedException.expectMessage("missing varselTekst for 'EPOST'");
 
 		mapper.mapReVarsel(KanalCode.EPOST, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 	}

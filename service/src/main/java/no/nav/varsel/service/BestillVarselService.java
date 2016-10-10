@@ -11,7 +11,7 @@ import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
-import no.nav.varsel.service.support.exception.RevarselTekstMissingException;
+import no.nav.varsel.service.support.exception.VarselTekstMissingException;
 import no.nav.varsel.service.support.exception.VarselbestillingAlreadyExistException;
 import no.nav.varsel.service.support.exception.VarselbestillingNotExistException;
 import no.nav.varsel.service.to.BestillVarselTo;
@@ -127,12 +127,14 @@ public class BestillVarselService {
 					.map((kanalCode) -> domainMapper.mapReVarsel(kanalCode, to, varselInfoTo, kontaktregisterTo))
 					.peek(existingVarsel::addVarsel)
 					.collect(toSet());
+
 			updateRevarselFields(existingVarsel);
 
 			varselbestillingRepo.saveAndFlush(existingVarsel);
 
 			sendToVarselutsending(existingVarsel, to.getUtloepstidspunkt(), varsels);
-		} catch (RevarselTekstMissingException e) {
+
+		} catch (VarselTekstMissingException e) {
 			stopRevarsel(existingVarsel, e.getMessage());
 		}
 	}
@@ -158,7 +160,7 @@ public class BestillVarselService {
 					}
 				};
 		transactionTemplate.execute(transactionCallbackWithoutResult);
-		throw new RevarselTekstMissingException(String.format("Missing revarslingstekst in varselbestilling id: %s, %s", existingVarsel.getId(), errorMsg));
+		throw new VarselTekstMissingException(String.format("Missing revarslingstekst in varselbestilling id: %s, %s", existingVarsel.getId(), errorMsg));
 	}
 
 	private void sendToVarselutsending(Varselbestilling varselbestilling, LocalDateTime utloepstidspunkt, Set<Varsel> varsels) {
