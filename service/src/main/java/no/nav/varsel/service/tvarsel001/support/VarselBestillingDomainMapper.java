@@ -116,7 +116,7 @@ public class VarselBestillingDomainMapper {
 		String varselTittel = varselFletter.weaveText(mal.getTittel(), params);
 
 		if (StringUtils.isEmpty(varselTekst)) {
-			throw new VarselTekstMissingException(String.format("missing varselTekst for '%s'", kanalCode));
+			throw new VarselTekstMissingException(String.format("kanalCode=%s", kanalCode));
 		}
 
 		return aVarsel()
