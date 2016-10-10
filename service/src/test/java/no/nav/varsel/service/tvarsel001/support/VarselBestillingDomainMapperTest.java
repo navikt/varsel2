@@ -151,7 +151,7 @@ public class VarselBestillingDomainMapperTest {
 		varselTo.getMal(KanalCode.EPOST).setFoerstegangsTekst(null);
 
 		expectedException.expect(VarselTekstMissingException.class);
-		expectedException.expectMessage("missing varselTekst for 'EPOST'");
+		expectedException.expectMessage("kanalCode=EPOST");
 
 		mapper.mapVarselbestillingFoerstegangVarselMedRevarsel(createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 
@@ -243,7 +243,7 @@ public class VarselBestillingDomainMapperTest {
 		varselTo.getMal(KanalCode.EPOST).setRevarslingTekst(null);
 
 		expectedException.expect(VarselTekstMissingException.class);
-		expectedException.expectMessage("missing varselTekst for 'EPOST'");
+		expectedException.expectMessage("kanalCode=EPOST");
 
 		mapper.mapReVarsel(KanalCode.EPOST, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 	}
