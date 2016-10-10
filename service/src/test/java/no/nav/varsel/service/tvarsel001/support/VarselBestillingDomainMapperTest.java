@@ -4,6 +4,8 @@ import static java.util.Collections.singletonMap;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_NAVN;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL;
+
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -230,12 +232,10 @@ public class VarselBestillingDomainMapperTest {
 		VarselInfoTo varselTo = createVarselTo();
 		varselTo.getMal(KanalCode.EPOST).setRevarslingTekst(null);
 
-		try {
-			mapper.mapReVarsel(KanalCode.EPOST, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
-			fail("Should have thrown error");
-		} catch (RevarselTekstMissingException e) {
-			assertThat(e.getMessage(), is("missing revarslingstekst for 'EPOST'"));
-		}
+		expectedException.expect(RevarselTekstMissingException.class);
+		expectedException.expectMessage("missing revarslingstekst for 'EPOST'");
+
+		mapper.mapReVarsel(KanalCode.EPOST, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 	}
 
 	@Test
