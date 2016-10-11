@@ -1,6 +1,7 @@
 package no.nav.varsel.jms.consumer.tvarsel003;
 
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
+import static no.nav.varsel.jms.consumer.AbstractJmsConsumer.JMS_NOBACKOUTLOG;
 import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.UTLOEPS_TIDSPUNKT;
 import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.VAL;
 import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.VARSELBESTILLING_ID;
@@ -34,6 +35,9 @@ import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest;
 import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.to.xml.JmsReply;
+import no.nav.varsel.test.TestUtils;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -50,10 +54,19 @@ import java.util.Iterator;
  */
 public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 
+	private final static String MISSING_TEXT = "varsel_missing";
+
+	private TestUtils.MockAppender loggerMock = null;
+
 	@Inject
 	private Queue bestillVarselQueue;
 	@Inject
 	private Queue varselutsendingQueue;
+
+	@Before
+	public void setUp() throws Exception {
+		loggerMock = TestUtils.getMockedAppender(JMS_NOBACKOUTLOG);
+	}
 
 	@Test
 	public void shouldBestillFoerstegangVarsel() throws Exception {
@@ -84,6 +97,22 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		Varsel varsel = assertDatabaseRevarsel(varselIdFoersteVarsel, varselbestilling);
 
 		assertVarselutsending(varselbestilling, varsel);
+	}
+
+	@Test
+	public void shouldNotBackoutWhenRevarselEmptyText() {
+		sendMessage(bestillVarselQueue, createVarselBestillingFailing(false));
+		receive(varselutsendingQueue);
+		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
+		varselbestilling.setNesteVarslingDato(LocalDate.now().minusDays(1));
+		varselbestillingRepo.save(varselbestilling);
+
+		sendMessage(bestillVarselQueue, createVarselBestillingFailing(true));
+
+		varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
+		assertDatabaseStoppedRevarsel(varselbestilling);
+
+		loggerMock.verify("Nonbackout Error in service=tvarsel003");
 	}
 
 	@Test
@@ -195,6 +224,19 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		return varsel;
 	}
 
+	private void assertDatabaseStoppedRevarsel(Varselbestilling varselbestilling) {
+		assertThat(varselbestilling, notNullValue());
+		assertThat(varselbestilling.getVarselbestillingId(), is(VARSELBESTILLING_ID));
+		assertThat(varselbestilling.getVarseltypeId(), is(MISSING_TEXT));
+		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPS_TIDSPUNKT));
+		assertThat(varselbestilling.getFnr(), is(BestillVarselMapperTest.PERSON_IDENT));
+		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
+		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
+		assertThat(varselbestilling.getRevarslingIntervall(), is(REVARSLING_INTERVALL));
+
+		assertThat(varselbestilling.getAntallRevarslinger(), is(0));
+	}
+
 	private void assertVarselutsending(Varselbestilling varselbestilling, Varsel varsel) {
 		Varselutsending varselutsending = receive(varselutsendingQueue);
 
@@ -212,6 +254,18 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 
 	private JAXBElement<VarselMedHandling> createVarselBestilling(boolean revarsel) {
 		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling();
+		if (revarsel) {
+			varselBestilling.getParameterListe().clear();
+		}
+		varselBestilling.setReVarsel(revarsel);
+		return new ObjectFactory().createVarselMedHandling(varselBestilling);
+	}
+
+	private JAXBElement<VarselMedHandling> createVarselBestillingFailing(boolean revarsel) {
+		VarselMedHandling varselBestilling = BestillVarselMapperTest.createVarselBestilling();
+
+		varselBestilling.setVarseltypeId(MISSING_TEXT);
+
 		if (revarsel) {
 			varselBestilling.getParameterListe().clear();
 		}

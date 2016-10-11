@@ -3,6 +3,7 @@ package no.nav.varsel.service;
 import static java.util.stream.Collectors.toSet;
 
 import com.google.common.collect.Maps;
+
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.to.AktoerTo;
@@ -10,6 +11,7 @@ import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
+import no.nav.varsel.service.support.exception.VarselTekstMissingException;
 import no.nav.varsel.service.support.exception.VarselbestillingAlreadyExistException;
 import no.nav.varsel.service.support.exception.VarselbestillingNotExistException;
 import no.nav.varsel.service.to.BestillVarselTo;
@@ -18,8 +20,12 @@ import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -38,20 +44,27 @@ public class BestillVarselService {
 
 	@Inject
 	private AktoerService aktoerService;
+
 	@Inject
 	private VarselbestillingRepo varselbestillingRepo;
 
 	@Inject
 	private VarselInfoConsumer varselInfoConsumer;
+
 	@Inject
 	private HentDigitalKontaktinformasjonConsumer dkifConsumer;
 
 	@Inject
 	private VarselBestillingDomainMapper domainMapper;
+
 	@Inject
 	private VarselutsendingProducer varselutsendingProducer;
+
 	@Inject
 	private VarselutsendingToMapper varselutsendingToMapper;
+
+	@Inject
+	private TransactionTemplate transactionTemplate;
 
 	public void bestillVarsel(BestillVarselTo to) {
 		Varselbestilling existingVarsel = varselbestillingRepo.findByVarselbestillingIdEager(to.getVarselBestillingId());
@@ -104,22 +117,29 @@ public class BestillVarselService {
 
 	private void bestillRevarsel(BestillVarselTo to, Varselbestilling existingVarsel) {
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(to.getVarseltypeId());
+
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
 				.hentDigitalKontaktinformasjonAndDecideKanal(existingVarsel.getFnr(), varselInfoTo.getPreferertKanal());
 
 		to.setParameters(Maps.newHashMap(existingVarsel.getFletteParametere()));
-		Set<Varsel> varsels = kontaktregisterTo.getKanaler().stream()
-				.map((kanalCode) -> domainMapper.mapReVarsel(kanalCode, to, varselInfoTo, kontaktregisterTo))
-				.peek(existingVarsel::addVarsel)
-				.collect(toSet());
-		updateRevarselFeilds(existingVarsel);
+		try {
+			Set<Varsel> varsels = kontaktregisterTo.getKanaler().stream()
+					.map((kanalCode) -> domainMapper.mapReVarsel(kanalCode, to, varselInfoTo, kontaktregisterTo))
+					.peek(existingVarsel::addVarsel)
+					.collect(toSet());
 
-		varselbestillingRepo.saveAndFlush(existingVarsel);
+			updateRevarselFields(existingVarsel);
 
-		sendToVarselutsending(existingVarsel, to.getUtloepstidspunkt(), varsels);
+			varselbestillingRepo.saveAndFlush(existingVarsel);
+
+			sendToVarselutsending(existingVarsel, to.getUtloepstidspunkt(), varsels);
+
+		} catch (VarselTekstMissingException exception) {
+			stopRevarsel(existingVarsel, exception);
+		}
 	}
 
-	private void updateRevarselFeilds(Varselbestilling item) {
+	private void updateRevarselFields(Varselbestilling item) {
 		Integer nyAntallRevarslinger = item.getAntallRevarslinger() - 1;
 		if (nyAntallRevarslinger <= 0) {
 			item.setAntallRevarslinger(null);
@@ -128,6 +148,19 @@ public class BestillVarselService {
 			item.setAntallRevarslinger(nyAntallRevarslinger);
 			item.setNesteVarslingDato(LocalDate.now().plusDays(item.getRevarslingIntervall()));
 		}
+	}
+
+	private void stopRevarsel(Varselbestilling existingVarsel, VarselTekstMissingException exception) {
+		TransactionCallbackWithoutResult transactionCallbackWithoutResult =
+				new TransactionCallbackWithoutResult() {
+					@Override
+					protected void doInTransactionWithoutResult(TransactionStatus status) {
+						existingVarsel.setAntallRevarslinger(0);
+						varselbestillingRepo.saveAndFlush(existingVarsel);
+					}
+				};
+		transactionTemplate.execute(transactionCallbackWithoutResult);
+		throw exception;
 	}
 
 	private void sendToVarselutsending(Varselbestilling varselbestilling, LocalDateTime utloepstidspunkt, Set<Varsel> varsels) {
