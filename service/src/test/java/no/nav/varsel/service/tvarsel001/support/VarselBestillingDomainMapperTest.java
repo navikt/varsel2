@@ -1,6 +1,7 @@
 package no.nav.varsel.service.tvarsel001.support;
 
 import static java.util.Collections.singletonMap;
+
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_NAVN;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL;
@@ -11,9 +12,9 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
@@ -24,6 +25,7 @@ import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -147,14 +149,14 @@ public class VarselBestillingDomainMapperTest {
 
 	@Test
 	public void shouldThrowWhenFoerstegangVarselMissingVarselTekst() {
+		String expectedErrMsg = String.format("Missing varseltekst for varselbestillingsId=%s, kanalCode=%s", BESTILLING_ID, KanalCode.EPOST);
 		VarselInfoTo varselTo = createVarselTo();
 		varselTo.getMal(KanalCode.EPOST).setFoerstegangsTekst(null);
 
 		expectedException.expect(VarselTekstMissingException.class);
-		expectedException.expectMessage("kanalCode=EPOST");
+		expectedException.expectMessage(expectedErrMsg);
 
 		mapper.mapVarselbestillingFoerstegangVarselMedRevarsel(createBestillTo(), varselTo, createDigitalKontaktinfoTo());
-
 	}
 
 	@Test
@@ -239,13 +241,14 @@ public class VarselBestillingDomainMapperTest {
 
 	@Test
 	public void shouldStopRevarslingWhenMissingRevarslingstekst() {
+		String expectedErrMsg = String.format("Missing varseltekst for varselbestillingsId=%s, kanalCode=%s", BESTILLING_ID, KanalCode.DITT_NAV);
 		VarselInfoTo varselTo = createVarselTo();
-		varselTo.getMal(KanalCode.EPOST).setRevarslingTekst(null);
+		varselTo.getMal(KanalCode.DITT_NAV).setRevarslingTekst(null);
 
 		expectedException.expect(VarselTekstMissingException.class);
-		expectedException.expectMessage("kanalCode=EPOST");
+		expectedException.expectMessage(expectedErrMsg);
 
-		mapper.mapReVarsel(KanalCode.EPOST, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
+		mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 	}
 
 	@Test

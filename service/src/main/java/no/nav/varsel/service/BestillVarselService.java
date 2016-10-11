@@ -134,8 +134,8 @@ public class BestillVarselService {
 
 			sendToVarselutsending(existingVarsel, to.getUtloepstidspunkt(), varsels);
 
-		} catch (VarselTekstMissingException e) {
-			stopRevarsel(existingVarsel, e.getMessage());
+		} catch (VarselTekstMissingException exception) {
+			stopRevarsel(existingVarsel, exception);
 		}
 	}
 
@@ -150,7 +150,7 @@ public class BestillVarselService {
 		}
 	}
 
-	private void stopRevarsel(Varselbestilling existingVarsel, String errorKanalCode) {
+	private void stopRevarsel(Varselbestilling existingVarsel, VarselTekstMissingException exception) {
 		TransactionCallbackWithoutResult transactionCallbackWithoutResult =
 				new TransactionCallbackWithoutResult() {
 					@Override
@@ -160,7 +160,7 @@ public class BestillVarselService {
 					}
 				};
 		transactionTemplate.execute(transactionCallbackWithoutResult);
-		throw new VarselTekstMissingException(String.format("Missing revarslingstekst in varselbestillingsId=%s, %s", existingVarsel.getId(), errorKanalCode));
+		throw exception;
 	}
 
 	private void sendToVarselutsending(Varselbestilling varselbestilling, LocalDateTime utloepstidspunkt, Set<Varsel> varsels) {

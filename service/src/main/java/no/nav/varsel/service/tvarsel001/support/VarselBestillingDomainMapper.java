@@ -52,10 +52,10 @@ public class VarselBestillingDomainMapper {
 	}
 
 	public Varsel mapReVarsel(KanalCode kanalCode,
-			BestillVarselTo bestillServicemeldingTo,
+			BestillVarselTo bestillVarselTo,
 			VarselInfoTo varselInfoTo,
 			KontaktregisterTo kontaktregisterTo) {
-		return mapVarsel(kanalCode, bestillServicemeldingTo, varselInfoTo, kontaktregisterTo, true);
+		return mapVarsel(kanalCode, bestillVarselTo, varselInfoTo, kontaktregisterTo, true);
 	}
 
 	private Varselbestilling mapVarselbestilling(BestillVarselTo bestillingTo,
@@ -91,14 +91,14 @@ public class VarselBestillingDomainMapper {
 	}
 
 	private Varsel mapVarsel(KanalCode kanalCode,
-			BestillVarselTo bestillServicemeldingTo,
+			BestillVarselTo bestillVarselTo,
 			VarselInfoTo varselInfoTo,
 			KontaktregisterTo kontaktregisterTo) {
-		return mapVarsel(kanalCode, bestillServicemeldingTo, varselInfoTo, kontaktregisterTo, false);
+		return mapVarsel(kanalCode, bestillVarselTo, varselInfoTo, kontaktregisterTo, false);
 	}
 
 	private Varsel mapVarsel(KanalCode kanalCode,
-			BestillVarselTo bestillServicemeldingTo,
+			BestillVarselTo bestillVarselTo,
 			VarselInfoTo varselInfoTo,
 			KontaktregisterTo kontaktregisterTo,
 			boolean revarsel) {
@@ -110,13 +110,14 @@ public class VarselBestillingDomainMapper {
 								null;
 		String tekstMal = revarsel ? mal.getRevarslingTekst() : mal.getFoerstegangsTekst();
 		String varselId = UUID.randomUUID().toString();
-		Map<String, String> params = Maps.newHashMap(bestillServicemeldingTo.getParameters());
+		Map<String, String> params = Maps.newHashMap(bestillVarselTo.getParameters());
 		String varselUrl = varselFletter.weaveText(varselInfoTo.getVarselUrl(), params);
 		String varselTekst = varselFletter.weaveText(tekstMal, params);
 		String varselTittel = varselFletter.weaveText(mal.getTittel(), params);
 
 		if (StringUtils.isEmpty(varselTekst)) {
-			throw new VarselTekstMissingException(String.format("kanalCode=%s", kanalCode));
+			throw new VarselTekstMissingException(
+					String.format("Missing varseltekst for varselbestillingsId=%s, kanalCode=%s", bestillVarselTo.getVarselBestillingId(), kanalCode));
 		}
 
 		return aVarsel()
