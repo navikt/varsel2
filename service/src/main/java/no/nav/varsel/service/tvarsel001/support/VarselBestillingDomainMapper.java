@@ -5,7 +5,6 @@ import static java.util.stream.Collectors.toMap;
 import static no.nav.varsel.domain.builder.VarselBuilder.aVarsel;
 import static no.nav.varsel.domain.builder.VarselbestillingBuilder.aVarselbestilling;
 
-import com.ctc.wstx.util.StringUtil;
 import com.google.common.collect.Maps;
 
 import no.nav.varsel.domain.builder.VarselbestillingBuilder;
@@ -30,7 +29,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Mapper for TVARSEL001
+ * Mapper for TVARSEL001, TVARSEL003 and TVARSEL006
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
