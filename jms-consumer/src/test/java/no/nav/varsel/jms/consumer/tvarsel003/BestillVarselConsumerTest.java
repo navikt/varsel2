@@ -37,12 +37,14 @@ import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.test.TestUtils;
 
+import org.apache.activemq.util.TransactionTemplate;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
 import javax.jms.Message;
 import javax.jms.Queue;
+import javax.persistence.EntityManager;
 import javax.xml.bind.JAXBElement;
 import java.time.LocalDate;
 import java.util.Iterator;
@@ -60,6 +62,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 
 	@Inject
 	private Queue bestillVarselQueue;
+
 	@Inject
 	private Queue varselutsendingQueue;
 
@@ -234,7 +237,8 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
 		assertThat(varselbestilling.getRevarslingIntervall(), is(REVARSLING_INTERVALL));
 
-		assertThat(varselbestilling.getAntallRevarslinger(), is(0));
+		assertThat(varselbestilling.getAntallRevarslinger(), nullValue());
+		assertThat(varselbestilling.getNesteVarslingDato(), nullValue());
 	}
 
 	private void assertVarselutsending(Varselbestilling varselbestilling, Varsel varsel) {

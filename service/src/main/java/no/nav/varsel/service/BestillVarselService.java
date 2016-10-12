@@ -63,9 +63,6 @@ public class BestillVarselService {
 	@Inject
 	private VarselutsendingToMapper varselutsendingToMapper;
 
-	@Inject
-	private TransactionTemplate transactionTemplate;
-
 	public void bestillVarsel(BestillVarselTo to) {
 		Varselbestilling existingVarsel = varselbestillingRepo.findByVarselbestillingIdEager(to.getVarselBestillingId());
 
@@ -151,15 +148,9 @@ public class BestillVarselService {
 	}
 
 	private void stopRevarsel(Varselbestilling existingVarsel, VarselTekstMissingException exception) {
-		TransactionCallbackWithoutResult transactionCallbackWithoutResult =
-				new TransactionCallbackWithoutResult() {
-					@Override
-					protected void doInTransactionWithoutResult(TransactionStatus status) {
-						existingVarsel.setAntallRevarslinger(0);
-						varselbestillingRepo.saveAndFlush(existingVarsel);
-					}
-				};
-		transactionTemplate.execute(transactionCallbackWithoutResult);
+		existingVarsel.setAntallRevarslinger(null);
+		existingVarsel.setNesteVarslingDato(null);
+		varselbestillingRepo.saveAndFlush(existingVarsel);
 		throw exception;
 	}
 
