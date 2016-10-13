@@ -55,13 +55,15 @@ public class JmsPingProviderITest {
 	public void shouldPing() throws Exception {
 		List<Ping> ping = jmsPingProvider.ping();
 
-		assertThat(ping, hasSize(((int) queueOverview.keySet().stream().filter(q -> !q.isRemote()).count())));
+		assertThat(ping, hasSize(queueOverview.size()));
 		ping.forEach(p -> {
 			assertThat(p.getType(), anyOf(is(Ping.Type.Queue), is(Ping.Type.RemoteQueue)));
 			assertThat(p.getAddress(), startsWith("mq_"));
 			assertThat(p.getBeskrivelse(), notNullValue());
 			assertThat(p.getName(), notNullValue());
-			p.getPinger().run();
+			if (p.getType() != Ping.Type.RemoteQueue) {
+				p.getPinger().run();
+			}
 		});
 	}
 }
