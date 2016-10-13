@@ -6,8 +6,7 @@
 	<name>varsel</name>
 
 	<selftest>
-		<path>/varsel/internal/selftest?status</path>
-		<humanReadablePath>/varsel/internal/selftest</humanReadablePath>
+		<path>/varsel/internal/selftest</path>
 	</selftest>
 
 	<loadBalancer isAlive="/varsel/internal/isAlive"/>
