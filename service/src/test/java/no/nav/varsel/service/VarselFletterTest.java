@@ -111,11 +111,9 @@ public class VarselFletterTest {
 
 		Map<String, String> map = new HashMap<>();
 		map.put("url", "https://somesubdomain.nav.no/mininnboks/traad/10005WTVQ");
-		String varsel = fletter.weaveText(template, map);
 
 		assertThat(fletter.weaveText(template, map),
 				is(excpectedResult));
-
 	}
 
 	@Test
@@ -155,5 +153,18 @@ public class VarselFletterTest {
 		map.put("param1", "p1");
 
 		fletter.weaveText("http://nav.no/{param1}/{param2}", map);
+	}
+
+	@Test
+	public void testArrayOutOfBoundsExc_PKFEIL20151() throws Exception {
+		Map<String, String> map = new HashMap<>();
+		map.put("sted", "NAV Bærum - Løkketangen");
+		map.put("tid", "2016-10-20T10:00:00");
+
+		fletter.weaveText("Hei! Du har et møte i regi av NAV på {sted} {tid:dd.MM.yyyy} klokken {tid:HH:mm}\n" +
+				"Vennlig hilsen NAV", map);
+		fletter.weaveText("Hei! Dette er en beskjed om at du har et møte på {sted} {tid:dd:MM:yyyy} klokken {tid:HH:mm}\n" +
+				"Vennlig hilsen NAV", map);
+		fletter.weaveText("Hei! Dette er en beskjed om at du har et møte på {sted} {tid:dd:MM:yyyy} klokken {tid:HH:mm}", map);
 	}
 }
