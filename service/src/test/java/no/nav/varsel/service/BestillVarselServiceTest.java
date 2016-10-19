@@ -30,6 +30,7 @@ import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.support.exception.VarselbestillingAlreadyExistException;
 import no.nav.varsel.service.support.exception.VarselbestillingNotExistException;
+import no.nav.varsel.service.support.exception.VarselbestillingUtloeptException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
@@ -46,6 +47,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Unit test for {@link BestillVarselService}
@@ -209,6 +211,17 @@ public class BestillVarselServiceTest {
 		existingVarselbestilling.setNesteVarslingDato(futureTime);
 		createBestillingTo(VARSELBESTILLING_ID, true);
 		bestillVarselService.bestillVarsel(bestillingTo);
+	}
+
+	@Test
+	public void shouldThrowFunctionalForVarselbestilling_VarselbestillingUtloept() throws Exception {
+		LocalDateTime pastTime = LocalDateTime.now().minusDays(1);
+		expectedException.expectMessage("Varselbestilling with varselbestillingId=" + VARSELBESTILLING_ID + " has utloepstidspunkt=" + pastTime);
+		expectedException.expect(VarselbestillingUtloeptException.class);
+
+		BestillVarselTo bestillingTo = createBestillingTo(VARSELBESTILLING_ID, true);
+		bestillingTo.setUtloepstidspunkt(pastTime);
+		bestillVarselService.bestillVarsel(this.bestillingTo);
 	}
 
 	private BestillVarselTo createBestillingTo(String bestillingId, boolean revarsling) {

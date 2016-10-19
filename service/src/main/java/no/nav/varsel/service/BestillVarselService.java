@@ -11,6 +11,7 @@ import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.support.exception.VarselTekstMissingException;
+import no.nav.varsel.service.support.exception.VarselbestillingUtloeptException;
 import no.nav.varsel.service.support.exception.VarselbestillingAlreadyExistException;
 import no.nav.varsel.service.support.exception.VarselbestillingNotExistException;
 import no.nav.varsel.service.to.BestillVarselTo;
@@ -60,6 +61,10 @@ public class BestillVarselService {
 
 	public void bestillVarsel(BestillVarselTo to) {
 		Varselbestilling existingVarsel = varselbestillingRepo.findByVarselbestillingIdEager(to.getVarselBestillingId());
+
+		if (to.getUtloepstidspunkt() != null && to.getUtloepstidspunkt().isBefore(LocalDateTime.now())) {
+			throw new VarselbestillingUtloeptException(to.getVarselBestillingId(), to.getUtloepstidspunkt());
+		}
 
 		if (to.isRevarsling()) {
 			assertRevarsel(to, existingVarsel);
