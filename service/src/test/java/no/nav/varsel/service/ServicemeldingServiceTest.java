@@ -31,6 +31,7 @@ import no.nav.varsel.repo.TestdataUtil;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.support.exception.VarselInaktivVarselmalException;
+import no.nav.varsel.service.support.exception.VarselbestillingUtloeptException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
@@ -48,6 +49,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -203,6 +205,16 @@ public class ServicemeldingServiceTest {
 
 		assertThat(value.getEpostadresse(), is(EPOST));
 		assertThat(value.getMobiltelefonnummer(), is(TLF));
+	}
+
+	@Test
+	public void shouldThrowFunctionalForVarselbestilling_VarselbestillingUtloept() throws Exception {
+		LocalDateTime pastTime = LocalDateTime.now().minusDays(1);
+		expectedException.expectMessage("Varselbestilling has utloepstidspunkt=" + pastTime);
+		expectedException.expect(VarselbestillingUtloeptException.class);
+
+		bestilling.setUtloepstidspunkt(pastTime);
+		servicemeldingService.bestillServicemelding(bestilling);
 	}
 
 	private void createKontaktInfoBestilling() {

@@ -10,6 +10,11 @@ import java.time.LocalDateTime;
  */
 public class VarselbestillingUtloeptException extends FunctionalVarselException {
 	public VarselbestillingUtloeptException(String varselbestillingId, LocalDateTime utloept) {
-		super(String.format("Varselbestilling with varselbestillingId=%s has utloepstidspunkt=%s", varselbestillingId, utloept.toString()));
+		super(message(varselbestillingId, utloept));
+	}
+
+	protected static String message(String varselbestillingId, LocalDateTime utloept) {
+		String id = varselbestillingId == null ? "" : "with varselbestillingId=%s " + varselbestillingId;
+		return String.format("Varselbestilling %shas utloepstidspunkt=%s", id, utloept.toString());
 	}
 }
