@@ -14,7 +14,7 @@ public class VarselbestillingUtloeptException extends FunctionalVarselException 
 	}
 
 	protected static String message(String varselbestillingId, LocalDateTime utloept) {
-		String id = varselbestillingId == null ? "" : "with varselbestillingId=%s " + varselbestillingId;
-		return String.format("Varselbestilling %shas utloepstidspunkt=%s", id, utloept.toString());
+		String id = varselbestillingId == null ? "" : " with varselbestillingId=" + varselbestillingId;
+		return String.format("Varselbestilling%s has utloepstidspunkt=%s", id, utloept.toString());
 	}
 }
