@@ -1,5 +1,6 @@
 package no.nav.varsel.service;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.repo.VarselRepo;
@@ -13,12 +14,14 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Service for MottaVarselKvittering
  *
  * @author Roar Bjurstrom, Visma Consulting.
  */
+
 public class MottaVarselKvitteringService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MottaVarselKvitteringService.class);
@@ -34,14 +37,26 @@ public class MottaVarselKvitteringService {
 	}
 
 	private Varsel findVarsel(MottaVarselKvitteringTo mottaVarselKvitteringTo) {
-		Varsel varsel = varselRepo.findByVarselId(mottaVarselKvitteringTo.getVarselId());
+		Varsel varsel = null;
+		
+		for(int i = 0; i < 3 && varsel == null; i++){
+			varsel = varselRepo.findByVarselId(mottaVarselKvitteringTo.getVarselId());
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		
 		if (varsel == null) {
 			throw new VarselNotExistException(mottaVarselKvitteringTo.getVarselId());
 		}
+		
 		return varsel;
 	}
 
 	private void validateVarselStatus(Varsel varsel) {
+		
 		if (varsel.getStatus() != StatusCode.SENDT) {
 			throw new InvalidVarselStatusException(varsel);
 		}
