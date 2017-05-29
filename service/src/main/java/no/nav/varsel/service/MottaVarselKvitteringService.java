@@ -1,11 +1,11 @@
 package no.nav.varsel.service;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.service.support.exception.InvalidVarselStatusException;
 import no.nav.varsel.service.support.exception.VarselNotExistException;
+import no.nav.varsel.service.support.exception.VarselKvitteringIkkeFunnetException;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringStatusTo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringTo;
 import org.apache.commons.lang3.StringUtils;
@@ -13,8 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+
 import java.time.LocalDateTime;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Service for MottaVarselKvittering
@@ -23,28 +23,30 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class MottaVarselKvitteringService {
-
+	
+	private static final int millisekunderVentetid = 200;
 	private static final Logger LOG = LoggerFactory.getLogger(MottaVarselKvitteringService.class);
 	static final int MAX_LENGTH_FEILMELDING = 1000;
-
+	
 	@Inject
 	private VarselRepo varselRepo;
-
+	
 	public void behandleKvitteringsmelding(MottaVarselKvitteringTo mottaVarselKvitteringTo) {
 		Varsel varsel = findVarsel(mottaVarselKvitteringTo);
 		validateVarselStatus(varsel);
 		updateVarsel(mottaVarselKvitteringTo, varsel);
 	}
-
+	
 	private Varsel findVarsel(MottaVarselKvitteringTo mottaVarselKvitteringTo) {
 		Varsel varsel = null;
 		
-		for(int i = 0; i < 3 && varsel == null; i++){
+		for (int i = 0; i < 3 && varsel == null; i++) {
 			varsel = varselRepo.findByVarselId(mottaVarselKvitteringTo.getVarselId());
 			try {
-				Thread.sleep(200);
+				Thread.sleep(millisekunderVentetid);
 			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
+				throw new VarselKvitteringIkkeFunnetException("Varsel med ID" + mottaVarselKvitteringTo.getVarselId() + " ikke funnet for oppdatering av status ",
+						e);
 			}
 		}
 		
@@ -54,14 +56,14 @@ public class MottaVarselKvitteringService {
 		
 		return varsel;
 	}
-
+	
 	private void validateVarselStatus(Varsel varsel) {
 		
 		if (varsel.getStatus() != StatusCode.SENDT) {
 			throw new InvalidVarselStatusException(varsel);
 		}
 	}
-
+	
 	private void updateVarsel(MottaVarselKvitteringTo mottaVarselKvitteringTo, Varsel varsel) {
 		varsel.setKvitteringTidspunkt(LocalDateTime.now());
 		if (mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.OK) {
