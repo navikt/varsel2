@@ -45,7 +45,7 @@ public class MottaVarselKvitteringService {
 			try {
 				Thread.sleep(millisekunderVentetid);
 			} catch (InterruptedException e) {
-				throw new VarselKvitteringIkkeFunnetException("Varsel med ID" + mottaVarselKvitteringTo.getVarselId() + " ikke funnet for oppdatering av status ",
+				throw new VarselKvitteringIkkeFunnetException("Varsel med VarselId " + mottaVarselKvitteringTo.getVarselId() + " ikke funnet for oppdatering av status ",
 						e);
 			}
 		}
