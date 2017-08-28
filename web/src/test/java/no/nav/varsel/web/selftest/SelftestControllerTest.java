@@ -40,9 +40,9 @@ public class SelftestControllerTest extends AbstractRestTest {
 	}
 
 	@Test
-	public void shouldSelftestJsonAndGiveErrorCode() throws Exception {
+	public void shouldSelftestJsonAndNotGiveErrorCode() throws Exception {
 		mockMvc.perform(get("/internal/selftest").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isInternalServerError())
+				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.application", is("varsel")))
 				.andExpect(jsonPath("$.version", notNullValue()))
 				.andExpect(jsonPath("$.node", notNullValue()))

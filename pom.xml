@@ -5,7 +5,7 @@
 	<groupId>no.nav.varsel</groupId>
 	<artifactId>varsel</artifactId>
 	<packaging>pom</packaging>
-	<version>1.2.8-SNAPSHOT</version>
+	<version>1.2.15-SNAPSHOT</version>
 
 	<modules>
 		<module>config</module>
@@ -186,7 +186,7 @@
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
-				<version>3.2.1</version>
+				<version>3.5</version>
 			</dependency>
 
 			<!-- jdbc -->
@@ -492,7 +492,7 @@
 	<scm>
 		<developerConnection>scm:git:http://stash.devillo.no/scm/boaf/varsel.git</developerConnection>
 		<url>http://stash.devillo.no/projects/BOAF/repos/varsel.git</url>
-		<tag>HEAD</tag>
+		<tag>varsel-1.2.12</tag>
 	</scm>
 
 	<distributionManagement>

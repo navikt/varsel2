@@ -3,7 +3,6 @@ package no.nav.varsel.service;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import static java.util.regex.Pattern.compile;
 import static no.nav.varsel.domain.Constants.LOCALE_NO;
-import static org.apache.commons.lang3.text.StrMatcher.stringMatcher;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -38,12 +37,12 @@ public class VarselFletter {
 	/**
 	 * Replaces values (identified by surrounding curly brackets) in a string.
 	 *
-	 * @param text The string to replace
+	 * @param text           The string to replace
 	 * @param weavedataInput The parameters to replace the values with
 	 * @return A new string with the replaced values
 	 * @throws FletteparameterMissingException Thrown if there exists a value in the text that lacks a corresponding parameter
-	 * in weavedataInput
-	 * @throws InvalidDateTimeFormatException Thrown if a given dateTime is invalid or if the format pattern is invalid
+	 *                                         in weavedataInput
+	 * @throws InvalidDateTimeFormatException  Thrown if a given dateTime is invalid or if the format pattern is invalid
 	 */
 	public String weaveText(String text, Map<String, String> weavedataInput)
 			throws FletteparameterMissingException, InvalidDateTimeFormatException {
@@ -61,9 +60,10 @@ public class VarselFletter {
 		tekst = weaveTimeParams(tekst, flettedata);
 		StrBuilder sb = new StrBuilder(tekst);
 		flettedata.forEach((key, val) -> {
-			sb.setLength(sb.length() + val.length());
 			String replace = "{" + key + "}";
-			sb.replace(stringMatcher(replace), val, 0, sb.length(), -1);
+			while (sb.contains(replace)) {
+				sb.replaceFirst(replace, val);
+			}
 		});
 		return sb.toString().trim();
 	}

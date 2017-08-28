@@ -68,12 +68,8 @@ public class SelftestController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/internal/selftest", produces = MediaType.APPLICATION_JSON_VALUE)
-	public SelftestResponse selftest(HttpServletResponse httpServletResponse) {
-		SelftestResponse response = performSelftest();
-		if (response.isError()) {
-			httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		}
-		return response;
+	public SelftestResponse selftest() {
+		return performSelftest();
 	}
 
 	/**

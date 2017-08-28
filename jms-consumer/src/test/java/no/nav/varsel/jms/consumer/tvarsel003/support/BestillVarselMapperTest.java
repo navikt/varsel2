@@ -30,7 +30,7 @@ public class BestillVarselMapperTest {
 	public static final String AKTOER_ID = "aktoerId";
 	public static final String PERSON_IDENT = "personIdent";
 	public static final String VARSELTYPE_ID = "varseltypeId";
-	public static final LocalDateTime UTLOEPS_TIDSPUNKT = LocalDateTime.parse("2016-06-06T21:21:42");
+	public static final LocalDateTime UTLOEPS_TIDSPUNKT = LocalDateTime.now().plusHours(1);
 
 	private BestillVarselMapper mapper = new BestillVarselMapper();
 

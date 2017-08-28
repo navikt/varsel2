@@ -54,6 +54,8 @@ public class MottaVarselKvitteringService {
 			varsel.setDistribusjonTidspunkt(mottaVarselKvitteringTo.getUtsendingstidspunkt());
 		} else if (mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.ERROR
 				|| mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.EXPIRED) {
+			LOG.warn("Error/Expired kvittering for varsel with varselId=" + mottaVarselKvitteringTo.getVarselId() +
+					". feilmelding=" + mottaVarselKvitteringTo.getFeilmelding());
 			varsel.setStatus(StatusCode.FEILET);
 			varsel.setFeilbeskrivelse(StringUtils.abbreviate(mottaVarselKvitteringTo.getFeilmelding(),
 					MAX_LENGTH_FEILMELDING));

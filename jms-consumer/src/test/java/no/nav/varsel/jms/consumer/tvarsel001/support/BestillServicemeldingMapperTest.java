@@ -29,8 +29,7 @@ import java.time.LocalDateTime;
  */
 public class BestillServicemeldingMapperTest {
 
-	public static final String UTLOEPSTIDSPUNKT = "2016-04-24T15:22:45";
-	public static final LocalDateTime UTLOEPSTIDSPUNKT_LDT = LocalDateTime.parse(UTLOEPSTIDSPUNKT);
+	public static final LocalDateTime UTLOEPSTIDSPUNKT_LDT = LocalDateTime.now().plusHours(1);
 	public static final String MOTTAKER = "mottakeren";
 	public static final String KEY = "mottaker";
 	public static final String VAL = "val";
@@ -135,7 +134,7 @@ public class BestillServicemeldingMapperTest {
 		AktoerId aktoerId = new AktoerId();
 		aktoerId.setAktoerId(MOTTAKER);
 		varsel.setMottaker(aktoerId);
-		varsel.setUtloepstidspunkt(datatypeFactory.newXMLGregorianCalendar(UTLOEPSTIDSPUNKT));
+		varsel.setUtloepstidspunkt(datatypeFactory.newXMLGregorianCalendar(UTLOEPSTIDSPUNKT_LDT.toString()));
 		Parameter parameter = new Parameter();
 		parameter.setKey(KEY);
 		parameter.setValue(VAL);
