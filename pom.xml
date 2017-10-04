@@ -481,6 +481,13 @@
 						<password>h4jro2vi352</password>
 					</configuration>
 				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.20.1</version>
+					<configuration>
+						<reuseForks>false</reuseForks>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
