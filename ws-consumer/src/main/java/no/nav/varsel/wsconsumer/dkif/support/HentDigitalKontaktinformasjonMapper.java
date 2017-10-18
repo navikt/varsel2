@@ -23,12 +23,12 @@ public class HentDigitalKontaktinformasjonMapper {
 				.reservasjon(mapStringToBool(dki.getReservasjon()));
 
 		if (dki.getEpostadresse() != null) {
-			builder.epostadresse(dki.getEpostadresse().getValue())
+			builder.epostadresse(dki.getEpostadresse().getValue().trim())
 					.epostSistOppdatert(toLocalDateTime(dki.getEpostadresse().getSistOppdatert()))
 					.epostSistVerifisert(toLocalDateTime(dki.getEpostadresse().getSistVerifisert()));
 		}
 		if (dki.getMobiltelefonnummer() != null) {
-			builder.mobiltelefonnummer(dki.getMobiltelefonnummer().getValue())
+			builder.mobiltelefonnummer(dki.getMobiltelefonnummer().getValue().trim())
 					.mobiltelefonSistOppdatert(toLocalDateTime(dki.getMobiltelefonnummer().getSistOppdatert()))
 					.mobiltelefonSistVerifisert(toLocalDateTime(dki.getMobiltelefonnummer().getSistVerifisert()));
 		}

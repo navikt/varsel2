@@ -13,6 +13,7 @@ import static no.nav.varsel.repo.TestdataUtil.VARSEL_URL;
 import static no.nav.varsel.repo.TestdataUtil.createVarselbestilling;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import no.nav.varsel.domain.code.KanalCode;
@@ -30,6 +31,7 @@ import java.util.List;
  */
 public class VarselutsendingToMapperTest {
 
+	private static String EPOSTADRESSE = "err@mock.com";
 	private VarselutsendingToMapper mapper = new VarselutsendingToMapper();
 
 	@Test
@@ -52,6 +54,17 @@ public class VarselutsendingToMapperTest {
 		assertVarselTo(tos.get(0));
 		assertMottakerPerson(tos.get(0));
 	}
+	
+	@Test
+	public void shouldRemoveWhitespaceFromKontaktinfo() throws Exception {
+		Varselbestilling varselbestilling = createVarselbestilling();
+		varselbestilling.getVarsels().iterator().next().setKanal(KanalCode.DITT_NAV);
+		varselbestilling.getVarsels().forEach(e->e.setKontaktInfo(" "+EPOSTADRESSE+" "));
+		
+		List<VarselutsendingTo> tos = mapper.mapVarsels(varselbestilling, UTLOP_TIDSPUNKT, varselbestilling.getVarsels());
+		
+		tos.forEach(e->assertEquals(e.getKontaktInformasjon(),EPOSTADRESSE));
+	}
 
 	@Test
 	public void shouldMapDittNavVarsel() throws Exception {
@@ -59,7 +72,7 @@ public class VarselutsendingToMapperTest {
 		varselbestilling.getVarsels().iterator().next().setKanal(KanalCode.DITT_NAV);
 
 		List<VarselutsendingTo> tos = mapper.mapVarsels(varselbestilling, UTLOP_TIDSPUNKT, varselbestilling.getVarsels());
-
+		
 		assertThat(tos, hasSize(1));
 		assertVarselTo(tos.get(0));
 		assertMottakerAktoer(tos.get(0));

@@ -4,6 +4,7 @@ import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.Epostadresse;
@@ -82,6 +83,23 @@ public class HentDigitalKontaktinformasjonMapperTest {
 				.setSistVerifisert(null);
 		KontaktregisterTo map = mapper.map(response);
 		assertThat(map.getMobiltelefonSistVerifisert(), nullValue());
+	}
+
+	@Test
+	public void shoulRemoveWhitespaceFromEpostadresseAndMobiltelefonnummer() throws Exception {
+		HentDigitalKontaktinformasjonResponse response = createResponse();
+		
+		Mobiltelefonnummer mobiltelefonnummer = new Mobiltelefonnummer();
+		mobiltelefonnummer.setValue(" " + MOBILTELEFONNUMMER + " ");
+		response.getDigitalKontaktinformasjon().setMobiltelefonnummer(mobiltelefonnummer);
+		
+		Epostadresse epostadresse = new Epostadresse();
+		epostadresse.setValue(" " + EPOSTADRESSE + " ");
+		response.getDigitalKontaktinformasjon().setEpostadresse(epostadresse);
+		
+		KontaktregisterTo map = mapper.map(response);
+		assertEquals(map.getMobiltelefonnummer(), MOBILTELEFONNUMMER);
+		assertEquals(map.getEpostadresse(), EPOSTADRESSE);
 	}
 
 	public static HentDigitalKontaktinformasjonResponse createResponse() {

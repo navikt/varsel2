@@ -12,8 +12,10 @@ import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldin
 import static no.nav.varsel.jms.producer.VarselutsendingProducer.FEIL_MQ_UT;
 import static no.nav.varsel.mock.AktoerV2Mock.PERSON_IDENT;
 import static no.nav.varsel.repo.TestdataUtil.FUNKSJONELL_FEIL;
+import static no.nav.varsel.repo.TestdataUtil.PERSONIDENT_WHITESPACE_TEST;
 import static no.nav.varsel.repo.TestdataUtil.TEKNISK_FEIL;
 import static no.nav.varsel.test.TestUtils.aboutNow;
+import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static org.hamcrest.Matchers.equalTo;
@@ -24,6 +26,7 @@ import static org.junit.Assert.assertThat;
 
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.AktoerId;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ObjectFactory;
+import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.Person;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
 import no.nav.varsel.domain.code.KanalCode;
@@ -113,6 +116,23 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 		String varselTekst = FOERSTE_GANG_TEKST.replace("{mottaker}", VAL);
 		String varselId = assertDb(varselTekst).getVarselId();
 		assertVarselutsendingQueue(varselTekst, varselId);
+	}
+	
+	@Test
+	public void shouldTrimKontaktInfo() throws Exception {
+		JAXBElement<ServicemeldingMedKontaktinformasjon> serviceMelding =  new ObjectFactory().createServicemelding(createServicemeldingMedKontaktinformasjon());
+		Person person = new Person();
+		person.setIdent(PERSONIDENT_WHITESPACE_TEST);
+		
+		serviceMelding.getValue().setMottaker(person);
+		
+		JmsReply response = sendMessage(bestillServicemeldingKontaktInfoQueue, serviceMelding);
+
+		isOk(response);
+		assertThat(varselbestillingRepo.count(), is(1L));
+		
+		Varselutsending varselutsending = receive(varselutsendingQueue);
+		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), equalTo(EPOSTADRESSE));
 	}
 
 	private no.nav.varsel.domain.object.Varsel assertDb(String varselTekst) {

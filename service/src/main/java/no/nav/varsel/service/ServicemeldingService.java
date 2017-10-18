@@ -76,8 +76,8 @@ public class ServicemeldingService {
 			//TVARSEL006 Path
 			varselInfoTo.getPreferertKanal().remove(KanalCode.DITT_NAV);
 			kontaktregisterTo = new KontaktregisterTo();
-			kontaktregisterTo.setMobiltelefonnummer(bestilling.getMobiltelefonnummer());
-			kontaktregisterTo.setEpostadresse(bestilling.getEpost());
+			kontaktregisterTo.setMobiltelefonnummer(bestilling.getMobiltelefonnummer() != null ? bestilling.getMobiltelefonnummer().trim() : null) ;
+			kontaktregisterTo.setEpostadresse(bestilling.getEpost() != null ? bestilling.getEpost().trim() : null);
 		} else {
 			//TVARSEL001 Path
 			kontaktregisterTo = dkifConsumer.hentDigitalKontaktinformasjon(bestilling.getPersonIdent());
