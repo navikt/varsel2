@@ -28,6 +28,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.UUID;
 
 /**
  * Test Config for JMS
@@ -85,7 +86,7 @@ public class JmsTestConfig {
 	@Bean(initMethod = "init", destroyMethod = "close")
 	public ConnectionFactory atomikosConnectionFactoryBean() {
 		AtomikosConnectionFactoryBean atomikosConnectionFactoryBean = new AtomikosConnectionFactoryBean();
-		atomikosConnectionFactoryBean.setUniqueResourceName("QUEUE_BROKER");
+		atomikosConnectionFactoryBean.setUniqueResourceName(UUID.randomUUID().toString());
 		atomikosConnectionFactoryBean.setXaConnectionFactory(activeMQXAConnectionFactory());
 		atomikosConnectionFactoryBean.setPoolSize(10);
 		return atomikosConnectionFactoryBean;
