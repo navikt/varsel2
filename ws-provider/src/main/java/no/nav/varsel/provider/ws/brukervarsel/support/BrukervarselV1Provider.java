@@ -35,6 +35,7 @@ public class BrukervarselV1Provider {
 	private BrukervarselService brukervarselV1Service;
 
 	public void ping() {
+		//ping
 	}
 
 	@AccessControl(attributes = {

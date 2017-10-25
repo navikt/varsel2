@@ -51,7 +51,8 @@ public class HentVarselForBrukerTo {
 		private LocalDateTime datoFom;
 		private LocalDateTime datoTom;
 
-		public Builder() {
+		private Builder() {
+			//Avoid public instantiation
 		}
 		public static Builder aHentVarselForBrukerTo() {
 			return new Builder();
