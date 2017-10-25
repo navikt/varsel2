@@ -29,7 +29,7 @@ public class VarselutsendingToMapper {
 			to.setUtloepstidspunkt(utlopTidspunkt);
 			to.setVarseltypeId(varselbestilling.getVarseltypeId());
 			to.setKanal(varsel.getKanal());
-			to.setKontaktInformasjon(varsel.getKontaktInfo());
+			to.setKontaktInformasjon(varsel.getKontaktInfo() != null ? varsel.getKontaktInfo().trim() : null);
 			if(varsel.getKanal().hasExternalUtsendingskanal()) {
 				to.setMottaker(AktoerTo.newPersonIdent(varselbestilling.getFnr()));
 			} else {

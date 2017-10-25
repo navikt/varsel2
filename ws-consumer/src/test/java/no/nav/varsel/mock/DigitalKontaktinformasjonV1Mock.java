@@ -1,5 +1,6 @@
 package no.nav.varsel.mock;
 
+import static no.nav.varsel.repo.TestdataUtil.PERSONIDENT_WHITESPACE_TEST;
 import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.createResponse;
 
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.DigitalKontaktinformasjonV1;
@@ -48,7 +49,12 @@ public class DigitalKontaktinformasjonV1Mock implements DigitalKontaktinformasjo
 
 	@Override
 	public HentDigitalKontaktinformasjonResponse hentDigitalKontaktinformasjon(HentDigitalKontaktinformasjonRequest hentDigitalKontaktinformasjonRequest) throws HentDigitalKontaktinformasjonKontaktinformasjonIkkeFunnet, HentDigitalKontaktinformasjonPersonIkkeFunnet, HentDigitalKontaktinformasjonSikkerhetsbegrensing {
-		return createResponse();
+		HentDigitalKontaktinformasjonResponse response = createResponse();
+		if(PERSONIDENT_WHITESPACE_TEST.equals(hentDigitalKontaktinformasjonRequest.getPersonident())) {
+			response.getDigitalKontaktinformasjon().getEpostadresse().setValue(
+					response.getDigitalKontaktinformasjon().getEpostadresse().getValue() + " ");
+		}
+		return response;
 	}
 
 	@Override

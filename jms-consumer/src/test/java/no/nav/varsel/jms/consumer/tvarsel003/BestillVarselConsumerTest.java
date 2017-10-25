@@ -165,6 +165,22 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		Varselutsending varselutsending = receive(varselutsendingQueue);
 		assertThat(varselutsending.getVarselURL(), equalTo(expectedVarselUrl));
 	}
+	
+	
+	@Test
+	public void shouldTrimKontaktInfo() throws Exception {
+		JAXBElement<VarselMedHandling> varselBestilling = createVarselBestilling(false);
+		((no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Person)varselBestilling.getValue().getMottaker())
+				.setIdent("test whitespace");
+		
+		JmsReply response = sendMessage(bestillVarselQueue, varselBestilling);
+		
+		isOk(response);
+		assertThat(varselbestillingRepo.count(), is(1L));
+		
+		Varselutsending varselutsending = receive(varselutsendingQueue);
+		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), equalTo(EPOSTADRESSE));
+	}
 
 	private Varsel assertDatabaseFoerstegangVarsel(Varselbestilling varselbestilling) {
 		assertThat(varselbestilling, notNullValue());
