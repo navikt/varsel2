@@ -133,6 +133,7 @@ public class KontaktregisterTo implements Serializable {
 		private Collection<KanalCode> kanaler;
 
 		private KontaktregisterToBuilder() {
+			//Avoid public instantiation
 		}
 
 		public static KontaktregisterToBuilder aKontaktregisterTo() {
