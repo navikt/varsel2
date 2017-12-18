@@ -5,6 +5,7 @@ import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.service.support.exception.InvalidVarselStatusException;
 import no.nav.varsel.service.support.exception.VarselNotExistException;
+import no.nav.varsel.service.support.exception.VarselKvitteringIkkeFunnetException;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringStatusTo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringTo;
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+
 import java.time.LocalDateTime;
 
 /**
@@ -19,34 +21,49 @@ import java.time.LocalDateTime;
  *
  * @author Roar Bjurstrom, Visma Consulting.
  */
-public class MottaVarselKvitteringService {
 
+public class MottaVarselKvitteringService {
+	
+	private static final int millisekunderVentetid = 200;
 	private static final Logger LOG = LoggerFactory.getLogger(MottaVarselKvitteringService.class);
 	static final int MAX_LENGTH_FEILMELDING = 1000;
-
+	
 	@Inject
 	private VarselRepo varselRepo;
-
+	
 	public void behandleKvitteringsmelding(MottaVarselKvitteringTo mottaVarselKvitteringTo) {
 		Varsel varsel = findVarsel(mottaVarselKvitteringTo);
 		validateVarselStatus(varsel);
 		updateVarsel(mottaVarselKvitteringTo, varsel);
 	}
-
+	
 	private Varsel findVarsel(MottaVarselKvitteringTo mottaVarselKvitteringTo) {
-		Varsel varsel = varselRepo.findByVarselId(mottaVarselKvitteringTo.getVarselId());
+		Varsel varsel = null;
+		
+		for (int i = 0; i < 3 && varsel == null; i++) {
+			varsel = varselRepo.findByVarselId(mottaVarselKvitteringTo.getVarselId());
+			try {
+				Thread.sleep(millisekunderVentetid);
+			} catch (InterruptedException e) {
+				throw new VarselKvitteringIkkeFunnetException("Varsel med VarselId " + mottaVarselKvitteringTo.getVarselId() + " ikke funnet for oppdatering av status ",
+						e);
+			}
+		}
+		
 		if (varsel == null) {
 			throw new VarselNotExistException(mottaVarselKvitteringTo.getVarselId());
 		}
+		
 		return varsel;
 	}
-
+	
 	private void validateVarselStatus(Varsel varsel) {
+		
 		if (varsel.getStatus() != StatusCode.SENDT) {
 			throw new InvalidVarselStatusException(varsel);
 		}
 	}
-
+	
 	private void updateVarsel(MottaVarselKvitteringTo mottaVarselKvitteringTo, Varsel varsel) {
 		varsel.setKvitteringTidspunkt(LocalDateTime.now());
 		if (mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.OK) {

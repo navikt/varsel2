@@ -37,7 +37,7 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 	public static final String VARSELTYPE_ID = "varseltypeId";
 	public static final LocalDateTime UTLOEPS_TIDSPUNKT = LocalDateTime.now().plusHours(1);
 	public static final String ORGNUMMER = "orgnummer";
-	public static final String EPOST = "test@test.no";
+	public static final String EPOST = "er@mocked.data";
 	public static final String TLF = "11223344";
 
 	@Rule

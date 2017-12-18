@@ -15,28 +15,28 @@ import org.apache.commons.lang3.StringUtils;
  * @author Andreas Skomedal, Visma Consulting.
  */
 public class HentDigitalKontaktinformasjonMapper {
-
+	
 	public KontaktregisterTo map(HentDigitalKontaktinformasjonResponse response) {
 		Kontaktinformasjon dki = response.getDigitalKontaktinformasjon();
-
+		
 		KontaktregisterTo.KontaktregisterToBuilder builder = aKontaktregisterTo()
 				.reservasjon(mapStringToBool(dki.getReservasjon()));
-
-		if (dki.getEpostadresse() != null) {
-			builder.epostadresse(dki.getEpostadresse().getValue())
+		
+		if (dki.getEpostadresse() != null && dki.getEpostadresse().getValue() != null) {
+			builder.epostadresse(dki.getEpostadresse().getValue().trim())
 					.epostSistOppdatert(toLocalDateTime(dki.getEpostadresse().getSistOppdatert()))
 					.epostSistVerifisert(toLocalDateTime(dki.getEpostadresse().getSistVerifisert()));
 		}
-		if (dki.getMobiltelefonnummer() != null) {
-			builder.mobiltelefonnummer(dki.getMobiltelefonnummer().getValue())
+		if (dki.getMobiltelefonnummer() != null && dki.getMobiltelefonnummer().getValue() != null) {
+			builder.mobiltelefonnummer(dki.getMobiltelefonnummer().getValue().trim())
 					.mobiltelefonSistOppdatert(toLocalDateTime(dki.getMobiltelefonnummer().getSistOppdatert()))
 					.mobiltelefonSistVerifisert(toLocalDateTime(dki.getMobiltelefonnummer().getSistVerifisert()));
 		}
-
+		
 		return builder.build();
 	}
-
-
+	
+	
 	boolean mapStringToBool(String bool) {
 		if (StringUtils.isBlank(bool)) {
 			return true;

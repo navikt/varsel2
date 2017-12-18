@@ -1,6 +1,7 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
+import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo.Builder.aHentVarselForBrukerTo;
 
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.AktoerId;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
@@ -18,7 +19,7 @@ public class HentVarselForBrukerRequestMapper {
 	public HentVarselForBrukerTo map(HentVarselForBrukerRequest request) {
 		Assert.notNull(request, "The parameter request can't be null");
 
-		HentVarselForBrukerTo.Builder builder = new HentVarselForBrukerTo.Builder();
+		HentVarselForBrukerTo.Builder builder = aHentVarselForBrukerTo();
 		Periode periode = request.getPeriode() == null ? new Periode() : request.getPeriode();
 		return builder.aktoerId(request.getBruker() instanceof AktoerId ? ((AktoerId) request.getBruker()).getAktoerId() : null)
 				.fnr(request.getBruker() instanceof Person ? ((Person) request.getBruker()).getIdent() : null)

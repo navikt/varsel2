@@ -14,6 +14,8 @@ import java.util.Collection;
  */
 public class KontaktregisterTo implements Serializable {
 
+	private static final long serialVersionUID = ***gammelt_fnr***8148963L;
+
 	public static final int DATE_VALID_MONTHS = 18;
 
 	private boolean reservasjon;
@@ -131,6 +133,7 @@ public class KontaktregisterTo implements Serializable {
 		private Collection<KanalCode> kanaler;
 
 		private KontaktregisterToBuilder() {
+			//Avoid public instantiation
 		}
 
 		public static KontaktregisterToBuilder aKontaktregisterTo() {

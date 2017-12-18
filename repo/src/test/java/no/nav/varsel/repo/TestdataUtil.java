@@ -26,6 +26,7 @@ public class TestdataUtil {
 	public static final String TEKNISK_FEIL = "tekniskfeil";
 	public static final String FUNKSJONELL_FEIL = "funksjonellfeil";
 
+	public static final String PERSONIDENT_WHITESPACE_TEST="test whitespace";
 	public static final String VARSELBESTILLING_ID = "d9f8f75e-13cb-4766-81c8-306d9d9385b2";
 	public static final String VARSELTYPE_ID = "UT";
 	public static final String ORG_NR = "orgnr";
