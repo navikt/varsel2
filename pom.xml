@@ -35,10 +35,13 @@
 	</parent>
 
 	<properties>
-		<ojdbc.version>11.2.0.3</ojdbc.version>
+		<!-- maven-compiler-plugin config -->
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<ojdbc.version>12.2.0.1</ojdbc.version>
 		<modig-security.version>1.0.30</modig-security.version>
 		<cxf.version>2.7.18</cxf.version>
-		<cxf.wss4j.version>1.6.19</cxf.wss4j.version>
+		<wss4j.version>1.6.19</wss4j.version>
 		<cxf.jetty.version>8.1.15.v20140411</cxf.jetty.version>
 		<jaxb-impl.version>2.2.11</jaxb-impl.version>
 
@@ -50,7 +53,6 @@
 
 		<flyway.version>3.2.1</flyway.version>
 
-		<java.version>1.8</java.version>
 		<bootstrap.version>3.3.6</bootstrap.version>
 		<modig-log.version>1.1.2</modig-log.version>
 		<resteasy.version>2.3.10.Final</resteasy.version>
@@ -146,7 +148,7 @@
 				<classifier>jaxws</classifier>
 			</dependency>
 
-			<!--java-ee-->
+			<!-- provided -->
 			<dependency>
 				<groupId>javax.inject</groupId>
 				<artifactId>javax.inject</artifactId>
@@ -154,22 +156,15 @@
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
+				<groupId>org.jboss.spec.javax.jms</groupId>
+				<artifactId>jboss-jms-api_2.0_spec</artifactId>
+				<version>1.0.2.Final</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.hibernate.javax.persistence</groupId>
 				<artifactId>hibernate-jpa-2.1-api</artifactId>
 				<version>1.0.0.Final</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.jboss.spec.javax.jms</groupId>
-				<artifactId>jboss-jms-api_1.1_spec</artifactId>
-				<version>1.0.1.Final-redhat-2</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.activemq</groupId>
-				<artifactId>activemq-core</artifactId>
-				<version>${activemq-core.version}</version>
-				<scope>provided</scope>
 			</dependency>
 
 			<!-- util -->
@@ -197,7 +192,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.oracle</groupId>
-				<artifactId>ojdbc6</artifactId>
+				<artifactId>ojdbc8</artifactId>
 				<version>${ojdbc.version}</version>
 				<scope>provided</scope>
 			</dependency>
@@ -208,15 +203,6 @@
 				<artifactId>bootstrap</artifactId>
 				<version>${bootstrap.version}</version>
 			</dependency>
-
-			<!-- Logging dependencies -->
-			<dependency>
-				<groupId>org.jboss.logmanager</groupId>
-				<artifactId>log4j-jboss-logmanager</artifactId>
-				<version>1.0.2.Final</version>
-				<scope>provided</scope>
-			</dependency>
-			<!-- End logging dependencies -->
 
 			<!-- modig -->
 			<dependency>
@@ -251,20 +237,8 @@
 			</dependency>
 			<dependency>
 				<groupId>no.nav.modig</groupId>
-				<artifactId>modig-security-core</artifactId>
-				<version>${modig-security.version}</version>
-				<classifier>tests</classifier>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.modig</groupId>
 				<artifactId>modig-security-authorization</artifactId>
 				<version>${modig-security.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.modig</groupId>
-				<artifactId>modig-testcertificates</artifactId>
-				<version>1.0.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
@@ -318,7 +292,7 @@
 			<dependency>
 				<groupId>org.apache.ws.security</groupId>
 				<artifactId>wss4j</artifactId>
-				<version>${cxf.wss4j.version}</version>
+				<version>${wss4j.version}</version>
 			</dependency>
 
 			<dependency>
@@ -343,7 +317,6 @@
 				<version>${brevogarkiv-batch-common.version}</version>
 			</dependency>
 
-			<!-- test -->
 			<!--jetty for cxf-->
 			<dependency>
 				<groupId>org.apache.cxf</groupId>
@@ -380,6 +353,27 @@
 				<artifactId>jetty-security</artifactId>
 				<version>${cxf.jetty.version}</version>
 			</dependency>
+
+			<!-- test -->
+			<dependency>
+				<groupId>org.apache.activemq</groupId>
+				<artifactId>activemq-core</artifactId>
+				<version>${activemq-core.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.modig</groupId>
+				<artifactId>modig-security-core</artifactId>
+				<version>${modig-security.version}</version>
+				<classifier>tests</classifier>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.modig</groupId>
+				<artifactId>modig-testcertificates</artifactId>
+				<version>1.2.5</version>
+				<scope>test</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -389,12 +383,6 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>org.jboss.logmanager</groupId>
-			<artifactId>log4j-jboss-logmanager</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-logging</artifactId>
@@ -450,13 +438,12 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>sonar-maven-plugin</artifactId>
+					<artifactId>maven-ear-plugin</artifactId>
 					<version>3.0.1</version>
 				</plugin>
 				<plugin>
-					<artifactId>maven-ear-plugin</artifactId>
-					<version>2.10.1</version>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
 				</plugin>
 				<plugin>
 					<groupId>no.nav.maven.plugins</groupId>
@@ -481,7 +468,7 @@
 				</plugin>
 				<plugin>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.20.1</version>
+					<version>3.0.0-M3</version>
 					<configuration>
 						<reuseForks>false</reuseForks>
 					</configuration>

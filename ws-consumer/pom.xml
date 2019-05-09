@@ -22,11 +22,6 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
-		</dependency>
-
 		<!--Tjenestespesifikasjoner-->
 		<dependency>
 			<groupId>no.nav.tjenester.fim</groupId>
@@ -49,6 +44,13 @@
 			<classifier>jaxws</classifier>
 		</dependency>
 
+		<!-- provided -->
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<!--test-->
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
@@ -67,6 +69,11 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.modig</groupId>
+			<artifactId>modig-testcertificates</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

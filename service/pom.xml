@@ -27,9 +27,16 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- provided -->
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.jms</groupId>
+			<artifactId>jboss-jms-api_2.0_spec</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- test -->
@@ -52,11 +59,6 @@
 			<artifactId>varsel-ws-consumer</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.spec.javax.jms</groupId>
-			<artifactId>jboss-jms-api_1.1_spec</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

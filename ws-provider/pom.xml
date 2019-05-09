@@ -37,20 +37,11 @@
 		</dependency>
 		<dependency>
 			<groupId>no.nav.modig</groupId>
-			<artifactId>modig-testcertificates</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.modig</groupId>
 			<artifactId>modig-security-loginmodule</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.modig</groupId>
 			<artifactId>modig-security-authorization</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.modig</groupId>
-			<artifactId>modig-security-core</artifactId>
-			<classifier>tests</classifier>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.tjenester</groupId>
@@ -62,14 +53,12 @@
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-core</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.spec.javax.jms</groupId>
-			<artifactId>jboss-jms-api_1.1_spec</artifactId>
+			<artifactId>jboss-jms-api_2.0_spec</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<!--test-->
@@ -92,6 +81,22 @@
 			<artifactId>varsel-jms</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.modig</groupId>
+			<artifactId>modig-security-core</artifactId>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.modig</groupId>
+			<artifactId>modig-testcertificates</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-core</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
