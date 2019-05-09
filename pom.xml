@@ -477,8 +477,6 @@
 						<autoVersionSubmodules>true</autoVersionSubmodules>
 						<goals>deploy</goals>
 						<preparationGoals>clean install</preparationGoals>
-						<username>srvBrevOgArkiv</username>
-						<password>h4jro2vi352</password>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -488,14 +486,14 @@
 						<reuseForks>false</reuseForks>
 					</configuration>
 				</plugin>
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>3.1.1</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
-
-	<prerequisites>
-		<maven>3.3</maven>
-	</prerequisites>
-
+	
 	<scm>
 		<developerConnection>scm:git:http://stash.devillo.no/scm/boaf/varsel.git</developerConnection>
 		<url>http://stash.devillo.no/projects/BOAF/repos/varsel.git</url>
