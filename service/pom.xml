@@ -26,7 +26,10 @@
 			<artifactId>varsel-jms-producer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.retry</groupId>
+			<artifactId>spring-retry</artifactId>
+		</dependency>
 		<!-- provided -->
 		<dependency>
 			<groupId>javax.inject</groupId>

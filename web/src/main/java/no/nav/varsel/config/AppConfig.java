@@ -6,6 +6,7 @@ import no.nav.varsel.web.metrics.MetricsServletContextListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.retry.annotation.EnableRetry;
 
 /**
  * Spring configuration for the application
@@ -21,6 +22,7 @@ import org.springframework.context.annotation.Import;
 		BatchConfig.class,
 		WebConfig.class
 })
+@EnableRetry
 public class AppConfig {
 
 	@Bean
