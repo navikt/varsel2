@@ -70,6 +70,22 @@ public class MottaVarselKvitteringServiceTest {
 	}
 
 	@Test
+	public void shouldNotThrowIfVarselHasStatusFERDIGBEHANDLET() throws Exception {
+		MottaVarselKvitteringTo to = MottaVarselKvitteringToTest.createTo();
+
+		Varsel varsel = createVarsel(to.getVarselId());
+		varsel.setStatus(StatusCode.FERDIGBEHANDLET);
+
+		when(varselRepo.findByVarselId(to.getVarselId())).thenReturn(varsel);
+
+		mottaVarselKvitteringService.behandleKvitteringsmelding(to);
+
+		assertThat(varsel.getStatus(), is(StatusCode.FERDIGBEHANDLET));
+		assertThat(varsel.getDistribusjonTidspunkt(), equalTo(to.getUtsendingstidspunkt()));
+		assertThat(varsel.getKvitteringTidspunkt(), aboutNow());
+	}
+
+	@Test
 	public void shouldUpdateVarselWhenStatusOK() throws Exception {
 		MottaVarselKvitteringTo to = MottaVarselKvitteringToTest.createTo();
 
