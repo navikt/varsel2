@@ -14,8 +14,10 @@ import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringTo;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,8 +53,14 @@ public class MottaVarselKvitteringRetryTest {
 		}
 	}
 
+	@After
+	public void resetMocks() {
+		Mockito.reset(varselRepo);
+	}
+
 	@Test
 	public void shouldRetry() {
+		when(varselRepo.findByVarselId(anyString())).thenReturn(null).thenReturn(null);
 		MottaVarselKvitteringTo mottaVarselKvitteringTo = new MottaVarselKvitteringTo();
 		mottaVarselKvitteringTo.setVarselId("1");
 		try {
