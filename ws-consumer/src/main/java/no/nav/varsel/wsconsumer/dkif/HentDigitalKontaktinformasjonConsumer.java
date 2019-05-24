@@ -12,6 +12,8 @@ import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 
 import javax.inject.Inject;
 import java.util.Collection;
@@ -42,6 +44,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 		return kontaktregisterTo;
 	}
 
+	@Retryable(maxAttempts = 5, backoff = @Backoff(delay = 1000L, multiplier = 2))
 	public KontaktregisterTo hentDigitalKontaktinformasjon(String personIdent) {
 		HentDigitalKontaktinformasjonRequest request = new HentDigitalKontaktinformasjonRequest();
 		request.setPersonident(personIdent);
