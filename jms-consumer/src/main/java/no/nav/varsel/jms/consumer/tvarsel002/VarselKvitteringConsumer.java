@@ -59,5 +59,6 @@ public class VarselKvitteringConsumer extends AbstractJmsConsumer<VarselKvitteri
 		} catch (IllegalArgumentException e) {
 			throw new NoJmsBackoutException(e);
 		}
+
 	}
 }

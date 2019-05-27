@@ -54,6 +54,7 @@ public class MottaVarselKvitteringService {
 	private void updateVarsel(MottaVarselKvitteringTo mottaVarselKvitteringTo, Varsel varsel) {
 		varsel.setKvitteringTidspunkt(LocalDateTime.now());
 		if (mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.OK) {
+			LOG.info("Varsel med status=" + varsel.getStatus() + " og varselId=" + mottaVarselKvitteringTo.getVarselId() + " er oppdatert til status=FERDIGBEHANDLET");
 			varsel.setStatus(StatusCode.FERDIGBEHANDLET);
 			varsel.setDistribusjonTidspunkt(mottaVarselKvitteringTo.getUtsendingstidspunkt());
 		} else if (mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.ERROR
