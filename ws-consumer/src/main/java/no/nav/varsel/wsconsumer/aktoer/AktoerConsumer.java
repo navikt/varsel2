@@ -9,6 +9,8 @@ import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentIdentForAktoerIdReques
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentIdentForAktoerIdResponse;
 import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.domain.to.MottakerType;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 
 import javax.inject.Inject;
 
@@ -22,6 +24,7 @@ public class AktoerConsumer {
 	@Inject
 	private AktoerV2 aktoerV2;
 
+	@Retryable(exclude = {HentIdentForAktoerIdPersonIkkeFunnet.class, HentAktoerIdForIdentPersonIkkeFunnet.class}, maxAttempts = 5, backoff = @Backoff(delay = 1000L, multiplier = 2))
 	public AktoerTo hentIdent(AktoerTo requestTo) throws HentIdentForAktoerIdPersonIkkeFunnet, HentAktoerIdForIdentPersonIkkeFunnet {
 		AktoerTo responseTo = new AktoerTo();
 

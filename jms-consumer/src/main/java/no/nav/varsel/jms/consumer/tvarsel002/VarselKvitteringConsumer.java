@@ -51,7 +51,7 @@ public class VarselKvitteringConsumer extends AbstractJmsConsumer<VarselKvitteri
 	@Override
 	protected void handleMessage(ObjectMessageWrapper<VarselKvittering> wrappedKvittering) {
 		VarselKvittering kvittering = wrappedKvittering.getObject();
-		LOGG.debug("Mottatt kvittering " + kvittering.getStatus() + " , varselId=" + kvittering.getVarselId());
+		LOGG.info("Mottatt kvittering med status=" + kvittering.getStatus() + ", og varselId=" + kvittering.getVarselId());
 		try {
 			MottaVarselKvitteringTo to = mottaVarselKvitteringMapper.map(kvittering);
 			to.validateTo();
@@ -59,5 +59,6 @@ public class VarselKvitteringConsumer extends AbstractJmsConsumer<VarselKvitteri
 		} catch (IllegalArgumentException e) {
 			throw new NoJmsBackoutException(e);
 		}
+
 	}
 }

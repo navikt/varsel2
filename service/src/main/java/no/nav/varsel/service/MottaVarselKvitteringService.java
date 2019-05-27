@@ -5,15 +5,15 @@ import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.service.support.exception.InvalidVarselStatusException;
 import no.nav.varsel.service.support.exception.VarselNotExistException;
-import no.nav.varsel.service.support.exception.VarselKvitteringIkkeFunnetException;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringStatusTo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringTo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 
 import javax.inject.Inject;
-
 import java.time.LocalDateTime;
 
 /**
@@ -24,42 +24,29 @@ import java.time.LocalDateTime;
 
 public class MottaVarselKvitteringService {
 	
-	private static final int millisekunderVentetid = 200;
 	private static final Logger LOG = LoggerFactory.getLogger(MottaVarselKvitteringService.class);
 	static final int MAX_LENGTH_FEILMELDING = 1000;
 	
 	@Inject
 	private VarselRepo varselRepo;
-	
+
+	@Retryable(include = VarselNotExistException.class, maxAttempts = 3, backoff = @Backoff(delay = 3000, multiplier = 3))
 	public void behandleKvitteringsmelding(MottaVarselKvitteringTo mottaVarselKvitteringTo) {
 		Varsel varsel = findVarsel(mottaVarselKvitteringTo);
 		validateVarselStatus(varsel);
 		updateVarsel(mottaVarselKvitteringTo, varsel);
 	}
-	
+
 	private Varsel findVarsel(MottaVarselKvitteringTo mottaVarselKvitteringTo) {
-		Varsel varsel = null;
-		
-		for (int i = 0; i < 3 && varsel == null; i++) {
-			varsel = varselRepo.findByVarselId(mottaVarselKvitteringTo.getVarselId());
-			try {
-				Thread.sleep(millisekunderVentetid);
-			} catch (InterruptedException e) {
-				throw new VarselKvitteringIkkeFunnetException("Varsel med VarselId " + mottaVarselKvitteringTo.getVarselId() + " ikke funnet for oppdatering av status ",
-						e);
-			}
-		}
-		
+		Varsel varsel = varselRepo.findByVarselId(mottaVarselKvitteringTo.getVarselId());
 		if (varsel == null) {
 			throw new VarselNotExistException(mottaVarselKvitteringTo.getVarselId());
 		}
-		
 		return varsel;
 	}
-	
+
 	private void validateVarselStatus(Varsel varsel) {
-		
-		if (varsel.getStatus() != StatusCode.SENDT) {
+		if (!(varsel.getStatus() == StatusCode.SENDT || varsel.getStatus() == StatusCode.FERDIGBEHANDLET)) {
 			throw new InvalidVarselStatusException(varsel);
 		}
 	}
@@ -67,6 +54,7 @@ public class MottaVarselKvitteringService {
 	private void updateVarsel(MottaVarselKvitteringTo mottaVarselKvitteringTo, Varsel varsel) {
 		varsel.setKvitteringTidspunkt(LocalDateTime.now());
 		if (mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.OK) {
+			LOG.info("Varsel med status=" + varsel.getStatus() + " og varselId=" + mottaVarselKvitteringTo.getVarselId() + " er oppdatert til status=FERDIGBEHANDLET");
 			varsel.setStatus(StatusCode.FERDIGBEHANDLET);
 			varsel.setDistribusjonTidspunkt(mottaVarselKvitteringTo.getUtsendingstidspunkt());
 		} else if (mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.ERROR
