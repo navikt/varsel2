@@ -1,6 +1,5 @@
 package no.nav.varsel.wsconsumer.dkif;
 
-import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -11,8 +10,11 @@ import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.DigitalKo
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonKontaktinformasjonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonSikkerhetsbegrensing;
+import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonRequest;
+import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonResponse;
 import no.nav.varsel.wsconsumer.aktoer.AktoerConsumer;
 import no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapper;
+import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,6 +43,9 @@ public class DkifRetryTest {
 	@Inject
 	private DigitalKontaktinformasjonV1 digitalKontaktinformasjonV1Mock;
 
+	@Inject
+	private HentDigitalKontaktinformasjonMapper hentDigitalKontaktinformasjonMapper;
+
 	@EnableRetry
 	@Configuration
 	public static class Config {
@@ -67,16 +72,14 @@ public class DkifRetryTest {
 
 	@Test
 	public void shouldRetryOnException() throws HentDigitalKontaktinformasjonSikkerhetsbegrensing, HentDigitalKontaktinformasjonKontaktinformasjonIkkeFunnet, HentDigitalKontaktinformasjonPersonIkkeFunnet {
-		when(digitalKontaktinformasjonV1Mock.hentDigitalKontaktinformasjon(any())).thenThrow(new RuntimeException());
+		HentDigitalKontaktinformasjonResponse response = new HentDigitalKontaktinformasjonResponse();
 
-		try {
-			hentDigitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(PERSON_ID);
-			fail();
-		} catch (Exception e) {
+		when(digitalKontaktinformasjonV1Mock.hentDigitalKontaktinformasjon(any(HentDigitalKontaktinformasjonRequest.class))).thenThrow(new RuntimeException()).thenReturn(response);
+		when(hentDigitalKontaktinformasjonMapper.map(response)).thenReturn(new KontaktregisterTo());
 
-		}
+		hentDigitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(PERSON_ID);
 
-		verify(digitalKontaktinformasjonV1Mock, times(5)).hentDigitalKontaktinformasjon(any());
+		verify(digitalKontaktinformasjonV1Mock, times(2)).hentDigitalKontaktinformasjon(any());
 
 	}
 

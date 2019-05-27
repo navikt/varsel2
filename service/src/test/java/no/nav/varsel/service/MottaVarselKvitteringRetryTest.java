@@ -1,6 +1,5 @@
 package no.nav.varsel.service;
 
-import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Matchers.anyString;
@@ -59,20 +58,6 @@ public class MottaVarselKvitteringRetryTest {
 
 	@Test
 	public void shouldRetry() {
-		when(varselRepo.findByVarselId(anyString())).thenReturn(null).thenReturn(null);
-		MottaVarselKvitteringTo mottaVarselKvitteringTo = new MottaVarselKvitteringTo();
-		mottaVarselKvitteringTo.setVarselId("1");
-		try {
-			mottaVarselKvitteringService.behandleKvitteringsmelding(mottaVarselKvitteringTo);
-			fail();
-		} catch (Exception e) {
-		}
-
-		verify(varselRepo, times(3)).findByVarselId(anyString());
-	}
-
-	@Test
-	public void shouldReturnOnSecondRetry() {
 		MottaVarselKvitteringTo mottaVarselKvitteringTo = new MottaVarselKvitteringTo();
 		mottaVarselKvitteringTo.setVarselId("1");
 		Varsel varsel = new Varsel();

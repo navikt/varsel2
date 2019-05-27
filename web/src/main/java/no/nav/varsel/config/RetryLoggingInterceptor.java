@@ -19,9 +19,9 @@ public class RetryLoggingInterceptor extends RetryListenerSupport {
 	@Override
 	public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback, Throwable throwable) {
 		super.onError(context, callback, throwable);
-		//Ikke logg stacktrace hvis det funksjonell feil
+		//Ikke logg stacktrace hvis det er funksjonell feil
 		if (throwable instanceof FunctionalVarselException) {
-			LOG.warn(String.format("Retry trigget for %s. gang med feilmelding=%s ", context.getRetryCount(), throwable.getMessage()));
+			LOG.info(String.format("Retry trigget for %s. gang med feilmelding=%s ", context.getRetryCount(), throwable.getMessage()));
 		} else {
 			LOG.warn(String.format("Retry trigget for %s. gang med feilmelding=%s ", context.getRetryCount(), throwable.getMessage()), throwable);
 		}

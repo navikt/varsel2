@@ -1,6 +1,5 @@
 package no.nav.varsel.wsconsumer.aktoer;
 
-import static org.junit.Assert.fail;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -11,6 +10,7 @@ import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentIdentForAktoerIdPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentAktoerIdForIdentRequest;
+import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentAktoerIdForIdentResponse;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentIdentForAktoerIdRequest;
 import no.nav.varsel.domain.to.AktoerTo;
 import org.junit.Test;
@@ -53,16 +53,13 @@ public class AktoerConsumerRetryTest {
 
 	@Test
 	public void shouldRetryOnException() throws HentAktoerIdForIdentPersonIkkeFunnet, HentIdentForAktoerIdPersonIkkeFunnet {
-		when(aktoerV2Mock.hentAktoerIdForIdent(persId(PERSON_ID))).thenThrow(new RuntimeException("tes"));
+		HentAktoerIdForIdentResponse aktoerIdForIdentResponse = new HentAktoerIdForIdentResponse();
+		aktoerIdForIdentResponse.setAktoerId(AKTOER_ID);
+		when(aktoerV2Mock.hentAktoerIdForIdent(persId(PERSON_ID))).thenThrow(new RuntimeException("tes")).thenReturn(aktoerIdForIdentResponse);
 
-		try {
-			AktoerTo aktoerTo = aktoerConsumer.hentIdent(AktoerTo.newPersonIdent(PERSON_ID));
-			fail();
-		} catch (Exception e) {
+		AktoerTo aktoerTo = aktoerConsumer.hentIdent(AktoerTo.newPersonIdent(PERSON_ID));
 
-		}
-
-		verify(aktoerV2Mock, times(5)).hentAktoerIdForIdent(Matchers.any());
+		verify(aktoerV2Mock, times(2)).hentAktoerIdForIdent(Matchers.any());
 
 	}
 
