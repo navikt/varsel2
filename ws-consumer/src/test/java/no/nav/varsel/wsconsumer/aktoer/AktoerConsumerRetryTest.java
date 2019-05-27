@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentIdentForAktoerIdPersonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.aktoer.v2.feil.PersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentAktoerIdForIdentRequest;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentIdentForAktoerIdRequest;
 import no.nav.varsel.domain.to.AktoerTo;
@@ -54,7 +53,7 @@ public class AktoerConsumerRetryTest {
 
 	@Test
 	public void shouldRetryOnException() throws HentAktoerIdForIdentPersonIkkeFunnet, HentIdentForAktoerIdPersonIkkeFunnet {
-		when(aktoerV2Mock.hentAktoerIdForIdent(persId(PERSON_ID))).thenThrow(new HentAktoerIdForIdentPersonIkkeFunnet("tes", new PersonIkkeFunnet()));
+		when(aktoerV2Mock.hentAktoerIdForIdent(persId(PERSON_ID))).thenThrow(new RuntimeException("tes"));
 
 		try {
 			AktoerTo aktoerTo = aktoerConsumer.hentIdent(AktoerTo.newPersonIdent(PERSON_ID));
