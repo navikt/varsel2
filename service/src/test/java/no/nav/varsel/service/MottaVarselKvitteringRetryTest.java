@@ -9,7 +9,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import no.nav.varsel.config.RetryLoggingInterceptor;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.repo.VarselRepo;
@@ -33,7 +32,7 @@ import javax.inject.Inject;
  */
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {RetryLoggingInterceptor.class, MottaVarselKvitteringService.class, MottaVarselKvitteringRetryTest.Config.class})
+@SpringApplicationConfiguration(classes = {MottaVarselKvitteringService.class, MottaVarselKvitteringRetryTest.Config.class})
 @ActiveProfiles({"itest"})
 public class MottaVarselKvitteringRetryTest {
 

@@ -24,7 +24,7 @@ public class AktoerConsumer {
 	@Inject
 	private AktoerV2 aktoerV2;
 
-	@Retryable(maxAttempts = 5, backoff = @Backoff(delay = 1000L, multiplier = 2))
+	@Retryable(exclude = {HentIdentForAktoerIdPersonIkkeFunnet.class, HentAktoerIdForIdentPersonIkkeFunnet.class}, maxAttempts = 5, backoff = @Backoff(delay = 1000L, multiplier = 2))
 	public AktoerTo hentIdent(AktoerTo requestTo) throws HentIdentForAktoerIdPersonIkkeFunnet, HentAktoerIdForIdentPersonIkkeFunnet {
 		AktoerTo responseTo = new AktoerTo();
 

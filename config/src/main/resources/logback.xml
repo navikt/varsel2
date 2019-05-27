@@ -98,7 +98,7 @@
 		<appender-ref ref="SYSLOG"/>
 	</root>
 
-	<logger name="no.nav.varsel" level="INFO">
+	<logger name="no.nav.varsel" level="INFO" additivity="false">
 		<appender-ref ref="debuglog"/>
 		<appender-ref ref="SYSLOG"/>
 	</logger>

@@ -30,7 +30,7 @@ public class MottaVarselKvitteringService {
 	@Inject
 	private VarselRepo varselRepo;
 
-	@Retryable(include = VarselNotExistException.class, maxAttempts = 3, backoff = @Backoff(delay = 2000, multiplier = 3))
+	@Retryable(include = VarselNotExistException.class, maxAttempts = 3, backoff = @Backoff(delay = 3000, multiplier = 3))
 	public void behandleKvitteringsmelding(MottaVarselKvitteringTo mottaVarselKvitteringTo) {
 		Varsel varsel = findVarsel(mottaVarselKvitteringTo);
 		validateVarselStatus(varsel);
