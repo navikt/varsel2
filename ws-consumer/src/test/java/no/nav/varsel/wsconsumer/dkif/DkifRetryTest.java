@@ -6,12 +6,15 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.DigitalKontaktinformasjonV1;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonKontaktinformasjonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonSikkerhetsbegrensing;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonRequest;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonResponse;
+import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.wsconsumer.aktoer.AktoerConsumer;
 import no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
@@ -25,6 +28,8 @@ import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Unit test for {@link AktoerConsumer}
@@ -46,6 +51,12 @@ public class DkifRetryTest {
 	@Inject
 	private HentDigitalKontaktinformasjonMapper hentDigitalKontaktinformasjonMapper;
 
+	@Inject
+	private VarselKanalDecider varselKanalDecider;
+
+	public static final Set<KanalCode> PREFERERT_KANAL = Sets.newHashSet(KanalCode.DITT_NAV);
+
+
 	@EnableRetry
 	@Configuration
 	public static class Config {
@@ -54,8 +65,6 @@ public class DkifRetryTest {
 		public VarselKanalDecider varselKanalDecider() {
 			return mock(VarselKanalDecider.class);
 		}
-
-		;
 
 		@Bean
 		public DigitalKontaktinformasjonV1 digitalKontaktinformasjonV1() {
@@ -66,8 +75,6 @@ public class DkifRetryTest {
 		public HentDigitalKontaktinformasjonMapper hentDigitalKontaktinformasjonMapper() {
 			return mock(HentDigitalKontaktinformasjonMapper.class);
 		}
-
-		;
 	}
 
 	@Test
@@ -78,6 +85,21 @@ public class DkifRetryTest {
 		when(hentDigitalKontaktinformasjonMapper.map(response)).thenReturn(new KontaktregisterTo());
 
 		hentDigitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(PERSON_ID);
+
+		verify(digitalKontaktinformasjonV1Mock, times(2)).hentDigitalKontaktinformasjon(any());
+
+	}
+
+	@Test
+	public void shouldRetryOnExceptionhentDigitalKontaktinformasjonAndDecideKanal() throws HentDigitalKontaktinformasjonSikkerhetsbegrensing, HentDigitalKontaktinformasjonKontaktinformasjonIkkeFunnet, HentDigitalKontaktinformasjonPersonIkkeFunnet {
+		HentDigitalKontaktinformasjonResponse response = new HentDigitalKontaktinformasjonResponse();
+		ArrayList<KanalCode> kanalCodes = Lists.newArrayList(KanalCode.DITT_NAV);
+
+		when(digitalKontaktinformasjonV1Mock.hentDigitalKontaktinformasjon(any(HentDigitalKontaktinformasjonRequest.class))).thenThrow(new RuntimeException()).thenReturn(response);
+		when(hentDigitalKontaktinformasjonMapper.map(response)).thenReturn(new KontaktregisterTo());
+		when(varselKanalDecider.decideKanaler(any(), any())).thenReturn(kanalCodes);
+
+		hentDigitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjonAndDecideKanal(PERSON_ID, PREFERERT_KANAL);
 
 		verify(digitalKontaktinformasjonV1Mock, times(2)).hentDigitalKontaktinformasjon(any());
 
