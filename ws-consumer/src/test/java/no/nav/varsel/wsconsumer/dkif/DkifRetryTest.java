@@ -19,8 +19,10 @@ import no.nav.varsel.wsconsumer.aktoer.AktoerConsumer;
 import no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -75,6 +77,11 @@ public class DkifRetryTest {
 		public HentDigitalKontaktinformasjonMapper hentDigitalKontaktinformasjonMapper() {
 			return mock(HentDigitalKontaktinformasjonMapper.class);
 		}
+	}
+
+	@After
+	public void resetMocks() {
+		Mockito.reset(digitalKontaktinformasjonV1Mock);
 	}
 
 	@Test
