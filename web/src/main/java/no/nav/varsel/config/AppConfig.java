@@ -19,7 +19,8 @@ import org.springframework.context.annotation.Import;
 		ProviderWsConfig.class,
 		SelftestConfig.class,
 		BatchConfig.class,
-		WebConfig.class
+		WebConfig.class,
+		RetryLoggingInterceptor.class
 })
 public class AppConfig {
 

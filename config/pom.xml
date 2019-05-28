@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>varsel</artifactId>
 		<groupId>no.nav.varsel</groupId>
-		<version>2.0.1-SNAPSHOT</version>
+		<version>3.0.2-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -13,7 +13,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc6</artifactId>
+			<artifactId>ojdbc8</artifactId>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

@@ -18,6 +18,9 @@ import org.junit.Test;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 /**
  * Itest for {@link SelftestController}
  *
@@ -65,7 +68,7 @@ public class SelftestControllerTest extends AbstractRestTest {
 
 				.andExpect(jsonPath("$.checks[1].type", is("Rest")))
 				.andExpect(jsonPath("$.checks[1].endpoint", is("Batch")))
-				.andExpect(jsonPath("$.checks[1].address", is("http://localhost:8080/varsel/batch/ping")))
+				.andExpect(jsonPath("$.checks[1].address", is("https://" + getServerAddress() + ":8443/varsel/batch/ping")))
 				.andExpect(jsonPath("$.checks[1].errorMessage", notNullValue()))
 				.andExpect(jsonPath("$.checks[1].stackTrace", notNullValue()))
 				.andExpect(jsonPath("$.checks[1].resultText", is(Result.ERROR.name())))
@@ -77,5 +80,13 @@ public class SelftestControllerTest extends AbstractRestTest {
 		mockMvc.perform(get("/internal/isAlive"))
 				.andExpect(status().isOk())
 				.andExpect(content().string(APPLICATION_UP));
+	}
+
+	private String getServerAddress() {
+		try {
+			return InetAddress.getLocalHost().getCanonicalHostName();
+		} catch (UnknownHostException e) {
+			return "N/A";
+		}
 	}
 }

@@ -85,17 +85,18 @@ public class SelftestController {
 		SelftestResponse response = new SelftestResponse();
 		response.setApplication(applicationName);
 		response.setVersion(applicationVersion);
-		response.setNode(getServerAddress());
-		addChecks(response);
+		String serverAddress = getServerAddress();
+		response.setNode(serverAddress);
+		addChecks(response, serverAddress);
 		return response;
 	}
 
-	private void addChecks(SelftestResponse response) {
+	private void addChecks(SelftestResponse response, String serverAddress) {
 		// Datasource
 		response.addCheck(dbSelftest.check());
 
 		// Self
-		response.addCheck(new HttpSelftest("Batch", "Internal Batch Controller", "http://localhost:8080/varsel/batch/ping").check());
+		response.addCheck(new HttpSelftest("Batch", "Internal Batch Controller", "https://" + serverAddress + ":8443/varsel/batch/ping").check());
 
 		// Webservice
 		response.addCheck(new PingSelftest(wsPingProvider.pingAktoerV2()).check());

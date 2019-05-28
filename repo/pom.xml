@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>varsel</artifactId>
 		<groupId>no.nav.varsel</groupId>
-		<version>2.0.1-SNAPSHOT</version>
+		<version>3.0.2-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -22,9 +22,11 @@
 			<artifactId>metrics-spring</artifactId>
 		</dependency>
 
+		<!-- provided -->
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- test -->

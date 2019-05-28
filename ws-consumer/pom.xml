@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>varsel</artifactId>
 		<groupId>no.nav.varsel</groupId>
-		<version>2.0.1-SNAPSHOT</version>
+		<version>3.0.2-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -21,12 +21,10 @@
 			<artifactId>varsel-ws</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
+			<groupId>org.springframework.retry</groupId>
+			<artifactId>spring-retry</artifactId>
 		</dependency>
-
 		<!--Tjenestespesifikasjoner-->
 		<dependency>
 			<groupId>no.nav.tjenester.fim</groupId>
@@ -49,6 +47,13 @@
 			<classifier>jaxws</classifier>
 		</dependency>
 
+		<!-- provided -->
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<!--test-->
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
@@ -67,6 +72,11 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.modig</groupId>
+			<artifactId>modig-testcertificates</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
