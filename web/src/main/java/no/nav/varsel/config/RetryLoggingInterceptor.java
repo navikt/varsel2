@@ -1,7 +1,6 @@
 package no.nav.varsel.config;
 
 
-import no.nav.varsel.service.support.exception.FunctionalVarselException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.retry.RetryCallback;
@@ -19,12 +18,8 @@ public class RetryLoggingInterceptor extends RetryListenerSupport {
 	@Override
 	public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback, Throwable throwable) {
 		super.onError(context, callback, throwable);
-		//Ikke logg stacktrace hvis det er funksjonell feil
-		if (throwable instanceof FunctionalVarselException) {
-			LOG.info(String.format("Retry trigget for %s. gang med feilmelding=%s ", context.getRetryCount(), throwable.getMessage()));
-		} else {
-			LOG.warn(String.format("Retry trigget for %s. gang med feilmelding=%s ", context.getRetryCount(), throwable.getMessage()), throwable);
-		}
+		// Logg retry uten stacktrace
+		LOG.info(String.format("Retry trigget for %s. gang med feilmelding=%s ", context.getRetryCount(), throwable.getMessage()));
 	}
 
 }
