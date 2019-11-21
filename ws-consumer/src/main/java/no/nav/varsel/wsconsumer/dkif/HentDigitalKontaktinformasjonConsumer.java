@@ -55,7 +55,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 		} catch (HentDigitalKontaktinformasjonKontaktinformasjonIkkeFunnet |
 				HentDigitalKontaktinformasjonPersonIkkeFunnet |
 				HentDigitalKontaktinformasjonSikkerhetsbegrensing e) {
-			LOG.warn(String.format("Feil mot DKIF %s: %s %s", e.getClass().getSimpleName(), e.getMessage(), personIdent));
+			LOG.warn(String.format("Feil mot DKIF %s: %s", e.getClass().getSimpleName(), e.getMessage()));
 			return new KontaktregisterTo();
 		}
 		KontaktregisterTo kontaktregisterTo = mapper.map(response);
