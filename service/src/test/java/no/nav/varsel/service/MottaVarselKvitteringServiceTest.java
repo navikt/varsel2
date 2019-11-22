@@ -162,6 +162,18 @@ public class MottaVarselKvitteringServiceTest {
 		assertThat(varsel.getFeilbeskrivelse().endsWith("..."), is(false));
 	}
 
+	@Test
+	public void shouldCensorPersonalData() throws Exception {
+		String uncensoredTlf = "The phone number has an invalid country code: +***gammelt_fnr***8";
+		String uncensoredMailAndFnr = "Address: ola.normann@epøst.no, User: ***gammelt_fnr***";
+
+		String censoredTlf = mottaVarselKvitteringService.sensurerPersonligData(uncensoredTlf);
+		String censoredMailAndFnr = mottaVarselKvitteringService.sensurerPersonligData(uncensoredMailAndFnr);
+
+		assertThat(censoredTlf, equalTo("The phone number has an invalid country code: +0047****"));
+		assertThat(censoredMailAndFnr, equalTo("Address: o***@e***.no, User: ****"));
+	}
+
 	private Varsel createVarsel(String varselId) {
 		Varsel varsel = new Varsel();
 		varsel.setVarselId(varselId);
