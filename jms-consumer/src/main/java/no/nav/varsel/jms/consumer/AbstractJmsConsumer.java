@@ -103,18 +103,13 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 			handleMessage(new ObjectMessageWrapper<>(unmarshalledObject, message));
 		} catch (NoJmsBackoutException e) {
 			noBackoutExceptionMeter.mark();
-			NO_BACKOUTLOG.warn("Nonbackout " + errorFor(message), e);
+			NO_BACKOUTLOG.warn("Nonbackout Error in service=" + jmsConsumer.getServiceName(), e);
 		} catch (Exception e) {
 			exceptionMeter.mark();
 			jmsConsumerManager.registerError(jmsConsumer);
-			throw new RuntimeException(errorFor(message), e);
+			throw new RuntimeException("Error in service=" + jmsConsumer.getServiceName(), e);
 		}
 		return unmarshalledObject;
-	}
-
-	private String errorFor(TextMessage message) {
-		return String.format("Error in service=%s during processing of message: %s",
-				jmsConsumer.getServiceName(), messageToString(message));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -136,14 +131,6 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 			}
 		} catch (Exception e) {
 			throw new NoJmsBackoutException("Invalid message, cannot be unmarshalled", e);
-		}
-	}
-
-	private String messageToString(TextMessage message) {
-		try {
-			return message.getText();
-		} catch (JMSException e) {
-			return e.getMessage();
 		}
 	}
 

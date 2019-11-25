@@ -60,7 +60,7 @@ public class MottaVarselKvitteringService {
 		} else if (mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.ERROR
 				|| mottaVarselKvitteringTo.getStatus() == MottaVarselKvitteringStatusTo.EXPIRED) {
 			LOG.warn("Error/Expired kvittering for varsel with varselId=" + mottaVarselKvitteringTo.getVarselId() +
-					". feilmelding=" + mottaVarselKvitteringTo.getFeilmelding());
+					". feilmelding=" + sensurerPersonligData(mottaVarselKvitteringTo.getFeilmelding()));
 			varsel.setStatus(StatusCode.FEILET);
 			varsel.setFeilbeskrivelse(StringUtils.abbreviate(mottaVarselKvitteringTo.getFeilmelding(),
 					MAX_LENGTH_FEILMELDING));
@@ -70,5 +70,11 @@ public class MottaVarselKvitteringService {
 						"feilmelding=" + mottaVarselKvitteringTo.getFeilmelding());
 			}
 		}
+	}
+
+	static String sensurerPersonligData(String melding) {
+        return melding.replaceAll("(User:\\s)\\d{11}", "$1****") // Sensurer fnr
+                .replaceAll("(?i)(Address: [a-zæøå0-9!#$%&'*+/=?^_`{|}~-])(?:[a-zæøå0-9!#$%&'*+/=?^_`{|}~-]*(?:\\.[a-zæøå0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@([a-zæøå0-9!#$%&'*+/=?^_`{|}~-])(?:(?:[a-zæøå0-9](?:[a-zæøå0-9-]*[a-zæøå0-9])?\\.)*([a-zæøå0-9](?:[a-zæøå0-9-]*[a-zæøå0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-zæøå0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\]))", "$1***@$2***.$3") // Sensurer epostadresse
+                .replaceAll("(country code:\\s\\+\\d{4})(\\d+)", "$1****"); // Sensurer telefonnr
 	}
 }
