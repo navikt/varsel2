@@ -73,8 +73,11 @@ public class MottaVarselKvitteringService {
 	}
 
 	static String sensurerPersonligData(String melding) {
-        return melding.replaceAll("(User:\\s)\\d{11}", "$1****") // Sensurer fnr
-                .replaceAll("(?i)(Address: [a-zæøå0-9!#$%&'*+/=?^_`{|}~-])(?:[a-zæøå0-9!#$%&'*+/=?^_`{|}~-]*(?:\\.[a-zæøå0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@([a-zæøå0-9!#$%&'*+/=?^_`{|}~-])(?:(?:[a-zæøå0-9](?:[a-zæøå0-9-]*[a-zæøå0-9])?\\.)*([a-zæøå0-9](?:[a-zæøå0-9-]*[a-zæøå0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-zæøå0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\]))", "$1***@$2***.$3") // Sensurer epostadresse
-                .replaceAll("(country code:\\s\\+\\d{4})(\\d+)", "$1****"); // Sensurer telefonnr
+		String fnrRegex = "(User:\\s)\\d{11}";
+		String epostRegex = "(?i)(Address: [a-zæøåÆØÅ0-9!#$%&'*+/=?^_`{|}~-])(?:[a-zæøåÆØÅ0-9!#$%&'*+/=?^_`{|}~-]*(?:\\.[a-zæøåÆØÅ0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@([a-zæøåÆØÅ0-9!#$%&'*+/=?^_`{|}~-])(?:(?:[a-zæøåÆØÅ0-9](?:[a-zæøåÆØÅ0-9-]*[a-zæøåÆØÅ0-9])?\\.)*([a-zæøåÆØÅ0-9](?:[a-zæøåÆØÅ0-9-]*[a-zæøåÆØÅ0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-zæøåÆØÅ0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\]))";
+		String tlfRegex = "(country code:\\s\\+\\d{4})(\\d+)";
+		return melding.replaceAll(fnrRegex, "$1****") // Sensurer fnr
+				.replaceAll(epostRegex, "$1***@$2***.$3") // Sensurer epostadresse
+				.replaceAll(tlfRegex, "$1****"); // Sensurer telefonnr
 	}
 }
