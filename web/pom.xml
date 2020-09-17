@@ -15,29 +15,23 @@
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-ws-provider</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-jms-consumer</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-batch</artifactId>
-			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>io.dropwizard.metrics</groupId>
 			<artifactId>metrics-servlets</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>

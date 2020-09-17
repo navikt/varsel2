@@ -36,28 +36,15 @@
 
 	<properties>
 		<!-- maven-compiler-plugin config -->
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<ojdbc.version>12.2.0.1</ojdbc.version>
+		<java.version>1.8</java.version>
 		<modig-security.version>1.0.30</modig-security.version>
 		<cxf.version>2.7.18</cxf.version>
 		<wss4j.version>1.6.19</wss4j.version>
 		<cxf.jetty.version>8.1.15.v20140411</cxf.jetty.version>
 		<jaxb-impl.version>2.2.11</jaxb-impl.version>
-
-		<hamcrest.version>1.3</hamcrest.version>
-		<slf4j.version>1.7.13</slf4j.version>
-		<logback.version>1.1.3</logback.version>
-
 		<brevogarkiv-batch-common.version>3.0.8</brevogarkiv-batch-common.version>
-
-		<flyway.version>3.2.1</flyway.version>
-
 		<bootstrap.version>3.3.6</bootstrap.version>
-		<modig-log.version>1.1.2</modig-log.version>
 		<resteasy.version>2.3.10.Final</resteasy.version>
-		<activemq-core.version>5.7.0</activemq-core.version>
-
 		<nav-varsel-v1.version>1.1.1</nav-varsel-v1.version>
 		<nav-virksomhet-varselutsending-v2.version>2.0.3</nav-virksomhet-varselutsending-v2.version>
 		<nav-varselKvittering-v1.version>1.0.0</nav-varselKvittering-v1.version>
@@ -69,10 +56,87 @@
 		<dokkat-schemas.version>6.0.3</dokkat-schemas.version>
 		<nav-fim-kodeverk-v2-tjenestespesifikasjon.version>2.0.0-alpha004</nav-fim-kodeverk-v2-tjenestespesifikasjon.version>
 		<nav-brukervarsel-v1-tjenestespesifikasjon.version>1.0.4</nav-brukervarsel-v1-tjenestespesifikasjon.version>
+		<hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
+		<guava.version>19.0</guava.version>
+		<commons-io.version>2.4</commons-io.version>
+		<commons-lang3.version>3.5</commons-lang3.version>
+		<usertype.extended.version>3.2.0.GA</usertype.extended.version>
+		<modig-log.version>1.1.2</modig-log.version>
+		<modig-log-filter.version>1.1.3</modig-log-filter.version>
+		<modig-batch-connector.version>1.1.1</modig-batch-connector.version>
+		<xml-apis.version>1.4.01</xml-apis.version>
+		<spring-retry.version>1.2.4.RELEASE</spring-retry.version>
+		<!-- provided -->
+		<javax.inject.version>1</javax.inject.version>
+		<jboss-jms-api_2.0_spec.version>1.0.2.Final</jboss-jms-api_2.0_spec.version>
+		<ojdbc.version>12.2.0.1</ojdbc.version>
+		<!-- test -->
+		<activemq-core.version>5.7.0</activemq-core.version>
+		<modig-testcertificates.version>1.2.5</modig-testcertificates.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>no.nav.varsel</groupId>
+				<artifactId>varsel-config</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.varsel</groupId>
+				<artifactId>varsel-service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.varsel</groupId>
+				<artifactId>varsel-domain</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.varsel</groupId>
+				<artifactId>varsel-ws</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.varsel</groupId>
+				<artifactId>varsel-ws-provider</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.varsel</groupId>
+				<artifactId>varsel-ws-consumer</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.varsel</groupId>
+				<artifactId>varsel-jms</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.varsel</groupId>
+				<artifactId>varsel-jms-consumer</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.varsel</groupId>
+				<artifactId>varsel-jms-producer</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.varsel</groupId>
+				<artifactId>varsel-batch</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.varsel</groupId>
+				<artifactId>varsel-repo</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>varsel-web</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.ryantenney.metrics</groupId>
 				<artifactId>metrics-spring</artifactId>
@@ -81,7 +145,7 @@
 			<dependency>
 				<groupId>org.springframework.retry</groupId>
 				<artifactId>spring-retry</artifactId>
-				<version>1.2.4.RELEASE</version>
+				<version>${spring-retry.version}</version>
 			</dependency>
 
 			<!--Tjenestespesifikasjoner-->
@@ -137,6 +201,16 @@
 				<groupId>no.nav.dokkat</groupId>
 				<artifactId>dokkat-schemas</artifactId>
 				<version>${dokkat-schemas.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>ch.qos.logback</groupId>
+						<artifactId>logback-core</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>com.fasterxml.jackson.core</groupId>
+						<artifactId>jackson-annotations</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>
@@ -152,54 +226,34 @@
 				<version>${nav-brukervarsel-v1-tjenestespesifikasjon.version}</version>
 				<classifier>jaxws</classifier>
 			</dependency>
-
-			<!-- provided -->
-			<dependency>
-				<groupId>javax.inject</groupId>
-				<artifactId>javax.inject</artifactId>
-				<version>1</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.jboss.spec.javax.jms</groupId>
-				<artifactId>jboss-jms-api_2.0_spec</artifactId>
-				<version>1.0.2.Final</version>
-				<scope>provided</scope>
-			</dependency>
 			<dependency>
 				<groupId>org.hibernate.javax.persistence</groupId>
 				<artifactId>hibernate-jpa-2.1-api</artifactId>
-				<version>1.0.0.Final</version>
+				<version>${hibernate-jpa-2.1-api.version}</version>
 			</dependency>
 
 			<!-- util -->
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>19.0</version>
+				<version>${guava.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
-				<version>2.4</version>
+				<version>${commons-io.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
-				<version>3.5</version>
+				<version>${commons-lang3.version}</version>
 			</dependency>
 
 			<!-- jdbc -->
 			<dependency>
 				<groupId>org.jadira.usertype</groupId>
 				<artifactId>usertype.extended</artifactId>
-				<version>3.2.0.GA</version>
-			</dependency>
-			<dependency>
-				<groupId>com.oracle</groupId>
-				<artifactId>ojdbc8</artifactId>
-				<version>${ojdbc.version}</version>
-				<scope>provided</scope>
+				<version>${usertype.extended.version}</version>
 			</dependency>
 
 			<!-- web -->
@@ -213,7 +267,7 @@
 			<dependency>
 				<groupId>no.nav.modig</groupId>
 				<artifactId>modig-log-filter</artifactId>
-				<version>1.1.3</version>
+				<version>${modig-log-filter.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.modig</groupId>
@@ -260,7 +314,7 @@
 				<artifactId>modig-batch-connector</artifactId>
 				<classifier>script-and-jar</classifier>
 				<type>zip</type>
-				<version>1.1.1</version>
+				<version>${modig-batch-connector.version}</version>
 			</dependency>
 
 			<!-- cxf -->
@@ -313,7 +367,7 @@
 			<dependency>
 				<groupId>xml-apis</groupId>
 				<artifactId>xml-apis</artifactId>
-				<version>1.4.01</version>
+				<version>${xml-apis.version}</version>
 			</dependency>
 
 			<dependency>
@@ -358,6 +412,25 @@
 				<artifactId>jetty-security</artifactId>
 				<version>${cxf.jetty.version}</version>
 			</dependency>
+			<!-- provided -->
+			<dependency>
+				<groupId>javax.inject</groupId>
+				<artifactId>javax.inject</artifactId>
+				<version>${javax.inject.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.spec.javax.jms</groupId>
+				<artifactId>jboss-jms-api_2.0_spec</artifactId>
+				<version>${jboss-jms-api_2.0_spec.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.oracle</groupId>
+				<artifactId>ojdbc8</artifactId>
+				<version>${ojdbc.version}</version>
+				<scope>provided</scope>
+			</dependency>
 
 			<!-- test -->
 			<dependency>
@@ -376,7 +449,7 @@
 			<dependency>
 				<groupId>no.nav.modig</groupId>
 				<artifactId>modig-testcertificates</artifactId>
-				<version>1.2.5</version>
+				<version>${modig-testcertificates.version}</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>
@@ -384,10 +457,6 @@
 
 	<dependencies>
 		<!-- Logging dependecies -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-logging</artifactId>
@@ -436,7 +505,7 @@
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-webdav-jackrabbit</artifactId>
-				<version>1.0</version>
+				<version>3.3.4</version>
 			</extension>
 		</extensions>
 
@@ -449,27 +518,6 @@
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.8.1</version>
-				</plugin>
-				<plugin>
-					<groupId>no.nav.maven.plugins</groupId>
-					<artifactId>aura-maven-plugin</artifactId>
-					<configuration>
-						<apps>varsel:${project.version}</apps>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.flywaydb</groupId>
-					<artifactId>flyway-maven-plugin</artifactId>
-					<version>${flyway.version}</version>
-				</plugin>
-				<plugin>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5.3</version>
-					<configuration>
-						<autoVersionSubmodules>true</autoVersionSubmodules>
-						<goals>deploy</goals>
-						<preparationGoals>clean install</preparationGoals>
-					</configuration>
 				</plugin>
 				<plugin>
 					<artifactId>maven-surefire-plugin</artifactId>

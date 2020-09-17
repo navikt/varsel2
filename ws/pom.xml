@@ -35,7 +35,6 @@
 		<dependency>
 			<groupId>no.nav.modig</groupId>
 			<artifactId>modig-security-ws</artifactId>
-			<version>${modig-security.version}</version>
 		</dependency>
 
 		<dependency>

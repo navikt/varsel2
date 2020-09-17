@@ -14,9 +14,7 @@
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-config</artifactId>
-			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.1-api</artifactId>
@@ -25,7 +23,6 @@
 			<groupId>org.jadira.usertype</groupId>
 			<artifactId>usertype.extended</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>

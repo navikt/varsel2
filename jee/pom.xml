@@ -13,7 +13,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
+			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-web</artifactId>
 			<version>${project.version}</version>
 			<type>war</type>
@@ -30,7 +30,7 @@
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
 					<modules>
 						<webModule>
-							<groupId>${project.groupId}</groupId>
+							<groupId>no.nav.varsel</groupId>
 							<artifactId>varsel-web</artifactId>
 							<contextRoot>/varsel</contextRoot>
 							<bundleFileName>varsel-web.war</bundleFileName>

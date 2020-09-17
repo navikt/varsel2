@@ -14,7 +14,6 @@
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-jms</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<!--provided-->
