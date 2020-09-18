@@ -4,7 +4,6 @@ import com.codahale.metrics.annotation.Counted;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
 import no.nav.modig.core.context.SubjectHandler;
-import no.nav.modig.core.exception.AuthorizationException;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.BrukervarselV1;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.HentVarselForBrukerUgyldigInput;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
@@ -60,11 +59,18 @@ public class BrukervarselV1Endpoint implements BrukervarselV1 {
 		hentVarselForBrukerRequestValidator.validate(hentVarselForBrukerRequest);
 		try {
 			return brukervarselV1Provider.hentVarselForBruker(hentVarselForBrukerRequest);
-		} catch (AuthorizationException e) {
-			log.warn(String.format("Access denied in operation %s. LoggedOnUser=%s. IdentType=%s", BRUKERVARSEL_V1_HENT_VARSEL_FOR_BRUKER,
-					SubjectHandler.getSubjectHandler().getUid(), SubjectHandler.getSubjectHandler().getIdentType()), e);
-			throw new AuthorizationException(ACCESS_DENIED); //NOSONAR
+		} catch (RuntimeException e) {
+			// Hvorfor gjør vi dette?
+			// Biblioteket vi er avhengig av modig-security-authorization kaster access denied feil som RuntimeException.
+			// Selv om dette er funksjonelle feil. For mer info se no.nav.modig.security.tilgangskontroll.policy.pep.PEPImpl
+			if (e.getMessage().startsWith(ACCESS_DENIED)) {
+				log.warn(String.format("Access denied in operation %s IdentType=%s", BRUKERVARSEL_V1_HENT_VARSEL_FOR_BRUKER,
+						SubjectHandler.getSubjectHandler().getIdentType()), e);
+				throw new AuthorizationException(ACCESS_DENIED);
+			} else {
+				log.error("Teknisk feil: " + e.getMessage(), e);
+				throw e;
+			}
 		}
-
 	}
 }

@@ -1,5 +1,16 @@
 package no.nav.varsel.web.selftest;
 
+import no.nav.varsel.config.AppConfig;
+import no.nav.varsel.config.WsConsumerTestConfig;
+import no.nav.varsel.web.AbstractRestTest;
+import no.nav.varsel.web.selftest.support.Result;
+import org.junit.Test;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import static no.nav.varsel.web.selftest.SelftestController.APPLICATION_UP;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -10,25 +21,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import no.nav.varsel.config.AppConfig;
-import no.nav.varsel.config.WsConsumerTestConfig;
-import no.nav.varsel.web.AbstractRestTest;
-import no.nav.varsel.web.selftest.support.Result;
-import org.junit.Test;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.http.MediaType;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 /**
  * Itest for {@link SelftestController}
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@SpringApplicationConfiguration(classes = {AppConfig.class, WsConsumerTestConfig.class})
+@Import({AppConfig.class, WsConsumerTestConfig.class})
 public class SelftestControllerTest extends AbstractRestTest {
-
 
 	@Test
 	public void shouldSelftestThymeleaf() throws Exception {

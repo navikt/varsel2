@@ -15,7 +15,10 @@
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-domain</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>io.dropwizard.metrics</groupId>
+			<artifactId>metrics-core</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.ryantenney.metrics</groupId>
 			<artifactId>metrics-spring</artifactId>

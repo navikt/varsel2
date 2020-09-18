@@ -2,7 +2,6 @@ package no.nav.varsel.domain.object;
 
 import com.google.common.base.MoreObjects;
 import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -51,7 +50,6 @@ public class Varselbestilling extends AbstractDomainObject {
 	@Column(name = "varseltype_id", nullable = false)
 	private String varseltypeId;
 
-	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
 	@Column(name = "utlop_tidspunkt", columnDefinition = "TIMESTAMP")
 	private LocalDateTime utlopTidspunkt;
 
@@ -64,7 +62,6 @@ public class Varselbestilling extends AbstractDomainObject {
 	@Column(name = "org_nr")
 	private String orgNr;
 
-	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
 	@Column(name = "bestilling_tidspunkt", nullable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime bestillingTidspunkt;
 
@@ -74,7 +71,6 @@ public class Varselbestilling extends AbstractDomainObject {
 	@Column(name = "antall_revarslinger")
 	private Integer antallRevarslinger;
 
-	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDate")
 	@Column(name = "neste_varsling_dato", columnDefinition = "DATE")
 	private LocalDate nesteVarslingDato;
 

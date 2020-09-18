@@ -1,9 +1,5 @@
 package no.nav.varsel.jms.consumer;
 
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import no.nav.varsel.config.JmsConsumerTestConfig;
 import no.nav.varsel.config.JmsTestConfig;
 import no.nav.varsel.jms.to.xml.JmsReply;
@@ -13,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -27,13 +23,17 @@ import javax.jms.Message;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
 
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Abstract Test for JMS
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = JmsConsumerTestConfig.class)
+@SpringBootTest(classes = JmsConsumerTestConfig.class)
 @ActiveProfiles({"itest"})
 @DirtiesContext
 public abstract class AbstractConsumerJmsTest {

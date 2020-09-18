@@ -1,11 +1,5 @@
 package no.nav.varsel.wsconsumer.dkif;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.DigitalKontaktinformasjonV1;
@@ -23,7 +17,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.annotation.EnableRetry;
@@ -33,13 +27,19 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Set;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 /**
  * Unit test for {@link AktoerConsumer}
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {DkifRetryTest.Config.class, HentDigitalKontaktinformasjonConsumer.class})
+@SpringBootTest(classes = {DkifRetryTest.Config.class, HentDigitalKontaktinformasjonConsumer.class})
 public class DkifRetryTest {
 
 	private static final String PERSON_ID = "id";

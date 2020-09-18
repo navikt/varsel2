@@ -4,7 +4,6 @@ import com.google.common.base.MoreObjects;
 import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,15 +49,12 @@ public class Varsel extends AbstractDomainObject {
 	@Column(name = "k_kanal", nullable = false)
 	private KanalCode kanal;
 
-	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
 	@Column(name = "sendt_tidspunkt", columnDefinition = "TIMESTAMP")
 	private LocalDateTime sendtTidspunkt;
 
-	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
 	@Column(name = "distribusjon_tidspunkt", columnDefinition = "TIMESTAMP")
 	private LocalDateTime distribusjonTidspunkt;
 
-	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
 	@Column(name = "kvittering_tidspunkt", columnDefinition = "TIMESTAMP")
 	private LocalDateTime kvitteringTidspunkt;
 

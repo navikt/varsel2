@@ -3,11 +3,8 @@ package no.nav.varsel;
 import com.codahale.metrics.servlets.MetricsServlet;
 import no.nav.varsel.config.AppConfig;
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
-import org.springframework.boot.context.embedded.ServletRegistrationBean;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -21,7 +18,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration
-@EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class, DataSourceAutoConfiguration.class})
 @Import(AppConfig.class)
 @EnableRetry
 public class Application extends SpringBootServletInitializer {

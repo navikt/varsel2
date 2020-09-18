@@ -1,14 +1,6 @@
 package no.nav.varsel.provider.ws.brukervarsel;
 
-import static no.nav.varsel.provider.ws.brukervarsel.BrukervarselV1Endpoint.ACCESS_DENIED;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import no.nav.modig.core.context.ThreadLocalSubjectHandler;
-import no.nav.modig.core.exception.AuthorizationException;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
 import no.nav.varsel.provider.ws.brukervarsel.support.BrukervarselV1Provider;
@@ -21,6 +13,13 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static no.nav.varsel.provider.ws.brukervarsel.BrukervarselV1Endpoint.ACCESS_DENIED;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit test for {@link BrukervarselV1Endpoint}
@@ -62,7 +61,7 @@ public class BrukervarselV1EndpointTest {
 	@Test
 	public void shouldGiveUndetailedExceptionWhenAccessDenied() throws Exception {
 		when(brukervarselV1ProviderMock.hentVarselForBruker(any(HentVarselForBrukerRequest.class)))
-				.thenThrow(new AuthorizationException("detailed exception"));
+				.thenThrow(new AuthorizationException(ACCESS_DENIED));
 
 		expectedException.expect(AuthorizationException.class);
 		expectedException.expectMessage(ACCESS_DENIED);
