@@ -7,7 +7,6 @@ import no.nav.varsel.domain.object.worktable.ArbeidStatus;
 import no.nav.varsel.jms.producer.varselbestilling.support.BestillVarselProducerMapper;
 import no.nav.varsel.jms.producer.varselbestilling.to.VarselbestillingTo;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +15,9 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.support.ClassifierCompositeItemWriter;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jms.UncategorizedJmsException;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -42,8 +40,7 @@ import static org.junit.Assert.assertThat;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@Ignore
-@Import({Bvarsel001JobFailureTest.Config.class, BatchTestConfig.class})
+@SpringBootTest(classes = {BatchTestConfig.class, Bvarsel001JobFailureTest.Config.class})
 public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 
 	private static final String FAIL = "FAIL";
@@ -61,7 +58,6 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 	public static class Config {
 
 		@Bean
-		@Primary
 		public ItemWriter<VarselbestillingTo> varselbestillingQueueItemWriter(
 				JmsQueueItemWriter<VarselbestillingTo> jmsTestWriter) {
 			ClassifierCompositeItemWriter<VarselbestillingTo> writer = new ClassifierCompositeItemWriter<>();
@@ -83,7 +79,6 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 		 * Copy from {@link no.nav.varsel.config.Bvarsel001Config}
 		 */
 		@Bean
-		@Primary
 		public JmsQueueItemWriter<VarselbestillingTo> jmsTestWriter(
 				Queue bestillVarselQueue,
 				BestillVarselProducerMapper bestillVarselProducerMapper) {

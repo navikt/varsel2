@@ -14,7 +14,6 @@ import org.slf4j.MDC;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.test.JobLauncherTestUtils;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -33,7 +32,6 @@ import java.time.format.DateTimeFormatter;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = BatchTestConfig.class)
 @ActiveProfiles({"itest"})
 @DirtiesContext
 public abstract class AbstractBatchTest extends JobLauncherTestUtils {

@@ -2,11 +2,13 @@ package no.nav.varsel.batch.bvarsel001.itest;
 
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Person;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
+import no.nav.varsel.config.BatchTestConfig;
 import no.nav.varsel.repo.TestdataUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ import static org.junit.Assert.assertThat;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
+@SpringBootTest(classes = {BatchTestConfig.class})
 public class Bvarsel001JobTest extends AbstractBvarsel001Test {
 
     private static final String IGNORED = "ignored";

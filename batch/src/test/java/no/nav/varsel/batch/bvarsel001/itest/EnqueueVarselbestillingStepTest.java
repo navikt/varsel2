@@ -1,5 +1,13 @@
 package no.nav.varsel.batch.bvarsel001.itest;
 
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Person;
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
+import no.nav.varsel.config.BatchTestConfig;
+import no.nav.varsel.domain.object.worktable.ArbeidStatus;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import static no.nav.varsel.repo.TestdataUtil.FNR;
 import static no.nav.varsel.repo.TestdataUtil.PARAMETERKEY;
 import static no.nav.varsel.repo.TestdataUtil.PARAMETERVALUE;
@@ -10,17 +18,12 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertThat;
 
-import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Person;
-import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
-import no.nav.varsel.domain.object.worktable.ArbeidStatus;
-import org.junit.Before;
-import org.junit.Test;
-
 /**
  * Itest for enqueueVarselbestilling Step
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
+@SpringBootTest(classes = {BatchTestConfig.class})
 public class EnqueueVarselbestillingStepTest extends AbstractBvarsel001StepTest {
 
 	@Before
