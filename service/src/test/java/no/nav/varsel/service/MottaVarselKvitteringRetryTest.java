@@ -1,13 +1,5 @@
 package no.nav.varsel.service;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.repo.VarselRepo;
@@ -16,7 +8,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.annotation.EnableRetry;
@@ -26,12 +18,20 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.inject.Inject;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 /**
  * @author Ugur Alpay Cenar, Visma Consulting.
  */
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {MottaVarselKvitteringService.class, MottaVarselKvitteringRetryTest.Config.class})
+@SpringBootTest(classes = {MottaVarselKvitteringService.class, MottaVarselKvitteringRetryTest.Config.class})
 @ActiveProfiles({"itest"})
 public class MottaVarselKvitteringRetryTest {
 

@@ -1,11 +1,9 @@
 package no.nav.varsel.config;
 
-import static org.hibernate.cfg.AvailableSettings.JTA_PLATFORM;
-
 import no.nav.varsel.domain.object.Varselbestilling;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +17,8 @@ import javax.inject.Named;
 import javax.sql.DataSource;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static org.hibernate.cfg.AvailableSettings.JTA_PLATFORM;
 
 /**
  * Spring config for datasources and entitymanager
@@ -66,8 +66,7 @@ public class DataSourceConfig {
 	}
 
 	private Map<String, Object> getVendorProperties(DataSource dataSource) {
-		Map<String, Object> vendorProperties = new LinkedHashMap<>();
-		vendorProperties.putAll(properties.getHibernateProperties(dataSource));
+		Map<String, Object> vendorProperties = new LinkedHashMap<>(properties.getHibernateProperties(dataSource));
 		vendorProperties.put(JTA_PLATFORM, new SpringJtaPlatform(jtaTransactionManager));
 		return vendorProperties;
 	}

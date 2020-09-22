@@ -1,18 +1,21 @@
 package no.nav.varsel.batch.bvarsel001.itest;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
+import no.nav.varsel.config.BatchTestConfig;
 import no.nav.varsel.domain.object.worktable.ArbeidStatus;
 import no.nav.varsel.domain.object.worktable.Bvarsel001WorkTable;
 import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Itest for CleanArbeidsTabellStep Bvarsel001
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
+@SpringBootTest(classes = {BatchTestConfig.class})
 public class CleanArbeidsTabellStepTest extends AbstractBvarsel001StepTest {
 
 	@Test

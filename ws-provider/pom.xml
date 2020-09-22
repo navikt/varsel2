@@ -14,12 +14,10 @@
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-ws</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-service</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<!-- modig -->

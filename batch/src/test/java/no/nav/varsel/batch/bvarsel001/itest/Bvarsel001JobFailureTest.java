@@ -1,13 +1,5 @@
 package no.nav.varsel.batch.bvarsel001.itest;
 
-import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
-import static no.nav.varsel.repo.TestdataUtil.createVarselbestillingBuilder;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import no.nav.varsel.batch.common.JmsQueueItemWriter;
 import no.nav.varsel.config.BatchTestConfig;
 import no.nav.varsel.domain.object.Varselbestilling;
@@ -23,7 +15,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.support.ClassifierCompositeItemWriter;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.UncategorizedJmsException;
@@ -35,12 +27,20 @@ import javax.inject.Inject;
 import javax.jms.Queue;
 import java.util.List;
 
+import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
+import static no.nav.varsel.repo.TestdataUtil.createVarselbestillingBuilder;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 /**
  * Itest for Failure in jobtest
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@SpringApplicationConfiguration(classes = {Bvarsel001JobFailureTest.Config.class, BatchTestConfig.class})
+@SpringBootTest(classes = {BatchTestConfig.class, Bvarsel001JobFailureTest.Config.class})
 public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 
 	private static final String FAIL = "FAIL";

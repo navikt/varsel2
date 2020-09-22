@@ -1,16 +1,12 @@
 package no.nav.varsel.provider.ws.brukervarsel.itest;
 
-import static no.nav.varsel.domain.Constants.USER_ID;
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
-import static org.hamcrest.core.Is.is;
-
 import no.nav.modig.core.context.SubjectHandlerUtils;
 import no.nav.modig.core.domain.IdentType;
-import no.nav.modig.core.exception.AuthorizationException;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Person;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
 import no.nav.varsel.provider.AbstractWsProviderITest;
+import no.nav.varsel.provider.ws.brukervarsel.AuthorizationException;
 import no.nav.varsel.provider.ws.brukervarsel.BrukervarselV1Endpoint;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,6 +14,10 @@ import org.junit.rules.ExpectedException;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+
+import static no.nav.varsel.domain.Constants.USER_ID;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
+import static org.hamcrest.core.Is.is;
 
 /**
  * Tests the XACML-logic in BrukervarselV1 TVARSEL005

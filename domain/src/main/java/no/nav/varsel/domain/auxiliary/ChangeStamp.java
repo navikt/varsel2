@@ -1,7 +1,5 @@
 package no.nav.varsel.domain.auxiliary;
 
-import org.hibernate.annotations.Type;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -21,14 +19,12 @@ public class ChangeStamp implements Serializable {
 	private String opprettetAv;
 
 	@Column(name = "opprettet_dato", nullable = false, updatable = false, columnDefinition = "TIMESTAMP")
-	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
 	private LocalDateTime opprettetDato;
 
 	@Column(name = "endret_av")
 	private String endretAv;
 
 	@Column(name = "endret_dato", columnDefinition = "TIMESTAMP")
-	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")
 	private LocalDateTime endretDato;
 
 	/**

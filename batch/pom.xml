@@ -14,12 +14,10 @@
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-repo</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-jms-producer</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<!--provided-->

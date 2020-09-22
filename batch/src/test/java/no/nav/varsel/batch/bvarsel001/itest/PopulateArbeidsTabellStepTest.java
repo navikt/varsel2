@@ -1,19 +1,22 @@
 package no.nav.varsel.batch.bvarsel001.itest;
 
+import no.nav.varsel.config.BatchTestConfig;
+import no.nav.varsel.domain.object.worktable.ArbeidStatus;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import static java.time.LocalDate.now;
 import static no.nav.varsel.repo.TestdataUtil.createVarselbestillingBuilder;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-
-import no.nav.varsel.domain.object.worktable.ArbeidStatus;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * Itest for PopulateArbeidsTabellStep Bvarsel001
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
+@SpringBootTest(classes = {BatchTestConfig.class})
 public class PopulateArbeidsTabellStepTest extends AbstractBvarsel001StepTest {
 
 	private static final String YESTERDAY = "yesterday";

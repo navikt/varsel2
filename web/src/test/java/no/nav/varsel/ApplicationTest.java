@@ -5,7 +5,7 @@ import no.nav.varsel.config.WebTestConfig;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = WebTestConfig.class)
+@SpringBootTest(classes = WebTestConfig.class)
 @ActiveProfiles({"itest"})
 @DirtiesContext
 public class ApplicationTest {

@@ -21,7 +21,7 @@ public class TomcatSubjectHandler extends SubjectHandler {
 	private static String uid;
 
 	@Override
-	protected Subject getSubject() {
+	public Subject getSubject() {
 		ServletRequestAttributes servletRequestAttributes =
 				(ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		if (servletRequestAttributes == null) {

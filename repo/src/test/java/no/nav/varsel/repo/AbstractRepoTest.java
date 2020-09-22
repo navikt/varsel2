@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.slf4j.MDC;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -21,7 +21,7 @@ import javax.persistence.PersistenceContext;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = RepoTestConfig.class)
+@SpringBootTest(classes = RepoTestConfig.class)
 @ActiveProfiles({"itest"})
 public abstract class AbstractRepoTest {
 

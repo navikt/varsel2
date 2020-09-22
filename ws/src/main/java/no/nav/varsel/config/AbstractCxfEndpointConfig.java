@@ -3,8 +3,6 @@ package no.nav.varsel.config;
 import no.nav.varsel.config.support.TimeoutFeature;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.interceptor.Interceptor;
-import org.apache.cxf.interceptor.LoggingInInterceptor;
-import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.message.Message;
 
@@ -28,8 +26,6 @@ public abstract class AbstractCxfEndpointConfig {
 	private final JaxWsProxyFactoryBean factoryBean = new JaxWsProxyFactoryBean();
 
 	public AbstractCxfEndpointConfig() {
-		factoryBean.getOutInterceptors().add(new LoggingOutInterceptor());
-		factoryBean.getInInterceptors().add(new LoggingInInterceptor());
 		factoryBean.setProperties(new HashMap<>());
 		factoryBean.setBus(bus);
 	}
