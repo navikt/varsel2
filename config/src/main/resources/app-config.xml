@@ -36,7 +36,6 @@
 		<baseUrl alias="securityTokenService" mapToProperty="securityTokenService"/>
 		<soap mapToProperty="aktoerv2.ws" alias="virksomhet:Aktoer_v2"/>
 		<soap mapToProperty="dkif.ws" alias="virksomhet:DigitalKontaktinformasjon_v1"/>
-		<soap mapToProperty="kodeverkv2.ws" alias="Kodeverk_v2"/>
 		<rest alias="VarselInfo_v1" mapToProperty="dokkat.varselinfo.rest"/>
 		<applicationProperties alias="varselProps"/>
 	</resources>

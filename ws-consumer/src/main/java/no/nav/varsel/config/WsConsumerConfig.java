@@ -5,7 +5,6 @@ import no.nav.varsel.wsconsumer.aktoer.AktoerConsumer;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
-import no.nav.varsel.wsconsumer.kodeverk.KodeverkConsumer;
 import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,11 +42,6 @@ public class WsConsumerConfig {
 	@Bean
 	public VarselKanalDecider varselKanalDecider() {
 		return new VarselKanalDecider();
-	}
-
-	@Bean
-	public KodeverkConsumer kodeverkConsumer() {
-		return new KodeverkConsumer();
 	}
 
 	@Bean

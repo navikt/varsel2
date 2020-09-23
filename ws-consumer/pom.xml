@@ -39,12 +39,6 @@
 			<artifactId>dokkat-schemas</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>no.nav.tjenester.fim</groupId>
-			<artifactId>nav-fim-kodeverk-v2-tjenestespesifikasjon</artifactId>
-			<classifier>jaxws</classifier>
-		</dependency>
-
 		<!-- provided -->
 		<dependency>
 			<groupId>javax.inject</groupId>
