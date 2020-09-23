@@ -1,8 +1,8 @@
 package no.nav.varsel.config.endpoint;
 
-import no.nav.modig.security.ws.SystemSAMLOutInterceptor;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 import no.nav.varsel.config.AbstractCxfEndpointConfig;
+import no.nav.varsel.config.STSConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,16 +15,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AktoerV2Endpoint extends AbstractCxfEndpointConfig {
 
-	@Value("${aktoerv2.ws.url}")
-	private String aktoerUrl;
+    @Value("${aktoerv2.ws.endpointUrl}")
+    private String aktoerUrl;
 
-	@Bean
-	public AktoerV2 aktoerV2() {
-		addOutInterceptor(new SystemSAMLOutInterceptor());
-		setAdress(aktoerUrl);
-		enableMtom();
-
-		return createPort(AktoerV2.class);
-	}
+    @Bean
+    public AktoerV2 aktoerV2(STSConfig stsConfig) {
+        setAdress(aktoerUrl);
+        enableMtom();
+        AktoerV2 port = createPort(AktoerV2.class);
+        stsConfig.configureSTS(port);
+        return port;
+    }
 
 }

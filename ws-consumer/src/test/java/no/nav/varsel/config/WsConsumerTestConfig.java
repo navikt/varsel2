@@ -20,17 +20,17 @@ import javax.xml.ws.Endpoint;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@Import({LocalTomcatConfiguration.class, WsConsumerConfig.class, RestMock.class})
+@Import({LocalTomcatConfiguration.class, WsConsumerConfig.class, RestMock.class, STSTestConfig.class})
 @Configuration
 public class WsConsumerTestConfig {
 
-	@Value("${aktoerv2.ws.url}")
+	@Value("${aktoerv2.ws.endpointUrl}")
 	private String aktoerUrl;
 
-	@Value("${dkif.ws.url}")
+	@Value("${dkif.ws.endpointUrl}")
 	private String dkifUrl;
 
-	@Value("${kodeverkv2.ws.url}")
+	@Value("${kodeverkv2.ws.endpointUrl}")
 	private String kodeverkUrl;
 
 

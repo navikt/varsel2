@@ -18,7 +18,7 @@ public class KodeverkV2Endpoint extends AbstractCxfEndpointConfig {
 
 	private static final String WSDL_URL = "wsdl/no/nav/tjeneste/virksomhet/kodeverk/v2/Kodeverk.wsdl";
 
-	@Value("${kodeverkv2.ws.url}")
+	@Value("${kodeverkv2.ws.endpointUrl}")
 	private String kodeverkUrl;
 
 	@Bean
