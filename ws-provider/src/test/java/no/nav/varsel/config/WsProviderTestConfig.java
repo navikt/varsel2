@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Import;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class, DataSourceAutoConfiguration.class})
-@Import({JmsTestConfig.class, RepoTestConfig.class, ProviderWsConfig.class})
+@Import({JmsTestConfig.class, RepoTestConfig.class, ProviderWsConfig.class, STSTestConfig.class})
 @Configuration
 public class WsProviderTestConfig {
 

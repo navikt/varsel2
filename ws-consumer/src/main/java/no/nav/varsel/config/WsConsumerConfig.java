@@ -5,7 +5,6 @@ import no.nav.varsel.wsconsumer.aktoer.AktoerConsumer;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
-import no.nav.varsel.wsconsumer.kodeverk.KodeverkConsumer;
 import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +15,7 @@ import org.springframework.context.annotation.Import;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@Import({CxfConfig.class, ConsumerEndpointConfig.class, RestConsumerConfig.class})
+@Import({STSConfig.class, CxfConfig.class, ConsumerEndpointConfig.class, RestConsumerConfig.class})
 @Configuration
 public class WsConsumerConfig {
 
@@ -43,11 +42,6 @@ public class WsConsumerConfig {
 	@Bean
 	public VarselKanalDecider varselKanalDecider() {
 		return new VarselKanalDecider();
-	}
-
-	@Bean
-	public KodeverkConsumer kodeverkConsumer() {
-		return new KodeverkConsumer();
 	}
 
 	@Bean

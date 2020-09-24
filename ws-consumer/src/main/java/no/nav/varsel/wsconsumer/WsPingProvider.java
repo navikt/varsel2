@@ -1,16 +1,15 @@
 package no.nav.varsel.wsconsumer;
 
-import static no.nav.varsel.domain.to.Ping.Type.Rest;
-import static no.nav.varsel.domain.to.Ping.Type.Soap;
-
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.DigitalKontaktinformasjonV1;
-import no.nav.tjeneste.virksomhet.kodeverk.v2.KodeverkPortType;
 import no.nav.varsel.domain.to.Ping;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.inject.Inject;
+
+import static no.nav.varsel.domain.to.Ping.Type.Rest;
+import static no.nav.varsel.domain.to.Ping.Type.Soap;
 
 /**
  * Ping Provider for Ws Consumer
@@ -21,17 +20,12 @@ public class WsPingProvider {
 
 	@Inject
 	private AktoerV2 aktoerV2;
-	@Value("${aktoerv2.ws.url}")
+	@Value("${aktoerv2.ws.endpointUrl}")
 	private String aktoerUrl;
 
 	@Inject
-	private KodeverkPortType kodeverkPortType;
-	@Value("${kodeverkv2.ws.url}")
-	private String kodeverkUrl;
-
-	@Inject
 	private DigitalKontaktinformasjonV1 digitalKontaktinformasjonV1;
-	@Value("${dkif.ws.url}")
+	@Value("${dkif.ws.endpointUrl}")
 	private String dkifUrl;
 	@Inject
 	private VarselInfoConsumer varselInfoConsumer;
@@ -48,9 +42,5 @@ public class WsPingProvider {
 
 	public Ping pingVarselInfoV1() {
 		return new Ping(Rest, "VarselInfoV1", varselInfoUrl, () -> varselInfoConsumer.ping());
-	}
-
-	public Ping pingKodeverkPortType() {
-		return new Ping(Soap, "Kodeverk_v2", kodeverkUrl, () -> kodeverkPortType.ping());
 	}
 }

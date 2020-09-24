@@ -53,8 +53,6 @@
         <nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>1.0.0
         </nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>
         <dokkat-schemas.version>6.0.3</dokkat-schemas.version>
-        <nav-fim-kodeverk-v2-tjenestespesifikasjon.version>2.0.0-alpha004
-        </nav-fim-kodeverk-v2-tjenestespesifikasjon.version>
         <nav-brukervarsel-v1-tjenestespesifikasjon.version>1.0.4</nav-brukervarsel-v1-tjenestespesifikasjon.version>
         <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
         <guava.version>19.0</guava.version>
@@ -208,14 +206,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
-            <dependency>
-                <groupId>no.nav.tjenester.fim</groupId>
-                <artifactId>nav-fim-kodeverk-v2-tjenestespesifikasjon</artifactId>
-                <version>${nav-fim-kodeverk-v2-tjenestespesifikasjon.version}</version>
-                <classifier>jaxws</classifier>
-            </dependency>
-
             <dependency>
                 <groupId>no.nav.tjenester</groupId>
                 <artifactId>nav-brukervarsel-v1-tjenestespesifikasjon</artifactId>
