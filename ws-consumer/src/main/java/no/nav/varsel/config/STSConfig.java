@@ -25,7 +25,7 @@ public class STSConfig {
                      @Value("${no.nav.modig.security.systemuser.password}") String serviceuserPassword) {
         this.stsUrl = stsUrl;
         this.serviceuserUsername = serviceuserUsername;
-        this.serviceuser***passord=gammelt_passord***;
+        this.serviceuserPassword = serviceuserPassword;
     }
 
     public void configureSTS(Object port) {

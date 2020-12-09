@@ -16,7 +16,7 @@ import java.util.Map;
 public class JmsReply implements Serializable {
 
 
-	private static final long serialVersionUID = ***gammelt_fnr***76092330L;
+	private static final long serialVersionUID = 5559790053976092330L;
 
 	private Map<String, String> params = new HashMap<>();
 

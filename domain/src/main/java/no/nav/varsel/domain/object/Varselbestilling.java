@@ -34,7 +34,7 @@ import java.util.Set;
 @Table(name = "VARSELBESTILLING", uniqueConstraints = @UniqueConstraint(columnNames = "varselbestilling_id"))
 public class Varselbestilling extends AbstractDomainObject {
 
-	private static final long serialVersionUID = ***gammelt_fnr***412768L;
+	private static final long serialVersionUID = 97815676835412768L;
 
 	private static final String VARSELBESTILLING_SEQ = "VARSELBESTILLING_SEQ";
 

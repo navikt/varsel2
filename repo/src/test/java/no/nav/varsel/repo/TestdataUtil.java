@@ -35,8 +35,8 @@ public class TestdataUtil {
 	public static final Set<KanalCode> PREFERERT_KANAL = Sets.newHashSet(KanalCode.EPOST);
 	public static final Set<KanalCode> OVERSTYRT_PREFERERT_KANAL = Sets.newHashSet(KanalCode.values());
 	public static final LocalDateTime UTLOP_TIDSPUNKT = LocalDateTime.now().plusHours(1);
-	public static final String FNR = "***gammelt_fnr***";
-	public static final String AKTOR_ID = "***gammelt_fnr***34444";
+	public static final String FNR = "11112222333";
+	public static final String AKTOR_ID = "1111222233334444";
 	public static final LocalDateTime BESTILLING_TIDSPUNKT = LocalDateTime.parse("2016-04-04T11:12:13");
 	public static final int REVARSLING_INTERVALL = 7;
 	public static final int ANTALL_REVARSLINGER = 2;

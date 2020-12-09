@@ -14,7 +14,7 @@ import java.util.Collection;
  */
 public class KontaktregisterTo implements Serializable {
 
-	private static final long serialVersionUID = ***gammelt_fnr***8148963L;
+	private static final long serialVersionUID = 373780690208148963L;
 
 	public static final int DATE_VALID_MONTHS = 18;
 

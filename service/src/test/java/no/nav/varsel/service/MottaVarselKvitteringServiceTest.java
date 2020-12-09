@@ -164,8 +164,8 @@ public class MottaVarselKvitteringServiceTest {
 
 	@Test
 	public void shouldCensorPersonalData() throws Exception {
-		String uncensoredTlf = "The phone number has an invalid country code: +***gammelt_fnr***8";
-		String uncensoredMailAndFnr = "Address: ola.normann.ÅLAND_123@epøst.no, User: ***gammelt_fnr***";
+		String uncensoredTlf = "The phone number has an invalid country code: +004712345678";
+		String uncensoredMailAndFnr = "Address: ola.normann.ÅLAND_123@epøst.no, User: 01017012345";
 
 		String censoredTlf = mottaVarselKvitteringService.sensurerPersonligData(uncensoredTlf);
 		String censoredMailAndFnr = mottaVarselKvitteringService.sensurerPersonligData(uncensoredMailAndFnr);

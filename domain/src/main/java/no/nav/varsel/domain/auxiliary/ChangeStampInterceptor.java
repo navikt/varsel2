@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 public class ChangeStampInterceptor extends EmptyInterceptor {
 
-	private static final long serialVersionUID = ***gammelt_fnr***8953194L;
+	private static final long serialVersionUID = 973776995128953194L;
 
 	@Override
 	public boolean onFlushDirty(final Object entity, final Serializable id, final Object[] currentState,

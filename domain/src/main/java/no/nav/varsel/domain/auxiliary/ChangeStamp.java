@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Embeddable
 public class ChangeStamp implements Serializable {
 
-	private static final long serialVersionUID = ***gammelt_fnr***562288L;
+	private static final long serialVersionUID = 61541164562562288L;
 
 	@Column(name = "opprettet_av", nullable = false, updatable = false)
 	private String opprettetAv;
