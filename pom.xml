@@ -568,12 +568,6 @@
         </pluginManagement>
     </build>
 
-    <scm>
-        <developerConnection>scm:git:http://stash.devillo.no/scm/boaf/varsel.git</developerConnection>
-        <url>http://stash.devillo.no/projects/BOAF/repos/varsel.git</url>
-        <tag>HEAD</tag>
-    </scm>
-
     <distributionManagement>
         <repository>
             <id>m2internal</id>
