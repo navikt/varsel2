@@ -76,7 +76,7 @@ public class StoppReVarselConsumerTest extends AbstractConsumerJmsTest {
 
 		sendMessage(revarselStoppQueue, stoppReVarsel);
 
-		verify(loggerAppender, times(1)).doAppend(argThat(hasMessageContaining("Behandle stoppReVarsel, varselbestillingId=VARSELBESTILLING_ID")));
+		verify(loggerAppender, times(1)).doAppend(argThat(hasMessageContaining("Mottat kall for å stoppe revarsel for varselbestillingId=VARSELBESTILLING_ID")));
 	}
 
 	public static JAXBElement<StoppReVarsel> createStoppReVarselJaxBElement(String varselbestillingId) {
