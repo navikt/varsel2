@@ -37,6 +37,6 @@ public class StoppReVarselService {
 	private void updateVarselbestilling(Varselbestilling varselbestilling) {
 		varselbestilling.setAntallRevarslinger(0);
 		varselbestilling.setNesteVarslingDato(null);
-		LOGG.info("Stoppet revarsel for varselbestillingsId {} ", varselbestilling.getVarselbestillingId());
+		LOGG.info("Stoppet revarsel for varselbestillingsId={} ", varselbestilling.getVarselbestillingId());
 	}
 }
