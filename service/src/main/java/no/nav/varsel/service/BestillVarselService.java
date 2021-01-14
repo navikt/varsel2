@@ -141,9 +141,12 @@ public class BestillVarselService {
 		if (nyAntallRevarslinger <= 0) {
 			item.setAntallRevarslinger(null);
 			item.setNesteVarslingDato(null);
+			LOGG.info("Ingen nye revarsler for varselbestillingId {}", item.getVarselbestillingId());
 		} else {
 			item.setAntallRevarslinger(nyAntallRevarslinger);
 			item.setNesteVarslingDato(LocalDate.now().plusDays(item.getRevarslingIntervall()));
+			LOGG.info("BestillVarselService har bestilt {} nye varsler for varselbestillingId {}. Neste revarsel: {}",
+					item.getAntallRevarslinger(), item.getVarselbestillingId(), item.getNesteVarslingDato());
 		}
 	}
 
