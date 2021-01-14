@@ -4,6 +4,8 @@ import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.exception.VarselbestillingNotExistException;
 import no.nav.varsel.service.tvarsel004.to.StoppReVarselTo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
@@ -13,6 +15,8 @@ import javax.inject.Inject;
  * @author Hiep Luong Nguyen, Computas
  */
 public class StoppReVarselService {
+	private static final Logger LOGG = LoggerFactory.getLogger(StoppReVarselService.class);
+
 	@Inject
 	private VarselbestillingRepo varselbestillingRepo;
 
@@ -33,5 +37,6 @@ public class StoppReVarselService {
 	private void updateVarselbestilling(Varselbestilling varselbestilling) {
 		varselbestilling.setAntallRevarslinger(0);
 		varselbestilling.setNesteVarslingDato(null);
+		LOGG.info("Stoppet revarsel for varselbestillingsId={} ", varselbestilling.getVarselbestillingId());
 	}
 }
