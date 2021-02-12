@@ -1,5 +1,6 @@
 package no.nav.varsel.jms.consumer.tvarsel006;
 
+import static no.nav.varsel.Utils.formatDateTime;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static no.nav.varsel.jms.consumer.AbstractJmsConsumer.JMS_NOBACKOUTLOG;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.AKTOER_ID;
@@ -139,7 +140,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 		Varselbestilling varselbestilling = varselbestillingRepo.findAllEager().get(0);
 		assertThat(UUID.fromString(varselbestilling.getVarselbestillingId()).toString(), is(varselbestilling.getVarselbestillingId()));
 		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
-		assertThat(varselbestilling.getUtlopTidspunkt(), is(equalTo(UTLOEPS_TIDSPUNKT)));
+		assertThat(formatDateTime(varselbestilling.getUtlopTidspunkt()), is(equalTo(formatDateTime((UTLOEPS_TIDSPUNKT)))));
 		assertThat(varselbestilling.getFnr(), is(PERSON_IDENT));
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
 		assertThat(varselbestilling.getOrgNr(), is(ORGNUMMER));

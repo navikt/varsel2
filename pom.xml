@@ -40,6 +40,7 @@
         <modig-security.version>3.0.6</modig-security.version>
         <cxf.version>3.3.9</cxf.version>
         <jaxb-impl.version>2.2.11</jaxb-impl.version>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
         <brevogarkiv-batch-common.version>3.0.8</brevogarkiv-batch-common.version>
         <bootstrap.version>3.3.6</bootstrap.version>
         <resteasy.version>2.3.10.Final</resteasy.version>
@@ -72,6 +73,13 @@
         <!-- test -->
         <activemq-core.version>5.7.0</activemq-core.version>
         <modig-testcertificates.version>1.2.5</modig-testcertificates.version>
+
+        <!--build-->
+        <wagon-webdav-jackrabbit.version>3.3.4</wagon-webdav-jackrabbit.version>
+        <maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-ear-plugin.version>3.0.1</maven-ear-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -419,6 +427,11 @@
                 <version>${jaxb-impl.version}</version>
             </dependency>
             <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${jaxb-api.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>xml-apis</groupId>
                 <artifactId>xml-apis</artifactId>
                 <version>${xml-apis.version}</version>
@@ -528,7 +541,7 @@
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-webdav-jackrabbit</artifactId>
-                <version>3.3.4</version>
+                <version>${wagon-webdav-jackrabbit.version}</version>
             </extension>
         </extensions>
 
@@ -536,22 +549,22 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-ear-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>${maven-ear-plugin.version}</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
+                    <version>${maven-compiler-plugin.version}</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M3</version>
+                    <version>${maven-surefire-plugin.version}</version>
                     <configuration>
                         <reuseForks>false</reuseForks>
                     </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <version>${maven-assembly-plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

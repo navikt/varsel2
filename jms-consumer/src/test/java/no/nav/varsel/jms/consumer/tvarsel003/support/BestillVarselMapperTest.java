@@ -1,5 +1,6 @@
 package no.nav.varsel.jms.consumer.tvarsel003.support;
 
+import static no.nav.varsel.Utils.formatDateTime;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -43,7 +44,7 @@ public class BestillVarselMapperTest {
 		assertThat(to.getPersonIdent(), is(PERSON_IDENT));
 		assertThat(to.getAktoerId(), nullValue());
 		assertThat(to.getVarseltypeId(), is(VARSELTYPE_ID));
-		assertThat(to.getUtloepstidspunkt(), is(UTLOEPS_TIDSPUNKT));
+		assertThat(formatDateTime(to.getUtloepstidspunkt()), is(formatDateTime((UTLOEPS_TIDSPUNKT))));
 		assertThat(to.getParameters().keySet(), hasSize(1));
 		assertThat(to.getParameters().get(KEY), is(VAL));
 	}
