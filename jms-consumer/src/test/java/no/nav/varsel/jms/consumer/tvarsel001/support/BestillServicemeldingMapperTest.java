@@ -1,5 +1,6 @@
 package no.nav.varsel.jms.consumer.tvarsel001.support;
 
+import static no.nav.varsel.Utils.formatDateTime;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -55,7 +56,7 @@ public class BestillServicemeldingMapperTest {
 		assertThat(to.getAktoerId(), is(MOTTAKER));
 		assertThat(to.getPersonIdent(), nullValue());
 		assertThat(to.getVarseltypeId(), is(VARSELTYPE_ID));
-		assertThat(to.getUtloepstidspunkt(), equalTo(UTLOEPSTIDSPUNKT_LDT));
+		assertThat(formatDateTime(to.getUtloepstidspunkt()), equalTo(formatDateTime(UTLOEPSTIDSPUNKT_LDT)));
 		assertThat(to.getParameters().keySet(), hasSize(1));
 		assertThat(to.getParameters().get(KEY), is(VAL));
 		assertThat(to.isTestvarsel(), is(false));

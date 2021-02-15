@@ -1,5 +1,6 @@
 package no.nav.varsel.jms.consumer.tvarsel001;
 
+import static no.nav.varsel.Utils.formatDateTime;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.MOTTAKER;
@@ -120,7 +121,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(UUID.fromString(varselbestilling.getVarselbestillingId())
 				.toString(), is(varselbestilling.getVarselbestillingId()));
 		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
-		assertThat(varselbestilling.getUtlopTidspunkt(), is(equalTo(UTLOEPSTIDSPUNKT_LDT)));
+		assertThat(formatDateTime(varselbestilling.getUtlopTidspunkt()), is(equalTo(formatDateTime(UTLOEPSTIDSPUNKT_LDT))));
 		assertThat(varselbestilling.getFnr(), is(PERSON_IDENT));
 		assertThat(varselbestilling.getAktorId(), is(MOTTAKER));
 		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());

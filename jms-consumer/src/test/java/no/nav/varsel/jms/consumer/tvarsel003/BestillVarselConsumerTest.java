@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static no.nav.varsel.Utils.formatDateTime;
 
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.ObjectFactory;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Parameter;
@@ -186,7 +187,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestilling, notNullValue());
 		assertThat(varselbestilling.getVarselbestillingId(), is(VARSELBESTILLING_ID));
 		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
-		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPS_TIDSPUNKT));
+		assertThat(formatDateTime(varselbestilling.getUtlopTidspunkt()), is(formatDateTime(UTLOEPS_TIDSPUNKT)));
 		assertThat(varselbestilling.getFnr(), is(BestillVarselMapperTest.PERSON_IDENT));
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
 		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
@@ -215,7 +216,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestilling, notNullValue());
 		assertThat(varselbestilling.getVarselbestillingId(), is(VARSELBESTILLING_ID));
 		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
-		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPS_TIDSPUNKT));
+		assertThat(formatDateTime(varselbestilling.getUtlopTidspunkt()), is(formatDateTime(UTLOEPS_TIDSPUNKT)));
 		assertThat(varselbestilling.getFnr(), is(BestillVarselMapperTest.PERSON_IDENT));
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
 		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
@@ -247,7 +248,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestilling, notNullValue());
 		assertThat(varselbestilling.getVarselbestillingId(), is(VARSELBESTILLING_ID));
 		assertThat(varselbestilling.getVarseltypeId(), is(MISSING_TEXT));
-		assertThat(varselbestilling.getUtlopTidspunkt(), is(UTLOEPS_TIDSPUNKT));
+		assertThat(formatDateTime(varselbestilling.getUtlopTidspunkt()), is(formatDateTime(UTLOEPS_TIDSPUNKT)));
 		assertThat(varselbestilling.getFnr(), is(BestillVarselMapperTest.PERSON_IDENT));
 		assertThat(varselbestilling.getAktorId(), is(AKTOER_ID));
 		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());

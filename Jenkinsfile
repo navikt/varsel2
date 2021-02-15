@@ -1,4 +1,4 @@
 applicationPipeline {
     applicationName = "varsel"
-    javaVersion = "1.8"
+    javaVersion = "11"
 }
