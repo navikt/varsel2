@@ -38,6 +38,10 @@
 			<groupId>no.nav.dokkat</groupId>
 			<artifactId>dokkat-schemas</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.sun.activation</groupId>
+			<artifactId>javax.activation</artifactId>
+		</dependency>
 
 		<!-- provided -->
 		<dependency>
