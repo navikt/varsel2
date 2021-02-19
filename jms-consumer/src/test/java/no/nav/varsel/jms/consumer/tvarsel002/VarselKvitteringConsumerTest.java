@@ -1,21 +1,9 @@
 package no.nav.varsel.jms.consumer.tvarsel002;
 
-import static no.nav.varsel.jms.consumer.tvarsel002.VarselKvitteringConsumer.TVARSEL002;
-import static no.nav.varsel.jms.consumer.tvarsel002.support.MottaVarselKvitteringMapperTest.DATE_UTSENDINGSSTIDSPUNKT;
-import static no.nav.varsel.jms.consumer.tvarsel002.support.MottaVarselKvitteringMapperTest.FEILMELDING;
-import static no.nav.varsel.test.TestUtils.aboutNow;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.ObjectFactory;
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
 import no.nav.varsel.domain.code.StatusCode;
-import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
 import no.nav.varsel.jms.consumer.tvarsel002.support.MottaVarselKvitteringMapperTest;
@@ -27,8 +15,19 @@ import org.junit.rules.ExpectedException;
 import javax.inject.Inject;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
-import java.util.List;
+import java.time.Duration;
 import java.util.UUID;
+
+import static no.nav.varsel.jms.consumer.tvarsel002.VarselKvitteringConsumer.TVARSEL002;
+import static no.nav.varsel.jms.consumer.tvarsel002.support.MottaVarselKvitteringMapperTest.DATE_UTSENDINGSSTIDSPUNKT;
+import static no.nav.varsel.jms.consumer.tvarsel002.support.MottaVarselKvitteringMapperTest.FEILMELDING;
+import static no.nav.varsel.test.TestUtils.aboutNow;
+import static org.awaitility.Awaitility.await;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Itest for {@link VarselKvitteringConsumer}
@@ -48,8 +47,8 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 
 	@Test
 	public void shouldPersistPlukketKvitteringsmelding() throws Exception {
-		Varselbestilling varselbestilling = persistVarselbestilling();
-		String varselId = varselbestilling.getVarsels().iterator().next().getVarselId();
+		sendVarselbestilling();
+		String varselId = getVarselId();
 
 		JAXBElement<VarselKvittering> varselKvittering = createVarselKvitteringJaxBElement(varselId);
 		JmsReply response = sendMessage(varselKvitteringQueue, varselKvittering);
@@ -60,8 +59,8 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 
 	@Test
 	public void shouldPersistFeiletKvitteringsmelding() throws Exception {
-		Varselbestilling varselbestilling = persistVarselbestilling();
-		String varselId = varselbestilling.getVarsels().iterator().next().getVarselId();
+		sendVarselbestilling();
+		String varselId = getVarselId();
 
 		VarselKvittering kvittering = createVarselKvittering(varselId);
 		kvittering.setStatus(STATUS_ERROR);
@@ -86,8 +85,8 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 
 	@Test
 	public void shouldNotPutDuplicateKvitteringOnBq() throws Exception {
-		Varselbestilling varselbestilling = persistVarselbestilling();
-		String varselId = varselbestilling.getVarsels().iterator().next().getVarselId();
+		sendVarselbestilling();
+		String varselId = getVarselId();
 
 		JAXBElement<VarselKvittering> varselKvittering = createVarselKvitteringJaxBElement(varselId);
 		JmsReply response = sendMessage(varselKvitteringQueue, varselKvittering);
@@ -108,8 +107,8 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 
 	@Test
 	public void shouldNotPutInvalidKvitteringstatusOnBq() throws Exception {
-		Varselbestilling varselbestilling = persistVarselbestilling();
-		String varselId = varselbestilling.getVarsels().iterator().next().getVarselId();
+		sendVarselbestilling();
+		String varselId = getVarselId();
 
 		VarselKvittering kvittering = createVarselKvittering(varselId);
 		kvittering.setStatus("invalid status");
@@ -134,14 +133,14 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(response.isOk(), is(true));
 	}
 
-	private Varselbestilling persistVarselbestilling() {
+	private void sendVarselbestilling() {
 		JmsReply createVarselresponse = sendMessage(bestillServicemeldingQueue, createVarsel());
 		assertTrue(createVarselresponse != null && createVarselresponse.isOk());
-		List<Varselbestilling> varselbestillings = varselbestillingRepo.findAllEager();
-		assertThat(varselbestillings, hasSize(1));
-		Varselbestilling varselbestilling = varselbestillings.iterator().next();
-		assertThat(varselbestilling.getVarsels(), hasSize(1));
-		return varselbestilling;
+	}
+
+	private String getVarselId() {
+		await().atMost(Duration.ofSeconds(5)).until(() -> varselbestillingRepo.findAllEager().size() == 1);
+		return varselbestillingRepo.findAllEager().iterator().next().getVarsels().iterator().next().getVarselId();
 	}
 
 	public static JAXBElement<VarselKvittering> createVarselKvitteringJaxBElement(String varselId) {

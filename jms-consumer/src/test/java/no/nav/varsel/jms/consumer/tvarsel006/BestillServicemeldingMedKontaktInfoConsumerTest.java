@@ -1,30 +1,5 @@
 package no.nav.varsel.jms.consumer.tvarsel006;
 
-import static no.nav.varsel.Utils.formatDateTime;
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
-import static no.nav.varsel.jms.consumer.AbstractJmsConsumer.JMS_NOBACKOUTLOG;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.AKTOER_ID;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.EPOST;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.ORGNUMMER;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.UTLOEPS_TIDSPUNKT;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.VAL;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.VARSELTYPE_ID;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.createServicemeldingMedKontaktinformasjon;
-import static no.nav.varsel.jms.producer.VarselutsendingProducer.FEIL_MQ_UT;
-import static no.nav.varsel.mock.AktoerV2Mock.PERSON_IDENT;
-import static no.nav.varsel.repo.TestdataUtil.FUNKSJONELL_FEIL;
-import static no.nav.varsel.repo.TestdataUtil.PERSONIDENT_WHITESPACE_TEST;
-import static no.nav.varsel.repo.TestdataUtil.TEKNISK_FEIL;
-import static no.nav.varsel.test.TestUtils.aboutNow;
-import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.AktoerId;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ObjectFactory;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.Person;
@@ -44,7 +19,34 @@ import javax.inject.Inject;
 import javax.jms.Message;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
+import java.time.Duration;
 import java.util.UUID;
+
+import static no.nav.varsel.Utils.formatDateTime;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
+import static no.nav.varsel.jms.consumer.AbstractJmsConsumer.JMS_NOBACKOUTLOG;
+import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.AKTOER_ID;
+import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.EPOST;
+import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.ORGNUMMER;
+import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.UTLOEPS_TIDSPUNKT;
+import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.VAL;
+import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.VARSELTYPE_ID;
+import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.createServicemeldingMedKontaktinformasjon;
+import static no.nav.varsel.jms.producer.VarselutsendingProducer.FEIL_MQ_UT;
+import static no.nav.varsel.mock.AktoerV2Mock.PERSON_IDENT;
+import static no.nav.varsel.repo.TestdataUtil.FUNKSJONELL_FEIL;
+import static no.nav.varsel.repo.TestdataUtil.PERSONIDENT_WHITESPACE_TEST;
+import static no.nav.varsel.repo.TestdataUtil.TEKNISK_FEIL;
+import static no.nav.varsel.test.TestUtils.aboutNow;
+import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
+import static org.awaitility.Awaitility.await;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * ITest for {@link BestillServicemeldingMedKontaktInfoConsumer}
@@ -130,8 +132,9 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 		JmsReply response = sendMessage(bestillServicemeldingKontaktInfoQueue, serviceMelding);
 
 		isOk(response);
-		assertThat(varselbestillingRepo.count(), is(1L));
-		
+		await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+			assertThat(varselbestillingRepo.count(), is(1L));
+		});
 		Varselutsending varselutsending = receive(varselutsendingQueue);
 		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), equalTo(EPOSTADRESSE));
 	}

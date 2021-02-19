@@ -1,5 +1,30 @@
 package no.nav.varsel.jms.consumer.tvarsel003;
 
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.ObjectFactory;
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Parameter;
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
+import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Person;
+import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
+import no.nav.varsel.domain.code.StatusCode;
+import no.nav.varsel.domain.object.Varsel;
+import no.nav.varsel.domain.object.Varselbestilling;
+import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
+import no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest;
+import no.nav.varsel.jms.producer.VarselutsendingProducer;
+import no.nav.varsel.jms.to.xml.JmsReply;
+import no.nav.varsel.test.TestUtils;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.inject.Inject;
+import javax.jms.Message;
+import javax.jms.Queue;
+import javax.xml.bind.JAXBElement;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.Iterator;
+
+import static no.nav.varsel.Utils.formatDateTime;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static no.nav.varsel.jms.consumer.AbstractJmsConsumer.JMS_NOBACKOUTLOG;
 import static no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest.UTLOEPS_TIDSPUNKT;
@@ -16,39 +41,13 @@ import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.REVARSLING_
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.REVARSLING_TEKST;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL_MED_FLETTING;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static no.nav.varsel.Utils.formatDateTime;
-
-import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.ObjectFactory;
-import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Parameter;
-import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
-import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Person;
-import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
-import no.nav.varsel.domain.code.StatusCode;
-import no.nav.varsel.domain.object.Varsel;
-import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
-import no.nav.varsel.jms.consumer.tvarsel003.support.BestillVarselMapperTest;
-import no.nav.varsel.jms.producer.VarselutsendingProducer;
-import no.nav.varsel.jms.to.xml.JmsReply;
-import no.nav.varsel.test.TestUtils;
-
-import org.apache.activemq.util.TransactionTemplate;
-import org.junit.Before;
-import org.junit.Test;
-
-import javax.inject.Inject;
-import javax.jms.Message;
-import javax.jms.Queue;
-import javax.persistence.EntityManager;
-import javax.xml.bind.JAXBElement;
-import java.time.LocalDate;
-import java.util.Iterator;
 
 /**
  * Itest for TVARSEL003 BestillVarsel
@@ -77,10 +76,11 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		JmsReply jmsReply = sendMessage(bestillVarselQueue, createVarselBestilling(false));
 		isOk(jmsReply);
 
-		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
-
-		assertDatabaseFoerstegangVarsel(varselbestilling);
-		assertVarselutsending(varselbestilling, varselbestilling.getVarsels().iterator().next());
+		await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+			Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
+			assertDatabaseFoerstegangVarsel(varselbestilling);
+			assertVarselutsending(varselbestilling, varselbestilling.getVarsels().iterator().next());
+		});
 	}
 
 	@Test
@@ -97,10 +97,11 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		JmsReply jmsReply = sendMessage(bestillVarselQueue, createVarselBestilling(true));
 		isOk(jmsReply);
 
-		varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
-		Varsel varsel = assertDatabaseRevarsel(varselIdFoersteVarsel, varselbestilling);
-
-		assertVarselutsending(varselbestilling, varsel);
+		await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+			Varselbestilling expectedVarselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
+			Varsel varsel = assertDatabaseRevarsel(varselIdFoersteVarsel, expectedVarselbestilling);
+			assertVarselutsending(expectedVarselbestilling, varsel);
+		});
 	}
 
 	@Test
@@ -113,8 +114,10 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 
 		sendMessage(bestillVarselQueue, createVarselBestillingFailing(true));
 
-		varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
-		assertDatabaseStoppedRevarsel(varselbestilling);
+		await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+			Varselbestilling expectedVarselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
+			assertDatabaseStoppedRevarsel(expectedVarselbestilling);
+		});
 
 		loggerMock.verify("Nonbackout Error in service=tvarsel003");
 	}
