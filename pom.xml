@@ -36,12 +36,12 @@
 
     <properties>
         <modig-security.version>3.0.6</modig-security.version>
-        <cxf.version>3.3.9</cxf.version>
+        <cxf.version>3.3.10</cxf.version>
         <javax.activation.version>1.2.0</javax.activation.version>
         <jaxb-impl.version>2.3.0</jaxb-impl.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
         <brevogarkiv-batch-common.version>3.0.8</brevogarkiv-batch-common.version>
-        <bootstrap.version>3.3.6</bootstrap.version>
+        <bootstrap.version>3.4.1</bootstrap.version>
         <resteasy.version>2.3.10.Final</resteasy.version>
         <nav-varsel-v1.version>1.1.1</nav-varsel-v1.version>
         <nav-virksomhet-varselutsending-v2.version>2.0.3</nav-virksomhet-varselutsending-v2.version>
@@ -54,7 +54,7 @@
         </nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>
         <dokkat-schemas.version>6.0.3</dokkat-schemas.version>
         <nav-brukervarsel-v1-tjenestespesifikasjon.version>1.0.4</nav-brukervarsel-v1-tjenestespesifikasjon.version>
-        <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
+        <hibernate-jpa-2.1-api.version>1.0.2.Final</hibernate-jpa-2.1-api.version>
         <guava.version>19.0</guava.version>
         <commons-io.version>2.7</commons-io.version>
         <commons-lang3.version>3.11</commons-lang3.version>
@@ -68,7 +68,7 @@
         <!-- provided -->
         <jaxws-ri.version>2.3.2</jaxws-ri.version>
         <javax.inject.version>1</javax.inject.version>
-        <jboss-jms-api_2.0_spec.version>1.0.2.Final</jboss-jms-api_2.0_spec.version>
+        <jboss-jms-api_2.0_spec.version>2.0.0.Final</jboss-jms-api_2.0_spec.version>
         <ojdbc.version>12.2.0.1</ojdbc.version>
         <!-- test -->
         <activemq-core.version>5.7.0</activemq-core.version>
@@ -519,12 +519,12 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- Logging dependecies -->
+        <!-- Logging dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
-        <!-- End Logging dependecies -->
+        <!-- End Logging dependencies -->
 
         <!-- for local tomcat -->
         <dependency>
