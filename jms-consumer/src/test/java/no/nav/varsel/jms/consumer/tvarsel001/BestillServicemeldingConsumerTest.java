@@ -1,27 +1,5 @@
 package no.nav.varsel.jms.consumer.tvarsel001;
 
-import static no.nav.varsel.Utils.formatDateTime;
-import static no.nav.varsel.domain.code.KanalCode.EPOST;
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
-import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.MOTTAKER;
-import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.UTLOEPSTIDSPUNKT_LDT;
-import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VAL;
-import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VARSELTYPE_ID;
-import static no.nav.varsel.jms.producer.VarselutsendingProducer.FEIL_MQ_UT;
-import static no.nav.varsel.mock.AktoerV2Mock.PERSON_IDENT;
-import static no.nav.varsel.repo.TestdataUtil.FUNKSJONELL_FEIL;
-import static no.nav.varsel.repo.TestdataUtil.PERSONIDENT_WHITESPACE_TEST;
-import static no.nav.varsel.repo.TestdataUtil.TEKNISK_FEIL;
-import static no.nav.varsel.test.TestUtils.aboutNow;
-import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import no.nav.melding.virksomhet.varsel.v1.varsel.AktoerId;
 import no.nav.melding.virksomhet.varsel.v1.varsel.ObjectFactory;
 import no.nav.melding.virksomhet.varsel.v1.varsel.PersonIdent;
@@ -40,7 +18,31 @@ import javax.inject.Inject;
 import javax.jms.Message;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
+import java.time.Duration;
 import java.util.UUID;
+
+import static no.nav.varsel.Utils.formatDateTime;
+import static no.nav.varsel.domain.code.KanalCode.EPOST;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
+import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.MOTTAKER;
+import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.UTLOEPSTIDSPUNKT_LDT;
+import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VAL;
+import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VARSELTYPE_ID;
+import static no.nav.varsel.jms.producer.VarselutsendingProducer.FEIL_MQ_UT;
+import static no.nav.varsel.mock.AktoerV2Mock.PERSON_IDENT;
+import static no.nav.varsel.repo.TestdataUtil.FUNKSJONELL_FEIL;
+import static no.nav.varsel.repo.TestdataUtil.PERSONIDENT_WHITESPACE_TEST;
+import static no.nav.varsel.repo.TestdataUtil.TEKNISK_FEIL;
+import static no.nav.varsel.test.TestUtils.aboutNow;
+import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
+import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
+import static org.awaitility.Awaitility.await;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * Itest for {@link BestillServicemeldingConsumer}
@@ -59,8 +61,10 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		JmsReply response = sendMessage(bestillServicemeldingQueue, createVarsel());
 		
 		isOk(response);
-		assertThat(varselbestillingRepo.count(), is(1L));
-		
+		await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+			assertThat(varselbestillingRepo.count(), is(1L));
+		});
+
 		String varselTekst = FOERSTE_GANG_TEKST.replace("{mottaker}", VAL);
 		String varselId = assertDb(varselTekst).getVarselId();
 		assertVarselutsendingQueue(varselTekst, varselId);
@@ -75,7 +79,9 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		JmsReply response = sendMessage(bestillServicemeldingQueue, varsel);
 		
 		isOk(response);
-		assertThat(varselbestillingRepo.count(), is(1L));
+		await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+			assertThat(varselbestillingRepo.count(), is(1L));
+		});
 		
 		Varselutsending varselutsending = receive(varselutsendingQueue);
 		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), equalTo(EPOSTADRESSE));
