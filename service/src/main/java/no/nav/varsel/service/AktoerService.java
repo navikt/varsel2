@@ -1,37 +1,37 @@
 package no.nav.varsel.service;
 
-import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentIdentForAktoerIdPersonIkkeFunnet;
 import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.service.to.AktoerBestillingTo;
-import no.nav.varsel.wsconsumer.aktoer.AktoerConsumer;
-import no.nav.varsel.wsconsumer.aktoer.support.AktoerIkkeFunnetException;
+import no.nav.varsel.wsconsumer.pdl.PdlIdentConsumer;
+import no.nav.varsel.wsconsumer.pdl.support.AktoerIkkeFunnetException;
 
 import javax.inject.Inject;
 
+import static no.nav.varsel.domain.to.AktoerTo.newAktoerId;
+import static no.nav.varsel.domain.to.AktoerTo.newPersonIdent;
+import static no.nav.varsel.domain.to.MottakerType.AKTOER;
+import static no.nav.varsel.domain.to.MottakerType.PERSON;
+
 /**
- * Service for Aktoer
- *
- * @author Andreas Skomedal, Visma Consulting.
+ * Tjenesten skal finne manglende ident for bruker.
+ * Kommer bestilling med aktørId som input til tjenesten, finner den folkeregisterident.
+ * Kommer bestilling med folkeregisterident som input til tjenesten, finner den aktørId.
  */
 public class AktoerService {
 
 	@Inject
-	private AktoerConsumer aktoerConsumer;
+	private PdlIdentConsumer pdlIdentConsumer;
 
-	/**
-	 * Fetch missing aktoer component
-	 *
-	 * @param aktoerBestillingTo the bestilling
-	 * @return the fetched aktoer
-	 */
 	public AktoerTo findMissingAktoer(AktoerBestillingTo aktoerBestillingTo) {
 		AktoerTo origAktoer = aktoerBestillingTo.createAktoerTo();
-		try {
-			return aktoerConsumer.hentIdent(origAktoer);
-		} catch (HentIdentForAktoerIdPersonIkkeFunnet | HentAktoerIdForIdentPersonIkkeFunnet e) {
-			throw new AktoerIkkeFunnetException("Kunne ikke hente manglende ident for " + origAktoer, e);
-		}
 
+		if (origAktoer.getMottakerType() == AKTOER) {
+			return newPersonIdent(pdlIdentConsumer.hentFolkeregisterIdent(origAktoer.getIdent()));
+		} else if (origAktoer.getMottakerType() == PERSON) {
+			return newAktoerId(pdlIdentConsumer.hentAktoerId(origAktoer.getIdent()));
+		} else {
+			throw new AktoerIkkeFunnetException("Kunne ikke hente manglende ident. Mangler mottakerType. mottakertype=" +
+					origAktoer.getMottakerType());
+		}
 	}
 }

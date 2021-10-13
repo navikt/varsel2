@@ -1,9 +1,6 @@
 package no.nav.varsel.jms.consumer.tvarsel001;
 
 
-import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING;
-import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_SERVICEMELDING_NAME;
-
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
@@ -19,6 +16,9 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import javax.jms.TextMessage;
 
+import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING;
+import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_SERVICEMELDING_NAME;
+
 /**
  * Consumer for TVARSEL001 BestillServicemelding
  *
@@ -27,7 +27,7 @@ import javax.jms.TextMessage;
 @Component
 public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 
-	private static final Logger LOGG = LoggerFactory.getLogger(BestillServicemeldingConsumer.class);
+	private static final Logger log = LoggerFactory.getLogger(BestillServicemeldingConsumer.class);
 
 	private static final String BESTILL_SERVICEMELDING_QUEUE = "bestillServicemeldingQueue";
 
@@ -49,9 +49,8 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 	@Override
 	protected void handleMessage(ObjectMessageWrapper<Varsel> varsel) {
 		BestillVarselTo to = bestillServicemeldingMapper.map(varsel);
+		log.info("bestillServicemelding mottatt varselBestillingId={}, varselTypeId={}", to.getVarselBestillingId(), to.getVarseltypeId());
 		to.validateTvarsel001Input();
-		LOGG.debug(String.format("Mottatt varsel %s til %s", to.getVarseltypeId(), to.createAktoerTo()));
-
 		servicemeldingService.bestillServicemelding(to);
 	}
 }

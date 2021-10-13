@@ -34,9 +34,10 @@
 		</queueManager>
 		<ldap alias="ldap" mapToProperty="ldap"/>
 		<baseUrl alias="securityTokenService" mapToProperty="securityTokenService"/>
-		<soap mapToProperty="aktoerv2.ws" alias="virksomhet:Aktoer_v2"/>
 		<soap mapToProperty="dkif.ws" alias="virksomhet:DigitalKontaktinformasjon_v1"/>
+		<baseUrl alias="pdl" mapToProperty="pdl"/>
 		<rest alias="VarselInfo_v1" mapToProperty="dokkat.varselinfo.rest"/>
+		<rest alias="security-token-service-token" mapToProperty="securityTokenRestService"/>
 		<applicationProperties alias="varselProps"/>
 	</resources>
 

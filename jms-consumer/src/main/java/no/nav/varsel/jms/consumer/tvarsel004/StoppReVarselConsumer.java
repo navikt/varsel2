@@ -1,8 +1,5 @@
 package no.nav.varsel.jms.consumer.tvarsel004;
 
-import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.REVARSEL_STOPP_NAME;
-import static no.nav.varsel.jms.consumer.JmsConsumer.REVARSEL_STOPP;
-
 import no.nav.melding.virksomhet.stopprevarsel.v1.stopprevarsel.StoppReVarsel;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
@@ -18,6 +15,9 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import javax.jms.TextMessage;
 
+import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.REVARSEL_STOPP_NAME;
+import static no.nav.varsel.jms.consumer.JmsConsumer.REVARSEL_STOPP;
+
 /**
  * Consumer for TVARSEL004 StoppRevarsel
  *
@@ -25,7 +25,7 @@ import javax.jms.TextMessage;
  */
 @Component
 public class StoppReVarselConsumer extends AbstractJmsConsumer<StoppReVarsel> {
-	private static final Logger LOGG = LoggerFactory.getLogger(StoppReVarselConsumer.class);
+	private static final Logger log = LoggerFactory.getLogger(StoppReVarselConsumer.class);
 	private static final String REVARSEL_STOPP_QUEUE = "revarselStoppQueue";
 
 	@Inject
@@ -46,7 +46,7 @@ public class StoppReVarselConsumer extends AbstractJmsConsumer<StoppReVarsel> {
 	@Override
 	protected void handleMessage(ObjectMessageWrapper<StoppReVarsel> stoppReVarselWithMessage) {
 		StoppReVarsel stoppRevarsel = stoppReVarselWithMessage.getObject();
-		LOGG.info("Mottat kall for å stoppe revarsel for varselbestillingId=" + stoppRevarsel.getVarselbestillingId());
+		log.info("Mottatt kall for å stoppe revarsel for varselbestillingId={}", stoppRevarsel.getVarselbestillingId());
 		StoppReVarselTo stoppReVarselTo = stoppReVarselMapper.map(stoppRevarsel);
 		stoppReVarselTo.validateTo();
 		stoppReVarselService.behandleVarselbestilling(stoppReVarselTo);

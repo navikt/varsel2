@@ -1,16 +1,5 @@
 package no.nav.varsel.jms.consumer.tvarsel004;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
@@ -36,6 +25,17 @@ import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Itest for {@link StoppReVarselConsumer}
@@ -76,7 +76,7 @@ public class StoppReVarselConsumerTest extends AbstractConsumerJmsTest {
 
 		sendMessage(revarselStoppQueue, stoppReVarsel);
 
-		verify(loggerAppender, times(1)).doAppend(argThat(hasMessageContaining("Mottat kall for å stoppe revarsel for varselbestillingId=VARSELBESTILLING_ID")));
+		verify(loggerAppender, times(1)).doAppend(argThat(hasMessageContaining("Mottatt kall for å stoppe revarsel for varselbestillingId=VARSELBESTILLING_ID")));
 	}
 
 	public static JAXBElement<StoppReVarsel> createStoppReVarselJaxBElement(String varselbestillingId) {

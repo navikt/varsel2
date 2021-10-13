@@ -1,8 +1,5 @@
 package no.nav.varsel.repo;
 
-import static no.nav.varsel.domain.builder.VarselBuilder.aVarsel;
-import static no.nav.varsel.domain.builder.VarselbestillingBuilder.aVarselbestilling;
-
 import com.google.common.collect.Sets;
 import no.nav.varsel.domain.builder.VarselBuilder;
 import no.nav.varsel.domain.builder.VarselbestillingBuilder;
@@ -16,16 +13,10 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * Test data utility class
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static no.nav.varsel.domain.builder.VarselBuilder.aVarsel;
+import static no.nav.varsel.domain.builder.VarselbestillingBuilder.aVarselbestilling;
+
 public class TestdataUtil {
-
-	public static final String TEKNISK_FEIL = "tekniskfeil";
-	public static final String FUNKSJONELL_FEIL = "funksjonellfeil";
-
 	public static final String PERSONIDENT_WHITESPACE_TEST="test whitespace";
 	public static final String VARSELBESTILLING_ID = "d9f8f75e-13cb-4766-81c8-306d9d9385b2";
 	public static final String VARSELTYPE_ID = "UT";
@@ -56,13 +47,6 @@ public class TestdataUtil {
 	public static final String PARAMETERKEY = "antall";
 	public static final String PARAMETERVALUE = "17";
 	public static final boolean ER_REVARSEL = false;
-	public static final String PERSON_IDENTER_FDAT_KODENAVN = "FDAT";
-	public static final String PERSON_IDENTER_FNR_KODENAVN = "FNR";
-	public static final String PERSON_IDENTER_BOST_KODENAVN = "BOST";
-	public static final String PERSON_IDENTER_DNR_KODENAVN = "DNR";
-	public static final String PERSON_IDENTER_SOME_OLD_KODENAVN = "SOME_OLD_KODENAVN";
-	public static final String PERSON_IDENTER_SOME_FUTURE_KODENAVN = "SOME_FUTURE_KODENAVN";
-	public static final String PERSON_IDENTER_SOME_VALID_KODENAVN = "SOME_VALID_KODENAVN";
 
 	/**
 	 * Create varselbestilling with preset values

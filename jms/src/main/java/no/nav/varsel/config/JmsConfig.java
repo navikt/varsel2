@@ -58,7 +58,7 @@ public class JmsConfig {
 								   ConnectionFactory connectionFactory
 	) {
 		JmsTemplate jmsTemplate = new JmsTemplate();
-		jmsTemplate.setReceiveTimeout(10_000);
+		jmsTemplate.setReceiveTimeout(5_000);
 		jmsTemplate.setMessageConverter(converter());
 		jmsTemplate.setConnectionFactory(connectionFactory);
 		jmsTemplate.setDestinationResolver(destinationResolver);

@@ -1,8 +1,5 @@
 package no.nav.varsel.jms.consumer.tvarsel006;
 
-import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING_KONTAKTINFO;
-import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_SERVICEMELDING_KONTAKTINFO_NAME;
-
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
@@ -18,6 +15,9 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import javax.jms.TextMessage;
 
+import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING_KONTAKTINFO;
+import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_SERVICEMELDING_KONTAKTINFO_NAME;
+
 /**
  * Consumer for TVARSEL006 ServiceMeldingMedKontaktInfo
  *
@@ -26,7 +26,7 @@ import javax.jms.TextMessage;
 @Component
 public class BestillServicemeldingMedKontaktInfoConsumer extends AbstractJmsConsumer<ServicemeldingMedKontaktinformasjon> {
 
-	private static final Logger LOGG = LoggerFactory.getLogger(BestillServicemeldingMedKontaktInfoConsumer.class);
+	private static final Logger log = LoggerFactory.getLogger(BestillServicemeldingMedKontaktInfoConsumer.class);
 
 	private static final String SERVICEMELDING_KONTAKT_INFO_QUEUE = "bestillServicemeldingKontaktInfoQueue";
 
@@ -42,9 +42,9 @@ public class BestillServicemeldingMedKontaktInfoConsumer extends AbstractJmsCons
 	@Override
 	protected void handleMessage(ObjectMessageWrapper<ServicemeldingMedKontaktinformasjon> objectMessageWrapper) {
 		BestillVarselTo to = mapper.map(objectMessageWrapper.getObject());
+		log.info("bestillServiceMeldingMedKontaktInfo mottatt varselBestillingId={}, varselTypeId={}",
+				to.getVarselBestillingId(), to.getVarseltypeId());
 		to.validateTvarsel006Input();
-
-		LOGG.debug(String.format("Mottatt varsel %s til %s", to.getVarseltypeId(), to.createAktoerTo()));
 
 		servicemeldingService.bestillServicemelding(to);
 	}

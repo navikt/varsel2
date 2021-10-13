@@ -1,19 +1,16 @@
 package no.nav.varsel.service;
 
-import static java.util.stream.Collectors.toSet;
-
 import com.google.common.collect.Maps;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
-import no.nav.varsel.service.support.exception.VarselTekstMissingException;
-import no.nav.varsel.service.support.exception.VarselbestillingUtloeptException;
-import no.nav.varsel.service.support.exception.VarselbestillingAlreadyExistException;
-import no.nav.varsel.service.support.exception.VarselbestillingNotExistException;
+import no.nav.varsel.service.support.exception.functional.VarselTekstMissingException;
+import no.nav.varsel.service.support.exception.functional.VarselbestillingAlreadyExistException;
+import no.nav.varsel.service.support.exception.functional.VarselbestillingNotExistException;
+import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloeptException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
@@ -29,11 +26,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Service for TVARSEL003 BestillVarsel
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static java.util.stream.Collectors.toSet;
+
 public class BestillVarselService {
 
 	private static final Logger LOGG = LoggerFactory.getLogger(BestillVarselService.class);
@@ -97,8 +91,7 @@ public class BestillVarselService {
 	}
 
 	private void bestillFoerstegangsVarsel(BestillVarselTo to) {
-		AktoerTo fetchedAktoerTo = aktoerService.findMissingAktoer(to);
-		to.setMottaker(fetchedAktoerTo);
+		to.setMottaker(aktoerService.findMissingAktoer(to));
 
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(to.getVarseltypeId());
 		KontaktregisterTo kontaktregisterTo = dkifConsumer
@@ -121,7 +114,7 @@ public class BestillVarselService {
 		to.setParameters(Maps.newHashMap(existingVarsel.getFletteParametere()));
 		try {
 			Set<Varsel> varsels = kontaktregisterTo.getKanaler().stream()
-					.map((kanalCode) -> domainMapper.mapReVarsel(kanalCode, to, varselInfoTo, kontaktregisterTo))
+					.map(kanalCode -> domainMapper.mapReVarsel(kanalCode, to, varselInfoTo, kontaktregisterTo))
 					.peek(existingVarsel::addVarsel)
 					.collect(toSet());
 

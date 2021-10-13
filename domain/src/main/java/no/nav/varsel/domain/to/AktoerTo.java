@@ -1,24 +1,23 @@
 package no.nav.varsel.domain.to;
 
-/**
- * To for Aktoer
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import java.util.Objects;
+
+import static no.nav.varsel.domain.to.MottakerType.*;
+
+
 public class AktoerTo {
 
 	private String ident;
 	private MottakerType mottakerType;
 
-	public AktoerTo() {
-	}
+	public AktoerTo() {}
 
 	public static AktoerTo newAktoerId(String aktoerId) {
-		return new AktoerTo(MottakerType.AKTOER, aktoerId);
+		return new AktoerTo(AKTOER, aktoerId);
 	}
 
 	public static AktoerTo newPersonIdent(String ident) {
-		return new AktoerTo(MottakerType.PERSON, ident);
+		return new AktoerTo(PERSON, ident);
 	}
 
 	private AktoerTo(MottakerType mottakerType, String ident) {
@@ -53,7 +52,7 @@ public class AktoerTo {
 
 		AktoerTo aktoerTo = (AktoerTo) o;
 
-		if (ident != null ? !ident.equals(aktoerTo.ident) : aktoerTo.ident != null) {
+		if (!Objects.equals(ident, aktoerTo.ident)) {
 			return false;
 		}
 		return mottakerType == aktoerTo.mottakerType;

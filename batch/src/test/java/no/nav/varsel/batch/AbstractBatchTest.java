@@ -1,10 +1,9 @@
 package no.nav.varsel.batch;
 
 import com.codahale.metrics.MetricRegistry;
-import no.nav.brevogarkiv.batch.common.CommonBatchInputParameters;
-import no.nav.varsel.config.BatchTestConfig;
+import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
+import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
 import no.nav.varsel.config.JmsTestConfig;
-import no.nav.varsel.domain.Constants;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import org.junit.After;
 import org.junit.Before;
@@ -15,7 +14,6 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -26,14 +24,14 @@ import javax.xml.bind.JAXBElement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Abstract class for batch test
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static no.nav.brevogarkiv.batch.common.CommonBatchInputParameters.PROGRESS_INTERVAL_KEY;
+import static no.nav.brevogarkiv.batch.common.CommonBatchInputParameters.START_TIME_KEY;
+import static no.nav.brevogarkiv.batch.common.CommonBatchInputParameters.WORK_UNIT_KEY;
+import static no.nav.varsel.config.BatchTestConfig.START_TIME_FORMAT_TEST;
+import static no.nav.varsel.domain.Constants.USER_ID;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles({"itest"})
-@DirtiesContext
 public abstract class AbstractBatchTest extends JobLauncherTestUtils {
 
 	protected static final String DEFAULT_WORK_UNIT = "2";
@@ -44,8 +42,10 @@ public abstract class AbstractBatchTest extends JobLauncherTestUtils {
 
 	@Inject
 	protected JmsTemplate jmsTemplate;
+
 	@Inject
 	protected MetricRegistry metricRegistry;
+
 	@Inject
 	protected TransactionTemplate transactionTemplate;
 
@@ -57,21 +57,21 @@ public abstract class AbstractBatchTest extends JobLauncherTestUtils {
 	}
 
 	@Before
-	public void setUpAbstract() throws Exception {
-		MDC.put(Constants.USER_ID, "batch-itest");
+	public void setUpAbstract() {
+		MDC.put(USER_ID, "batch-itest");
 		varselbestillingRepo.deleteAll();
 	}
 
 	@After
-	public void tearDownAbstract() throws Exception {
-		MDC.remove(Constants.USER_ID);
+	public void tearDownAbstract() {
+		MDC.remove(USER_ID);
 	}
 
 	protected JobParametersBuilder getDefaultCommonJobParametersBuilder() {
 		return jobParametersBuilder
-				.addString(CommonBatchInputParameters.START_TIME_KEY, getStartTime())
-				.addString(CommonBatchInputParameters.WORK_UNIT_KEY, getWorkUnit())
-				.addString(CommonBatchInputParameters.PROGRESS_INTERVAL_KEY, getProgressInterval());
+				.addString(START_TIME_KEY, getStartTime())
+				.addString(WORK_UNIT_KEY, getWorkUnit())
+				.addString(PROGRESS_INTERVAL_KEY, getProgressInterval());
 	}
 
 	protected JobParameters defaultJobParams() {
@@ -87,7 +87,26 @@ public abstract class AbstractBatchTest extends JobLauncherTestUtils {
 	}
 
 	protected String getStartTime() {
-		return LocalDateTime.now().format(DateTimeFormatter.ofPattern(BatchTestConfig.START_TIME_FORMAT_TEST));
+		return LocalDateTime.now().format(DateTimeFormatter.ofPattern(START_TIME_FORMAT_TEST));
+	}
+
+	protected Varselutsending findLastMessage(Queue varselutsendingQueue) {
+		Varselutsending varselutsending = null;
+		Varselutsending lastMessage = null;
+		while((varselutsending = receive(varselutsendingQueue))!=null){
+			lastMessage = varselutsending;
+		}
+		return lastMessage;
+	}
+
+
+	protected VarselMedHandling findLastMessageWithVarselMedHandling(Queue varselutsendingQueue) {
+		VarselMedHandling varselutsending = null;
+		VarselMedHandling lastMessage = null;
+		while((varselutsending = receive(varselutsendingQueue))!=null){
+			lastMessage = varselutsending;
+		}
+		return lastMessage;
 	}
 
 	@SuppressWarnings("unchecked")

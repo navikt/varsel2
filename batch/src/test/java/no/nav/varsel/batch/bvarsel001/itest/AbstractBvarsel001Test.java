@@ -8,11 +8,6 @@ import org.springframework.batch.core.Job;
 import javax.inject.Inject;
 import javax.jms.Queue;
 
-/**
- * Abstract test for Bvarsel001
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public abstract class AbstractBvarsel001Test extends AbstractBatchTest {
 
 	@Inject
@@ -28,7 +23,7 @@ public abstract class AbstractBvarsel001Test extends AbstractBatchTest {
 	}
 
 	@Before
-	public void setUpAbstractBvarsel001() throws Exception {
+	public void setUpAbstractBvarsel001() {
 		bvarsel001Repo.deleteAll();
 	}
 }

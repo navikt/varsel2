@@ -9,7 +9,6 @@ import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigit
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonRequest;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonResponse;
 import no.nav.varsel.domain.code.KanalCode;
-import no.nav.varsel.wsconsumer.aktoer.AktoerConsumer;
 import no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
@@ -34,7 +33,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Unit test for {@link AktoerConsumer}
+ * Unit test for { @link AktoerConsumer}
  *
  * @author Andreas Skomedal, Visma Consulting.
  */

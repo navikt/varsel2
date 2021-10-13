@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -28,11 +28,15 @@ import javax.inject.Inject;
  */
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
+@AutoConfigureWireMock(port = 0)
 @SpringBootTest(classes = {
-		LocalTomcatConfiguration.class, BatchConfig.class,
-		JmsTestConfig.class, RepoTestConfig.class, WebConfig.class})
+		LocalTomcatConfiguration.class,
+		BatchConfig.class,
+		JmsTestConfig.class,
+		RepoTestConfig.class,
+		WebConfig.class
+})
 @ActiveProfiles({"itest"})
-@DirtiesContext
 public abstract class AbstractRestTest {
 
 	@Inject
@@ -47,14 +51,14 @@ public abstract class AbstractRestTest {
 	}
 
 	@Before
-	public final void setUpAbstract() throws Exception {
+	public final void setUpAbstract() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
 				.build();
 		cleanDb();
 	}
 
 	@After
-	public final void tearDown() throws Exception {
+	public final void tearDown() {
 		cleanDb();
 	}
 

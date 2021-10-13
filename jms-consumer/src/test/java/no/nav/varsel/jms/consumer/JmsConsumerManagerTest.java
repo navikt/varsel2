@@ -1,21 +1,18 @@
 package no.nav.varsel.jms.consumer;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.test.annotation.DirtiesContext;
+
+import javax.inject.Inject;
+
 import static java.lang.Thread.sleep;
 import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING;
 import static no.nav.varsel.jms.consumer.JmsConsumer.VARSEL_KVITTERING;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import javax.inject.Inject;
-
-/**
- * Itest for {@link JmsConsumerManager}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS) // Denne testen manipulerer JmsTemplate og JmsConsumerManager for de ørvrige testene.
 public class JmsConsumerManagerTest extends AbstractConsumerJmsTest {
 
 	private static final int RESTART_TIME_SECONDS = 1;
@@ -36,7 +33,7 @@ public class JmsConsumerManagerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	public void shouldStopAndStartConsumer() throws Exception {
+	public void shouldStopAndStartConsumer() {
 		jmsConsumerManager.stop(BESTILL_SERVICEMELDING);
 
 		assertFalse(jmsConsumerManager.getListener(BESTILL_SERVICEMELDING).isRunning());
@@ -49,7 +46,7 @@ public class JmsConsumerManagerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	public void shouldStopAndStartAll() throws Exception {
+	public void shouldStopAndStartAll() {
 		jmsConsumerManager.stopAll();
 		jmsConsumerManager.getListeners().forEach(l -> assertFalse(l.isRunning()));
 
@@ -58,7 +55,7 @@ public class JmsConsumerManagerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	public void shouldNotStopIfNotTooManyErrors() throws Exception {
+	public void shouldNotStopIfNotTooManyErrors() {
 		jmsConsumerManager.registerError(BESTILL_SERVICEMELDING);
 		jmsConsumerManager.registerError(BESTILL_SERVICEMELDING);
 		assertTrue(jmsConsumerManager.getListener(BESTILL_SERVICEMELDING).isRunning());

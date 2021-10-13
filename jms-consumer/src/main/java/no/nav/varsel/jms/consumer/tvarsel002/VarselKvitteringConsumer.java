@@ -1,8 +1,5 @@
 package no.nav.varsel.jms.consumer.tvarsel002;
 
-import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.VARSEL_KVITTERING_NAME;
-import static no.nav.varsel.jms.consumer.JmsConsumer.VARSEL_KVITTERING;
-
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
 import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
@@ -19,6 +16,9 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import javax.jms.TextMessage;
 
+import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.VARSEL_KVITTERING_NAME;
+import static no.nav.varsel.jms.consumer.JmsConsumer.VARSEL_KVITTERING;
+
 /**
  * Consumer for TVARSEL002 VarselKvittering
  *
@@ -27,7 +27,7 @@ import javax.jms.TextMessage;
 @Component
 public class VarselKvitteringConsumer extends AbstractJmsConsumer<VarselKvittering> {
 
-	private static final Logger LOGG = LoggerFactory.getLogger(VarselKvitteringConsumer.class);
+	private static final Logger log = LoggerFactory.getLogger(VarselKvitteringConsumer.class);
 
 	private static final String VARSEL_KVITTERING_QUEUE = "varselKvitteringQueue";
 
@@ -51,7 +51,7 @@ public class VarselKvitteringConsumer extends AbstractJmsConsumer<VarselKvitteri
 	@Override
 	protected void handleMessage(ObjectMessageWrapper<VarselKvittering> wrappedKvittering) {
 		VarselKvittering kvittering = wrappedKvittering.getObject();
-		LOGG.info("Mottatt kvittering med status=" + kvittering.getStatus() + ", og varselId=" + kvittering.getVarselId());
+		log.info("Mottatt kvittering med status=" + kvittering.getStatus() + ", og varselId=" + kvittering.getVarselId());
 		try {
 			MottaVarselKvitteringTo to = mottaVarselKvitteringMapper.map(kvittering);
 			to.validateTo();

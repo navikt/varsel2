@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import com.google.common.collect.Maps;
-import no.nav.varsel.service.support.exception.FletteparameterMissingException;
+import no.nav.varsel.service.support.exception.functional.FletteparameterMissingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

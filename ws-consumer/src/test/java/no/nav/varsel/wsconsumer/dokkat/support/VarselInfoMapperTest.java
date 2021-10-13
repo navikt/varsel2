@@ -1,5 +1,13 @@
 package no.nav.varsel.wsconsumer.dokkat.support;
 
+import com.google.common.collect.Sets;
+import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
+import no.nav.dokkat.schemas.tkat021.VarselMalRestTo;
+import no.nav.varsel.domain.code.KanalCode;
+import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
+import org.junit.Test;
+
 import static no.nav.varsel.repo.TestdataUtil.ANTALL_REVARSLINGER;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
@@ -12,35 +20,18 @@ import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_KATE
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_NAVN;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL_MED_FLETTING;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL_PREFERERT_KANAL;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import com.google.common.collect.Sets;
-import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
-import no.nav.dokkat.schemas.tkat021.VarselMalRestTo;
-import no.nav.varsel.domain.code.KanalCode;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
-import org.junit.Test;
-
-import java.util.Collections;
-
-/**
- * Unit test for {@link VarselInfoMapper}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class VarselInfoMapperTest {
 
 	private VarselInfoMapper mapper = new VarselInfoMapper();
 
 	@Test
-	public void shouldMap() throws Exception {
+	public void shouldMap() {
 		VarselInfoTo to = mapper.map(createVarselInfo());
 
 		assertThat(to.getVarseltypeId(), is(VARSELTYPE_ID));
@@ -62,7 +53,7 @@ public class VarselInfoMapperTest {
 	}
 
 	@Test
-	public void shouldHandleNullRevarslingIntervall() throws Exception {
+	public void shouldHandleNullRevarslingIntervall() {
 		VarselInfoRestTo varselInfo = createVarselInfo();
 		varselInfo.setRevarslingIntervall(null);
 		VarselInfoTo to = mapper.map(varselInfo);
@@ -71,7 +62,7 @@ public class VarselInfoMapperTest {
 	}
 
 	@Test
-	public void shouldHandleNullAntallRevarslinger() throws Exception {
+	public void shouldHandleNullAntallRevarslinger() {
 		VarselInfoRestTo varselInfo = createVarselInfo();
 		varselInfo.setAntallRevarslinger(null);
 		VarselInfoTo to = mapper.map(varselInfo);
@@ -98,20 +89,6 @@ public class VarselInfoMapperTest {
 		varselMal.setRevarslingTekst(REVARSLING_TEKST);
 
 		varselInfo.setVarselmals(Sets.newHashSet(varselMal));
-		return varselInfo;
-	}
-
-	public static VarselInfoRestTo createVarselInfoWithVarselUrl() {
-		VarselInfoRestTo varselInfo = createVarselInfo();
-		varselInfo.setVarselURL(VARSEL_URL_MED_FLETTING);
-		varselInfo.setPreferertKanal(Collections.singleton(VARSEL_URL_PREFERERT_KANAL.name()));
-		varselInfo.getVarselmals().iterator().next().setKanal(VARSEL_URL_PREFERERT_KANAL.name());
-		return varselInfo;
-	}
-
-	public static VarselInfoRestTo createVarselInfoWithoutRevarslingstekst() {
-		VarselInfoRestTo varselInfo = createVarselInfo();
-		varselInfo.getVarselmals().iterator().next().setRevarslingTekst(null);
 		return varselInfo;
 	}
 }

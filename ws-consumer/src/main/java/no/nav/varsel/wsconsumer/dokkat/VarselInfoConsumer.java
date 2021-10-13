@@ -9,15 +9,12 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.inject.Inject;
 
-/**
- * VarselInfo rest consumer
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+
 public class VarselInfoConsumer {
 
 	@Inject
 	private RestTemplate restTemplate;
+
 	private String varselinfoUrlGet;
 
 	@Inject

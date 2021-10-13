@@ -6,8 +6,8 @@ import static no.nav.varsel.domain.Constants.LOCALE_NO;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import no.nav.varsel.service.support.exception.FletteparameterMissingException;
-import no.nav.varsel.service.support.exception.InvalidDateTimeFormatException;
+import no.nav.varsel.service.support.exception.functional.FletteparameterMissingException;
+import no.nav.varsel.service.support.exception.functional.InvalidDateTimeFormatException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrBuilder;
 import org.springframework.beans.factory.annotation.Value;

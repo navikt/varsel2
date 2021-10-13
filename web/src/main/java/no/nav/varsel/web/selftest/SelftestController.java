@@ -99,7 +99,6 @@ public class SelftestController {
 		response.addCheck(new HttpSelftest("Batch", "Internal Batch Controller", "https://" + serverAddress + ":8443/varsel/batch/ping").check());
 
 		// Webservice
-		response.addCheck(new PingSelftest(wsPingProvider.pingAktoerV2()).check());
 		response.addCheck(new PingSelftest(wsPingProvider.pingDigitalKontaktinformasjonV1()).check());
 		response.addCheck(new PingSelftest(wsPingProvider.pingVarselInfoV1()).check());
 

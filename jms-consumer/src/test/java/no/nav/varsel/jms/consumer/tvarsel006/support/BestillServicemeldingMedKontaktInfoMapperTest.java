@@ -1,12 +1,5 @@
 package no.nav.varsel.jms.consumer.tvarsel006.support;
 
-import static no.nav.varsel.Utils.formatDateTime;
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.Aktoer;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.AktoerId;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.Kommunikasjonskanaler;
@@ -24,17 +17,19 @@ import org.junit.rules.ExpectedException;
 
 import java.time.LocalDateTime;
 
-/**
- * Unit test for {@link BestillServicemeldingMedKontaktInfoMapper}
- *
- * @author Roar Bjurstrom, Visma Consulting.
- */
+import static no.nav.varsel.Utils.formatDateTime;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+
 public class BestillServicemeldingMedKontaktInfoMapperTest {
 
 	public static final String KEY = "mottaker";
 	public static final String VAL = "val";
-	public static final String AKTOER_ID = "aktoerId";
-	public static final String PERSON_IDENT = "personIdent";
+	public static final String AKTOER_ID = "aktoerId"; // aktoerId 1234567890123
+	public static final String PERSON_IDENT = "1234567890123";
 	public static final String VARSELTYPE_ID = "varseltypeId";
 	public static final LocalDateTime UTLOEPS_TIDSPUNKT = LocalDateTime.now().plusHours(1);
 	public static final String ORGNUMMER = "orgnummer";
@@ -47,7 +42,7 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 	private BestillServicemeldingMedKontaktInfoMapper mapper = new BestillServicemeldingMedKontaktInfoMapper();
 
 	@Test
-	public void shouldMap() throws Exception {
+	public void shouldMap() {
 		BestillVarselTo to = mapper.map(createServicemeldingMedKontaktinformasjon());
 
 		assertThat(to.getAktoerId(), is(AKTOER_ID));
@@ -61,7 +56,7 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 	}
 
 	@Test
-	public void shouldHandleNullOnOptional() throws Exception {
+	public void shouldHandleNullOnOptional() {
 		ServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
 		varsel.getParameterListe().clear();
 		varsel.setUtloepstidspunkt(null);
@@ -73,7 +68,7 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 	}
 
 	@Test
-	public void shouldMapPersonIdent() throws Exception {
+	public void shouldMapPersonIdent() {
 		ServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
 		varsel.setMottaker(createPerson());
 
@@ -84,7 +79,7 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 	}
 
 	@Test
-	public void shouldHandleOrganisasjonNull() throws Exception {
+	public void shouldHandleOrganisasjonNull() {
 		ServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
 		varsel.setTilhoerendeOrganisasjon(null);
 
@@ -94,7 +89,7 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 	}
 
 	@Test
-	public void shouldThrowIfKontaktInfoKanalIsDittNav() throws Exception {
+	public void shouldThrowIfKontaktInfoKanalIsDittNav() {
 		ServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
 
 		Kontaktinformasjon kontaktinformasjon = new Kontaktinformasjon();
@@ -107,7 +102,7 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 	}
 
 	@Test
-	public void shouldThrowIllegalArgumentIfInfoKanalNull() throws Exception {
+	public void shouldThrowIllegalArgumentIfInfoKanalNull() {
 		ServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
 
 		Kontaktinformasjon kontaktinformasjon = new Kontaktinformasjon();

@@ -6,19 +6,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-/**
- * Application config test
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = WebTestConfig.class)
+@AutoConfigureWireMock(port = 0)
 @ActiveProfiles({"itest"})
-@DirtiesContext
 public class ApplicationTest {
 
 	@BeforeClass
@@ -27,8 +22,5 @@ public class ApplicationTest {
 	}
 
 	@Test
-	public void shouldStartContext() throws Exception {
-
-
-	}
+	public void shouldStartContext() {}
 }

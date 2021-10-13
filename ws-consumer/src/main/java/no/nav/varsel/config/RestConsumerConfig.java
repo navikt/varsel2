@@ -12,6 +12,8 @@ import org.springframework.http.client.InterceptingClientHttpRequestFactory;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.client.RestTemplate;
 
+import javax.inject.Inject;
+
 /**
  * Spring config for Rest Consumers
  *

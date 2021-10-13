@@ -9,11 +9,6 @@ import org.mockito.Mockito;
 
 import javax.jms.Message;
 
-/**
- * Unittest for ObjectMessageWrapper
- *
- * @author Lars Aune
- */
 public class ObjectMessageWrapperTest {
 	private Message messageMock = Mockito.mock(Message.class);
 	private Varsel varsel = new Varsel();

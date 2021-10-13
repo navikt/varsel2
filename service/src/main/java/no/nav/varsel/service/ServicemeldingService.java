@@ -1,16 +1,13 @@
 package no.nav.varsel.service;
 
-import static org.springframework.util.StringUtils.hasText;
-
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.jms.producer.VarselutsendingProducer;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
-import no.nav.varsel.service.support.exception.VarselInaktivVarselmalException;
-import no.nav.varsel.service.support.exception.VarselbestillingUtloeptException;
+import no.nav.varsel.service.support.exception.functional.VarselInaktivVarselmalException;
+import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloeptException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
@@ -22,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,25 +26,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Service for Servicemelding
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
+import static org.springframework.util.StringUtils.hasText;
+
 public class ServicemeldingService {
 	
 	private static final Logger LOGG = LoggerFactory.getLogger(ServicemeldingService.class);
 	
 	@Inject
 	private AktoerService aktoerService;
+
 	@Inject
 	private VarselInfoConsumer varselInfoConsumer;
+
 	@Inject
 	private HentDigitalKontaktinformasjonConsumer dkifConsumer;
+
 	@Inject
 	private VarselKanalDecider varselKanalDecider;
+
 	@Inject
 	private VarselutsendingProducer varselutsendingProducer;
+
 	@Inject
 	private VarselutsendingToMapper varselutsendingToMapper;
 	
@@ -63,8 +62,7 @@ public class ServicemeldingService {
 			throw new VarselbestillingUtloeptException(bestilling.getVarselBestillingId(), bestilling.getUtloepstidspunkt());
 		}
 		
-		AktoerTo fetchedAktoerTo = aktoerService.findMissingAktoer(bestilling);
-		bestilling.setMottaker(fetchedAktoerTo);
+		bestilling.setMottaker(aktoerService.findMissingAktoer(bestilling));
 		
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestilling.getVarseltypeId());
 		bestilling.setVarselBestillingId(UUID.randomUUID().toString());
@@ -75,10 +73,9 @@ public class ServicemeldingService {
 		KontaktregisterTo kontaktregisterTo;
 		if (hasKontaktInfo(bestilling)) {
 			//TVARSEL006 Path
-			varselInfoTo.getPreferertKanal().remove(KanalCode.DITT_NAV);
+			varselInfoTo.getPreferertKanal().remove(DITT_NAV);
 			kontaktregisterTo = new KontaktregisterTo();
-			kontaktregisterTo.setMobiltelefonnummer(bestilling.getMobiltelefonnummer() != null ? bestilling.getMobiltelefonnummer()
-					.trim() : null);
+			kontaktregisterTo.setMobiltelefonnummer(bestilling.getMobiltelefonnummer() != null ? bestilling.getMobiltelefonnummer().trim() : null);
 			kontaktregisterTo.setEpostadresse(bestilling.getEpost() != null ? bestilling.getEpost().trim() : null);
 		} else {
 			//TVARSEL001 Path
@@ -91,8 +88,8 @@ public class ServicemeldingService {
 		Varselbestilling varselbestilling = domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo);
 		
 		varselbestillingRepo.saveAndFlush(varselbestilling);
-		
 		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper.map(varselbestilling);
+
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
 			varselutsendingProducer.produce(varselutsendingTo);
 			LOGG.info("Sending servicevarsel with varselbestillingsId=" + varselbestilling.getVarselbestillingId()

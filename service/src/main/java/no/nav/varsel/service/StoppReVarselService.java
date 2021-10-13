@@ -2,7 +2,7 @@ package no.nav.varsel.service;
 
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.VarselbestillingRepo;
-import no.nav.varsel.service.support.exception.VarselbestillingNotExistException;
+import no.nav.varsel.service.support.exception.functional.VarselbestillingNotExistException;
 import no.nav.varsel.service.tvarsel004.to.StoppReVarselTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

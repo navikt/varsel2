@@ -1,6 +1,5 @@
 package no.nav.varsel.wsconsumer;
 
-import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.DigitalKontaktinformasjonV1;
 import no.nav.varsel.domain.to.Ping;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
@@ -19,11 +18,6 @@ import static no.nav.varsel.domain.to.Ping.Type.Soap;
 public class WsPingProvider {
 
 	@Inject
-	private AktoerV2 aktoerV2;
-	@Value("${aktoerv2.ws.endpointUrl}")
-	private String aktoerUrl;
-
-	@Inject
 	private DigitalKontaktinformasjonV1 digitalKontaktinformasjonV1;
 	@Value("${dkif.ws.endpointUrl}")
 	private String dkifUrl;
@@ -31,10 +25,6 @@ public class WsPingProvider {
 	private VarselInfoConsumer varselInfoConsumer;
 	@Value("${dokkat.varselinfo.rest.url}")
 	private String varselInfoUrl;
-
-	public Ping pingAktoerV2() {
-		return new Ping(Soap, "AktoerV2", aktoerUrl, () -> aktoerV2.ping());
-	}
 
 	public Ping pingDigitalKontaktinformasjonV1() {
 		return new Ping(Soap, "DigitalKontaktinformasjonV1", dkifUrl, () -> digitalKontaktinformasjonV1.ping());

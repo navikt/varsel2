@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.VarselbestillingRepo;
-import no.nav.varsel.service.support.exception.VarselbestillingNotExistException;
+import no.nav.varsel.service.support.exception.functional.VarselbestillingNotExistException;
 import no.nav.varsel.service.tvarsel004.to.StoppReVarselTo;
 import no.nav.varsel.service.tvarsel004.to.StoppReVarselToTest;
 import org.junit.Rule;

@@ -1,8 +1,5 @@
 package no.nav.varsel.jms.consumer.tvarsel003;
 
-import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_VARSEL;
-import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_VARSEL_NAME;
-
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
@@ -18,6 +15,9 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import javax.jms.TextMessage;
 
+import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_VARSEL;
+import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_VARSEL_NAME;
+
 /**
  * Jms Consumer for TVARSEL003 BestillVarsel
  *
@@ -26,7 +26,7 @@ import javax.jms.TextMessage;
 @Component
 public class BestillVarselConsumer extends AbstractJmsConsumer<VarselMedHandling> {
 
-	private static final Logger LOGG = LoggerFactory.getLogger(BestillVarselConsumer.class);
+	private static final Logger log = LoggerFactory.getLogger(BestillVarselConsumer.class);
 
 	private static final String BESTILL_VARSEL_QUEUE = "bestillVarselQueue";
 
@@ -48,8 +48,8 @@ public class BestillVarselConsumer extends AbstractJmsConsumer<VarselMedHandling
 	@Override
 	protected void handleMessage(ObjectMessageWrapper<VarselMedHandling> message) {
 		BestillVarselTo to = bestillVarselMapper.map(message.getObject());
+		log.info("bestillVarsel mottatt varselBestillingId={}, varselTypeId={}", to.getVarselBestillingId(), to.getVarseltypeId());
 		to.validateTvarsel003Input();
-		LOGG.debug(String.format("Mottatt varsel %s til %s", to.getVarseltypeId(), to.createAktoerTo()));
 
 		bestillVarselService.bestillVarsel(to);
 	}

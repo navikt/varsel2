@@ -1,0 +1,18 @@
+{
+  "varseltypeId" : "UT",
+  "varselNavn" : "varselnavn",
+  "varselKategori" : "varkat",
+  "varselForDistribusjonKanal" : "vardistkanal",
+  "inaktiv" : false,
+  "revarslingIntervall" : 4,
+  "antallRevarslinger" : 2,
+  "malVersion" : null,
+  "varselURL" : "http://nav.no",
+  "preferertKanal" : [ "EPOST" ],
+  "varselmals" : [ {
+    "kanal" : "EPOST",
+    "varselTittel" : "Varsel Tittel",
+    "foerstegangsvarselTekst" : "Første gang tekst til {mottaker}",
+    "revarslingTekst" : "Revarsling tekst til {mottaker}"
+  } ]
+}

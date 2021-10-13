@@ -1,12 +1,5 @@
 package no.nav.varsel.jms.consumer.tvarsel003.support;
 
-import static no.nav.varsel.Utils.formatDateTime;
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Aktoer;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.AktoerId;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.Parameter;
@@ -17,18 +10,20 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 
-/**
- * Unit test for {@link BestillVarselMapper}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static no.nav.varsel.Utils.formatDateTime;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 public class BestillVarselMapperTest {
 
 	public static final String VARSELBESTILLING_ID = "84d31fc5-523d-4ae1-a1d8-449ed2382f61";
 	public static final boolean REVARSLING = true;
 	public static final String KEY = "mottaker";
 	public static final String VAL = "val";
-	public static final String AKTOER_ID = "aktoerId";
+	public static final String AKTOER_ID = "1234567890123";
 	public static final String PERSON_IDENT = "personIdent";
 	public static final String VARSELTYPE_ID = "varseltypeId";
 	public static final LocalDateTime UTLOEPS_TIDSPUNKT = LocalDateTime.now().plusHours(1);
@@ -36,7 +31,7 @@ public class BestillVarselMapperTest {
 	private BestillVarselMapper mapper = new BestillVarselMapper();
 
 	@Test
-	public void shouldMap() throws Exception {
+	public void shouldMap() {
 		BestillVarselTo to = mapper.map(createVarselBestilling());
 
 		assertThat(to.getVarselBestillingId(), is(VARSELBESTILLING_ID));
@@ -50,7 +45,7 @@ public class BestillVarselMapperTest {
 	}
 
 	@Test
-	public void shouldMapAktoerId() throws Exception {
+	public void shouldMapAktoerId() {
 		VarselMedHandling varsel = createVarselBestilling();
 		varsel.setMottaker(createAktoerId());
 		BestillVarselTo to = mapper.map(varsel);
@@ -60,7 +55,7 @@ public class BestillVarselMapperTest {
 	}
 
 	@Test
-	public void shouldMapNullValues() throws Exception {
+	public void shouldMapNullValues() {
 		mapper.map(new VarselMedHandling());
 	}
 
