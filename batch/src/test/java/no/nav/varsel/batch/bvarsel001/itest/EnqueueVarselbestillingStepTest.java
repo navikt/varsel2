@@ -5,6 +5,7 @@ import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMe
 import no.nav.varsel.config.BatchTestConfig;
 import no.nav.varsel.domain.object.worktable.ArbeidStatus;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -23,6 +24,7 @@ import static org.junit.Assert.assertThat;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
+@Ignore
 @SpringBootTest(classes = {BatchTestConfig.class})
 public class EnqueueVarselbestillingStepTest extends AbstractBvarsel001StepTest {
 
