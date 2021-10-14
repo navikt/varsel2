@@ -64,6 +64,7 @@
 		<xml-apis.version>1.4.01</xml-apis.version>
 		<spring-retry.version>1.2.4.RELEASE</spring-retry.version>
 		<metrics-spring.version>3.1.3</metrics-spring.version>
+		<spotify-logging.version>2.3.1</spotify-logging.version>
 		<!-- Overstyrer spring boot 1.5.22.RELEASE sin versjon 4.5.9 som har en kjent bug.
 		https://issues.apache.org/jira/browse/HTTPCLIENT-1997 -->
 		<httpclient.version>4.5.10</httpclient.version>
@@ -460,6 +461,11 @@
 				<artifactId>brevogarkiv-batch-common</artifactId>
 				<version>${brevogarkiv-batch-common.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.spotify</groupId>
+				<artifactId>logging</artifactId>
+				<version>${spotify-logging.version}</version>
+			</dependency>
 
 			<!-- provided -->
 			<dependency>
@@ -531,6 +537,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-logging</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.spotify</groupId>
+			<artifactId>logging</artifactId>
 		</dependency>
 		<!-- End Logging dependencies -->
 
