@@ -12,6 +12,7 @@ import no.nav.varsel.jms.consumer.JmsConsumer;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.test.TestUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -45,6 +46,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+@Ignore
 public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractConsumerJmsTest {
 
 	private TestUtils.MockAppender loggerMock = null;
