@@ -51,6 +51,11 @@ public class JmsConfig {
 	@Value("${varsel.jms.consumer.max}")
 	private Integer maximumConsumers;
 
+	@Value("${no.nav.modig.security.systemuser.username}")
+	private String srvVarselUsername;
+	@Value("${no.nav.modig.security.systemuser.password}")
+	private String srvVarselPassword;
+
 	private static final Logger LOG = LoggerFactory.getLogger(JmsConfig.class);
 
 	@Bean
@@ -117,8 +122,8 @@ public class JmsConfig {
 		ConnectionFactory connectionFactory = getJndiObject("java:/jboss/mqConnectionFactory", ConnectionFactory.class);
 		UserCredentialsConnectionFactoryAdapter adapter = new UserCredentialsConnectionFactoryAdapter();
 		adapter.setTargetConnectionFactory(connectionFactory);
-		adapter.setUsername("srvappserver");
-		adapter.setPassword("");
+		adapter.setUsername(srvVarselUsername);
+		adapter.setPassword(srvVarselPassword);
 		return adapter;
 	}
 

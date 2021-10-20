@@ -23,8 +23,9 @@
 		<datasource alias="varselDS" jndi="java:/jboss/datasources/varselDS" type="ORACLE">
 			<pool maxPoolSize="50"/>
 		</datasource>
-		<queueManager alias="mqGateway02" jndi="java:/jboss/mqConnectionFactory" xaEnabled="true"
+		<queueManager alias="mqGateway01_new" jndi="java:/jboss/mqConnectionFactory" xaEnabled="true"
 					  unifiedConnectionFactory="true">
+			<channel alias="varselproduksjon_channel"/>
 			<queue alias="VARSELPRODUKSJON.VARSLINGER" jndi="java:/jboss/bestillServicemelding"/>
 			<queue alias="VARSELPRODUKSJON.KVITTERING" jndi="java:/jboss/varselKvittering"/>
 			<queue alias="VARSEL_INN" jndi="java:/jboss/varselutsending"/>
@@ -58,5 +59,9 @@
 	<monitoring>
 		<metric path="/varsel/internal/metrics"/>
 	</monitoring>
+
+	<serverOptions>
+		<jvmArgs>-Dcom.ibm.mq.cfg.jmqi.useMQCSPauthentication=true</jvmArgs>
+	</serverOptions>
 
 </application>

@@ -43,8 +43,6 @@ public class SelftestController {
 	@Inject
 	private DbSelftest dbSelftest;
 	@Inject
-	private JmsPingProvider jmsPingProvider;
-	@Inject
 	private WsPingProvider wsPingProvider;
 
 	/**
@@ -102,8 +100,6 @@ public class SelftestController {
 		response.addCheck(new PingSelftest(wsPingProvider.pingDigitalKontaktinformasjonV1()).check());
 		response.addCheck(new PingSelftest(wsPingProvider.pingVarselInfoV1()).check());
 
-		// Jms
-		jmsPingProvider.ping().forEach(p -> response.addCheck(new PingSelftest(p).check()));
 	}
 
 	private String getServerAddress() {
