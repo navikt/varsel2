@@ -4,11 +4,10 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.internal.util.reflection.Whitebox.getInternalState;
-
 import org.junit.Test;
 import org.springframework.batch.core.step.builder.SimpleStepBuilder;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.interceptor.TransactionAttribute;
 
 /**
@@ -28,7 +27,7 @@ public class FaultTolerantStepBuilderLazyTransactionAttributeTest {
 		TransactionAttribute mock = mock(TransactionAttribute.class);
 		stepBuilder.transactionAttribute(mock);
 
-		assertThat(getInternalState(stepBuilder, "transactionAttribute"), is(mock));
+		assertThat(ReflectionTestUtils.getField(stepBuilder, "transactionAttribute"), is(mock));
 		verifyZeroInteractions(mock);
 	}
 

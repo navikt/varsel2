@@ -15,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.inject.Inject;
 
+import java.time.Duration;
+
 import static no.nav.varsel.config.cache.LokalCacheConfig.STS_CACHE;
 
 @Component
@@ -35,9 +37,9 @@ public class StsRestConsumer {
 	) {
 		this.stsUrl = stsUrl;
 		this.restTemplate = restTemplate
-				.setReadTimeout(200000)
-				.setConnectTimeout(5000)
-				.basicAuthorization(serviceuserUsername, serviceuserPassword)
+				.setConnectTimeout(Duration.ofSeconds(5))
+				.setReadTimeout(Duration.ofSeconds(20))
+				.basicAuthentication(serviceuserUsername, serviceuserPassword)
 				.build();
 	}
 

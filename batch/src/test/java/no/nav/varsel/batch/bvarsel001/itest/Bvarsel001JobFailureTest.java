@@ -101,7 +101,7 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 
 		JobExecution jobExecution = launchJob(defaultJobParams());
 		assertThat(jobExecution.getStatus(), is(FAILED));
-		assertThat(bvarsel001Repo.findOne(VARSELBESTILLING_ID).getArbeidStatus(), is(OPPRETTET));
+		assertThat(bvarsel001Repo.findById(VARSELBESTILLING_ID).get().getArbeidStatus(), is(OPPRETTET));
 		assertJms(0);
 		assertThat(failureCount, is(2));
 	}
@@ -118,7 +118,7 @@ public class Bvarsel001JobFailureTest extends AbstractBvarsel001Test {
 
 		JobExecution jobExecution = launchJob(defaultJobParams());
 		assertThat(jobExecution.getStatus(), is(FAILED));
-		assertThat(bvarsel001Repo.findOne(VARSELBESTILLING_ID).getArbeidStatus(), is(OPPRETTET));
+		assertThat(bvarsel001Repo.findById(VARSELBESTILLING_ID).get().getArbeidStatus(), is(OPPRETTET));
 		assertJms(0);
 		assertThat(failureCount, is(2));
 	}

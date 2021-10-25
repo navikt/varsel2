@@ -147,7 +147,6 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestillingRepo.count(), is(0L));
 	}
 
-	@Ignore
 	@Test
 	public void shouldWeaveVarselUrl() {
 		String expectedVarselUrl = VARSEL_URL_MED_FLETTING.replace("{param}", "p1");

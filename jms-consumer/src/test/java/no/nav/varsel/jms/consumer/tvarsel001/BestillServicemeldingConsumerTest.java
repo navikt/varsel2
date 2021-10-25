@@ -43,7 +43,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
-@Ignore // Testen er altfor brittle. Burde skrives om.
+// Testen er altfor brittle. Burde skrives om.
 public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	@Inject
@@ -103,7 +103,6 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	@Ignore
 	public void shouldPutOnBackoutAndRollbackIfFailedAfterDbSave() {
 		this.stubVarselInfoV1();
 		this.stubPdlConsumer();

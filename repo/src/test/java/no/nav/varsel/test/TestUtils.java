@@ -65,8 +65,8 @@ public class TestUtils {
 		private static ArgumentMatcher<ILoggingEvent> hasMessageContaining(final String token) {
 			return new ArgumentMatcher<ILoggingEvent>() {
 				@Override
-				public boolean matches(final Object argument) {
-					return ((LoggingEvent) argument).getFormattedMessage().contains(token);
+				public boolean matches(ILoggingEvent iLoggingEvent) {
+					return iLoggingEvent.getFormattedMessage().contains(token);
 				}
 			};
 		}

@@ -42,9 +42,9 @@ public class PopulateArbeidsTabellStepTest extends AbstractBvarsel001StepTest {
 		launchStep("populateArbeidsTabellStep");
 
 
-		assertThat(bvarsel001Repo.findOne(YESTERDAY).getArbeidStatus(), is(ArbeidStatus.OPPRETTET));
-		assertThat(bvarsel001Repo.findOne(LAST_WEEK).getArbeidStatus(), is(ArbeidStatus.OPPRETTET));
-		assertThat(bvarsel001Repo.findOne(TODAY).getArbeidStatus(), is(ArbeidStatus.OPPRETTET));
+		assertThat(bvarsel001Repo.findById(YESTERDAY).get().getArbeidStatus(), is(ArbeidStatus.OPPRETTET));
+		assertThat(bvarsel001Repo.findById(LAST_WEEK).get().getArbeidStatus(), is(ArbeidStatus.OPPRETTET));
+		assertThat(bvarsel001Repo.findById(TODAY).get().getArbeidStatus(), is(ArbeidStatus.OPPRETTET));
 		assertThat(bvarsel001Repo.count(), is(3L));
 	}
 }

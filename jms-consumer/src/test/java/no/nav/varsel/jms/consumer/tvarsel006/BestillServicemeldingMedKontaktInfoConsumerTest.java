@@ -46,7 +46,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-@Ignore
 public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractConsumerJmsTest {
 
 	private TestUtils.MockAppender loggerMock = null;

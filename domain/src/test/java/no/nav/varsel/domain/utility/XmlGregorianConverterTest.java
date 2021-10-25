@@ -6,6 +6,7 @@ import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianC
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+
 import org.hamcrest.Matchers;
 import org.junit.Test;
 

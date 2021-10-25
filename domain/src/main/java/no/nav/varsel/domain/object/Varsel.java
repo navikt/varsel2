@@ -4,6 +4,8 @@ import com.google.common.base.MoreObjects;
 import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,9 +34,18 @@ public class Varsel extends AbstractDomainObject {
 
 	private static final String VARSEL_SEQ = "VARSEL_SEQ";
 
+	//TODO: Hvorfor er allocation-size 100?
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = VARSEL_SEQ)
-	@SequenceGenerator(name = VARSEL_SEQ, sequenceName = VARSEL_SEQ, allocationSize = 100)
+	@GenericGenerator(name = VARSEL_SEQ,
+			strategy = "sequence",
+			parameters = {
+					@Parameter(name = "sequence_name",  value = VARSEL_SEQ),
+					@Parameter(name = "initial_value",  value = "1"),
+					@Parameter(name = "increment_size",  value = "100"),
+					@Parameter(name = "optimizer", value = "hilo")
+			}
+		)
 	@Column(name = "id", updatable = false)
 	private Long id;
 

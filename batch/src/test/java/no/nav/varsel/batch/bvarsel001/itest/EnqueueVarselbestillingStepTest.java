@@ -24,7 +24,6 @@ import static org.junit.Assert.assertThat;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@Ignore
 @SpringBootTest(classes = {BatchTestConfig.class})
 public class EnqueueVarselbestillingStepTest extends AbstractBvarsel001StepTest {
 
@@ -37,8 +36,8 @@ public class EnqueueVarselbestillingStepTest extends AbstractBvarsel001StepTest 
 	public void shouldQueueAndUpdateArbStatus() throws Exception {
 		launchStep("enqueueVarselbestillingStep");
 
-		assertThat(bvarsel001Repo.findOne(OPPRETTET).getArbeidStatus(), is(ArbeidStatus.SENDT));
-		assertThat(bvarsel001Repo.findOne(SENDT).getArbeidStatus(), is(ArbeidStatus.SENDT));
+		assertThat(bvarsel001Repo.findById(OPPRETTET).get().getArbeidStatus(), is(ArbeidStatus.SENDT));
+		assertThat(bvarsel001Repo.findById(SENDT).get().getArbeidStatus(), is(ArbeidStatus.SENDT));
 
 		VarselMedHandling varsel = receive(bestillVarselQueue);
 		assertThat(varsel, notNullValue());

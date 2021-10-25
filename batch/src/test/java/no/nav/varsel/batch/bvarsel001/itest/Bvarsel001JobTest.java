@@ -28,7 +28,6 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.springframework.batch.core.ExitStatus.COMPLETED;
 
-@Ignore
 @SpringBootTest(classes = {BatchTestConfig.class})
 public class Bvarsel001JobTest extends AbstractBvarsel001Test {
 
