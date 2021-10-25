@@ -1,5 +1,7 @@
 package no.nav.varsel.config;
 
+import static java.lang.System.getProperty;
+import static java.lang.System.setProperty;
 import static no.nav.varsel.config.QueueConfig.getQueue;
 
 import com.atomikos.jms.AtomikosConnectionFactoryBean;
@@ -10,6 +12,8 @@ import org.apache.activemq.broker.region.policy.PolicyEntry;
 import org.apache.activemq.broker.region.policy.PolicyMap;
 import org.apache.activemq.broker.region.policy.SharedDeadLetterStrategy;
 import org.apache.activemq.command.ActiveMQQueue;
+import org.junit.Before;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
@@ -42,9 +46,15 @@ public class JmsTestConfig {
 
 	private static final String VM_LOCALHOST = "vm://localhost";
 
+	@Before
+	public void setUp() {
+		setProperty("no.nav.modig.security.systemuser.username", "srvvarsel");
+		setProperty("no.nav.modig.security.systemuser.password", "passord");
+	}
+
 	public static void mockJndi() throws Exception {
-		System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.apache.naming.java.javaURLContextFactory");
-		System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
+		setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.apache.naming.java.javaURLContextFactory");
+		setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
 		InitialContext ctx = new InitialContext();
 		try {
 			ctx.destroySubcontext("java:");
@@ -75,8 +85,8 @@ public class JmsTestConfig {
 	public ConnectionFactory connectionFactory(ConnectionFactory atomikosConnectionFactoryBean) throws JMSException {
 		UserCredentialsConnectionFactoryAdapter adapter = new UserCredentialsConnectionFactoryAdapter();
 		adapter.setTargetConnectionFactory(atomikosConnectionFactoryBean);
-		adapter.setUsername("srvappserver");
-		adapter.setPassword("");
+		adapter.setUsername(getProperty("no.nav.modig.security.systemuser.username"));
+		adapter.setPassword(getProperty("no.nav.modig.security.systemuser.password"));
 		return adapter;
 	}
 

@@ -51,7 +51,7 @@ public class SelftestControllerTest extends AbstractRestTest {
 				.andExpect(jsonPath("$.aggregateResultText", is(ERROR.name())))
 				.andExpect(jsonPath("$.timestamp", notNullValue()))
 
-				.andExpect(jsonPath("$.checks", hasSize(10)))
+				.andExpect(jsonPath("$.checks", hasSize(4)))
 				.andExpect(jsonPath("$.checks[0].type", is("Datasource")))
 				.andExpect(jsonPath("$.checks[0].endpoint", is("varselDS")))
 				.andExpect(jsonPath("$.checks[0].address", nullValue()))
