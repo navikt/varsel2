@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = WebTestConfig.class)
 @AutoConfigureWireMock(port = 0)
-@ActiveProfiles({"itest"})
+@ActiveProfiles({"itest", "local"})
 public class ApplicationTest {
 
 	@BeforeClass

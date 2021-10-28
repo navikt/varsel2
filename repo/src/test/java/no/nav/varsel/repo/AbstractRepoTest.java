@@ -22,7 +22,7 @@ import javax.persistence.PersistenceContext;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = RepoTestConfig.class)
-@ActiveProfiles({"itest"})
+@ActiveProfiles({"itest", "local"})
 public abstract class AbstractRepoTest {
 
 	@Inject

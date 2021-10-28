@@ -94,7 +94,7 @@ public class JmsTestConfig {
 	 * Atomikos wrapper for XAConnectionFactory
 	 */
 	@Bean(initMethod = "init", destroyMethod = "close")
-	public ConnectionFactory atomikosConnectionFactoryBean() {
+	public ConnectionFactory atomikosConnectionFactoryBean(BrokerService brokerService) {
 		AtomikosConnectionFactoryBean atomikosConnectionFactoryBean = new AtomikosConnectionFactoryBean();
 		atomikosConnectionFactoryBean.setUniqueResourceName(UUID.randomUUID().toString());
 		atomikosConnectionFactoryBean.setXaConnectionFactory(activeMQXAConnectionFactory());

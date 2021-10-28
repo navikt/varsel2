@@ -1,13 +1,14 @@
 package no.nav.varsel.repo;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.*;
-
 import org.hibernate.SessionFactory;
 import org.junit.Test;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 
 /**
  * Itest for context
@@ -19,6 +20,7 @@ public class RepoContextTest extends AbstractRepoTest {
 	@Inject
 	private SessionFactory sessionFactory;
 	@Inject
+	@Named("nonxaSessionFactory")
 	private SessionFactory nonxaSessionFactory;
 
 	@Test

@@ -23,7 +23,7 @@ import static no.nav.varsel.domain.Constants.USER_ID;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = WsProviderTestConfig.class)
-@ActiveProfiles({"itest"})
+@ActiveProfiles({"itest", "local"})
 @AutoConfigureWireMock(port = 0)
 public abstract class AbstractWsProviderITest {
 

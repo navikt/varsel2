@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @AutoConfigureWireMock(port = 0)
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles({"itest"})
+@ActiveProfiles({"itest", "local"})
 public class WsConsumerConfigTest {
 
 	@Test

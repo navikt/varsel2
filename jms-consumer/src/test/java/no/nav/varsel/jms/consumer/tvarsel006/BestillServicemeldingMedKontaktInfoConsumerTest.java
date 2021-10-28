@@ -104,11 +104,13 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 	}
 
 	@Test
-	public void shouldReceieveJms() {
+	public void shouldReceiveJms() {
 		JmsReply response = sendMessage(bestillServicemeldingKontaktInfoQueue, new ObjectFactory().createServicemelding(createServicemeldingMedKontaktinformasjon()));
 
 		isOk(response);
-		assertThat(varselbestillingRepo.count(), is(1L));
+		await().atMost(ofSeconds(5)).untilAsserted(() -> {
+			assertThat(varselbestillingRepo.count(), is(1L));
+		});
 
 		String varselTekst = FOERSTE_GANG_TEKST.replace("{mottaker}", VAL);
 		String varselId = assertDb(varselTekst).getVarselId();

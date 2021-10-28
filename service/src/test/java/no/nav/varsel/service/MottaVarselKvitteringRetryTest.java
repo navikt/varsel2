@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {MottaVarselKvitteringService.class, MottaVarselKvitteringRetryTest.Config.class})
-@ActiveProfiles({"itest"})
+@ActiveProfiles({"itest", "local"})
 public class MottaVarselKvitteringRetryTest {
 
 	@Inject

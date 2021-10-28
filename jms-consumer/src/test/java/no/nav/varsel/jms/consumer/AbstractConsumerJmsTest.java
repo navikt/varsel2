@@ -40,7 +40,7 @@ import static wiremock.org.apache.http.entity.ContentType.APPLICATION_JSON;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = JmsConsumerTestConfig.class)
-@ActiveProfiles({"itest"})
+@ActiveProfiles({"itest", "local"})
 @AutoConfigureWireMock(port = 0)
 public abstract class AbstractConsumerJmsTest {
 

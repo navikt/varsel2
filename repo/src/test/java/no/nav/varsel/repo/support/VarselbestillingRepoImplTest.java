@@ -107,14 +107,12 @@ public class VarselbestillingRepoImplTest {
 	private Varselbestilling mockVarselbestillingWithOrgNrWithStatuFerdigbehandlet() {
 		Varselbestilling result = mock(Varselbestilling.class);
 		when(result.getOrgNr()).thenReturn(ORG_NR);
-		when(result.getVarsels()).thenReturn(varselsWithStatusFerdigbehandlet);
 		return result;
 	}
 
 	private Varselbestilling mockVarselbestillingWithOrgNrWithoutVarselStatusFerdigbehandlet() {
 		Varselbestilling result = mock(Varselbestilling.class);
 		when(result.getOrgNr()).thenReturn(ORG_NR);
-		when(result.getVarsels()).thenReturn(varselsWithoutStatusFerdigbehandlet);
 		return result;
 	}
 

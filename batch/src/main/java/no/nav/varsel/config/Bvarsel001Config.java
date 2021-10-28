@@ -50,6 +50,7 @@ import org.springframework.transaction.interceptor.TransactionAttribute;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jms.Queue;
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -150,6 +151,7 @@ public class Bvarsel001Config {
 	@Bean
 	@JobScope
 	public HibernateCursorItemReaderVarselbestilling opprettetVarselbestillingWithFletteparameterReader(
+			@Named("nonxaSessionFactory")
 			SessionFactory nonxaSessionFactory,
 			@Value("#{jobParameters[" + WORK_UNIT_KEY + "]}") int workUnit) {
 		HibernateCursorItemReaderVarselbestilling reader = new HibernateCursorItemReaderVarselbestilling();

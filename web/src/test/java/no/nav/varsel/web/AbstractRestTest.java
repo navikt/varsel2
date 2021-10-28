@@ -36,7 +36,7 @@ import javax.inject.Inject;
 		RepoTestConfig.class,
 		WebConfig.class
 })
-@ActiveProfiles({"itest"})
+@ActiveProfiles({"itest", "local"})
 public abstract class AbstractRestTest {
 
 	@Inject

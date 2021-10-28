@@ -31,7 +31,7 @@ import static no.nav.varsel.config.BatchTestConfig.START_TIME_FORMAT_TEST;
 import static no.nav.varsel.domain.Constants.USER_ID;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles({"itest"})
+@ActiveProfiles({"itest", "local"})
 public abstract class AbstractBatchTest extends JobLauncherTestUtils {
 
 	protected static final String DEFAULT_WORK_UNIT = "2";

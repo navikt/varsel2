@@ -11,6 +11,7 @@ import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.JmsConsumer;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
 import no.nav.varsel.jms.to.xml.JmsReply;
+import org.apache.activemq.broker.Broker;
 import org.junit.Ignore;
 import org.junit.Test;
 

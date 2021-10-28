@@ -30,7 +30,7 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = JmsTestConfig.class)
-@ActiveProfiles({"itest"})
+@ActiveProfiles({"itest", "local"})
 public class JmsPingProviderITest {
 
 	@Inject

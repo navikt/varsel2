@@ -167,7 +167,7 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
 			assertThat(varselbestillingRepo.count(), is(1L));
 		});
-		Varselutsending varselutsending = receive(varselutsendingQueue);
+		Varselutsending varselutsending = findLastMessage(varselutsendingQueue);
 		assertThat(varselutsending.getVarselURL(), equalTo(expectedVarselUrl));
 	}
 
