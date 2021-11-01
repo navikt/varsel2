@@ -30,8 +30,6 @@ public class SelftestController {
 
 	// Application is up and running
 	public static final String APPLICATION_UP = "application: UP";
-	// Application is up but refusing connections
-	public static final String APPLICATION_DOWN = "application: DOWN";
 
 	@Value("${applicationName}")
 	private String applicationName;

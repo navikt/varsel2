@@ -2,6 +2,7 @@ package no.nav.varsel.wsconsumer.pdl;
 
 import no.nav.varsel.wsconsumer.pdl.support.PdlFunctionalException;
 import no.nav.varsel.wsconsumer.pdl.support.PersonIkkeFunnetException;
+import no.nav.varsel.wsconsumer.pdl.support.ServerErrorException;
 import no.nav.varsel.wsconsumer.pdl.to.PdlRequest;
 import no.nav.varsel.wsconsumer.pdl.to.PdlResponse;
 import no.nav.varsel.wsconsumer.sts.StsRestConsumer;
@@ -31,6 +32,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class PdlIdentConsumer {
 	private static final String HEADER_PDL_NAV_CONSUMER_TOKEN = "Nav-Consumer-Token";
 	private static final String PERSON_IKKE_FUNNET_CODE = "not_found";
+	private static final String SERVER_ERROR_CODE = "server_error";
 
 	private final RestTemplate restTemplate;
 	private final StsRestConsumer stsRestConsumer;
@@ -79,12 +81,13 @@ public class PdlIdentConsumer {
 
 			if (pdlResponse.getErrors() == null || pdlResponse.getErrors().isEmpty()) {
 				return pdlResponse.getData().getHentIdenter().getIdenter().get(0).getIdent();
-			} else {
-				if (PERSON_IKKE_FUNNET_CODE.equals(pdlResponse.getErrors().get(0).getExtensions().getCode())) {
+			} else if(pdlResponse.getErrors().stream().anyMatch(e -> SERVER_ERROR_CODE.equals(e.getExtensions().getCode()))) {
+				throw new ServerErrorException("Server_error hindrer aktørid i å bli hentet fra pdl");
+			} else if (PERSON_IKKE_FUNNET_CODE.equals(pdlResponse.getErrors().get(0).getExtensions().getCode())) {
 					throw new PersonIkkeFunnetException("Fant ikke aktørid for person i pdl.");
-				}
-				throw new PersonIkkeFunnetException("Kunne ikke hente aktørid for folkeregisterident i pdl. " + pdlResponse.getErrors());
 			}
+			throw new ServerErrorException("Kunne ikke hente aktørid for folkeregisterident i pdl. " + pdlResponse.getErrors());
+
 		} catch (HttpClientErrorException e) {
 			throw new PdlFunctionalException("Kall mot pdl feilet funksjonelt.", e);
 		}

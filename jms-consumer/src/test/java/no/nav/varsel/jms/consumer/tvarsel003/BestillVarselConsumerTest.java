@@ -148,6 +148,25 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
+	public void messageShouldBePuttOnBackoutQueuWhenPdlResponseIsServerError() {
+		this.stubPdlConsumerServerError();
+		JAXBElement<VarselMedHandling> varselBestilling = createVarselBestilling(false);
+
+		sendMessage(bestillVarselQueue, varselBestilling);
+
+		await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+			VarselMedHandling varselutsending = receive(backoutQueue);
+			assertNotNull(varselutsending);
+			assertThat(varselutsending.getVarselbestillingId(), is(varselBestilling.getValue().getVarselbestillingId()));
+			assertThat(varselutsending.getVarseltypeId(), is(varselBestilling.getValue().getVarseltypeId()));
+			assertThat(varselutsending.getUtloepstidspunkt(), is(varselBestilling.getValue().getUtloepstidspunkt()));
+			assertThat(varselutsending.isReVarsel(), is(varselBestilling.getValue().isReVarsel()));
+			assertThat(varselutsending.getUtsendelsestidspunkt(), is(varselBestilling.getValue().getUtsendelsestidspunkt()));
+		});
+	}
+
+	@Ignore
+	@Test
 	public void shouldWeaveVarselUrl() {
 		String expectedVarselUrl = VARSEL_URL_MED_FLETTING.replace("{param}", "p1");
 
@@ -180,9 +199,9 @@ public class BestillVarselConsumerTest extends AbstractConsumerJmsTest {
 		JmsReply response = sendMessage(bestillVarselQueue, varselBestilling);
 		isOk(response);
 
-		await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
-			assertThat(varselbestillingRepo.count(), is(1L));
-		});
+		await().atMost(Duration.ofSeconds(5)).untilAsserted(() ->
+				assertThat(varselbestillingRepo.count(), is(1L))
+		);
 		Varselutsending varselutsending = receive(varselutsendingQueue);
 		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), equalTo(EPOSTADRESSE));
 	}

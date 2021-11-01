@@ -203,6 +203,13 @@ public abstract class AbstractConsumerJmsTest {
 						.withBodyFile("pdl/pdl-ident-notfound.json")));
 	}
 
+	public void stubPdlConsumerServerError() {
+		stubFor(post("/pdl")
+				.willReturn(aResponse().withStatus(OK.value())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+						.withBodyFile("pdl/pdl-ident-server-error.json")));
+	}
+
 	public void stubPdlConsumerTechnicalErrorWithInternalServerError() {
 		stubFor(post("/pdl")
 				.willReturn(aResponse().withStatus(INTERNAL_SERVER_ERROR.value())
