@@ -1,4 +1,5 @@
 applicationPipeline {
-    applicationName = "varsel"
-    javaVersion = "11"
+    applicationName = "varsel2"
+    dockerfileDir = "."
+    deployEnvironmentQ = "q1,q2"
 }
