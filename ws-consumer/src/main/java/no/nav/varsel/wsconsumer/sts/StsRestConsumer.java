@@ -31,7 +31,7 @@ public class StsRestConsumer {
 	@Inject
 	public StsRestConsumer(
 			RestTemplateBuilder restTemplate,
-			@Value("${securityTokenRestService.url}") String stsUrl,
+			@Value("${security.token.rest.service.url}") String stsUrl,
 			@Value("${varsel.serviceuser.username}") String serviceuserUsername,
 			@Value("${varsel.serviceuser.password}") String serviceuserPassword
 	) {
