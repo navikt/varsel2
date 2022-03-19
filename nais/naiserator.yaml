@@ -7,6 +7,10 @@ metadata:
     team: teamdokumenthandtering
 spec:
   env:
+    - name: VARSEL_SERVICEUSER_USERNAME
+      value: {{ VARSEL_SERVICEUSER_USERNAME }}
+    - name: VARSEL_SERVICEUSER_PASSWORD
+      value: {{ VARSEL_SERVICEUSER_PASSWORD }}
     - name: SPRING_DATASOURCE_URL
       value: {{ SPRING_DATASOURCE_URL }}
     - name: MQGATEWAY01_HOSTNAME
