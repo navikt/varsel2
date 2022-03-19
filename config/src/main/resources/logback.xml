@@ -1,131 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true" scanPeriod="60 seconds" debug="false">
+<included>
+	<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-	<property name="BATCH_LOG_HOME" value="${APP_LOG_HOME}/../batch"/>
+	<appender name="auditLogger" class="com.papertrailapp.logback.Syslog4jAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>[%d, %-5p, %C:%L] - [%X{user},%X{transaction},%X{applicationKey}] - %m%n</pattern>
+		</layout>
 
-	<!-- Appender for batch info logging; applies to all batches -->
-	<appender name="BATCH-SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
-		<discriminator>
-			<Key>jobName</Key>
-			<DefaultValue>default</DefaultValue>
-		</discriminator>
-		<sift>
-			<appender name="FILE-${jobName}" class="ch.qos.logback.core.rolling.RollingFileAppender">
-				<Append>true</Append>
-				<File>${BATCH_LOG_HOME}/${jobName}/${jobName}.log</File>
-				<encoder>
-					<pattern>[%d, %-5p, %C:%L] - [%X{stepName} %thread] - %m%n</pattern>
-				</encoder>
-				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-					<fileNamePattern>${BATCH_LOG_HOME}/${jobName}/${jobName}.%d{yyyy-MM}.log.zip</fileNamePattern>
-					<maxHistory>12</maxHistory>
-				</rollingPolicy>
-			</appender>
-		</sift>
+		<syslogConfig class="org.productivity.java.syslog4j.impl.net.tcp.TCPNetSyslogConfig">
+			<host>audit.nais</host>
+			<port>6514</port>
+			<ident>varsel_audit</ident>
+			<maxMessageLength>128000</maxMessageLength>
+		</syslogConfig>
 	</appender>
 
-	<appender name="servicelogger" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<Append>true</Append>
-		<File>${APP_LOG_HOME}/servicelogger.log</File>
-		<encoder>
-			<pattern>[%d, %-5p, %C:%L] - [%X{consumerId}, %X{callId}, %X{userId}] - %m%n</pattern>
-		</encoder>
-		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<maxIndex>10</maxIndex>
-			<FileNamePattern>${APP_LOG_HOME}/servicelogger.%i.log.zip</FileNamePattern>
-		</rollingPolicy>
-		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-			<MaxFileSize>10MB</MaxFileSize>
-		</triggeringPolicy>
+	<logger level="INFO" name="auditLogger" additivity="false">
+		<appender-ref ref="auditLogger"/>
+	</logger>
+
+	<appender name="abacLogger" class="com.papertrailapp.logback.Syslog4jAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{"yyyy-MM-dd'T'HH:mm:ss,SSSXXX"} %t varsel: %level %X{callId} ConsumerID: %X{consumerId}; User: %X{userId}; Endpoint: %X{httpEndpoint}; Method: %X{httpOperation}; %m%n%xEx</pattern>
+		</layout>
+
+		<syslogConfig class="org.productivity.java.syslog4j.impl.net.tcp.TCPNetSyslogConfig">
+			<host>audit.nais</host>
+			<port>6514</port>
+			<ident>varsel_abac</ident>
+			<maxMessageLength>128000</maxMessageLength>
+		</syslogConfig>
 	</appender>
 
-	<appender name="nobackoutlog" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<Append>true</Append>
-		<File>${APP_LOG_HOME}/nobackoutlog.log</File>
-		<encoder>
-			<pattern>[%d, %-5p, %C:%L] - [%X{consumerId}, %X{callId}, %X{userId}] - %m%n</pattern>
-		</encoder>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${APP_LOG_HOME}/nobackoutlog.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
-			<maxHistory>45</maxHistory>
-		</rollingPolicy>
-	</appender>
+	<logger level="INFO" name="abacLogger" additivity="false">
+		<appender-ref ref="abacLogger"/>
+	</logger>
 
-	<appender name="debuglog" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<Append>true</Append>
-		<File>${APP_LOG_HOME}/debug.log</File>
-		<encoder>
-			<pattern>[%d, %-5p, %C:%L] - [%X{consumerId}, %X{callId}, %X{userId}] - %m%n</pattern>
-		</encoder>
-		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<maxIndex>10</maxIndex>
-			<FileNamePattern>${APP_LOG_HOME}/debug.%i.log.zip</FileNamePattern>
-		</rollingPolicy>
-		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-			<MaxFileSize>10MB</MaxFileSize>
-		</triggeringPolicy>
-	</appender>
-
-	<appender name="errorlog" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>${APP_LOG_HOME}/error.log</File>
-		<encoder>
-			<pattern>[%d, %-5p, %C:%L] - [%X{consumerId}, %X{callId}, %X{userId}] - %m%n</pattern>
-		</encoder>
-		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>WARN</level>
-		</filter>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${APP_LOG_HOME}/error.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
-			<maxHistory>45</maxHistory>
-		</rollingPolicy>
-	</appender>
-
-	<appender name="SYSLOG" class="com.spotify.logging.logback.MillisecondPrecisionSyslogAppender">
-		<syslogHost>localhost</syslogHost>
-		<facility>LOCAL1</facility>
-		<suffixPattern>varsel %mdc %logger{30} %m %n%rEx</suffixPattern>
-		<throwableExcluded>true</throwableExcluded>
-	</appender>
-
-	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-		<encoder>
-			<pattern>[%d, %-5p, %C:%L] - [%X{consumerId}, %X{callId}, %X{userId}] - %m%n</pattern>
+	<appender name="stdout_json" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
+			<throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+				<maxDepthPerThrowable>30</maxDepthPerThrowable>
+				<exclude>java\.util\.concurrent\..*</exclude>
+				<exclude>org\.apache\.tomcat\..*</exclude>
+				<exclude>org\.apache\.coyote\..*</exclude>
+				<exclude>org\.apache\.catalina\..*</exclude>
+				<exclude>org\.springframework\.web\..*</exclude>
+				<exclude>sun\.net\.www\..*</exclude>
+			</throwableConverter>
 		</encoder>
 	</appender>
 
-	<root level="${ROOT_LOG_LEVEL:-WARN}">
-		<appender-ref ref="errorlog"/>
-		<appender-ref ref="SYSLOG"/>
+	<root level="WARN">
+		<appender-ref ref="stdout_json"/>
 	</root>
 
+	<logger name="org.flywaydb" level="INFO" additivity="false">
+		<appender-ref ref="stdout_json"/>
+	</logger>
+
 	<logger name="no.nav.varsel" level="INFO" additivity="false">
-		<appender-ref ref="debuglog"/>
-		<appender-ref ref="SYSLOG"/>
+		<appender-ref ref="stdout_json"/>
 	</logger>
 
-	<logger name="no.nav.varsel.jms.nobackoutlog" level="INFO" additivity="false">
-		<appender-ref ref="nobackoutlog"/>
-		<appender-ref ref="SYSLOG"/>
-	</logger>
-
-	<logger name="no.nav.varsel.batch" additivity="false" level="INFO">
-		<appender-ref ref="BATCH-SIFT"/>
-		<appender-ref ref="SYSLOG"/>
-	</logger>
-
-	<logger name="no.nav.brevogarkiv.batch" additivity="false" level="INFO">
-		<appender-ref ref="BATCH-SIFT"/>
-		<appender-ref ref="SYSLOG"/>
-	</logger>
-
-	<logger name="org.springframework.batch" additivity="false" level="INFO">
-		<appender-ref ref="BATCH-SIFT"/>
-		<appender-ref ref="SYSLOG"/>
-	</logger>
-
-	<logger name="no.nav.modig.jaxws.handlers.ServiceLoggerHandler" additivity="false" level="INFO">
-		<appender-ref ref="servicelogger"/>
-		<appender-ref ref="SYSLOG"/>
-	</logger>
-
-</configuration>
+	<!--	 Hibernate deprecated warnings -->
+	<logger name="org.hibernate.orm.deprecation" additivity="false" level="ERROR"/>
+	<!--	 Remove noise due to wrong use of AddressingFeature -->
+	<logger name="org.apache.cxf.ws.addressing.ContextUtils" additivity="false" level="ERROR"/>
+	<logger name="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor" additivity="false" level="ERROR"/>
+	<logger name="org.apache.cxf.ws.addressing.soap.MAPCodec" additivity="false" level="ERROR"/>
+	<logger name="org.apache.wss4j.common.crypto.CryptoBase" additivity="false" level="ERROR"/>
+	<logger name="log4j.logger.org.apache.cxf.interceptor" additivity="false" level="ERROR"/>
+	<!--	 Remove spam from VeraPDF -->
+	<logger name="org.verapdf.pd.font.Encoding" additivity="false" level="ERROR"/>
+</included>
