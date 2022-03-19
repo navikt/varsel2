@@ -18,9 +18,7 @@
 		<module>ws-consumer</module>
 		<module>jms-producer</module>
 		<module>service</module>
-		<module>batch</module>
-		<module>batch-client</module>
-		<module>web</module>
+		<module>app</module>
 		<module>jee</module>
 		<module>ws-provider</module>
 	</modules>
@@ -40,7 +38,6 @@
 		<javax.activation.version>1.2.0</javax.activation.version>
 		<jaxb-impl.version>2.3.0</jaxb-impl.version>
 		<jaxb-api.version>2.3.1</jaxb-api.version>
-		<brevogarkiv-batch-common.version>3.0.8</brevogarkiv-batch-common.version>
 		<bootstrap.version>3.4.1</bootstrap.version>
 		<resteasy.version>2.3.10.Final</resteasy.version>
 		<nav-varsel-v1.version>1.1.1</nav-varsel-v1.version>
@@ -60,7 +57,6 @@
 		<usertype.extended.version>3.2.0.GA</usertype.extended.version>
 		<modig-log.version>1.1.2</modig-log.version>
 		<modig-log-filter.version>1.1.3</modig-log-filter.version>
-		<modig-batch-connector.version>1.1.1</modig-batch-connector.version>
 		<xml-apis.version>1.4.01</xml-apis.version>
 		<spring-retry.version>1.2.4.RELEASE</spring-retry.version>
 		<metrics-spring.version>3.1.3</metrics-spring.version>
@@ -86,8 +82,6 @@
 		<maven-ear-plugin.version>3.0.1</maven-ear-plugin.version>
 		<maven-toolchains.version>3.0.0</maven-toolchains.version>
 		<awaitility.version>4.0.3</awaitility.version>
-		<!--Jackson -->
-		<spring-batch.version>4.2.7.RELEASE</spring-batch.version>
 	</properties>
 
 	<dependencyManagement>
@@ -150,11 +144,6 @@
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
 				<artifactId>varsel-jms-producer</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
-				<artifactId>varsel-batch</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -404,13 +393,6 @@
 				<artifactId>resteasy-jaxrs</artifactId>
 				<version>${resteasy.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>no.nav.modig</groupId>
-				<artifactId>modig-batch-connector</artifactId>
-				<classifier>script-and-jar</classifier>
-				<type>zip</type>
-				<version>${modig-batch-connector.version}</version>
-			</dependency>
 
 			<!-- cxf -->
 			<dependency>
@@ -462,11 +444,6 @@
 				<groupId>xml-apis</groupId>
 				<artifactId>xml-apis</artifactId>
 				<version>${xml-apis.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.brevogarkiv</groupId>
-				<artifactId>brevogarkiv-batch-common</artifactId>
-				<version>${brevogarkiv-batch-common.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.spotify</groupId>

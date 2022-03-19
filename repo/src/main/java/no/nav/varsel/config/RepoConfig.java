@@ -1,7 +1,6 @@
 package no.nav.varsel.config;
 
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.domain.object.worktable.Bvarsel001WorkTable;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.repo.support.VarselRepoImpl;
 import org.hibernate.SessionFactory;
@@ -25,7 +24,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @Import({DataSourceConfig.class, TransactionConfig.class, MetricsConfig.class})
-@EntityScan(basePackageClasses = {Varselbestilling.class, Bvarsel001WorkTable.class})
+@EntityScan(basePackageClasses = {Varselbestilling.class})
 @EnableJpaRepositories(basePackageClasses = {VarselRepo.class, VarselRepoImpl.class})
 @EnableTransactionManagement
 public class RepoConfig {

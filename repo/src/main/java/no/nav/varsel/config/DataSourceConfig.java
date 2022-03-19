@@ -2,7 +2,10 @@ package no.nav.varsel.config;
 
 import no.nav.varsel.domain.object.Varselbestilling;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +29,7 @@ import static org.hibernate.cfg.AvailableSettings.JTA_PLATFORM;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration
+@EnableConfigurationProperties(DataSourceProperties.class)
 public class DataSourceConfig {
 
 	@Inject
@@ -36,13 +40,23 @@ public class DataSourceConfig {
 
 	@Bean(destroyMethod = "")
 	@Primary
-	public DataSource dataSource(@Value("${spring.datasource.jndi-name}") String jndi) {
-		return new JndiDataSourceLookup().getDataSource(jndi);
+	public DataSource dataSource(final DataSourceProperties dataSourceProperties) {
+		DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+		return dataSourceBuilder.driverClassName(dataSourceProperties.getDriverClassName())
+				.password(dataSourceProperties.getPassword())
+				.url(dataSourceProperties.getUrl())
+				.username(dataSourceProperties.getUsername())
+				.build();
 	}
 
 	@Bean(destroyMethod = "")
-	public DataSource nonxaDataSource(@Value("${nonxa.datasource.jndi-name}") String jndi) {
-		return new JndiDataSourceLookup().getDataSource(jndi);
+	public DataSource nonxaDataSource(final DataSourceProperties dataSourceProperties) {
+		DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+		return dataSourceBuilder.driverClassName(dataSourceProperties.getDriverClassName())
+				.password(dataSourceProperties.getPassword())
+				.url(dataSourceProperties.getUrl())
+				.username(dataSourceProperties.getUsername())
+				.build();
 	}
 
 	@Primary
