@@ -39,11 +39,6 @@ public class JmsPingProviderITest {
 	@Resource
 	private Map<QueueInfo, Queue> queueOverview;
 
-	@BeforeClass
-	public static void setUpStatic() throws Exception {
-		JmsTestConfig.mockJndi();
-	}
-
 	@Test
 	public void shouldStartcontext() throws Exception {
 

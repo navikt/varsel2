@@ -16,11 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ActiveProfiles({"itest", "local"})
 public class ApplicationTest {
 
-	@BeforeClass
-	public static void startup() throws Exception {
-		JmsTestConfig.mockJndi();
-	}
-
 	@Test
 	public void shouldStartContext() {}
 }

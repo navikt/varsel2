@@ -41,7 +41,6 @@ public abstract class AbstractWsProviderITest {
 		System.setProperty("no.nav.modig.security.systemuser.password", "passord");
 		TestCertificates.setupKeyAndTrustStore();
 		SubjectHandlerUtils.setInternBruker(USER_ID);
-		JmsTestConfig.mockJndi();
 	}
 
 	@Before

@@ -17,11 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ActiveProfiles({"itest", "local"})
 public class JmsConfigTest {
 
-	@BeforeClass
-	public static void setUpStatic() throws Exception {
-		JmsTestConfig.mockJndi();
-	}
-
 	@Test
 	public void shouldStartContext() throws Exception {
 		// itests using the config exists in jms consumer, ws provider, batch etc

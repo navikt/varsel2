@@ -41,11 +41,6 @@ public abstract class AbstractRestTest {
 	protected WebApplicationContext webApplicationContext;
 	protected MockMvc mockMvc;
 
-	@BeforeClass
-	public static void startup() throws Exception {
-		JmsTestConfig.mockJndi();
-	}
-
 	@Before
 	public final void setUpAbstract() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)

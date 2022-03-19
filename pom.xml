@@ -19,7 +19,6 @@
 		<module>jms-producer</module>
 		<module>service</module>
 		<module>app</module>
-		<module>jee</module>
 		<module>ws-provider</module>
 	</modules>
 
@@ -49,7 +48,6 @@
 		</nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>
 		<dokkat-schemas.version>6.0.3</dokkat-schemas.version>
 		<nav-brukervarsel-v1-tjenestespesifikasjon.version>1.0.4</nav-brukervarsel-v1-tjenestespesifikasjon.version>
-		<hibernate-jpa-2.1-api.version>1.0.2.Final</hibernate-jpa-2.1-api.version>
 		<guava.version>19.0</guava.version>
 		<commons-io.version>2.7</commons-io.version>
 		<commons-lang3.version>3.11</commons-lang3.version>
@@ -67,7 +65,7 @@
 		<jaxws-ri.version>2.3.2</jaxws-ri.version>
 		<javax.inject.version>1</javax.inject.version>
 		<jboss-jms-api_2.0_spec.version>2.0.0.Final</jboss-jms-api_2.0_spec.version>
-		<ojdbc.version>12.2.0.1</ojdbc.version>
+		<oracle.version>19.10.0.0</oracle.version>
 		<!-- test -->
 		<activemq-core.version>5.7.0</activemq-core.version>
 		<modig-testcertificates.version>1.2.5</modig-testcertificates.version>
@@ -81,6 +79,7 @@
 		<maven-ear-plugin.version>3.0.1</maven-ear-plugin.version>
 		<maven-toolchains.version>3.0.0</maven-toolchains.version>
 		<awaitility.version>4.0.3</awaitility.version>
+		<wmq.version>9.2.2.0</wmq.version>
 	</properties>
 
 	<dependencyManagement>
@@ -219,11 +218,6 @@
 				<version>${nav-brukervarsel-v1-tjenestespesifikasjon.version}</version>
 				<classifier>jaxws</classifier>
 			</dependency>
-			<dependency>
-				<groupId>org.hibernate.javax.persistence</groupId>
-				<artifactId>hibernate-jpa-2.1-api</artifactId>
-				<version>${hibernate-jpa-2.1-api.version}</version>
-			</dependency>
 
 			<!-- util -->
 			<dependency>
@@ -245,6 +239,11 @@
 				<groupId>com.ryantenney.metrics</groupId>
 				<artifactId>metrics-spring</artifactId>
 				<version>${metrics-spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ibm.mq</groupId>
+				<artifactId>com.ibm.mq.allclient</artifactId>
+				<version>${wmq.version}</version>
 			</dependency>
 
 			<!-- web -->
@@ -458,10 +457,9 @@
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.oracle</groupId>
-				<artifactId>ojdbc8</artifactId>
-				<version>${ojdbc.version}</version>
-				<scope>provided</scope>
+				<groupId>com.oracle.database.jdbc</groupId>
+				<artifactId>ojdbc10</artifactId>
+				<version>${oracle.version}</version>
 			</dependency>
 
 			<!-- test -->

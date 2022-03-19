@@ -44,11 +44,6 @@ import static wiremock.org.apache.http.entity.ContentType.APPLICATION_JSON;
 @AutoConfigureWireMock(port = 0)
 public abstract class AbstractConsumerJmsTest {
 
-	@BeforeClass
-	public static void setUpStatic() throws Exception {
-		JmsTestConfig.mockJndi();
-	}
-
 	@Inject
 	protected JmsTemplate jmsTemplate;
 

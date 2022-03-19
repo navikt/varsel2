@@ -5,6 +5,7 @@ import static java.lang.System.setProperty;
 import static no.nav.varsel.config.QueueConfig.getQueue;
 
 import com.atomikos.jms.AtomikosConnectionFactoryBean;
+import com.ibm.mq.jms.MQQueue;
 import org.apache.activemq.ActiveMQXAConnectionFactory;
 import org.apache.activemq.RedeliveryPolicy;
 import org.apache.activemq.broker.BrokerService;
@@ -50,32 +51,6 @@ public class JmsTestConfig {
 	public void setUp() {
 		setProperty("no.nav.modig.security.systemuser.username", "srvvarsel");
 		setProperty("no.nav.modig.security.systemuser.password", "passord");
-	}
-
-	public static void mockJndi() throws Exception {
-		setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.apache.naming.java.javaURLContextFactory");
-		setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
-		InitialContext ctx = new InitialContext();
-		try {
-			ctx.destroySubcontext("java:");
-		} catch (NamingException e) {
-			// ignore
-		}
-
-		ctx.createSubcontext("java:");
-		ctx.createSubcontext("java:/jboss");
-
-		// Queue mocks
-		ctx.bind("java:/jboss/bestillServicemelding", new ActiveMQQueue("mq_bestillServicemelding"));
-		ctx.bind("java:/jboss/varselKvittering", new ActiveMQQueue("mq_varselKvittering"));
-		ctx.bind("java:/jboss/varselutsending", new ActiveMQQueue("mq_varselutsending"));
-		ctx.bind("java:/jboss/bestillVarsel", new ActiveMQQueue("mq_bestillVarsel"));
-		ctx.bind("java:/jboss/revarselStopp", new ActiveMQQueue("mq_revarselStopp"));
-		ctx.bind("java:/jboss/bestillServicemeldingKontaktInfo", new ActiveMQQueue("mq_bestillServicemeldingKontaktInfo"));
-
-		// Test queues
-		ctx.bind("java:/jboss/backout", new ActiveMQQueue("backout"));
-		ctx.bind("java:/jboss/reply", new ActiveMQQueue("reply"));
 	}
 
 	/**
@@ -136,13 +111,13 @@ public class JmsTestConfig {
 	}
 
 	@Bean
-	public Queue replyQueue() {
-		return getQueue("java:/jboss/reply");
+	public Queue replyQueue() throws JMSException {
+		return new MQQueue("reply_queue");
 	}
 
 	@Bean
 	public ActiveMQQueue backoutQueue() {
-		return (ActiveMQQueue) getQueue("java:/jboss/backout");
+		return new ActiveMQQueue("backout_queue");
 	}
 
 }

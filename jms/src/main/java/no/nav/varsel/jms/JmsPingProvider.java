@@ -1,8 +1,8 @@
 package no.nav.varsel.jms;
 
+import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 import no.nav.varsel.config.support.QueueInfo;
 import no.nav.varsel.domain.to.Ping;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.UncategorizedJmsException;

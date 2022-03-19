@@ -12,9 +12,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc8</artifactId>
-			<scope>provided</scope>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc10</artifactId>
 		</dependency>
 	</dependencies>
 
