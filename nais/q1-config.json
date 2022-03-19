@@ -13,7 +13,7 @@
   "MQGATEWAY01_NAME": "MQLS01",
   "VARSELCHANNEL_NAME": "Q1_VARSELPRODUKSJON",
   "DKIF_WS_ENDPOINTURL": "https://dkif.dev.adeo.no/ws/DigitalKontaktinformasjon/v1",
-  "SECURITY_TOKEN_SERVICE_URL": "https://sts-q1.preprod.local/SecurityTokenServiceProvider/",
+  "SECURITYTOKENSERVICE_URL": "https://sts-q1.preprod.local/SecurityTokenServiceProvider/",
   "SECURITY_TOKEN_REST_SERVICE_URL": "https://security-token-service.nais.preprod.local/rest/v1/sts/token",
   "DOKKAT_VARSELINFO_REST_URL": "https://app-q1.adeo.no/dokkat/rest/varselinfo/v1",
   "PDL_URL": "https://pdl-api.nais.preprod.local/graphql",

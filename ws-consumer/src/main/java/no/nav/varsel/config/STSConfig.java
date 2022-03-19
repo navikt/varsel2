@@ -20,7 +20,7 @@ public class STSConfig {
     private final String serviceuserPassword;
 
     @Inject
-    public STSConfig(@Value("${securityTokenService.url}") String stsUrl,
+    public STSConfig(@Value("${securitytokenservice.url}") String stsUrl,
 					 @Value("${no.nav.modig.security.systemuser.username}") String serviceuserUsername,
                      @Value("${no.nav.modig.security.systemuser.password}") String serviceuserPassword) {
         this.stsUrl = stsUrl;
