@@ -12,11 +12,13 @@ then
     export  SPRING_DATASOURCE_PASSWORD=$(cat /var/run/secrets/nais.io/varselDS/password)
 fi
 
+if test -f /secrets/serviceuser/srvvarsel/username;
 then
     echo "Setting varsel_serviceuser_username"
     export VARSEL_SERVICEUSER_USERNAME=$(cat /secrets/serviceuser/srvvarsel/username)
 fi
-if test -f /secrets/serviceuser/srvsafselvbetjening/password;
+
+if test -f /secrets/serviceuser/srvvarsel/password;
 then
     echo "Setting varsel_serviceuser_password"
     export VARSEL_SERVICEUSER_PASSWORD=$(cat /secrets/serviceuser/srvvarsel/password)
