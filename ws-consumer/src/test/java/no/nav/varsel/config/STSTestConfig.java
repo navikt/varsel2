@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Profile("itest")
 public class STSTestConfig extends STSConfig {
 
-    public STSTestConfig(@Value("${securityTokenService.url}") String stsUrl,
+    public STSTestConfig(@Value("${securitytokenservice.url}") String stsUrl,
                          @Value("${no.nav.modig.security.systemuser.username}") String serviceuserUsername,
                          @Value("${no.nav.modig.security.systemuser.password}") String serviceuserPassword) {
         super(stsUrl, serviceuserUsername, serviceuserPassword);
