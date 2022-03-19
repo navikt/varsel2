@@ -7,13 +7,15 @@ metadata:
     team: teamdokumenthandtering
 spec:
   env:
+    - name: SPRING_DATASOURCE_URL
+      value: {{ SPRING_DATASOURCE_URL }}
   image: {{ image }}
   ingresses:
     {{#each INGRESSES}}
        - {{ this }}
            {{/each}}
   liveness:
-    path: brevweb/isAlive
+    path: varsel/isAlive
     port: 8080
     initialDelay: 30
     failureThreshold: 10
@@ -22,7 +24,7 @@ spec:
     enabled: true
     path: /actuator/prometheus
   readiness:
-    path: brevweb/isReady
+    path: varsel/isReady
     port: 8080
     initialDelay: 30
     timeout: 3
@@ -39,3 +41,5 @@ spec:
   vault:
     enabled: true
     paths:
+      - kvPath: {{ VARSEL_DS }}
+        mountPath: /var/run/secrets/nais.io/varselDS

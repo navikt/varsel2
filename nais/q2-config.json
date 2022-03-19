@@ -1,9 +1,11 @@
 {
   "NAMESPACE": "teamdokumenthandtering",
-  "APP_NAME": "varsel2-q1",
-  "APPD_NAME": "varsel2-q1",
+  "APP_NAME": "varsel2",
+  "APPD_NAME": "varsel2",
   "INGRESSES": [
-    "https://varsel2-q1.dev.intern.nav.no",
-    "https://varsel2-q1.dev.adeo.no"
-  ]
+    "https://varsel2.dev.intern.nav.no",
+    "https://varsel2.dev.adeo.no"
+  ],
+  "SPRING_DATASOURCE_URL": "jdbc:oracle:thin:@a01dbfl032.adeo.no:1521/varsel_q2",
+  "VARSEL_DS": "/oracle/data/dev/creds/varsel_q2-user"
 }
