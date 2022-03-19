@@ -1,11 +1,9 @@
 package no.nav.varsel.config;
 
 import no.nav.varsel.service.AktoerService;
-import no.nav.varsel.service.BestillVarselService;
 import no.nav.varsel.service.BrukervarselV1Service;
 import no.nav.varsel.service.MottaVarselKvitteringService;
 import no.nav.varsel.service.ServicemeldingService;
-import no.nav.varsel.service.StoppReVarselService;
 import no.nav.varsel.service.VarselFletter;
 import no.nav.varsel.service.interfaces.BrukervarselService;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
@@ -52,16 +50,6 @@ public class ServiceConfig {
 	@Bean
 	public AktoerService aktoerService() {
 		return new AktoerService();
-	}
-
-	@Bean
-	public BestillVarselService bestillVarselService() {
-		return new BestillVarselService();
-	}
-
-	@Bean
-	public StoppReVarselService stoppReVarselService() {
-		return new StoppReVarselService();
 	}
 
 	@Bean

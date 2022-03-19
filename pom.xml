@@ -43,7 +43,6 @@
 		<nav-varsel-v1.version>1.1.1</nav-varsel-v1.version>
 		<nav-virksomhet-varselutsending-v2.version>2.0.3</nav-virksomhet-varselutsending-v2.version>
 		<nav-varselKvittering-v1.version>1.0.0</nav-varselKvittering-v1.version>
-		<nav-stoppReVarsel-v1.version>1.0.1</nav-stoppReVarsel-v1.version>
 		<nav-digitalKontaktinformasjon-v1.version>2.0.0</nav-digitalKontaktinformasjon-v1.version>
 		<nav-virksomhet-varselMedHandling-v1.version>1.0.0</nav-virksomhet-varselMedHandling-v1.version>
 		<nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>1.0.0
@@ -179,12 +178,6 @@
 				<groupId>no.nav.meldinger.virksomhet</groupId>
 				<artifactId>nav-virksomhet-varselKvittering-v1-meldingsdefinisjon</artifactId>
 				<version>${nav-varselKvittering-v1.version}</version>
-				<classifier>jaxb</classifier>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.meldinger.virksomhet</groupId>
-				<artifactId>nav-virksomhet-stoppReVarsel-v1-meldingsdefinisjon</artifactId>
-				<version>${nav-stoppReVarsel-v1.version}</version>
 				<classifier>jaxb</classifier>
 			</dependency>
 			<dependency>

@@ -1,7 +1,6 @@
 package no.nav.varsel.config;
 
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
-import no.nav.melding.virksomhet.stopprevarsel.v1.stopprevarsel.StoppReVarsel;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
@@ -110,7 +109,6 @@ public class JmsConfig {
 				Varselutsending.class.getPackage().getName(),
 				VarselKvittering.class.getPackage().getName(),
 				VarselMedHandling.class.getPackage().getName(),
-				StoppReVarsel.class.getPackage().getName(),
 				ServicemeldingMedKontaktinformasjon.class.getPackage().getName(),
 				JmsReply.class.getPackage().getName()
 		);
