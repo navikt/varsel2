@@ -37,8 +37,8 @@ public abstract class AbstractWsProviderITest {
 	@BeforeClass
 	public static void setUpStatic() throws Exception {
 		System.setProperty("no.nav.modig.core.context.subjectHandlerImplementationClass", ThreadLocalSubjectHandler.class.getName());
-		System.setProperty("no.nav.modig.security.systemuser.username", "varsel");
-		System.setProperty("no.nav.modig.security.systemuser.password", "passord");
+		System.setProperty("varsel.serviceuser.username", "varsel");
+		System.setProperty("varsel.serviceuser.password", "passord");
 		TestCertificates.setupKeyAndTrustStore();
 		SubjectHandlerUtils.setInternBruker(USER_ID);
 	}

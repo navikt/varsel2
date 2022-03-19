@@ -77,3 +77,5 @@ spec:
     paths:
       - kvPath: {{ VARSEL_DS }}
         mountPath: /var/run/secrets/nais.io/varselDS
+      - kvPath: {{SERVICEUSER_VAULT_PATH}}
+        mountPath: "/secrets/serviceuser/srvvarsel"

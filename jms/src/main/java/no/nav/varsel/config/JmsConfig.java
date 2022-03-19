@@ -53,9 +53,9 @@ public class JmsConfig {
 	@Value("${varsel.jms.consumer.max}")
 	private Integer maximumConsumers;
 
-	@Value("${no.nav.modig.security.systemuser.username}")
+	@Value("${varsel.serviceuser.username}")
 	private String srvVarselUsername;
-	@Value("${no.nav.modig.security.systemuser.password}")
+	@Value("${varsel.serviceuser.password}")
 	private String srvVarselPassword;
 
 	private static final Logger LOG = LoggerFactory.getLogger(JmsConfig.class);

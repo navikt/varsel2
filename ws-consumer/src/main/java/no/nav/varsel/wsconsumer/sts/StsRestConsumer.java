@@ -32,8 +32,8 @@ public class StsRestConsumer {
 	public StsRestConsumer(
 			RestTemplateBuilder restTemplate,
 			@Value("${securityTokenRestService.url}") String stsUrl,
-			@Value("${no.nav.modig.security.systemuser.username}") String serviceuserUsername,
-			@Value("${no.nav.modig.security.systemuser.password}") String serviceuserPassword
+			@Value("${varsel.serviceuser.username}") String serviceuserUsername,
+			@Value("${varsel.serviceuser.password}") String serviceuserPassword
 	) {
 		this.stsUrl = stsUrl;
 		this.restTemplate = restTemplate

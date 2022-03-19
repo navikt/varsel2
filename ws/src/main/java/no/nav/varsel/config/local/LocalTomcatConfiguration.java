@@ -18,8 +18,8 @@ public class LocalTomcatConfiguration {
 	public LocalTomcatConfiguration() throws IOException {
 		System.setProperty("no.nav.modig.core.context.subjectHandlerImplementationClass", TomcatSubjectHandler.class.getName());
 		System.setProperty("no.nav.modig.security.sts.url", "https://e34jbsl00713.devillo.no:8443/SecurityTokenServiceProvider");
-		System.setProperty("no.nav.modig.security.systemuser.username", "srvvarsel_u");
-		System.setProperty("no.nav.modig.security.systemuser.password", "CktxoGj4cc1LYQG");
+		System.setProperty("varsel.serviceuser.username", "srvvarsel_u");
+		System.setProperty("varsel.serviceuser.password", "CktxoGj4cc1LYQG");
 		TestCertificates.setupKeyAndTrustStore();
 	}
 }

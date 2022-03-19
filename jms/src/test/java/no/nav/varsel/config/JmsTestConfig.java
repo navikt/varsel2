@@ -48,8 +48,8 @@ public class JmsTestConfig {
 
 	@Before
 	public void setUp() {
-		setProperty("no.nav.modig.security.systemuser.username", "srvvarsel");
-		setProperty("no.nav.modig.security.systemuser.password", "passord");
+		setProperty("varsel.serviceuser.username", "srvvarsel");
+		setProperty("varsel.serviceuser.password", "passord");
 	}
 
 	/**
@@ -59,8 +59,8 @@ public class JmsTestConfig {
 	public ConnectionFactory connectionFactory(ConnectionFactory atomikosConnectionFactoryBean) throws JMSException {
 		UserCredentialsConnectionFactoryAdapter adapter = new UserCredentialsConnectionFactoryAdapter();
 		adapter.setTargetConnectionFactory(atomikosConnectionFactoryBean);
-		adapter.setUsername(getProperty("no.nav.modig.security.systemuser.username"));
-		adapter.setPassword(getProperty("no.nav.modig.security.systemuser.password"));
+		adapter.setUsername(getProperty("varsel.serviceuser.username"));
+		adapter.setPassword(getProperty("varsel.serviceuser.password"));
 		return adapter;
 	}
 

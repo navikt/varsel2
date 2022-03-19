@@ -24,9 +24,9 @@ public class RestConsumerConfig {
 
 	public static final int TIMEOUT = 30_000;
 
-	@Value("${no.nav.modig.security.systemuser.username}")
+	@Value("${varsel.serviceuser.username}")
 	private String srvVarselUsername;
-	@Value("${no.nav.modig.security.systemuser.password}")
+	@Value("${varsel.serviceuser.password}")
 	private String srvVarselPassword;
 
 	@Bean

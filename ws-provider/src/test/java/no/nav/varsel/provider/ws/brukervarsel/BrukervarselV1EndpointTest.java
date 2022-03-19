@@ -42,7 +42,7 @@ public class BrukervarselV1EndpointTest {
 
 	@BeforeClass
 	public static void setUpSecurity() throws Exception {
-		System.setProperty("no.nav.modig.security.systemuser.username", "Varsel");
+		System.setProperty("varsel.serviceuser.username", "Varsel");
 		System.setProperty("no.nav.modig.core.context.subjectHandlerImplementationClass", ThreadLocalSubjectHandler.class.getName());
 	}
 
