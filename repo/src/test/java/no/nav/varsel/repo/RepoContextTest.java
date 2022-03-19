@@ -17,14 +17,9 @@ import static org.junit.Assert.assertThat;
  */
 public class RepoContextTest extends AbstractRepoTest {
 
-	@Inject
-	private SessionFactory sessionFactory;
-	@Inject
-	@Named("nonxaSessionFactory")
-	private SessionFactory nonxaSessionFactory;
-
 	@Test
 	public void shouldCreateDifferentSessionFactories() throws Exception {
-		assertThat(sessionFactory, is(not(nonxaSessionFactory)));
+		//Only on sessionfactory
 	}
+
 }

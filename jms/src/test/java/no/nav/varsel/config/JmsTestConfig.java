@@ -2,7 +2,6 @@ package no.nav.varsel.config;
 
 import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
-import static no.nav.varsel.config.QueueConfig.getQueue;
 
 import com.atomikos.jms.AtomikosConnectionFactoryBean;
 import com.ibm.mq.jms.MQQueue;
@@ -40,7 +39,7 @@ import java.util.UUID;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class, DataSourceAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class})
 @Import({JmsConfig.class})
 @Configuration
 public class JmsTestConfig {

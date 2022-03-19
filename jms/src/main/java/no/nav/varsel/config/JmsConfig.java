@@ -1,10 +1,13 @@
 package no.nav.varsel.config;
 
+import com.ibm.mq.jms.MQConnectionFactory;
+import com.ibm.msg.client.wmq.WMQConstants;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
+import no.nav.varsel.config.alias.MqGatewayProperties;
 import no.nav.varsel.jms.JmsPingProvider;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import org.slf4j.Logger;
@@ -116,8 +119,13 @@ public class JmsConfig {
 	}
 
 	@Bean
-	public ConnectionFactory connectionFactory() {
-		ConnectionFactory connectionFactory = getJndiObject("java:/jboss/mqConnectionFactory", ConnectionFactory.class);
+	public ConnectionFactory connectionFactory(final MqGatewayProperties mqGatewayAlias, final @Value("${varselchannel.name}") String channelName) throws JMSException {
+		MQConnectionFactory connectionFactory = new MQConnectionFactory();
+		connectionFactory.setHostName(mqGatewayAlias.getHostname());
+		connectionFactory.setPort(mqGatewayAlias.getPort());
+		connectionFactory.setChannel(channelName);
+		connectionFactory.setQueueManager(mqGatewayAlias.getName());
+		connectionFactory.setTransportType(WMQConstants.WMQ_CM_CLIENT);
 		UserCredentialsConnectionFactoryAdapter adapter = new UserCredentialsConnectionFactoryAdapter();
 		adapter.setTargetConnectionFactory(connectionFactory);
 		adapter.setUsername(srvVarselUsername);
@@ -151,16 +159,4 @@ public class JmsConfig {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T getJndiObject(String jndiName, Class<T> expectedType) {
-		JndiObjectFactoryBean factory = new JndiObjectFactoryBean();
-		factory.setJndiName(jndiName);
-		factory.setExpectedType(expectedType);
-		try {
-			factory.afterPropertiesSet();
-		} catch (IllegalArgumentException | NamingException e) {
-			throw new RuntimeException(e);
-		}
-		return (T) factory.getObject();
-	}
 }

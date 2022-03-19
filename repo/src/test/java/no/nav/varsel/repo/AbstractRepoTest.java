@@ -29,7 +29,7 @@ public abstract class AbstractRepoTest {
 	protected VarselbestillingRepo varselbestillingRepo;
 	@Inject
 	protected VarselRepo varselRepo;
-	@PersistenceContext(unitName = "primary")
+	@PersistenceContext
 	protected EntityManager entityManager;
 
 	@Before

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 public class VarselbestillingRepoImpl implements VarselbestillingRepoCustom {
 
-	@PersistenceContext(unitName = "primary")
+	@PersistenceContext
 	private EntityManager entityManager;
 
 	@Override

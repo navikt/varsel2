@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
  */
 public class VarselRepoImpl implements VarselRepoCustom {
 
-	@PersistenceContext(unitName = "primary")
+	@PersistenceContext
 	private EntityManager entityManager;
 
 	@Override

@@ -1,6 +1,5 @@
 package no.nav.varsel.config;
 
-import static no.nav.varsel.config.JmsConfig.getJndiObject;
 import static no.nav.varsel.config.support.QueueInfo.BESTILL_SERVICEMELDING;
 import static no.nav.varsel.config.support.QueueInfo.BESTILL_SERVICEMELDING_KONTAKTINFO;
 import static no.nav.varsel.config.support.QueueInfo.BESTILL_VARSEL;
@@ -67,7 +66,4 @@ public class QueueConfig {
 		return map;
 	}
 
-	static Queue getQueue(String jndi) {
-		return getJndiObject(jndi, Queue.class);
-	}
 }

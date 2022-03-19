@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author Ugur Alpay Cenar, Visma Consulting.
  */
 @Component
-@Profile("remote")
+@Profile("nais")
 public class STSConfig {
 
     private final String stsUrl;

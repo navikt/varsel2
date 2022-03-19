@@ -23,34 +23,12 @@ import javax.sql.DataSource;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration
-@Import({DataSourceConfig.class, TransactionConfig.class, MetricsConfig.class})
+@Import({TransactionConfig.class, MetricsConfig.class})
 @EntityScan(basePackageClasses = {Varselbestilling.class})
 @EnableJpaRepositories(basePackageClasses = {VarselRepo.class, VarselRepoImpl.class})
 @EnableTransactionManagement
 public class RepoConfig {
 
-	@Bean
-	public SessionFactory sessionFactory(@Named("entityManagerFactory") EntityManagerFactory emf) {
-		return emf.unwrap(SessionFactory.class);
-	}
 
-	/**
-	 * Sessionfactory for nonxa entity manager, used by hibernate cursors in batch, cursor used on same datasource that is
-	 * committed in spring batch doesnt work with jboss/oracle/xa
-	 */
-	@Bean
-	public SessionFactory nonxaSessionFactory(@Named("nonxaEntityManagerFactory") EntityManagerFactory emf) {
-		return emf.unwrap(SessionFactory.class);
-	}
-
-	@Bean
-	public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-		return new JdbcTemplate(dataSource);
-	}
-
-	@Bean
-	public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
-		return new NamedParameterJdbcTemplate(dataSource);
-	}
 
 }
