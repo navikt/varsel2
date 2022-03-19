@@ -3,6 +3,8 @@ package no.nav.varsel;
 import com.codahale.metrics.servlets.MetricsServlet;
 import no.nav.varsel.config.AppConfig;
 import org.apache.cxf.transport.servlet.CXFServlet;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +23,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Import(AppConfig.class)
 @EnableRetry
 public class Application extends SpringBootServletInitializer {
+
+	public static void main(String[] args) {
+		try {
+			System.setProperty("no.nav.modig.core.context.subjectHandlerImplementationClass", no.nav.modig.core.context.WlsSubjectHandler.class.getName());
+			SpringApplication.run(Application.class, args);
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 
 	@Bean
 	public WebMvcConfigurerAdapter dispatcherServletConfigurer() {
