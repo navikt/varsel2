@@ -1,14 +1,7 @@
 package no.nav.varsel.config;
 
-import static no.nav.varsel.config.support.QueueInfo.BESTILL_SERVICEMELDING;
-import static no.nav.varsel.config.support.QueueInfo.BESTILL_SERVICEMELDING_KONTAKTINFO;
-import static no.nav.varsel.config.support.QueueInfo.BESTILL_VARSEL;
-import static no.nav.varsel.config.support.QueueInfo.REVARSEL_STOPP;
-import static no.nav.varsel.config.support.QueueInfo.VARSELUTSENDING;
-import static no.nav.varsel.config.support.QueueInfo.VARSEL_KVITTERING;
-import com.ibm.mq.jms.MQQueue;
-
 import com.google.common.collect.Maps;
+import com.ibm.mq.jms.MQQueue;
 import no.nav.varsel.config.support.QueueInfo;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +12,11 @@ import javax.jms.JMSException;
 import javax.jms.Queue;
 import java.util.HashMap;
 import java.util.Map;
+
+import static no.nav.varsel.config.support.QueueInfo.BESTILL_SERVICEMELDING;
+import static no.nav.varsel.config.support.QueueInfo.BESTILL_SERVICEMELDING_KONTAKTINFO;
+import static no.nav.varsel.config.support.QueueInfo.VARSELUTSENDING;
+import static no.nav.varsel.config.support.QueueInfo.VARSEL_KVITTERING;
 
 /**
  * Spring config for queues
