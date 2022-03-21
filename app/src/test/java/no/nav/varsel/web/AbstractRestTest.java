@@ -2,11 +2,9 @@ package no.nav.varsel.web;
 
 import no.nav.varsel.config.JmsTestConfig;
 import no.nav.varsel.config.RepoTestConfig;
-import no.nav.varsel.config.local.LocalTomcatConfiguration;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
@@ -28,7 +26,6 @@ import javax.inject.Inject;
 @RunWith(SpringJUnit4ClassRunner.class)
 @AutoConfigureWireMock(port = 0)
 @SpringBootTest(classes = {
-		LocalTomcatConfiguration.class,
 		JmsTestConfig.class,
 		RepoTestConfig.class
 })
