@@ -26,7 +26,6 @@ public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		try {
-			System.setProperty("no.nav.modig.core.context.subjectHandlerImplementationClass", no.nav.modig.core.context.WlsSubjectHandler.class.getName());
 			SpringApplication.run(Application.class, args);
 		}catch (Exception e) {
 			e.printStackTrace();
