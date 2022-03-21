@@ -1,4 +1,0 @@
-<jboss-web>
-	<context-root>varsel</context-root>
-	<security-domain>java:/jaas/NavSAML</security-domain>
-</jboss-web>

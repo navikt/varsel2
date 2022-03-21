@@ -1,6 +1,7 @@
 package no.nav.varsel;
 
 import com.codahale.metrics.servlets.MetricsServlet;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.varsel.config.AppConfig;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.boot.SpringApplication;
@@ -22,13 +23,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 @Import(AppConfig.class)
 @EnableRetry
+@Slf4j
 public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		try {
 			SpringApplication.run(Application.class, args);
 		}catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 			throw e;
 		}
 	}
