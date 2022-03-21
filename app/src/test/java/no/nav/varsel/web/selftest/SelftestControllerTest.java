@@ -51,7 +51,7 @@ public class SelftestControllerTest extends AbstractRestTest {
 				.andExpect(jsonPath("$.aggregateResultText", is(ERROR.name())))
 				.andExpect(jsonPath("$.timestamp", notNullValue()))
 
-				.andExpect(jsonPath("$.checks", hasSize(4)))
+				.andExpect(jsonPath("$.checks", hasSize(3)))
 				.andExpect(jsonPath("$.checks[0].type", is("Datasource")))
 				.andExpect(jsonPath("$.checks[0].endpoint", is("varselDS")))
 				.andExpect(jsonPath("$.checks[0].address", nullValue()))
@@ -60,15 +60,8 @@ public class SelftestControllerTest extends AbstractRestTest {
 				.andExpect(jsonPath("$.checks[0].stackTrace", nullValue()))
 				.andExpect(jsonPath("$.checks[0].resultText", is(OK.name())))
 				.andExpect(jsonPath("$.checks[0].result", is(OK.auraCode)))
-				.andExpect(jsonPath("$.checks[0].responseTime", notNullValue()))
+				.andExpect(jsonPath("$.checks[0].responseTime", notNullValue()));
 
-				.andExpect(jsonPath("$.checks[1].type", is("Rest")))
-				.andExpect(jsonPath("$.checks[1].endpoint", is("Batch")))
-				.andExpect(jsonPath("$.checks[1].address", is("https://" + getServerAddress() + ":8443/varsel/batch/ping")))
-				.andExpect(jsonPath("$.checks[1].errorMessage", notNullValue()))
-				.andExpect(jsonPath("$.checks[1].stackTrace", notNullValue()))
-				.andExpect(jsonPath("$.checks[1].resultText", is(ERROR.name())))
-				.andExpect(jsonPath("$.checks[1].result", is(ERROR.auraCode)));
 	}
 
 	@Test
