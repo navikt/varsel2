@@ -1,16 +1,20 @@
 package no.nav.varsel.service;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.collect.Maps;
 import no.nav.varsel.service.support.exception.functional.FletteparameterMissingException;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import no.nav.varsel.service.support.exception.functional.InvalidDateTimeFormatException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.api.parallel.Execution;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,10 +35,7 @@ public class VarselFletterTest {
 
 	private VarselFletter fletter = new VarselFletter();
 
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
-
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		fletter.setVarselUrlFromFasit(URL_FROM_FASIT);
 	}
@@ -69,29 +70,32 @@ public class VarselFletterTest {
 
 	@Test
 	public void shouldThrowIfInvalidTimePattern() throws Exception {
-		expectedException.expectMessage("Invalid format for dateTime pattern for varsel, parameter tid dd.PP.yyyy");
 		Map<String, String> map = new HashMap<>();
 		map.put("tid", TIME);
-		fletter.weaveText("Dette er en beskjed om at du har et møte {tid:dd.PP.yyyy}", map);
+
+		Executable executable = () -> fletter.weaveText("Dette er en beskjed om at du har et møte {tid:dd.PP.yyyy}", map);
+		Exception exception = Assertions.assertThrows(InvalidDateTimeFormatException.class, executable);
+		assertTrue(exception.getMessage().contains("Invalid format for dateTime pattern for varsel, parameter tid dd.PP.yyyy"));
 	}
 
 	@Test
 	public void shouldThrowIfInvalidTime() throws Exception {
-		expectedException.expectMessage("Invalid format for dateTime for varsel, parameter tid 2015-07-T14:30:00");
 		Map<String, String> map = new HashMap<>();
 		map.put("tid", "2015-07-T14:30:00");
-		fletter.weaveText("Dette er en beskjed om at du har et møte {tid:dd.PP.yyyy}", map);
+		Executable executable = () -> fletter.weaveText("Dette er en beskjed om at du har et møte {tid:dd.PP.yyyy}", map);
+
+		Exception exception = Assertions.assertThrows(InvalidDateTimeFormatException.class, executable);
+		assertTrue(exception.getMessage().contains("Invalid format for dateTime for varsel, parameter tid 2015-07-T14:30:00"));
 	}
 
 	@Test
 	public void shouldThrowIfMissingParameter() throws Exception {
-		expectedException.expect(FletteparameterMissingException.class);
-		expectedException.expectMessage("missing: navn tema tid");
-
 		Map<String, String> map = new HashMap<>();
 		map.put("aarstall", AAR);
 
-		fletter.weaveText("dette er en tekst om {navn} i {aarstall} angående {tema} {tid:dd.MM.yyyy}", map);
+		Executable executable = () -> fletter.weaveText("dette er en tekst om {navn} i {aarstall} angående {tema} {tid:dd.MM.yyyy}", map);
+		Exception exception = Assertions.assertThrows(FletteparameterMissingException.class, executable);
+		assertTrue(exception.getMessage().contains("missing: navn tema tid"));
 	}
 
 	@Test
@@ -146,13 +150,12 @@ public class VarselFletterTest {
 
 	@Test
 	public void shouldThrowIfMissingParameterInVarselUrl() throws Exception {
-		expectedException.expect(FletteparameterMissingException.class);
-		expectedException.expectMessage("missing: param2");
-
 		Map<String, String> map = new HashMap<>();
 		map.put("param1", "p1");
 
-		fletter.weaveText("http://nav.no/{param1}/{param2}", map);
+		Executable executable = () -> fletter.weaveText("http://nav.no/{param1}/{param2}", map);
+		Exception exception = Assertions.assertThrows(FletteparameterMissingException.class, executable);
+		assertTrue(exception.getMessage().contains("missing: param2"));
 	}
 
 	@Test

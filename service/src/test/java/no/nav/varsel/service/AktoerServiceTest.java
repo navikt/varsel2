@@ -6,20 +6,23 @@ import no.nav.varsel.service.to.AktoerBestillingTo;
 import no.nav.varsel.wsconsumer.pdl.PdlIdentConsumer;
 import no.nav.varsel.wsconsumer.pdl.support.PdlFunctionalException;
 import no.nav.varsel.wsconsumer.pdl.support.PersonIkkeFunnetException;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
 import static no.nav.varsel.repo.TestdataUtil.FNR;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AktoerServiceTest {
 
 	@Mock
@@ -50,29 +53,31 @@ public class AktoerServiceTest {
 		assertThat(missingAktoer.getMottakerType(), is(MottakerType.PERSON));
 	}
 
-	@Test(expected = PersonIkkeFunnetException.class)
+	@Test
 	public void shouldThrowAktoerIkkeFunnetExceptionForFunksjonellFeilAktoer() {
 		when(pdlIdentConsumer.hentFolkeregisterIdent(eq(AKTOR_ID)))
 				.thenThrow(new PersonIkkeFunnetException(""));
-
 		AktoerBestillingTo aktoerBestillingTo = createAktoerBestillingAktoerId();
-		aktoerService.findMissingAktoer(aktoerBestillingTo);
+		Executable executable = () -> aktoerService.findMissingAktoer(aktoerBestillingTo);
+		Assertions.assertThrows(PersonIkkeFunnetException.class, executable);
 	}
 
-	@Test(expected = RuntimeException.class)
+	@Test
 	public void shouldThrowExceptionWhenArithmeticExceptionIsThrown() {
 		when(pdlIdentConsumer.hentAktoerId(FNR)).thenThrow(new RuntimeException("teknisk feil"));
-
 		AktoerBestillingTo aktoerBestillingTo = createAktoerBestillingPersonIdent();
-		aktoerService.findMissingAktoer(aktoerBestillingTo);
+		Executable executable = () -> aktoerService.findMissingAktoer(aktoerBestillingTo);
+		Assertions.assertThrows(RuntimeException.class, executable);
 	}
 
-	@Test(expected = PdlFunctionalException.class)
+	@Test
 	public void shouldThrowExceptionIfPdlFunctionalExceptionIsThrown() {
 		when(pdlIdentConsumer.hentFolkeregisterIdent(eq(AKTOR_ID))).thenThrow(PdlFunctionalException.class);
 
 		AktoerBestillingTo aktoerBestillingTo = createAktoerBestillingAktoerId();
-		aktoerService.findMissingAktoer(aktoerBestillingTo);
+
+		Executable executable = () -> aktoerService.findMissingAktoer(aktoerBestillingTo);
+		Assertions.assertThrows(PdlFunctionalException.class, executable);
 	}
 
 	private AktoerBestillingTo createAktoerBestillingPersonIdent() {

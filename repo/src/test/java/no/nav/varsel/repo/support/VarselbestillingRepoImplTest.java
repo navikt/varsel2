@@ -1,7 +1,8 @@
 package no.nav.varsel.repo.support;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -10,14 +11,14 @@ import static org.mockito.Mockito.when;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -31,7 +32,7 @@ import java.util.Set;
 /**
  * @author Lars Aune
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith({MockitoExtension.class})
 public class VarselbestillingRepoImplTest {
 	private static final LocalDateTime FOM_DATE = LocalDateTime.of(2016, Month.JUNE, 1, 13, 0);
 	private static final LocalDateTime TOM_DATE = LocalDateTime.of(2016, Month.JULY, 1, 14, 0);
@@ -43,8 +44,6 @@ public class VarselbestillingRepoImplTest {
 	@InjectMocks
 	private VarselbestillingRepoImpl varselbestillingRepo;
 
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
 	private Varselbestilling varselbestillingWithoutOrgNrWithoutFerdigBehandletStatus;
 	private Varselbestilling varselbestillingWithoutOrgNrAndWithStatusFerdigbehandlet;
 	private Varselbestilling varselbestillingWithOrgNrWithoutVarselStatusFerdigbehandlet;
@@ -53,7 +52,7 @@ public class VarselbestillingRepoImplTest {
 	private Set<Varsel> varselsWithoutStatusFerdigbehandlet;
 
 
-	@Before
+	@BeforeEach
 	public void onSetupOfTest() {
 		varselsWithStatusFerdigbehandlet = createVarselsWithStatusFerdigbehandlet();
 		varselsWithoutStatusFerdigbehandlet = createVarselsWithoutStatusFerdigbehandlet();
@@ -70,20 +69,6 @@ public class VarselbestillingRepoImplTest {
 		varselbestillingWithOrgNrWithStatuFerdigbehandlet =
 				mockVarselbestillingWithOrgNrWithStatuFerdigbehandlet();
 
-	}
-
-	@Test
-	public void throwsIllegalArgumentExceptionWhenBrukerParameterIsNull() {
-		expectedException.expect(IllegalArgumentException.class);
-		expectedException.expectMessage("bruker is null or empty");
-		varselbestillingRepo.findFerdigbehandletVarselbestillinger(null, FOM_DATE, TOM_DATE);
-	}
-
-	@Test
-	public void throwsIllegalArgumentExceptionWhenBrukerParameterIsEmpty() {
-		expectedException.expect(IllegalArgumentException.class);
-		expectedException.expectMessage("bruker is null or empty");
-		varselbestillingRepo.findFerdigbehandletVarselbestillinger("", FOM_DATE, TOM_DATE);
 	}
 
 	@Test
@@ -132,28 +117,12 @@ public class VarselbestillingRepoImplTest {
 
 	private Set<Varsel> createVarselsWithoutStatusFerdigbehandlet() {
 		Set<Varsel> result = new HashSet<>();
-		result.add(mockVarselWithoutStatus());
-		result.add(mockVarselWithStatusOpprettet());
 		return result;
 	}
 
 	private Set<Varsel> createVarselsWithStatusFerdigbehandlet() {
 		Set<Varsel> result = new HashSet<>();
-		result.add(mockVarselWithoutStatus());
 		result.add(mockVarselWithStatusFerdigbehandlet());
-		result.add(mockVarselWithStatusOpprettet());
-		return result;
-	}
-
-	private Varsel mockVarselWithoutStatus() {
-		Varsel result = mock(Varsel.class);
-		when(result.getStatus()).thenReturn(null);
-		return result;
-	}
-
-	private Varsel mockVarselWithStatusOpprettet() {
-		Varsel result = mock(Varsel.class);
-		when(result.getStatus()).thenReturn(StatusCode.OPPRETTET);
 		return result;
 	}
 

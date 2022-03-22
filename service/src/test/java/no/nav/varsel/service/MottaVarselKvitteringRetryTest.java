@@ -4,9 +4,8 @@ import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringTo;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +29,6 @@ import static org.mockito.Mockito.when;
  * @author Ugur Alpay Cenar, Visma Consulting.
  */
 @WebAppConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {MottaVarselKvitteringService.class, MottaVarselKvitteringRetryTest.Config.class})
 @ActiveProfiles({"itest", "local"})
 public class MottaVarselKvitteringRetryTest {
@@ -51,7 +49,7 @@ public class MottaVarselKvitteringRetryTest {
 		}
 	}
 
-	@After
+	@AfterEach
 	public void resetMocks() {
 		Mockito.reset(varselRepo);
 	}

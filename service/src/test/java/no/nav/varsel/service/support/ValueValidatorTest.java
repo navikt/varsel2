@@ -1,8 +1,10 @@
 package no.nav.varsel.service.support;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unit test for {@link ValueValidator}
@@ -11,8 +13,6 @@ import org.junit.rules.ExpectedException;
  */
 public class ValueValidatorTest {
 
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
 
 	@Test
 	public void notNullOK() throws Exception {
@@ -21,8 +21,9 @@ public class ValueValidatorTest {
 
 	@Test
 	public void notNull() throws Exception {
-		expectedException.expectMessage("field cannot be null");
-		ValueValidator.notNull(null, "field");
+		Executable executable = () -> ValueValidator.notNull(null, "field");
+		Exception exception = Assertions.assertThrows(Exception.class, executable);
+		assertEquals(exception.getMessage(), "field cannot be null");
 	}
 
 	@Test
@@ -32,14 +33,16 @@ public class ValueValidatorTest {
 
 	@Test
 	public void hasTextEmpty() throws Exception {
-		expectedException.expectMessage("field cannot be empty or missing");
-		ValueValidator.hasText("", "field");
+		Executable executable = () -> ValueValidator.hasText("", "field");
+		Exception exception = Assertions.assertThrows(Exception.class, executable);
+		assertEquals(exception.getMessage(), "field cannot be empty or missing");
 	}
 
 	@Test
 	public void hasTextNull() throws Exception {
-		expectedException.expectMessage("field cannot be empty or missing");
-		ValueValidator.hasText(null, "field");
+		Executable executable = () -> ValueValidator.hasText(null, "field");
+		Exception exception = Assertions.assertThrows(Exception.class, executable);
+		assertEquals(exception.getMessage(), "field cannot be empty or missing");
 	}
 
 	@Test
@@ -49,20 +52,24 @@ public class ValueValidatorTest {
 
 	@Test
 	public void isNumericEmpty() throws Exception {
-		expectedException.expectMessage("field cannot be empty or missing");
-		ValueValidator.isNumeric("", "field");
+		Executable executable = () -> ValueValidator.isNumeric("", "field");
+		Exception exception = Assertions.assertThrows(Exception.class, executable);
+		assertEquals(exception.getMessage(), "field cannot be empty or missing");
 	}
 
 	@Test
 	public void isNumericNull() throws Exception {
-		expectedException.expectMessage("field cannot be empty or missing");
-		ValueValidator.isNumeric(null, "field");
+		Executable executable = () -> ValueValidator.isNumeric(null, "field");
+		Exception exception = Assertions.assertThrows(Exception.class, executable);
+		assertEquals(exception.getMessage(), "field cannot be empty or missing");
+
 	}
 
 	@Test
 	public void isNumericNotNum() throws Exception {
-		expectedException.expectMessage("field must be a numeric value");
-		ValueValidator.isNumeric("95c", "field");
+		Executable executable = () -> ValueValidator.isNumeric("95c", "field");
+		Exception exception = Assertions.assertThrows(Exception.class, executable);
+		assertEquals(exception.getMessage(), "field must be a numeric value");
 	}
 
 }

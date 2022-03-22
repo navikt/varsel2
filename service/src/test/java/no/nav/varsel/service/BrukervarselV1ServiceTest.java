@@ -1,8 +1,8 @@
 package no.nav.varsel.service;
 
 import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo.Builder.aHentVarselForBrukerTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.Lists;
@@ -10,11 +10,12 @@ import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.tvarsel005.support.BrukervarselMapper;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class BrukervarselV1ServiceTest {
 
 	private static final LocalDateTime DATO_TOM = LocalDateTime.now().plusDays(1);
@@ -42,7 +43,7 @@ public class BrukervarselV1ServiceTest {
 	@InjectMocks
 	private BrukervarselV1Service brukervarselV1Service;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		when(varselbestillingRepoMock.findFerdigbehandletVarselbestillinger(BRUKER, DATO_FOM, DATO_TOM))
 				.thenReturn(varselbestillings);

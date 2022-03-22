@@ -7,11 +7,12 @@ import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.ObjectFactor
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
 import no.nav.varsel.jms.producer.varselutsending.support.VarselutsendingMapper;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.jms.core.JmsTemplate;
 
@@ -24,7 +25,7 @@ import javax.xml.namespace.QName;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class VarselutsendingProducerTest {
 
 	@Mock
@@ -42,7 +43,7 @@ public class VarselutsendingProducerTest {
 	private VarselutsendingTo varselutsendingTo;
 	private JAXBElement<Varselutsending> jaxbElement;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		varselutsendingTo = new VarselutsendingTo();
 		Varselutsending varselutsending = new Varselutsending();

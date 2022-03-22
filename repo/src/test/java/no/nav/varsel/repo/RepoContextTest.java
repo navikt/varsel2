@@ -1,6 +1,6 @@
 package no.nav.varsel.repo;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Itest for context

@@ -1,8 +1,5 @@
 package no.nav.varsel.config;
 
-import static java.lang.System.getProperty;
-import static java.lang.System.setProperty;
-
 import com.atomikos.jms.AtomikosConnectionFactoryBean;
 import com.ibm.mq.jms.MQQueue;
 import org.apache.activemq.ActiveMQXAConnectionFactory;
@@ -12,10 +9,8 @@ import org.apache.activemq.broker.region.policy.PolicyEntry;
 import org.apache.activemq.broker.region.policy.PolicyMap;
 import org.apache.activemq.broker.region.policy.SharedDeadLetterStrategy;
 import org.apache.activemq.command.ActiveMQQueue;
-import org.junit.Before;
-import org.springframework.beans.factory.annotation.Value;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,12 +22,12 @@ import org.springframework.transaction.support.TransactionTemplate;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.Queue;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.UUID;
+
+import static java.lang.System.getProperty;
+import static java.lang.System.setProperty;
 
 /**
  * Test Config for JMS
@@ -46,7 +41,7 @@ public class JmsTestConfig {
 
 	private static final String VM_LOCALHOST = "vm://localhost";
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		setProperty("varsel.serviceuser.username", "srvvarsel");
 		setProperty("varsel.serviceuser.password", "passord");

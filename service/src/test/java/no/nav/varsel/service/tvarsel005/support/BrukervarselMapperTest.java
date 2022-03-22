@@ -15,17 +15,17 @@ import static no.nav.varsel.repo.TestdataUtil.VARSEL_TITTEL;
 import static no.nav.varsel.repo.TestdataUtil.VARSEL_URL;
 import static no.nav.varsel.repo.TestdataUtil.createVarselBuilder;
 import static no.nav.varsel.repo.TestdataUtil.createVarselbestillingBuilder;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.collect.Lists;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 import no.nav.varsel.service.tvarsel005.to.VarselTo;
 import no.nav.varsel.service.tvarsel005.to.VarselbestillingTo;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 

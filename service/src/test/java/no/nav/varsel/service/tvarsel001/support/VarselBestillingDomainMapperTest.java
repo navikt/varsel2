@@ -6,11 +6,12 @@ import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_NAVN;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -26,13 +27,14 @@ import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDate;
@@ -46,7 +48,7 @@ import java.util.UUID;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class VarselBestillingDomainMapperTest {
 
 	private static final LocalDateTime UTLOEPSTIDSPUNKT = LocalDateTime.parse("2013-12-03T21:25:45");
@@ -72,15 +74,12 @@ public class VarselBestillingDomainMapperTest {
 	private static final KanalCode PREFERERT_KANAL = KanalCode.DITT_NAV;
 	private static final String BASE_URL = "baseurl";
 
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
-
 	@Spy
 	private VarselFletter varselFletter;
 	@InjectMocks
 	private VarselBestillingDomainMapper mapper;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		varselFletter.setVarselUrlFromFasit(BASE_URL);
 	}
@@ -152,11 +151,10 @@ public class VarselBestillingDomainMapperTest {
 		String expectedErrMsg = String.format("Missing varseltekst for varselbestillingsId=%s, kanalCode=%s", BESTILLING_ID, KanalCode.EPOST);
 		VarselInfoTo varselTo = createVarselTo();
 		varselTo.getMal(KanalCode.EPOST).setFoerstegangsTekst(null);
+		Executable executable = () -> mapper.mapVarselbestillingFoerstegangVarselMedRevarsel(createBestillTo(), varselTo, createDigitalKontaktinfoTo());
+		Exception exception = Assertions.assertThrows(VarselTekstMissingException.class, executable);
+		assertEquals(exception.getMessage(),expectedErrMsg);
 
-		expectedException.expect(VarselTekstMissingException.class);
-		expectedException.expectMessage(expectedErrMsg);
-
-		mapper.mapVarselbestillingFoerstegangVarselMedRevarsel(createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 	}
 
 	@Test
@@ -244,11 +242,9 @@ public class VarselBestillingDomainMapperTest {
 		String expectedErrMsg = String.format("Missing varseltekst for varselbestillingsId=%s, kanalCode=%s", BESTILLING_ID, KanalCode.DITT_NAV);
 		VarselInfoTo varselTo = createVarselTo();
 		varselTo.getMal(KanalCode.DITT_NAV).setRevarslingTekst(null);
-
-		expectedException.expect(VarselTekstMissingException.class);
-		expectedException.expectMessage(expectedErrMsg);
-
-		mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
+		Executable executable = () -> mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
+		Exception exception = Assertions.assertThrows(VarselTekstMissingException.class, executable);
+		assertEquals(exception.getMessage(),expectedErrMsg);
 	}
 
 	@Test
