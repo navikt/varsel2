@@ -44,10 +44,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -94,7 +93,7 @@ public class ServicemeldingServiceTest {
 	private VarselInfoTo varselInfoTo = new VarselInfoTo();
 
 	@BeforeEach
-	public void setUp() throws Exception {
+	public void setUp() {
 		// reset
 		bestilling.setVarselBestillingId(null);
 		bestilling.setPersonIdent(null);
@@ -102,19 +101,10 @@ public class ServicemeldingServiceTest {
 		bestilling.setVarseltypeId(VARSELTYPE_ID);
 
 		varselInfoTo.setPreferertKanal(PREFERERT_KANAL);
-/*
-		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
-		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
-		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
-		when(varselKanalDecider.decideKanaler(kontaktregisterTo, OVERSTYRT_PREFERERT_KANAL)).thenReturn(TestdataUtil.OVERSTYRT_PREFERERT_KANAL);
-		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
-		when(varselutsendingToMapper.map(eq(varselbestilling))).thenReturn(varselutsendingTos);
-*/
 	}
 
 	@Test
-	public void shouldBestillServicemelding() throws Exception {
+	public void shouldBestillServicemelding() {
 		bestilling.setAktoerId(AKTOR_ID);
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
 		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
@@ -128,7 +118,7 @@ public class ServicemeldingServiceTest {
 	}
 
 	@Test
-	public void shouldThrowTekniskForTekniskFeilDkif() throws Exception {
+	public void shouldThrowTekniskForTekniskFeilDkif() {
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
 		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(TEKNISK));
@@ -164,7 +154,7 @@ public class ServicemeldingServiceTest {
 			servicemeldingService.bestillServicemelding(bestilling);
 			fail();
 		} catch (VarselInaktivVarselmalException ive) {
-			verify(varselbestillingRepo, never()).saveAndFlush(anyObject());
+			verify(varselbestillingRepo, never()).saveAndFlush(any());
 		}
 	}
 
@@ -193,7 +183,7 @@ public class ServicemeldingServiceTest {
 	}
 
 	@Test
-	public void shouldNotCallDkiWhenEpostAndTlfIsSet() throws Exception {
+	public void shouldNotCallDkiWhenEpostAndTlfIsSet() {
 		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		createKontaktInfoBestilling();
 		servicemeldingService.bestillServicemelding(bestilling);
@@ -228,7 +218,7 @@ public class ServicemeldingServiceTest {
 	}
 
 	@Test
-	public void shouldThrowFunctionalForVarselbestilling_VarselbestillingUtloept() throws Exception {
+	public void shouldThrowFunctionalForVarselbestilling_VarselbestillingUtloept() {
 		LocalDateTime pastTime = LocalDateTime.now().minusDays(1);
 
 		bestilling.setUtloepstidspunkt(pastTime);

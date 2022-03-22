@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.Set;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -37,7 +37,6 @@ import static org.mockito.Mockito.when;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {DkifRetryTest.Config.class, HentDigitalKontaktinformasjonConsumer.class})
 public class DkifRetryTest {
 

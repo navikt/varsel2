@@ -13,17 +13,18 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerR
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * Unit test for {@link VarselbestillingMapper}
  *
  * @author Lars Aune
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class HentVarselForBrukerResponseMapperTest {
 	private static final String VARSELTYPE_ID = "VARSELTYPE_ID";
 	private static final Integer REVARSLINGSINTERVALL = 5;

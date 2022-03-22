@@ -1,21 +1,11 @@
 package no.nav.varsel.repo.support;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -28,6 +18,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Lars Aune
@@ -80,9 +77,8 @@ public class VarselbestillingRepoImplTest {
 		resultList.add(varselbestillingWithOrgNrWithoutVarselStatusFerdigbehandlet);
 		resultList.add(varselbestillingWithOrgNrWithStatuFerdigbehandlet);
 		when(query.getResultList()).thenReturn(resultList);
-		when(entityManager.createQuery(anyString(), anyObject()))
-				.thenReturn(query);
-		when(query.setParameter(anyString(), anyObject())).thenReturn(query);
+		when(entityManager.createQuery(anyString(), any())).thenReturn(query);
+		when(query.setParameter(anyString(), anyString())).thenReturn(query);
 		List<Varselbestilling> varselbestillinger =
 				varselbestillingRepo.findFerdigbehandletVarselbestillinger(BRUKER, FOM_DATE, TOM_DATE);
 		assertThat(varselbestillinger.size(), is(1));

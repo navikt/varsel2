@@ -10,10 +10,11 @@ import no.nav.varsel.domain.utility.XmlGregorianConverter;
 import no.nav.varsel.service.tvarsel005.to.VarselTo;
 import no.nav.varsel.service.tvarsel005.to.VarselbestillingTo;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
@@ -26,7 +27,7 @@ import java.util.List;
  *
  * @author Lars Aune
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class VarselbestillingMapperTest {
 	public static final String AKTOER_ID = "AKTOER_ID";
 	public static final LocalDateTime BESTILLINGSTIDSPUNKT = LocalDateTime.of(2016, Month.JULY, 1, 0, 0, 0, 0);

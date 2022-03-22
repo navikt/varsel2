@@ -1,15 +1,5 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo.Builder.aHentVarselForBrukerResponseTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.HentVarselForBrukerUgyldigInput;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.AktoerId;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
@@ -24,11 +14,11 @@ import no.nav.varsel.service.tvarsel005.to.VarselTo;
 import no.nav.varsel.service.tvarsel005.to.VarselbestillingTo;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
@@ -36,13 +26,22 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
+import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo.Builder.aHentVarselForBrukerResponseTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
+
 
 /**
  * Unit test for BrukervarselV1Provider
  *
  * @author Lars Aune
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class BrukervarselV1ProviderTest {
 	public static final String AKTOER_ID = "AKTOER_ID";
 	public static final String VARSEL_TYPE_ID = "VARSEL_TYPE_ID";
@@ -149,7 +148,7 @@ public class BrukervarselV1ProviderTest {
 
 		HentVarselForBrukerResponseTo hentVarselForBrukerResponseTo = responseToBuilder.varselbestillingTos(brukersVarsler).build();
 
-		when(brukervarselV1Service.hentVarselForBruker(anyObject())).thenReturn(hentVarselForBrukerResponseTo);
+		when(brukervarselV1Service.hentVarselForBruker(any())).thenReturn(hentVarselForBrukerResponseTo);
 
 		HentVarselForBrukerResponse response = brukervarselV1Provider.hentVarselForBruker(request);
 
