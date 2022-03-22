@@ -35,7 +35,7 @@
 		<modig-security.version>3.0.6</modig-security.version>
 		<cxf.version>3.3.10</cxf.version>
 		<javax.activation.version>1.2.0</javax.activation.version>
-		<jaxb-impl.version>2.3.0</jaxb-impl.version>
+		<jaxb-impl.version>3.0.2</jaxb-impl.version>
 		<jaxb-api.version>2.3.1</jaxb-api.version>
 		<bootstrap.version>3.4.1</bootstrap.version>
 		<resteasy.version>2.3.10.Final</resteasy.version>
@@ -433,6 +433,11 @@
 				<version>${jaxb-api.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>jakarta.xml.bind</groupId>
+				<artifactId>jakarta.xml.bind-api</artifactId>
+				<version>3.0.1</version>
+			</dependency>
+			<dependency>
 				<groupId>xml-apis</groupId>
 				<artifactId>xml-apis</artifactId>
 				<version>${xml-apis.version}</version>
@@ -584,7 +589,7 @@
 				<configuration>
 					<toolchains>
 						<jdk>
-							<version>11</version>
+							<version>17</version>
 							<vendor>openjdk</vendor>
 						</jdk>
 					</toolchains>
@@ -594,8 +599,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>11</source>
-					<target>11</target>
+					<source>17</source>
+					<target>17</target>
 				</configuration>
 			</plugin>
 			<plugin>

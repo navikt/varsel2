@@ -83,11 +83,11 @@ public class SelftestController {
 		response.setVersion(applicationVersion);
 		String serverAddress = getServerAddress();
 		response.setNode(serverAddress);
-		addChecks(response, serverAddress);
+		addChecks(response);
 		return response;
 	}
 
-	private void addChecks(SelftestResponse response, String serverAddress) {
+	private void addChecks(SelftestResponse response) {
 		// Datasource
 		response.addCheck(dbSelftest.check());
 

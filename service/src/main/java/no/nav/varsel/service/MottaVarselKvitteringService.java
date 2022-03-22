@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
  *
  * @author Roar Bjurstrom, Visma Consulting.
  */
-
 public class MottaVarselKvitteringService {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(MottaVarselKvitteringService.class);

@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
+import javax.transaction.Transactional;
 
 /**
  * Endpoint for BrukervarselV1 TVARSEL005
@@ -28,6 +29,7 @@ import javax.jws.WebService;
 		portName = "Brukervarsel_v1Port"
 )
 @HandlerChain(file = "/jboss-provider-handlers.xml")
+@Transactional
 public class BrukervarselV1Endpoint implements BrukervarselV1 {
 
 	private static final Logger log = LoggerFactory.getLogger(BrukervarselV1Endpoint.class);
