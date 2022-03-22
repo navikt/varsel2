@@ -7,7 +7,7 @@ import no.nav.varsel.service.tvarsel005.support.BrukervarselMapper;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 /**
@@ -17,9 +17,9 @@ import java.util.List;
  */
 public class BrukervarselV1Service implements BrukervarselService {
 
-	@Inject
+	@Autowired
 	private VarselbestillingRepo varselbestillingRepo;
-	@Inject
+	@Autowired
 	private BrukervarselMapper mapper;
 
 	public HentVarselForBrukerResponseTo hentVarselForBruker(HentVarselForBrukerTo reqTo) {

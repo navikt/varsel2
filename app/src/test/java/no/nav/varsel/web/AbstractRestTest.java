@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Abstract Test for Rest Itests
@@ -32,9 +32,9 @@ import javax.inject.Inject;
 @ActiveProfiles({"itest", "local"})
 public abstract class AbstractRestTest {
 
-	@Inject
+	@Autowired
 	protected VarselbestillingRepo varselbestillingRepo;
-	@Inject
+	@Autowired
 	protected WebApplicationContext webApplicationContext;
 	protected MockMvc mockMvc;
 

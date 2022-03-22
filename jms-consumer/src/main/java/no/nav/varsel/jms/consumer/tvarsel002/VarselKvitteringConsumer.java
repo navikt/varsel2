@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.TextMessage;
 
 import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.VARSEL_KVITTERING_NAME;
@@ -33,9 +33,9 @@ public class VarselKvitteringConsumer extends AbstractJmsConsumer<VarselKvitteri
 
 	static final String TVARSEL002 = "tvarsel002";
 
-	@Inject
+	@Autowired
 	private MottaVarselKvitteringMapper mottaVarselKvitteringMapper;
-	@Inject
+	@Autowired
 	private MottaVarselKvitteringService mottaVarselKvitteringService;
 
 	public VarselKvitteringConsumer() {

@@ -6,14 +6,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 
 /**
  * Abstract class for repo tests
@@ -25,9 +24,9 @@ import javax.persistence.PersistenceContext;
 @ActiveProfiles({"itest", "local"})
 public abstract class AbstractRepoTest {
 
-	@Inject
+	@Autowired
 	protected VarselbestillingRepo varselbestillingRepo;
-	@Inject
+	@Autowired
 	protected VarselRepo varselRepo;
 	@PersistenceContext
 	protected EntityManager entityManager;

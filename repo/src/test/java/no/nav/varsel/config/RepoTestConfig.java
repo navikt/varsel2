@@ -6,7 +6,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import javax.inject.Inject;
 
 /**
  * Repository Test Config
@@ -18,8 +17,5 @@ import javax.inject.Inject;
 @EnableAutoConfiguration
 @Import(RepoConfig.class)
 public class RepoTestConfig {
-
-	@Inject
-	private DataSourceProperties properties;
 
 }

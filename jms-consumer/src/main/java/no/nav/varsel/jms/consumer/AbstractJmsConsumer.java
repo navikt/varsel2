@@ -14,7 +14,7 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.util.Assert;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -147,17 +147,17 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 		return null;
 	}
 
-	@Inject
+	@Autowired
 	public void setMarshaller(Jaxb2Marshaller marshaller) {
 		this.marshaller = marshaller;
 	}
 
-	@Inject
+	@Autowired
 	public void setJmsConsumerManager(JmsConsumerManager jmsConsumerManager) {
 		this.jmsConsumerManager = jmsConsumerManager;
 	}
 
-	@Inject
+	@Autowired
 	public void setMetricRegistry(MetricRegistry metricRegistry) {
 		this.metricRegistry = metricRegistry;
 	}

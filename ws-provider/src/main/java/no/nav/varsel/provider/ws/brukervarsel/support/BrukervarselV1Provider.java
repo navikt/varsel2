@@ -16,7 +16,7 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerR
 import no.nav.varsel.service.interfaces.BrukervarselService;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Provider for Tvarsel005 HentVarselForBruker
@@ -25,13 +25,13 @@ import javax.inject.Inject;
  */
 public class BrukervarselV1Provider {
 
-	@Inject
+	@Autowired
 	private HentVarselForBrukerRequestMapper hentVarselForBrukerRequestMapper;
 
-	@Inject
+	@Autowired
 	private HentVarselForBrukerResponseMapper hentVarselForbrukerResponseMapper;
 
-	@Inject
+	@Autowired
 	private BrukervarselService brukervarselV1Service;
 
 	public void ping() {

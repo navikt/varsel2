@@ -1,12 +1,5 @@
 package no.nav.varsel.repo.support;
 
-import static java.util.stream.Collectors.toList;
-import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
-import static no.nav.varsel.repo.TestdataUtil.FNR;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
-
 import no.nav.varsel.domain.builder.VarselbestillingBuilder;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
@@ -18,11 +11,18 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
-import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
+import static no.nav.varsel.repo.TestdataUtil.FNR;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertThat;
 
 /**
  * Unit-test for VarselbestillingRepoImpl FindFerdigbehandletVarselbestillingerTest
@@ -34,7 +34,7 @@ public class FindFerdigbehandletVarselbestillingerTest extends AbstractRepoTest 
 
 	public static final int NUMBER_OF_DAYS_STANDARD_OFFSET = 10;
 
-	@Inject
+	@Autowired
 	private VarselbestillingRepo varselbestillingRepo;
 
 	private LocalDateTime datoFom = LocalDateTime.now().minusDays(NUMBER_OF_DAYS_STANDARD_OFFSET);

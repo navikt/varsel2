@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.TextMessage;
 
 import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING_KONTAKTINFO;
@@ -30,9 +30,9 @@ public class BestillServicemeldingMedKontaktInfoConsumer extends AbstractJmsCons
 
 	private static final String SERVICEMELDING_KONTAKT_INFO_QUEUE = "bestillServicemeldingKontaktInfoQueue";
 
-	@Inject
+	@Autowired
 	private BestillServicemeldingMedKontaktInfoMapper mapper;
-	@Inject
+	@Autowired
 	private ServicemeldingService servicemeldingService;
 
 	public BestillServicemeldingMedKontaktInfoConsumer() {

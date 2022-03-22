@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.config.JmsListenerEndpointRegistry;
 import org.springframework.jms.listener.MessageListenerContainer;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
@@ -34,7 +34,7 @@ public class JmsConsumerManager {
 
 	private Map<JmsConsumer, Queue<LocalDateTime>> recentErrors = new ConcurrentHashMap<>();
 
-	@Inject
+	@Autowired
 	private JmsListenerEndpointRegistry endpointRegistry;
 
 	public Queue<LocalDateTime> getErrorsFor(JmsConsumer jmsConsumer) {

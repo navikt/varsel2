@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -38,9 +38,9 @@ public class SelftestController {
 	@Value("${bootstrapVersion}")
 	private String bootstrapVersion;
 
-	@Inject
+	@Autowired
 	private DbSelftest dbSelftest;
-	@Inject
+	@Autowired
 	private WsPingProvider wsPingProvider;
 
 	/**

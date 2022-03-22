@@ -87,13 +87,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
-
-		<!-- provided -->
-		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
-			<scope>provided</scope>
-		</dependency>
 		<dependency>
 			<groupId>com.ibm.mq</groupId>
 			<artifactId>com.ibm.mq.allclient</artifactId>

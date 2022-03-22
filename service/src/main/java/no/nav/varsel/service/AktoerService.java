@@ -5,7 +5,7 @@ import no.nav.varsel.service.to.AktoerBestillingTo;
 import no.nav.varsel.wsconsumer.pdl.PdlIdentConsumer;
 import no.nav.varsel.wsconsumer.pdl.support.AktoerIkkeFunnetException;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static no.nav.varsel.domain.to.AktoerTo.newAktoerId;
 import static no.nav.varsel.domain.to.AktoerTo.newPersonIdent;
@@ -19,7 +19,7 @@ import static no.nav.varsel.domain.to.MottakerType.PERSON;
  */
 public class AktoerService {
 
-	@Inject
+	@Autowired
 	private PdlIdentConsumer pdlIdentConsumer;
 
 	public AktoerTo findMissingAktoer(AktoerBestillingTo aktoerBestillingTo) {

@@ -17,7 +17,7 @@ import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static no.nav.varsel.domain.Constants.USER_ID;
 
@@ -27,10 +27,10 @@ import static no.nav.varsel.domain.Constants.USER_ID;
 @AutoConfigureWireMock(port = 0)
 public abstract class AbstractWsProviderITest {
 
-	@Inject
+	@Autowired
 	protected VarselbestillingRepo varselbestillingRepo;
 	
-	@Inject
+	@Autowired
 	protected VarselRepo varselRepo;
 
 

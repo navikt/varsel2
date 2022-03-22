@@ -6,7 +6,7 @@ import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.message.Message;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -19,7 +19,7 @@ public abstract class AbstractCxfEndpointConfig {
 
 	public static final int DEFAULT_TIMEOUT = 30_000;
 
-	@Inject
+	@Autowired
 	private SpringBus bus;
 
 	private int timeout = DEFAULT_TIMEOUT;

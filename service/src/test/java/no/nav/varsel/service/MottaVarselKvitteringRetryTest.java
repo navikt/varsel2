@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
@@ -35,10 +35,10 @@ import static org.mockito.Mockito.when;
 @ActiveProfiles({"itest", "local"})
 public class MottaVarselKvitteringRetryTest {
 
-	@Inject
+	@Autowired
 	MottaVarselKvitteringService mottaVarselKvitteringService;
 
-	@Inject
+	@Autowired
 	VarselRepo varselRepo;
 
 	@EnableRetry

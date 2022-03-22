@@ -15,7 +15,7 @@ import org.apache.activemq.broker.Broker;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.Message;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
@@ -47,10 +47,10 @@ import static org.junit.Assert.assertThat;
 // Testen er altfor brittle. Burde skrives om.
 public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
-	@Inject
+	@Autowired
 	private Queue bestillServicemeldingQueue;
 
-	@Inject
+	@Autowired
 	private Queue varselutsendingQueue;
 
 	@Test

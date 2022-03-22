@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -43,16 +43,16 @@ public class DkifRetryTest {
 
 	private static final String PERSON_ID = "id";
 
-	@Inject
+	@Autowired
 	private HentDigitalKontaktinformasjonConsumer hentDigitalKontaktinformasjonConsumer;
 
-	@Inject
+	@Autowired
 	private DigitalKontaktinformasjonV1 digitalKontaktinformasjonV1Mock;
 
-	@Inject
+	@Autowired
 	private HentDigitalKontaktinformasjonMapper hentDigitalKontaktinformasjonMapper;
 
-	@Inject
+	@Autowired
 	private VarselKanalDecider varselKanalDecider;
 
 	public static final Set<KanalCode> PREFERERT_KANAL = Sets.newHashSet(KanalCode.DITT_NAV);

@@ -12,7 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 
 import static no.nav.varsel.domain.Constants.USER_ID;
@@ -29,7 +29,7 @@ public class BrukervarselV1AuthenticationTest extends AbstractWsProviderITest {
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
 
-	@Inject
+	@Autowired
 	private BrukervarselV1Endpoint brukervarselV1;
 
 	@Test

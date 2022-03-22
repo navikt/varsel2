@@ -9,7 +9,7 @@ import org.springframework.jms.UncategorizedJmsException;
 import org.springframework.jms.core.JmsTemplate;
 
 import javax.annotation.Resource;
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.JMSException;
 import javax.jms.Queue;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class JmsPingProvider {
 	@Resource
 	private Map<QueueInfo, Queue> queueOverview;
 
-	@Inject
+	@Autowired
 	private JmsTemplate jmsTemplate;
 
 	public List<Ping> ping() {

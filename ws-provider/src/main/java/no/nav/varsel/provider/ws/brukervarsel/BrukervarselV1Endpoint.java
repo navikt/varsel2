@@ -13,7 +13,7 @@ import no.nav.varsel.provider.ws.brukervarsel.support.HentVarselForBrukerRequest
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
 import javax.transaction.Transactional;
@@ -39,10 +39,10 @@ public class BrukervarselV1Endpoint implements BrukervarselV1 {
 	private static final String BRUKERVARSEL_V1_HENT_VARSEL_FOR_BRUKER = BRUKERVARSEL_V1 + ".hentVarselForBruker";
 	static final String ACCESS_DENIED = "Access denied";
 
-	@Inject
+	@Autowired
 	private BrukervarselV1Provider brukervarselV1Provider;
 
-	@Inject
+	@Autowired
 	private HentVarselForBrukerRequestValidator hentVarselForBrukerRequestValidator;
 
 	@Override

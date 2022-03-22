@@ -7,7 +7,7 @@ import no.nav.varsel.jms.producer.varselutsending.support.VarselutsendingMapper;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 import org.springframework.jms.core.JmsTemplate;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.Queue;
 
 /**
@@ -19,11 +19,11 @@ public class VarselutsendingProducer {
 
 	public static final String FEIL_MQ_UT = "varsel_test_feil";
 
-	@Inject
+	@Autowired
 	private JmsTemplate jmsTemplate;
-	@Inject
+	@Autowired
 	private Queue varselutsendingQueue;
-	@Inject
+	@Autowired
 	private VarselutsendingMapper mapper;
 
 	private ObjectFactory objectFactory = new ObjectFactory();

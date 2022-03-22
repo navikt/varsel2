@@ -11,7 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.Queue;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +33,7 @@ import static org.junit.Assert.assertThat;
 @ActiveProfiles({"itest", "local"})
 public class JmsPingProviderITest {
 
-	@Inject
+	@Autowired
 	private JmsPingProvider jmsPingProvider;
 
 	@Resource

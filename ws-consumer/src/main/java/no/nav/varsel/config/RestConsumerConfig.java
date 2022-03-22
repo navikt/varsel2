@@ -12,7 +12,7 @@ import org.springframework.http.client.InterceptingClientHttpRequestFactory;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.client.RestTemplate;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Spring config for Rest Consumers

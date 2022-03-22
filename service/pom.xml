@@ -28,13 +28,6 @@
 			<artifactId>spring-retry</artifactId>
 		</dependency>
 
-		<!-- provided -->
-		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
 		<!-- test -->
 		<dependency>
 			<groupId>no.nav.varsel</groupId>

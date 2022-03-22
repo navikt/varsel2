@@ -5,7 +5,7 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerR
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 import org.springframework.util.Assert;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Response Mapper for Tvarsel005 HentVarselForBruker
@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * @author Lars Aune
  */
 public class HentVarselForBrukerResponseMapper {
-	@Inject
+	@Autowired
 	private VarselbestillingMapper varselbestillingMapper;
 
 	public HentVarselForBrukerResponse map(HentVarselForBrukerResponseTo hentVarselForBrukerResponseTo) {

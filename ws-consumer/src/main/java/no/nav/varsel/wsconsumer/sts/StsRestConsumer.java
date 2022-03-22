@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
 
@@ -28,7 +28,7 @@ public class StsRestConsumer {
 	public static final int DELAY = 500;
 	public static final int MULTIPLIER = 2;
 
-	@Inject
+	@Autowired
 	public StsRestConsumer(
 			RestTemplateBuilder restTemplate,
 			@Value("${security.token.rest.service.url}") String stsUrl,

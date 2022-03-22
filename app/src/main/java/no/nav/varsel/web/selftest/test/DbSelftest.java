@@ -4,7 +4,7 @@ import no.nav.varsel.domain.to.Ping;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.web.selftest.support.AbstractSelftest;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Selftest for Db
@@ -13,7 +13,7 @@ import javax.inject.Inject;
  */
 public class DbSelftest extends AbstractSelftest {
 
-	@Inject
+	@Autowired
 	private VarselRepo varselRepo;
 
 	public DbSelftest() {

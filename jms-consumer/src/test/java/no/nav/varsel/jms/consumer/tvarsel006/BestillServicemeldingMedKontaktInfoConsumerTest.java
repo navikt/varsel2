@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.Message;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
@@ -50,10 +50,10 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 
 	private TestUtils.MockAppender loggerMock = null;
 
-	@Inject
+	@Autowired
 	private Queue bestillServicemeldingKontaktInfoQueue;
 
-	@Inject
+	@Autowired
 	private Queue varselutsendingQueue;
 
 	@Before

@@ -8,7 +8,7 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varselbestilling;
 import no.nav.varsel.service.tvarsel005.to.VarselbestillingTo;
 import org.springframework.util.Assert;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Response mapper for Tvarsel005 HentVarselForBruker
@@ -17,7 +17,7 @@ import javax.inject.Inject;
  */
 public class VarselbestillingMapper {
 
-	@Inject
+	@Autowired
 	private VarselMapper varselMapper;
 
 	public Varselbestilling map(VarselbestillingTo varselbestillingTo) {

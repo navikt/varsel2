@@ -3,7 +3,7 @@ package no.nav.varsel.web.metrics;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlets.MetricsServlet;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.servlet.annotation.WebListener;
 
 /**
@@ -14,7 +14,7 @@ import javax.servlet.annotation.WebListener;
 @WebListener
 public class MetricsServletContextListener extends MetricsServlet.ContextListener {
 
-	@Inject
+	@Autowired
 	private MetricRegistry metricRegistry;
 
 	@Override
