@@ -19,7 +19,7 @@
 		<appender-ref ref="applikasjonslogg"/>
 	</root>
 
-	<logger name="no.nav.brevserver" level="INFO" additivity="false">
+	<logger name="no.nav.varsel" level="INFO" additivity="false">
 		<appender-ref ref="applikasjonslogg"/>
 	</logger>
 	<logger name="mf.logger.translog" level="INFO" additivity="false">
