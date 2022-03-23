@@ -5,7 +5,8 @@
   "INGRESSES": [
     "https://varsel2.nais.adeo.no",
     "https://varsel2.prod-fss.nais.io",
-    "https://varsel2.intern.nav.no"
+    "https://varsel2.intern.nav.no",
+    "https://app.adeo.no/varsel"
   ],
   "SPRING_DATASOURCE_URL": "jdbc:oracle:thin:@a01dbfl041.adeo.no:1521/varsel_HA",
   "VARSEL_DS": "/oracle/data/dev/creds/varsel_q1-user",
