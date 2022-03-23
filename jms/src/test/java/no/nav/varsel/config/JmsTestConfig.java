@@ -2,6 +2,8 @@ package no.nav.varsel.config;
 
 import com.atomikos.jms.AtomikosConnectionFactoryBean;
 import com.ibm.mq.jms.MQQueue;
+import no.nav.varsel.config.alias.ListenerProperties;
+import no.nav.varsel.config.alias.MqGatewayProperties;
 import org.apache.activemq.ActiveMQXAConnectionFactory;
 import org.apache.activemq.RedeliveryPolicy;
 import org.apache.activemq.broker.BrokerService;
@@ -12,6 +14,7 @@ import org.apache.activemq.command.ActiveMQQueue;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -37,6 +40,9 @@ import static java.lang.System.setProperty;
 @EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class})
 @Import({JmsConfig.class})
 @Configuration
+@EnableConfigurationProperties({
+		ListenerProperties.class
+})
 public class JmsTestConfig {
 
 	private static final String VM_LOCALHOST = "vm://localhost";

@@ -2,11 +2,13 @@ package no.nav.varsel.config;
 
 import com.ibm.mq.jms.MQConnectionFactory;
 import com.ibm.msg.client.wmq.WMQConstants;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
+import no.nav.varsel.config.alias.ListenerProperties;
 import no.nav.varsel.config.alias.MqGatewayProperties;
 import no.nav.varsel.jms.JmsPingProvider;
 import no.nav.varsel.jms.to.xml.JmsReply;
@@ -44,6 +46,7 @@ import javax.jms.Session;
 @EnableJms
 @Import({QueueConfig.class})
 @Configuration
+@Slf4j
 public class JmsConfig {
 
 	@Value("${varsel.jms.consumer.min}")
@@ -60,8 +63,7 @@ public class JmsConfig {
 
 	@Bean
 	public JmsTemplate jmsTemplate(DestinationResolver destinationResolver,
-								   ConnectionFactory connectionFactory
-	) {
+								   ConnectionFactory connectionFactory) {
 		JmsTemplate jmsTemplate = new JmsTemplate();
 		jmsTemplate.setReceiveTimeout(5_000);
 		jmsTemplate.setMessageConverter(converter());
@@ -78,13 +80,16 @@ public class JmsConfig {
 	@Bean
 	public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(DestinationResolver destinationResolver,
 																		  ConnectionFactory connectionFactory,
-																		  PlatformTransactionManager transactionManager) {
+																		  PlatformTransactionManager transactionManager,
+																		  final ListenerProperties listenerProperties) {
 		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 		factory.setConnectionFactory(connectionFactory);
 		factory.setDestinationResolver(destinationResolver);
 		factory.setMessageConverter(new ConsumerMessageConverter(converter()));
 		factory.setTransactionManager(transactionManager);
 		factory.setConcurrency(String.format("%d-%d", minimumConsumers, maximumConsumers));
+		factory.setAutoStartup(listenerProperties.isAutoStartup());
+		log.info("Listener autostart: "+listenerProperties.isAutoStartup());
 		factory.setErrorHandler(t -> {
 			Throwable throwable = t;
 			if (t instanceof ListenerExecutionFailedException) {

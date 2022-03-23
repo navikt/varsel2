@@ -1,10 +1,10 @@
 package no.nav.varsel.config;
 
+import no.nav.varsel.config.alias.ListenerProperties;
 import no.nav.varsel.config.alias.MqGatewayProperties;
 import no.nav.varsel.nais.NaisContract;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -15,7 +15,8 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @EnableConfigurationProperties({
-		MqGatewayProperties.class
+		MqGatewayProperties.class,
+		ListenerProperties.class
 })
 @EnableAutoConfiguration
 @Import({
