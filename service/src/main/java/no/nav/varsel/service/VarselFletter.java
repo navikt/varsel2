@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrBuilder;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -117,7 +117,7 @@ public class VarselFletter {
 		return Joiner.on(" ").join(groups);
 	}
 
-	@Inject
+	@Autowired
 	public void setVarselUrlFromFasit(@Value("${varsel.url}") String varselUrlFromFasit) {
 		this.varselUrlFromFasit = varselUrlFromFasit;
 	}

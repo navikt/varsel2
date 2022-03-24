@@ -5,7 +5,7 @@ import no.nav.varsel.domain.to.Ping;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static no.nav.varsel.domain.to.Ping.Type.Rest;
 import static no.nav.varsel.domain.to.Ping.Type.Soap;
@@ -17,11 +17,11 @@ import static no.nav.varsel.domain.to.Ping.Type.Soap;
  */
 public class WsPingProvider {
 
-	@Inject
+	@Autowired
 	private DigitalKontaktinformasjonV1 digitalKontaktinformasjonV1;
 	@Value("${dkif.ws.endpointUrl}")
 	private String dkifUrl;
-	@Inject
+	@Autowired
 	private VarselInfoConsumer varselInfoConsumer;
 	@Value("${dokkat.varselinfo.rest.url}")
 	private String varselInfoUrl;

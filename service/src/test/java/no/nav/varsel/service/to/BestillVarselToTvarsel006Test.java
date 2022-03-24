@@ -1,12 +1,15 @@
 package no.nav.varsel.service.to;
 
+import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.repo.TestdataUtil;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unit test for Tvarsel006 validator
@@ -19,9 +22,6 @@ public class BestillVarselToTvarsel006Test {
 	private static final String VARSELTYPE_ID = "varsel";
 	private static final String EPOST = "test@test.no";
 
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
-
 	@Test
 	public void shouldValidate() throws Exception {
 		createTo().validateTvarsel006Input();
@@ -32,36 +32,36 @@ public class BestillVarselToTvarsel006Test {
 		BestillVarselTo to = createTo();
 		to.setPersonIdent(null);
 		to.setAktoerId(null);
-
-		expectedException.expectMessage("mottaker cannot be empty or missing");
-		to.validateTvarsel006Input();
+		Executable executable = () -> to.validateTvarsel006Input();
+		Exception exception = Assertions.assertThrows(NoJmsBackoutException.class, executable);
+		assertEquals(exception.getMessage(),"Validation failed for input, mottaker cannot be empty or missing");
 	}
 
 	@Test
 	public void shouldValidateMissingVarseltypeId() throws Exception {
 		BestillVarselTo to = createTo();
 		to.setVarseltypeId(null);
-
-		expectedException.expectMessage("varseltypeId cannot be empty or missing");
-		to.validateTvarsel006Input();
+		Executable executable = () -> to.validateTvarsel006Input();
+		Exception exception = Assertions.assertThrows(NoJmsBackoutException.class, executable);
+		assertEquals(exception.getMessage(),"Validation failed for input, varseltypeId cannot be empty or missing");
 	}
 
 	@Test
 	public void shouldValidateMissingParamKey() throws Exception {
 		BestillVarselTo to = createTo();
 		to.getParameters().put(null, "val2");
-
-		expectedException.expectMessage("parameter.key cannot be empty or missing");
-		to.validateTvarsel006Input();
+		Executable executable = () -> to.validateTvarsel006Input();
+		Exception exception = Assertions.assertThrows(NoJmsBackoutException.class, executable);
+		assertEquals(exception.getMessage(),"Validation failed for input, parameter.key cannot be empty or missing");
 	}
 
 	@Test
 	public void shouldValidateMissingParamValue() throws Exception {
 		BestillVarselTo to = createTo();
 		to.getParameters().put("key2", null);
-
-		expectedException.expectMessage("parameter.value cannot be empty or missing");
-		to.validateTvarsel006Input();
+		Executable executable = () -> to.validateTvarsel006Input();
+		Exception exception = Assertions.assertThrows(NoJmsBackoutException.class, executable);
+		assertEquals(exception.getMessage(),"Validation failed for input, parameter.value cannot be empty or missing");
 	}
 
 	@Test
@@ -69,18 +69,18 @@ public class BestillVarselToTvarsel006Test {
 		BestillVarselTo to = createTo();
 		to.setMobiltelefonnummer(null);
 		to.setEpost(null);
-
-		expectedException.expectMessage("kontaktinformasjon cannot be empty or missing");
-		to.validateTvarsel006Input();
+		Executable executable = () -> to.validateTvarsel006Input();
+		Exception exception = Assertions.assertThrows(NoJmsBackoutException.class, executable);
+		assertEquals(exception.getMessage(),"Validation failed for input, kontaktinformasjon cannot be empty or missing");
 	}
 
 	@Test
 	public void shouldValidateMissingOrgNr() throws Exception {
 		BestillVarselTo to = createTo();
 		to.setOrgNr(null);
-
-		expectedException.expectMessage("organisasjonsnummer cannot be empty or missing");
-		to.validateTvarsel006Input();
+		Executable executable = () -> to.validateTvarsel006Input();
+		Exception exception = Assertions.assertThrows(NoJmsBackoutException.class, executable);
+		assertEquals(exception.getMessage(),"Validation failed for input, organisasjonsnummer cannot be empty or missing");
 	}
 
 	private static BestillVarselTo createTo() {

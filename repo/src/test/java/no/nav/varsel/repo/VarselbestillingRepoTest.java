@@ -3,11 +3,11 @@ package no.nav.varsel.repo;
 import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
 import static no.nav.varsel.repo.TestdataUtil.createVarselbestilling;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
 
 import no.nav.varsel.domain.object.Varselbestilling;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 

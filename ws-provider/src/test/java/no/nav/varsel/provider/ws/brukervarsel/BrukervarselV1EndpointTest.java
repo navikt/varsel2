@@ -8,16 +8,16 @@ import no.nav.varsel.provider.ws.brukervarsel.support.HentVarselForBrukerRequest
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static no.nav.varsel.provider.ws.brukervarsel.BrukervarselV1Endpoint.ACCESS_DENIED;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class BrukervarselV1EndpointTest {
 
 	@Rule
@@ -42,7 +42,7 @@ public class BrukervarselV1EndpointTest {
 
 	@BeforeClass
 	public static void setUpSecurity() throws Exception {
-		System.setProperty("no.nav.modig.security.systemuser.username", "Varsel");
+		System.setProperty("varsel.serviceuser.username", "Varsel");
 		System.setProperty("no.nav.modig.core.context.subjectHandlerImplementationClass", ThreadLocalSubjectHandler.class.getName());
 	}
 

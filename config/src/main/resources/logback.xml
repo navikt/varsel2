@@ -1,131 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true" scanPeriod="60 seconds" debug="false">
+<configuration debug="false">
 
-	<property name="BATCH_LOG_HOME" value="${APP_LOG_HOME}/../batch"/>
-
-	<!-- Appender for batch info logging; applies to all batches -->
-	<appender name="BATCH-SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
-		<discriminator>
-			<Key>jobName</Key>
-			<DefaultValue>default</DefaultValue>
-		</discriminator>
-		<sift>
-			<appender name="FILE-${jobName}" class="ch.qos.logback.core.rolling.RollingFileAppender">
-				<Append>true</Append>
-				<File>${BATCH_LOG_HOME}/${jobName}/${jobName}.log</File>
-				<encoder>
-					<pattern>[%d, %-5p, %C:%L] - [%X{stepName} %thread] - %m%n</pattern>
-				</encoder>
-				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-					<fileNamePattern>${BATCH_LOG_HOME}/${jobName}/${jobName}.%d{yyyy-MM}.log.zip</fileNamePattern>
-					<maxHistory>12</maxHistory>
-				</rollingPolicy>
-			</appender>
-		</sift>
-	</appender>
-
-	<appender name="servicelogger" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<Append>true</Append>
-		<File>${APP_LOG_HOME}/servicelogger.log</File>
-		<encoder>
-			<pattern>[%d, %-5p, %C:%L] - [%X{consumerId}, %X{callId}, %X{userId}] - %m%n</pattern>
-		</encoder>
-		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<maxIndex>10</maxIndex>
-			<FileNamePattern>${APP_LOG_HOME}/servicelogger.%i.log.zip</FileNamePattern>
-		</rollingPolicy>
-		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-			<MaxFileSize>10MB</MaxFileSize>
-		</triggeringPolicy>
-	</appender>
-
-	<appender name="nobackoutlog" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<Append>true</Append>
-		<File>${APP_LOG_HOME}/nobackoutlog.log</File>
-		<encoder>
-			<pattern>[%d, %-5p, %C:%L] - [%X{consumerId}, %X{callId}, %X{userId}] - %m%n</pattern>
-		</encoder>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${APP_LOG_HOME}/nobackoutlog.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
-			<maxHistory>45</maxHistory>
-		</rollingPolicy>
-	</appender>
-
-	<appender name="debuglog" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<Append>true</Append>
-		<File>${APP_LOG_HOME}/debug.log</File>
-		<encoder>
-			<pattern>[%d, %-5p, %C:%L] - [%X{consumerId}, %X{callId}, %X{userId}] - %m%n</pattern>
-		</encoder>
-		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<maxIndex>10</maxIndex>
-			<FileNamePattern>${APP_LOG_HOME}/debug.%i.log.zip</FileNamePattern>
-		</rollingPolicy>
-		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-			<MaxFileSize>10MB</MaxFileSize>
-		</triggeringPolicy>
-	</appender>
-
-	<appender name="errorlog" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>${APP_LOG_HOME}/error.log</File>
-		<encoder>
-			<pattern>[%d, %-5p, %C:%L] - [%X{consumerId}, %X{callId}, %X{userId}] - %m%n</pattern>
-		</encoder>
-		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>WARN</level>
-		</filter>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${APP_LOG_HOME}/error.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
-			<maxHistory>45</maxHistory>
-		</rollingPolicy>
-	</appender>
-
-	<appender name="SYSLOG" class="com.spotify.logging.logback.MillisecondPrecisionSyslogAppender">
-		<syslogHost>localhost</syslogHost>
-		<facility>LOCAL1</facility>
-		<suffixPattern>varsel %mdc %logger{30} %m %n%rEx</suffixPattern>
-		<throwableExcluded>true</throwableExcluded>
-	</appender>
-
-	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-		<encoder>
-			<pattern>[%d, %-5p, %C:%L] - [%X{consumerId}, %X{callId}, %X{userId}] - %m%n</pattern>
+	<appender name="applikasjonslogg" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
+			<throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+				<maxDepthPerThrowable>30</maxDepthPerThrowable>
+				<exclude>java\.util\.concurrent\..*</exclude>
+				<exclude>org\.apache\.tomcat\..*</exclude>
+				<exclude>org\.apache\.coyote\..*</exclude>
+				<exclude>org\.apache\.catalina\..*</exclude>
+				<exclude>org\.springframework\.web\..*</exclude>
+				<exclude>sun\.net\.www\..*</exclude>
+			</throwableConverter>
 		</encoder>
 	</appender>
 
-	<root level="${ROOT_LOG_LEVEL:-WARN}">
-		<appender-ref ref="errorlog"/>
-		<appender-ref ref="SYSLOG"/>
+	<root level="WARN">
+		<appender-ref ref="applikasjonslogg"/>
 	</root>
 
 	<logger name="no.nav.varsel" level="INFO" additivity="false">
-		<appender-ref ref="debuglog"/>
-		<appender-ref ref="SYSLOG"/>
+		<appender-ref ref="applikasjonslogg"/>
 	</logger>
-
-	<logger name="no.nav.varsel.jms.nobackoutlog" level="INFO" additivity="false">
-		<appender-ref ref="nobackoutlog"/>
-		<appender-ref ref="SYSLOG"/>
-	</logger>
-
-	<logger name="no.nav.varsel.batch" additivity="false" level="INFO">
-		<appender-ref ref="BATCH-SIFT"/>
-		<appender-ref ref="SYSLOG"/>
-	</logger>
-
-	<logger name="no.nav.brevogarkiv.batch" additivity="false" level="INFO">
-		<appender-ref ref="BATCH-SIFT"/>
-		<appender-ref ref="SYSLOG"/>
-	</logger>
-
-	<logger name="org.springframework.batch" additivity="false" level="INFO">
-		<appender-ref ref="BATCH-SIFT"/>
-		<appender-ref ref="SYSLOG"/>
-	</logger>
-
-	<logger name="no.nav.modig.jaxws.handlers.ServiceLoggerHandler" additivity="false" level="INFO">
-		<appender-ref ref="servicelogger"/>
-		<appender-ref ref="SYSLOG"/>
+	<logger name="mf.logger.translog" level="INFO" additivity="false">
+		<appender-ref ref="applikasjonslogg"/>
 	</logger>
 
 </configuration>

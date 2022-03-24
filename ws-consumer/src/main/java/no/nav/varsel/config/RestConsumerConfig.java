@@ -12,7 +12,7 @@ import org.springframework.http.client.InterceptingClientHttpRequestFactory;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.client.RestTemplate;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Spring config for Rest Consumers
@@ -24,9 +24,9 @@ public class RestConsumerConfig {
 
 	public static final int TIMEOUT = 30_000;
 
-	@Value("${no.nav.modig.security.systemuser.username}")
+	@Value("${varsel.serviceuser.username}")
 	private String srvVarselUsername;
-	@Value("${no.nav.modig.security.systemuser.password}")
+	@Value("${varsel.serviceuser.password}")
 	private String srvVarselPassword;
 
 	@Bean

@@ -7,17 +7,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class VarselInfoConsumer {
 
-	@Inject
+	@Autowired
 	private RestTemplate restTemplate;
 
 	private String varselinfoUrlGet;
 
-	@Inject
+	@Autowired
 	private VarselInfoMapper varselInfoMapper;
 
 	public VarselInfoTo hentVarselInfo(String varseltypeId) {
@@ -30,7 +30,7 @@ public class VarselInfoConsumer {
 		return varselInfoMapper.map(varselInfo);
 	}
 
-	@Inject
+	@Autowired
 	public void setVarselinfoUrl(@Value("${dokkat.varselinfo.rest.url}") String varselinfoUrl) {
 		varselinfoUrlGet = varselinfoUrl;
 		if (!varselinfoUrlGet.endsWith("/")) {

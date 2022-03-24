@@ -18,7 +18,7 @@ import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,28 +33,28 @@ public class ServicemeldingService {
 	
 	private static final Logger LOGG = LoggerFactory.getLogger(ServicemeldingService.class);
 	
-	@Inject
+	@Autowired
 	private AktoerService aktoerService;
 
-	@Inject
+	@Autowired
 	private VarselInfoConsumer varselInfoConsumer;
 
-	@Inject
+	@Autowired
 	private HentDigitalKontaktinformasjonConsumer dkifConsumer;
 
-	@Inject
+	@Autowired
 	private VarselKanalDecider varselKanalDecider;
 
-	@Inject
+	@Autowired
 	private VarselutsendingProducer varselutsendingProducer;
 
-	@Inject
+	@Autowired
 	private VarselutsendingToMapper varselutsendingToMapper;
 	
-	@Inject
+	@Autowired
 	private VarselBestillingDomainMapper domainMapper;
 	
-	@Inject
+	@Autowired
 	private VarselbestillingRepo varselbestillingRepo;
 	
 	public void bestillServicemelding(BestillVarselTo bestilling) {

@@ -1,10 +1,10 @@
 package no.nav.varsel.service.tvarsel005.to;
 
+import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.time.Month;

@@ -4,9 +4,8 @@ import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringTo;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
@@ -16,11 +15,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -30,15 +29,14 @@ import static org.mockito.Mockito.when;
  * @author Ugur Alpay Cenar, Visma Consulting.
  */
 @WebAppConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {MottaVarselKvitteringService.class, MottaVarselKvitteringRetryTest.Config.class})
 @ActiveProfiles({"itest", "local"})
 public class MottaVarselKvitteringRetryTest {
 
-	@Inject
+	@Autowired
 	MottaVarselKvitteringService mottaVarselKvitteringService;
 
-	@Inject
+	@Autowired
 	VarselRepo varselRepo;
 
 	@EnableRetry
@@ -51,7 +49,7 @@ public class MottaVarselKvitteringRetryTest {
 		}
 	}
 
-	@After
+	@AfterEach
 	public void resetMocks() {
 		Mockito.reset(varselRepo);
 	}

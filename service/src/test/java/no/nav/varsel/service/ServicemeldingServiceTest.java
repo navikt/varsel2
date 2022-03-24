@@ -1,26 +1,5 @@
 package no.nav.varsel.service;
 
-import static no.nav.varsel.domain.to.AktoerTo.newPersonIdent;
-import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
-import static no.nav.varsel.repo.TestdataUtil.EPOST;
-import static no.nav.varsel.repo.TestdataUtil.FNR;
-import static no.nav.varsel.repo.TestdataUtil.OVERSTYRT_PREFERERT_KANAL;
-import static no.nav.varsel.repo.TestdataUtil.PREFERERT_KANAL;
-import static no.nav.varsel.repo.TestdataUtil.TLF;
-import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import no.nav.varsel.domain.code.KanalCode;
@@ -39,19 +18,40 @@ import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import static no.nav.varsel.domain.to.AktoerTo.newPersonIdent;
+import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
+import static no.nav.varsel.repo.TestdataUtil.EPOST;
+import static no.nav.varsel.repo.TestdataUtil.FNR;
+import static no.nav.varsel.repo.TestdataUtil.OVERSTYRT_PREFERERT_KANAL;
+import static no.nav.varsel.repo.TestdataUtil.PREFERERT_KANAL;
+import static no.nav.varsel.repo.TestdataUtil.TLF;
+import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 
 /**
@@ -59,7 +59,7 @@ import java.util.UUID;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith({MockitoExtension.class})
 public class ServicemeldingServiceTest {
 
 	private static final String TEKNISK = "teknisk";
@@ -92,11 +92,8 @@ public class ServicemeldingServiceTest {
 	private KontaktregisterTo kontaktregisterTo = new KontaktregisterTo();
 	private VarselInfoTo varselInfoTo = new VarselInfoTo();
 
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
-
-	@Before
-	public void setUp() throws Exception {
+	@BeforeEach
+	public void setUp() {
 		// reset
 		bestilling.setVarselBestillingId(null);
 		bestilling.setPersonIdent(null);
@@ -104,49 +101,52 @@ public class ServicemeldingServiceTest {
 		bestilling.setVarseltypeId(VARSELTYPE_ID);
 
 		varselInfoTo.setPreferertKanal(PREFERERT_KANAL);
-
-		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
-		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
-		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
-		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
-		when(varselKanalDecider.decideKanaler(kontaktregisterTo, OVERSTYRT_PREFERERT_KANAL)).thenReturn(TestdataUtil.OVERSTYRT_PREFERERT_KANAL);
-
-		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
-		when(varselutsendingToMapper.map(eq(varselbestilling))).thenReturn(varselutsendingTos);
 	}
 
 	@Test
-	public void shouldBestillServicemelding() throws Exception {
+	public void shouldBestillServicemelding() {
 		bestilling.setAktoerId(AKTOR_ID);
+		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
+		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
+		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
+		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
+		when(varselutsendingToMapper.map(eq(varselbestilling))).thenReturn(varselutsendingTos);
 		servicemeldingService.bestillServicemelding(bestilling);
 
 		assertOK();
 	}
 
-	@Test(expected = ArithmeticException.class)
-	public void shouldThrowTekniskForTekniskFeilDkif() throws Exception {
+	@Test
+	public void shouldThrowTekniskForTekniskFeilDkif() {
+		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
+		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(TEKNISK));
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(TEKNISK)).thenThrow(new ArithmeticException(TEKNISK));
-		servicemeldingService.bestillServicemelding(bestilling);
+
+		Executable executable = () -> servicemeldingService.bestillServicemelding(bestilling);
+		Assertions.assertThrows(ArithmeticException.class, executable);
 	}
 
 	@Test
 	public void throwsInaktivVarselmalExceptionForInaktivVarselmal() {
-		expectedException.expectMessage(
-				"Det er ikke mulig å bestille servicemelding for mottaker med mottakerId=" +
-						FNR + " og bestillingId=");
-		expectedException.expectMessage(" med inaktiv varselmal med varseltypeId=" + TestdataUtil.VARSELTYPE_ID + ".");
-
-		expectedException.expect(VarselInaktivVarselmalException.class);
+		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
+		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		bestilling.setTestvarsel(false);
 		varselInfoTo.setInaktiv(true);
 		varselInfoTo.setVarseltypeId(VARSELTYPE_ID);
-		servicemeldingService.bestillServicemelding(bestilling);
+
+		Executable executable = () -> servicemeldingService.bestillServicemelding(bestilling);
+
+		Exception exception = Assertions.assertThrows(VarselInaktivVarselmalException.class, executable);
+		assertTrue(exception.getMessage().contains("Det er ikke mulig å bestille servicemelding for mottaker med mottakerId=" +
+				FNR + " og bestillingId="));
+		assertTrue(exception.getMessage().contains(" med inaktiv varselmal med varseltypeId=" + TestdataUtil.VARSELTYPE_ID + "."));
 	}
 
 	@Test
 	public void doesNotStoreVarselbestillingWhenInaktivVarselmal() {
+		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		bestilling.setTestvarsel(false);
 		varselInfoTo.setInaktiv(true);
 		varselInfoTo.setVarseltypeId(VARSELTYPE_ID);
@@ -154,12 +154,15 @@ public class ServicemeldingServiceTest {
 			servicemeldingService.bestillServicemelding(bestilling);
 			fail();
 		} catch (VarselInaktivVarselmalException ive) {
-			verify(varselbestillingRepo, never()).saveAndFlush(anyObject());
+			verify(varselbestillingRepo, never()).saveAndFlush(any());
 		}
 	}
 
 	@Test
 	public void preferertKanalIsOverreidenWhenTestVarsel() {
+		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
+		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		bestilling.setTestvarsel(true);
 		varselInfoTo.setInaktiv(false);
 		servicemeldingService.bestillServicemelding(bestilling);
@@ -169,6 +172,9 @@ public class ServicemeldingServiceTest {
 
 	@Test
 	public void preferertKanallisteNotOverridenForNormalVarsler() {
+		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
+		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		bestilling.setTestvarsel(false);
 		varselInfoTo.setInaktiv(false);
 		servicemeldingService.bestillServicemelding(bestilling);
@@ -177,7 +183,8 @@ public class ServicemeldingServiceTest {
 	}
 
 	@Test
-	public void shouldNotCallDkiWhenEpostAndTlfIsSet() throws Exception {
+	public void shouldNotCallDkiWhenEpostAndTlfIsSet() {
+		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		createKontaktInfoBestilling();
 		servicemeldingService.bestillServicemelding(bestilling);
 
@@ -186,6 +193,7 @@ public class ServicemeldingServiceTest {
 
 	@Test
 	public void shouldNotSendDittNavToDecider() {
+		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		createKontaktInfoBestilling();
 		varselInfoTo.setPreferertKanal(Sets.newHashSet(KanalCode.EPOST, KanalCode.SMS, KanalCode.DITT_NAV));
 
@@ -196,7 +204,9 @@ public class ServicemeldingServiceTest {
 
 	@Test
 	public void shouldSendTelefonnummerAndEpostToDecider() {
+		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		createKontaktInfoBestilling();
+
 		servicemeldingService.bestillServicemelding(bestilling);
 
 		ArgumentCaptor<KontaktregisterTo> captor = ArgumentCaptor.forClass(KontaktregisterTo.class);
@@ -208,13 +218,13 @@ public class ServicemeldingServiceTest {
 	}
 
 	@Test
-	public void shouldThrowFunctionalForVarselbestilling_VarselbestillingUtloept() throws Exception {
+	public void shouldThrowFunctionalForVarselbestilling_VarselbestillingUtloept() {
 		LocalDateTime pastTime = LocalDateTime.now().minusDays(1);
-		expectedException.expectMessage("Varselbestilling has utloepstidspunkt=" + pastTime);
-		expectedException.expect(VarselbestillingUtloeptException.class);
 
 		bestilling.setUtloepstidspunkt(pastTime);
-		servicemeldingService.bestillServicemelding(bestilling);
+		Executable executable = () -> servicemeldingService.bestillServicemelding(bestilling);
+		Exception exception = Assertions.assertThrows(VarselbestillingUtloeptException.class, executable);
+		assertTrue(exception.getMessage().contains("Varselbestilling has utloepstidspunkt=" + pastTime));
 	}
 
 	private void createKontaktInfoBestilling() {

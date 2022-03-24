@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.annotation.DirtiesContext;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static java.lang.Thread.sleep;
 import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING;
@@ -18,7 +18,7 @@ public class JmsConsumerManagerTest extends AbstractConsumerJmsTest {
 	private static final int RESTART_TIME_SECONDS = 1;
 	private static final int CONTEXT_TIME_SECONDS = 1;
 
-	@Inject
+	@Autowired
 	protected JmsConsumerManager jmsConsumerManager;
 
 	@Before

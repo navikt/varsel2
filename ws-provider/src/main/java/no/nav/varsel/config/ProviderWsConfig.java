@@ -18,7 +18,7 @@ public class ProviderWsConfig {
 	@Bean
 	public FilterRegistrationBean mdcFilter() {
 		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-		filterRegistrationBean.setFilter(new MDCFilter());
+		filterRegistrationBean.setFilter(new MDCVarselFilter());
 		filterRegistrationBean.addUrlPatterns("/*");
 		filterRegistrationBean.setEnabled(true);
 		return filterRegistrationBean;

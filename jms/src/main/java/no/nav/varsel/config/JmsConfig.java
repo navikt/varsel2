@@ -1,11 +1,15 @@
 package no.nav.varsel.config;
 
+import com.ibm.mq.jms.MQConnectionFactory;
+import com.ibm.msg.client.wmq.WMQConstants;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
-import no.nav.melding.virksomhet.stopprevarsel.v1.stopprevarsel.StoppReVarsel;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
+import no.nav.varsel.config.alias.ListenerProperties;
+import no.nav.varsel.config.alias.MqGatewayProperties;
 import no.nav.varsel.jms.JmsPingProvider;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import org.slf4j.Logger;
@@ -26,15 +30,14 @@ import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 import org.springframework.jms.support.destination.BeanFactoryDestinationResolver;
 import org.springframework.jms.support.destination.DestinationResolver;
-import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.apache.activemq.jms.pool.PooledConnectionFactory;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
-import javax.naming.NamingException;
 
 /**
  * Spring config for JMS
@@ -44,6 +47,7 @@ import javax.naming.NamingException;
 @EnableJms
 @Import({QueueConfig.class})
 @Configuration
+@Slf4j
 public class JmsConfig {
 
 	@Value("${varsel.jms.consumer.min}")
@@ -51,17 +55,16 @@ public class JmsConfig {
 	@Value("${varsel.jms.consumer.max}")
 	private Integer maximumConsumers;
 
-	@Value("${no.nav.modig.security.systemuser.username}")
+	@Value("${varsel.serviceuser.username}")
 	private String srvVarselUsername;
-	@Value("${no.nav.modig.security.systemuser.password}")
+	@Value("${varsel.serviceuser.password}")
 	private String srvVarselPassword;
 
 	private static final Logger LOG = LoggerFactory.getLogger(JmsConfig.class);
 
 	@Bean
 	public JmsTemplate jmsTemplate(DestinationResolver destinationResolver,
-								   ConnectionFactory connectionFactory
-	) {
+								   ConnectionFactory connectionFactory) {
 		JmsTemplate jmsTemplate = new JmsTemplate();
 		jmsTemplate.setReceiveTimeout(5_000);
 		jmsTemplate.setMessageConverter(converter());
@@ -78,13 +81,16 @@ public class JmsConfig {
 	@Bean
 	public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(DestinationResolver destinationResolver,
 																		  ConnectionFactory connectionFactory,
-																		  PlatformTransactionManager transactionManager) {
+																		  PlatformTransactionManager transactionManager,
+																		  final ListenerProperties listenerProperties) {
 		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 		factory.setConnectionFactory(connectionFactory);
 		factory.setDestinationResolver(destinationResolver);
 		factory.setMessageConverter(new ConsumerMessageConverter(converter()));
 		factory.setTransactionManager(transactionManager);
 		factory.setConcurrency(String.format("%d-%d", minimumConsumers, maximumConsumers));
+		factory.setAutoStartup(listenerProperties.isAutoStartup());
+		log.info("Listener autostart: "+listenerProperties.isAutoStartup());
 		factory.setErrorHandler(t -> {
 			Throwable throwable = t;
 			if (t instanceof ListenerExecutionFailedException) {
@@ -110,7 +116,6 @@ public class JmsConfig {
 				Varselutsending.class.getPackage().getName(),
 				VarselKvittering.class.getPackage().getName(),
 				VarselMedHandling.class.getPackage().getName(),
-				StoppReVarsel.class.getPackage().getName(),
 				ServicemeldingMedKontaktinformasjon.class.getPackage().getName(),
 				JmsReply.class.getPackage().getName()
 		);
@@ -118,13 +123,22 @@ public class JmsConfig {
 	}
 
 	@Bean
-	public ConnectionFactory connectionFactory() {
-		ConnectionFactory connectionFactory = getJndiObject("java:/jboss/mqConnectionFactory", ConnectionFactory.class);
+	public ConnectionFactory connectionFactory(final MqGatewayProperties mqGatewayAlias, final @Value("${varselchannel.name}") String channelName) throws JMSException {
+		MQConnectionFactory connectionFactory = new MQConnectionFactory();
+		connectionFactory.setHostName(mqGatewayAlias.getHostname());
+		connectionFactory.setPort(mqGatewayAlias.getPort());
+		connectionFactory.setChannel(channelName);
+		connectionFactory.setQueueManager(mqGatewayAlias.getName());
+		connectionFactory.setTransportType(WMQConstants.WMQ_CM_CLIENT);
 		UserCredentialsConnectionFactoryAdapter adapter = new UserCredentialsConnectionFactoryAdapter();
 		adapter.setTargetConnectionFactory(connectionFactory);
 		adapter.setUsername(srvVarselUsername);
 		adapter.setPassword(srvVarselPassword);
-		return adapter;
+		PooledConnectionFactory pooledFactory = new PooledConnectionFactory();
+		pooledFactory.setConnectionFactory(adapter);
+		pooledFactory.setMaxConnections(10);
+		pooledFactory.setMaximumActiveSessionPerConnection(10);
+		return pooledFactory;
 	}
 
 	@Bean
@@ -153,16 +167,4 @@ public class JmsConfig {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T getJndiObject(String jndiName, Class<T> expectedType) {
-		JndiObjectFactoryBean factory = new JndiObjectFactoryBean();
-		factory.setJndiName(jndiName);
-		factory.setExpectedType(expectedType);
-		try {
-			factory.afterPropertiesSet();
-		} catch (IllegalArgumentException | NamingException e) {
-			throw new RuntimeException(e);
-		}
-		return (T) factory.getObject();
-	}
 }

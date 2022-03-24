@@ -23,13 +23,11 @@
 			<groupId>com.ryantenney.metrics</groupId>
 			<artifactId>metrics-spring</artifactId>
 		</dependency>
-
-		<!-- provided -->
 		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
-			<scope>provided</scope>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
 		</dependency>
+
 
 		<!-- test -->
 		<dependency>
@@ -37,11 +35,6 @@
 			<artifactId>varsel-config</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

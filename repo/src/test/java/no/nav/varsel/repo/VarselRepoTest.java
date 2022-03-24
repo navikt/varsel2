@@ -1,11 +1,11 @@
 package no.nav.varsel.repo;
 
+import org.junit.jupiter.api.Test;
+
 import static no.nav.varsel.repo.TestdataUtil.VARSEL_ID;
 import static no.nav.varsel.repo.TestdataUtil.createVarselbestilling;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Itest for Spring Data JPA {@link no.nav.varsel.domain.object.Varsel} Repo

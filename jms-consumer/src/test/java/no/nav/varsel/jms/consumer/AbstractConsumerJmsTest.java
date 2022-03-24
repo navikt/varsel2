@@ -19,7 +19,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.Message;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
@@ -44,27 +44,22 @@ import static wiremock.org.apache.http.entity.ContentType.APPLICATION_JSON;
 @AutoConfigureWireMock(port = 0)
 public abstract class AbstractConsumerJmsTest {
 
-	@BeforeClass
-	public static void setUpStatic() throws Exception {
-		JmsTestConfig.mockJndi();
-	}
-
-	@Inject
+	@Autowired
 	protected JmsTemplate jmsTemplate;
 
-	@Inject
+	@Autowired
 	protected Queue replyQueue;
 
-	@Inject
+	@Autowired
 	protected Queue backoutQueue;
 
-	@Inject
+	@Autowired
 	protected VarselbestillingRepo varselbestillingRepo;
 
-	@Inject
+	@Autowired
 	protected VarselRepo varselRepo;
 
-	@Inject
+	@Autowired
 	private TransactionTemplate transactionTemplate;
 
 	@Before

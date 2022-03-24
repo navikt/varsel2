@@ -1,10 +1,9 @@
 package no.nav.varsel.config;
 
-import static java.lang.System.getProperty;
-import static java.lang.System.setProperty;
-import static no.nav.varsel.config.QueueConfig.getQueue;
-
 import com.atomikos.jms.AtomikosConnectionFactoryBean;
+import com.ibm.mq.jms.MQQueue;
+import no.nav.varsel.config.alias.ListenerProperties;
+import no.nav.varsel.config.alias.MqGatewayProperties;
 import org.apache.activemq.ActiveMQXAConnectionFactory;
 import org.apache.activemq.RedeliveryPolicy;
 import org.apache.activemq.broker.BrokerService;
@@ -12,11 +11,10 @@ import org.apache.activemq.broker.region.policy.PolicyEntry;
 import org.apache.activemq.broker.region.policy.PolicyMap;
 import org.apache.activemq.broker.region.policy.SharedDeadLetterStrategy;
 import org.apache.activemq.command.ActiveMQQueue;
-import org.junit.Before;
-import org.springframework.beans.factory.annotation.Value;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -27,55 +25,32 @@ import org.springframework.transaction.support.TransactionTemplate;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.Queue;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.UUID;
+
+import static java.lang.System.getProperty;
+import static java.lang.System.setProperty;
 
 /**
  * Test Config for JMS
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class, DataSourceAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class})
 @Import({JmsConfig.class})
 @Configuration
+@EnableConfigurationProperties({
+		ListenerProperties.class
+})
 public class JmsTestConfig {
 
 	private static final String VM_LOCALHOST = "vm://localhost";
 
-	@Before
+	@BeforeEach
 	public void setUp() {
-		setProperty("no.nav.modig.security.systemuser.username", "srvvarsel");
-		setProperty("no.nav.modig.security.systemuser.password", "passord");
-	}
-
-	public static void mockJndi() throws Exception {
-		setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.apache.naming.java.javaURLContextFactory");
-		setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
-		InitialContext ctx = new InitialContext();
-		try {
-			ctx.destroySubcontext("java:");
-		} catch (NamingException e) {
-			// ignore
-		}
-
-		ctx.createSubcontext("java:");
-		ctx.createSubcontext("java:/jboss");
-
-		// Queue mocks
-		ctx.bind("java:/jboss/bestillServicemelding", new ActiveMQQueue("mq_bestillServicemelding"));
-		ctx.bind("java:/jboss/varselKvittering", new ActiveMQQueue("mq_varselKvittering"));
-		ctx.bind("java:/jboss/varselutsending", new ActiveMQQueue("mq_varselutsending"));
-		ctx.bind("java:/jboss/bestillVarsel", new ActiveMQQueue("mq_bestillVarsel"));
-		ctx.bind("java:/jboss/revarselStopp", new ActiveMQQueue("mq_revarselStopp"));
-		ctx.bind("java:/jboss/bestillServicemeldingKontaktInfo", new ActiveMQQueue("mq_bestillServicemeldingKontaktInfo"));
-
-		// Test queues
-		ctx.bind("java:/jboss/backout", new ActiveMQQueue("backout"));
-		ctx.bind("java:/jboss/reply", new ActiveMQQueue("reply"));
+		setProperty("varsel.serviceuser.username", "srvvarsel");
+		setProperty("varsel.serviceuser.password", "passord");
 	}
 
 	/**
@@ -85,8 +60,8 @@ public class JmsTestConfig {
 	public ConnectionFactory connectionFactory(ConnectionFactory atomikosConnectionFactoryBean) throws JMSException {
 		UserCredentialsConnectionFactoryAdapter adapter = new UserCredentialsConnectionFactoryAdapter();
 		adapter.setTargetConnectionFactory(atomikosConnectionFactoryBean);
-		adapter.setUsername(getProperty("no.nav.modig.security.systemuser.username"));
-		adapter.setPassword(getProperty("no.nav.modig.security.systemuser.password"));
+		adapter.setUsername(getProperty("varsel.serviceuser.username"));
+		adapter.setPassword(getProperty("varsel.serviceuser.password"));
 		return adapter;
 	}
 
@@ -136,13 +111,13 @@ public class JmsTestConfig {
 	}
 
 	@Bean
-	public Queue replyQueue() {
-		return getQueue("java:/jboss/reply");
+	public Queue replyQueue() throws JMSException {
+		return new MQQueue("reply_queue");
 	}
 
 	@Bean
 	public ActiveMQQueue backoutQueue() {
-		return (ActiveMQQueue) getQueue("java:/jboss/backout");
+		return new ActiveMQQueue("backout_queue");
 	}
 
 }

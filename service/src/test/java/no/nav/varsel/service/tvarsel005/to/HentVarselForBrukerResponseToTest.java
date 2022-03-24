@@ -1,10 +1,10 @@
 package no.nav.varsel.service.tvarsel005.to;
 
-import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo.Builder.aHentVarselForBrukerResponseTo;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertThat;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo.Builder.aHentVarselForBrukerResponseTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,7 @@ import java.util.List;
  * @author Lars Aune
  */
 public class HentVarselForBrukerResponseToTest {
+
 	@Test
 	public void shouldBuild() {
 		List<VarselTo> varsler = VarselbestillingToTest.buildVarsler();

@@ -4,8 +4,8 @@ import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianC
 import static no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo.VarselutsendingToBuilder.aVarselutsendingTo;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.AktoerId;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Person;
@@ -13,7 +13,7 @@ import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsend
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo.VarselutsendingToBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 

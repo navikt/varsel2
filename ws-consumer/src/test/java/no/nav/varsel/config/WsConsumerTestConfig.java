@@ -3,7 +3,6 @@ package no.nav.varsel.config;
 
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.DigitalKontaktinformasjonV1;
 import no.nav.varsel.config.cache.LokalCacheConfig;
-import no.nav.varsel.config.local.LocalTomcatConfiguration;
 import no.nav.varsel.mock.DigitalKontaktinformasjonV1Mock;
 import no.nav.varsel.wsconsumer.pdl.PdlIdentConsumer;
 import no.nav.varsel.wsconsumer.sts.StsRestConsumer;
@@ -15,7 +14,6 @@ import org.springframework.context.annotation.Import;
 import javax.xml.ws.Endpoint;
 
 @Import({
-		LocalTomcatConfiguration.class,
 		WsConsumerConfig.class,
 		STSTestConfig.class,
 		PdlIdentConsumer.class,

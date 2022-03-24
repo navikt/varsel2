@@ -7,13 +7,51 @@ metadata:
     team: teamdokumenthandtering
 spec:
   env:
+    - name: SPRING_DATASOURCE_URL
+      value: {{ SPRING_DATASOURCE_URL }}
+    - name: MQGATEWAY01_HOSTNAME
+      value: {{ MQGATEWAY01_HOSTNAME }}
+    - name: MQGATEWAY01_PORT
+      value: "{{ MQGATEWAY01_PORT }}"
+    - name: MQGATEWAY01_NAME
+      value: {{ MQGATEWAY01_NAME }}
+    - name: VARSELCHANNEL_NAME
+      value: {{ VARSELCHANNEL_NAME }}
+    - name: DKIF_WS_ENDPOINTURL
+      value: {{ DKIF_WS_ENDPOINTURL }}
+    - name: SECURITYTOKENSERVICE_URL
+      value: {{ SECURITYTOKENSERVICE_URL }}
+    - name: SECURITY_TOKEN_REST_SERVICE_URL
+      value: {{ SECURITY_TOKEN_REST_SERVICE_URL }}
+    - name: DOKKAT_VARSELINFO_REST_URL
+      value: {{ DOKKAT_VARSELINFO_REST_URL }}
+    - name: PDL_URL
+      value: {{ PDL_URL }}
+    - name: VARSELKVITTERING_QUEUENAME
+      value: {{ VARSELKVITTERING_QUEUENAME }}
+    - name: VARSELUTSENDING_QUEUENAME
+      value: {{ VARSELUTSENDING_QUEUENAME }}
+    - name: BESTILLSERVICEMELDING_QUEUENAME
+      value: {{ BESTILLSERVICEMELDING_QUEUENAME }}
+    - name: BESTILLSERVICEMELDINGKONTAKTINFO_QUEUENAME
+      value: {{ BESTILLSERVICEMELDINGKONTAKTINFO_QUEUENAME }}
+    - name: VARSEL_URL
+      value: {{ VARSEL_URL }}
+    - name: VARSEL_JMS_CONSUMER_ERROR_CONTEXT_SIZE
+      value: "{{ VARSEL_JMS_CONSUMER_ERROR_CONTEXT_SIZE }}"
+    - name: VARSEL_JMS_CONSUMER_ERROR_CONTEXT_TIME_SECONDS
+      value: "{{ VARSEL_JMS_CONSUMER_ERROR_CONTEXT_TIME_SECONDS }}"
+    - name: VARSEL_JMS_CONSUMER_ERROR_RESTART_DELAY_SECONDS
+      value: "{{ VARSEL_JMS_CONSUMER_ERROR_RESTART_DELAY_SECONDS }}"
+    - name: LISTENER_AUTOSTART
+      value: "{{ LISTENER_AUTOSTART }}"
   image: {{ image }}
   ingresses:
     {{#each INGRESSES}}
        - {{ this }}
            {{/each}}
   liveness:
-    path: brevweb/isAlive
+    path: varsel/isAlive
     port: 8080
     initialDelay: 30
     failureThreshold: 10
@@ -22,7 +60,7 @@ spec:
     enabled: true
     path: /actuator/prometheus
   readiness:
-    path: brevweb/isReady
+    path: varsel/isReady
     port: 8080
     initialDelay: 30
     timeout: 3
@@ -39,3 +77,7 @@ spec:
   vault:
     enabled: true
     paths:
+      - kvPath: {{ VARSEL_DS }}
+        mountPath: /var/run/secrets/nais.io/varselDS
+      - kvPath: {{SERVICEUSER_VAULT_PATH}}
+        mountPath: /secrets/serviceuser/srvvarsel

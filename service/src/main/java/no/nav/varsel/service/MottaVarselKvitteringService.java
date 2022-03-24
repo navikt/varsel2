@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 
 /**
@@ -21,13 +21,12 @@ import java.time.LocalDateTime;
  *
  * @author Roar Bjurstrom, Visma Consulting.
  */
-
 public class MottaVarselKvitteringService {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(MottaVarselKvitteringService.class);
 	static final int MAX_LENGTH_FEILMELDING = 1000;
 	
-	@Inject
+	@Autowired
 	private VarselRepo varselRepo;
 
 	@Retryable(include = VarselNotExistException.class, maxAttempts = 3, backoff = @Backoff(delay = 3000, multiplier = 3))

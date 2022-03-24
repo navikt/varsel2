@@ -2,9 +2,10 @@ package no.nav.varsel.service;
 
 import static no.nav.varsel.service.MottaVarselKvitteringService.MAX_LENGTH_FEILMELDING;
 import static no.nav.varsel.test.TestUtils.aboutNow;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import no.nav.varsel.domain.code.StatusCode;
@@ -15,25 +16,23 @@ import no.nav.varsel.service.support.exception.functional.VarselNotExistExceptio
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringStatusTo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringTo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringToTest;
+import no.nav.varsel.wsconsumer.pdl.support.PdlFunctionalException;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * Unit tests for {@link MottaVarselKvitteringService}
  *
  * @author Roar Bjurstrom, Visma Consulting.
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class MottaVarselKvitteringServiceTest {
-
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
 
 	@Mock
 	private VarselRepo varselRepo;
@@ -47,10 +46,9 @@ public class MottaVarselKvitteringServiceTest {
 
 		when(varselRepo.findByVarselId(to.getVarselId())).thenReturn(null);
 
-		expectedException.expect(VarselNotExistException.class);
-		expectedException.expectMessage("Varsel with varselId=" + to.getVarselId() + " does not exist");
-
-		mottaVarselKvitteringService.behandleKvitteringsmelding(to);
+		Executable executable = () ->mottaVarselKvitteringService.behandleKvitteringsmelding(to);
+		Exception exception = Assertions.assertThrows(VarselNotExistException.class, executable);
+		assertEquals(exception.getMessage(), "Varsel with varselId=" + to.getVarselId() + " does not exist");
 	}
 
 	@Test
@@ -62,11 +60,10 @@ public class MottaVarselKvitteringServiceTest {
 
 		when(varselRepo.findByVarselId(to.getVarselId())).thenReturn(varsel);
 
-		expectedException.expect(InvalidVarselStatusException.class);
-		expectedException.expectMessage("Varsel with varselId=" + to.getVarselId() +
+		Executable executable = () ->mottaVarselKvitteringService.behandleKvitteringsmelding(to);
+		Exception exception = Assertions.assertThrows(InvalidVarselStatusException.class, executable);
+		assertEquals(exception.getMessage(), "Varsel with varselId=" + to.getVarselId() +
 				" has invalid statusCode=" + StatusCode.OPPRETTET);
-
-		mottaVarselKvitteringService.behandleKvitteringsmelding(to);
 	}
 
 	@Test

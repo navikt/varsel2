@@ -3,12 +3,12 @@ package no.nav.varsel.domain.utility;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.DATATYPE_FACTORY;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
 
 
 import org.hamcrest.Matchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;

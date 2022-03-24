@@ -6,23 +6,23 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author Ugur Alpay Cenar, Visma Consulting.
  */
 @Component
-@Profile("remote")
+@Profile("nais")
 public class STSConfig {
 
     private final String stsUrl;
     private final String serviceuserUsername;
     private final String serviceuserPassword;
 
-    @Inject
-    public STSConfig(@Value("${securityTokenService.url}") String stsUrl,
-					 @Value("${no.nav.modig.security.systemuser.username}") String serviceuserUsername,
-                     @Value("${no.nav.modig.security.systemuser.password}") String serviceuserPassword) {
+    @Autowired
+    public STSConfig(@Value("${securitytokenservice.url}") String stsUrl,
+					 @Value("${varsel.serviceuser.username}") String serviceuserUsername,
+                     @Value("${varsel.serviceuser.password}") String serviceuserPassword) {
         this.stsUrl = stsUrl;
         this.serviceuserUsername = serviceuserUsername;
         this.serviceuserPassword = serviceuserPassword;

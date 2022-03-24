@@ -1,18 +1,18 @@
 package no.nav.varsel.domain.auxiliary;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 import no.nav.varsel.domain.Constants;
 import no.nav.varsel.domain.object.Varselbestilling;
 import org.hibernate.type.Type;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.MDC;
 
 /**
@@ -20,7 +20,7 @@ import org.slf4j.MDC;
  *
  * @author Thomas Eugen Bjørge, Visma Consulting
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ChangeStampInterceptorTest {
 
 	private static final String USER = "test";
@@ -32,7 +32,7 @@ public class ChangeStampInterceptorTest {
 
 	private ChangeStampInterceptor interceptor = new ChangeStampInterceptor();
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		when(changeStampType.getReturnedClass()).thenReturn(ChangeStamp.class);
 		MDC.put(Constants.USER_ID, USER);

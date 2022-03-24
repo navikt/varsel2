@@ -16,7 +16,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.net.URI;
 import java.util.HashMap;
 
@@ -41,7 +41,7 @@ public class PdlIdentConsumer {
 	public static final int DELAY = 500;
 	public static final int MULTIPLIER = 2;
 
-	@Inject
+	@Autowired
 	public PdlIdentConsumer(
 			@Value("${pdl.url}") String pdlUrl,
 			RestTemplate restTemplate,

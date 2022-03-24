@@ -4,6 +4,27 @@
   "APPD_NAME": "varsel2-q1",
   "INGRESSES": [
     "https://varsel2-q1.dev.intern.nav.no",
-    "https://varsel2-q1.dev.adeo.no"
-  ]
+    "https://app-q1.adeo.no/varsel"
+  ],
+  "SPRING_DATASOURCE_URL": "jdbc:oracle:thin:@a01dbfl032.adeo.no:1521/varsel_q1",
+  "VARSEL_DS": "/oracle/data/dev/creds/varsel_q1-user",
+  "MQGATEWAY01_HOSTNAME": "b27apvl219.preprod.local",
+  "MQGATEWAY01_PORT": "1413",
+  "MQGATEWAY01_NAME": "MQLS01",
+  "VARSELCHANNEL_NAME": "Q1_VARSELPRODUKSJON",
+  "DKIF_WS_ENDPOINTURL": "https://dkif.dev.adeo.no/ws/DigitalKontaktinformasjon/v1",
+  "SECURITYTOKENSERVICE_URL": "https://sts-q1.preprod.local/SecurityTokenServiceProvider/",
+  "SECURITY_TOKEN_REST_SERVICE_URL": "https://security-token-service.nais.preprod.local/rest/v1/sts/token",
+  "DOKKAT_VARSELINFO_REST_URL": "https://app-q1.adeo.no/dokkat/rest/varselinfo/v1",
+  "PDL_URL": "https://pdl-api.nais.preprod.local/graphql",
+  "VARSELKVITTERING_QUEUENAME": "QA.Q1_VARSELPRODUKSJON.KVITTERING",
+  "VARSELUTSENDING_QUEUENAME": "QA.Q1_VARSEL.INN",
+  "BESTILLSERVICEMELDING_QUEUENAME": "QA.Q1_VARSELPRODUKSJON.BEST_VARSEL_M_HANDLING",
+  "BESTILLSERVICEMELDINGKONTAKTINFO_QUEUENAME": "QA.Q1_VARSELPRODUKSJON.BEST_SRVMLD_M_KONTAKT",
+  "VARSEL_URL": "https://tjenester-q1.nav.no",
+  "VARSEL_JMS_CONSUMER_ERROR_CONTEXT_SIZE": "20",
+  "VARSEL_JMS_CONSUMER_ERROR_CONTEXT_TIME_SECONDS": "600",
+  "VARSEL_JMS_CONSUMER_ERROR_RESTART_DELAY_SECONDS": "600",
+  "SERVICEUSER_VAULT_PATH": "/serviceuser/data/dev/srvvarsel",
+  "LISTENER_AUTOSTART": "true"
 }

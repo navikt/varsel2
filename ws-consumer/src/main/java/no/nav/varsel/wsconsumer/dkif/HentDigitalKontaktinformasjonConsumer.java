@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Collection;
 import java.util.Set;
 
@@ -28,12 +28,12 @@ public class HentDigitalKontaktinformasjonConsumer {
 
 	private static final Logger LOG = LoggerFactory.getLogger(HentDigitalKontaktinformasjonConsumer.class);
 
-	@Inject
+	@Autowired
 	private DigitalKontaktinformasjonV1 digitalKontaktinformasjonV1;
-	@Inject
+	@Autowired
 	private HentDigitalKontaktinformasjonMapper mapper;
 
-	@Inject
+	@Autowired
 	private VarselKanalDecider varselKanalDecider;
 
 	@Retryable(maxAttempts = 5, backoff = @Backoff(delay = 1000L, multiplier = 2))

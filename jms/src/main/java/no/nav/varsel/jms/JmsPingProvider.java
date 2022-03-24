@@ -1,15 +1,15 @@
 package no.nav.varsel.jms;
 
+import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 import no.nav.varsel.config.support.QueueInfo;
 import no.nav.varsel.domain.to.Ping;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.UncategorizedJmsException;
 import org.springframework.jms.core.JmsTemplate;
 
 import javax.annotation.Resource;
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.JMSException;
 import javax.jms.Queue;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class JmsPingProvider {
 	@Resource
 	private Map<QueueInfo, Queue> queueOverview;
 
-	@Inject
+	@Autowired
 	private JmsTemplate jmsTemplate;
 
 	public List<Ping> ping() {

@@ -19,7 +19,7 @@ import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,7 +35,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class VarselBestillingDomainMapper {
 
-	@Inject
+	@Autowired
 	private VarselFletter varselFletter;
 
 	public Varselbestilling mapVarselbestillingFoerstegangVarselMedRevarsel(BestillVarselTo bestillingTo,

@@ -12,7 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
 import java.time.Duration;
@@ -40,9 +40,9 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
 
-	@Inject
+	@Autowired
 	private Queue varselKvitteringQueue;
-	@Inject
+	@Autowired
 	private Queue bestillServicemeldingQueue;
 
 	@Test

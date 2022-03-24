@@ -1,12 +1,12 @@
 package no.nav.varsel.jms.to.xml;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import static no.nav.varsel.jms.to.xml.ObjectFactory.JMS_REPLY_QNAME;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;
@@ -22,7 +22,7 @@ public class ObjectFactoryTest {
 	private ObjectFactory objectFactory = new ObjectFactory();
 	private JmsReply jmsReply;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		jmsReply = objectFactory.createJmsReply();
 		jmsReply.getParams().put("key", "val");

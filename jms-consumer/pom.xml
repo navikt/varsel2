@@ -22,18 +22,8 @@
 
 		<!-- provided -->
 		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.sun.activation</groupId>
 			<artifactId>javax.activation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.spec.javax.jms</groupId>
-			<artifactId>jboss-jms-api_2.0_spec</artifactId>
-			<scope>provided</scope>
 		</dependency>
 
 		<!-- test -->
@@ -95,6 +85,11 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-contract-wiremock</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jta-atomikos</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

@@ -1,12 +1,5 @@
 package no.nav.varsel.repo.support;
 
-import static java.util.stream.Collectors.toList;
-import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
-import static no.nav.varsel.repo.TestdataUtil.FNR;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
-
 import no.nav.varsel.domain.builder.VarselbestillingBuilder;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
@@ -14,15 +7,25 @@ import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.AbstractRepoTest;
 import no.nav.varsel.repo.TestdataUtil;
 import no.nav.varsel.repo.VarselbestillingRepo;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
+import static no.nav.varsel.repo.TestdataUtil.FNR;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit-test for VarselbestillingRepoImpl FindFerdigbehandletVarselbestillingerTest
@@ -34,16 +37,13 @@ public class FindFerdigbehandletVarselbestillingerTest extends AbstractRepoTest 
 
 	public static final int NUMBER_OF_DAYS_STANDARD_OFFSET = 10;
 
-	@Inject
+	@Autowired
 	private VarselbestillingRepo varselbestillingRepo;
 
 	private LocalDateTime datoFom = LocalDateTime.now().minusDays(NUMBER_OF_DAYS_STANDARD_OFFSET);
 	private LocalDateTime datoTom = LocalDateTime.now().plusDays(NUMBER_OF_DAYS_STANDARD_OFFSET);
 
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
-
-	@Before
+	@BeforeEach
 	public void onSetup() {
 		varselbestillingRepo.save(createVarselBestilling(createFerdigbehandletVarsel(), createFerdigbehandletVarsel())
 				.varselbestillingId("ferdigbehandletVarselbestillingInFarPast")
@@ -70,9 +70,9 @@ public class FindFerdigbehandletVarselbestillingerTest extends AbstractRepoTest 
 
 	@Test
 	public void shouldThrowExceptionWhenBrukerParameterIsNull() {
-		expectedException.expect(InvalidDataAccessApiUsageException.class);
-		expectedException.expectMessage("bruker is null");
-		varselbestillingRepo.findFerdigbehandletVarselbestillinger(null, datoFom, datoTom);
+		Executable executable = () -> varselbestillingRepo.findFerdigbehandletVarselbestillinger(null, datoFom, datoTom); //prepare Executable with invocation of the method on your system under test
+		Exception exception = Assertions.assertThrows(InvalidDataAccessApiUsageException.class, executable);
+		assertTrue(exception.getMessage().contains("bruker is null"));
 	}
 
 	@Test

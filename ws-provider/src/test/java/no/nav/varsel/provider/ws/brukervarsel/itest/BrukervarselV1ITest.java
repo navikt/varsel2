@@ -36,7 +36,7 @@ import no.nav.varsel.repo.TestdataUtil;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 
 /**
@@ -49,7 +49,7 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 	private static final LocalDateTime FOM = BESTILLING_TIDSPUNKT.minusHours(1);
 	private static final LocalDateTime TOM = BESTILLING_TIDSPUNKT.plusHours(1);
 
-	@Inject
+	@Autowired
 	private BrukervarselV1Endpoint brukervarselV1;
 
 	@Before
