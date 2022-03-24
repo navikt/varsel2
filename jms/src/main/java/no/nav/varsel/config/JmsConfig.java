@@ -32,6 +32,7 @@ import org.springframework.jms.support.destination.BeanFactoryDestinationResolve
 import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.apache.activemq.jms.pool.PooledConnectionFactory;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
@@ -133,7 +134,11 @@ public class JmsConfig {
 		adapter.setTargetConnectionFactory(connectionFactory);
 		adapter.setUsername(srvVarselUsername);
 		adapter.setPassword(srvVarselPassword);
-		return adapter;
+		PooledConnectionFactory pooledFactory = new PooledConnectionFactory();
+		pooledFactory.setConnectionFactory(adapter);
+		pooledFactory.setMaxConnections(10);
+		pooledFactory.setMaximumActiveSessionPerConnection(10);
+		return pooledFactory;
 	}
 
 	@Bean

@@ -244,6 +244,11 @@
 				<artifactId>com.ibm.mq.allclient</artifactId>
 				<version>${wmq.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.activemq</groupId>
+				<artifactId>activemq-jms-pool</artifactId>
+				<version>${activemq.version}</version>
+			</dependency>
 
 			<!-- web -->
 			<dependency>
