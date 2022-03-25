@@ -21,7 +21,7 @@ public class LokalCacheConfig {
 
 	@Bean
 	@Primary
-	@Profile({"remote", "itest"})
+	@Profile({"nais", "itest"})
 	CacheManager cacheManager() {
 		SimpleCacheManager manager = new SimpleCacheManager();
 		manager.setCaches(Arrays.asList(
