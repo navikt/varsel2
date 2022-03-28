@@ -9,7 +9,7 @@
     "https://app.adeo.no/varsel"
   ],
   "SPRING_DATASOURCE_URL": "jdbc:oracle:thin:@a01dbfl041.adeo.no:1521/varsel_HA",
-  "VARSEL_DS": "/oracle/data/dev/creds/varsel_q1-user",
+  "VARSEL_DS": "/oracle/data/prod/creds/varsel-user",
   "MQGATEWAY01_HOSTNAME": "a01apvl247.adeo.no",
   "MQGATEWAY01_PORT": "1414",
   "MQGATEWAY01_NAME": "MPLS01",
@@ -27,6 +27,6 @@
   "VARSEL_JMS_CONSUMER_ERROR_CONTEXT_SIZE": "20",
   "VARSEL_JMS_CONSUMER_ERROR_CONTEXT_TIME_SECONDS": "600",
   "VARSEL_JMS_CONSUMER_ERROR_RESTART_DELAY_SECONDS": "600",
-  "SERVICEUSER_VAULT_PATH": "/serviceuser/data/dev/srvvarsel",
+  "SERVICEUSER_VAULT_PATH": "/serviceuser/data/prod/srvvarsel",
   "LISTENER_AUTOSTART": "false"
 }
