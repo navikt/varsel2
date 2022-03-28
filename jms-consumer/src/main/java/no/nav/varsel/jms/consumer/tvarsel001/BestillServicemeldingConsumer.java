@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.TextMessage;
 
 import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING;
@@ -31,13 +30,13 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 
 	private static final String BESTILL_SERVICEMELDING_QUEUE = "bestillServicemeldingQueue";
 
-	@Autowired
-	private BestillServicemeldingMapper bestillServicemeldingMapper;
-	@Autowired
-	private ServicemeldingService servicemeldingService;
+	private final BestillServicemeldingMapper bestillServicemeldingMapper;
+	private final ServicemeldingService servicemeldingService;
 
-	public BestillServicemeldingConsumer() {
+	public BestillServicemeldingConsumer(BestillServicemeldingMapper bestillServicemeldingMapper, ServicemeldingService servicemeldingService) {
 		super(BESTILL_SERVICEMELDING, Varsel.class);
+		this.bestillServicemeldingMapper = bestillServicemeldingMapper;
+		this.servicemeldingService = servicemeldingService;
 	}
 
 	@Override
