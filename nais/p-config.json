@@ -8,7 +8,7 @@
     "https://varsel2.intern.nav.no",
     "https://app.adeo.no/varsel"
   ],
-  "SPRING_DATASOURCE_URL": "jdbc:oracle:thin:@a01dbfl050.adeo.no:1521/varsel_HA",
+  "SPRING_DATASOURCE_URL": "jdbc:oracle:thin:@(DESCRIPTION=(FAILOVER=on)(CONNECT_TIMEOUT=15)(RETRY_COUNT=20)(RETRY_DELAY=3)(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=a01dbfl050.adeo.no)(PORT=1521))(ADDRESS=(PROTOCOL=TCP)(HOST=a01dbfl041.adeo.no)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=varsel_HA)))",
   "VARSEL_DS": "/oracle/data/prod/creds/varsel-user",
   "MQGATEWAY01_HOSTNAME": "a01apvl247.adeo.no",
   "MQGATEWAY01_PORT": "1414",
