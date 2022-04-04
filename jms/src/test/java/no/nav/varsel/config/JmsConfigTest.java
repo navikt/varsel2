@@ -14,7 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 public class JmsConfigTest {
 
 	@Test
-	public void shouldStartContext() throws Exception {
+	public void shouldStartContext() {
 		// itests using the config exists in jms consumer, ws provider, batch etc
 	}
 }

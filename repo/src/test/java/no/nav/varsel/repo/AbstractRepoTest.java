@@ -8,7 +8,6 @@ import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,13 +29,13 @@ public abstract class AbstractRepoTest {
 	protected EntityManager entityManager;
 
 	@BeforeEach
-	public void setUpAbstract() throws Exception {
+	public void setUpAbstract() {
 		MDC.put(Constants.USER_ID, "itest");
 		varselbestillingRepo.deleteAll();
 	}
 
 	@AfterEach
-	public void tearDownAbstract() throws Exception {
+	public void tearDownAbstract() {
 		MDC.remove(Constants.USER_ID);
 		varselbestillingRepo.deleteAll();
 	}

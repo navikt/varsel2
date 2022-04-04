@@ -15,14 +15,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class VarselRepoTest extends AbstractRepoTest {
 
 	@Test
-	public void shouldFindByVarselId() throws Exception {
+	public void shouldFindByVarselId() {
 		varselbestillingRepo.save(createVarselbestilling());
 
 		assertThat(varselRepo.findByVarselId(VARSEL_ID), notNullValue());
 	}
 
-	@Test
-	public void shouldPing() throws Exception {
-		varselRepo.ping();
-	}
 }

@@ -47,7 +47,6 @@
 		<jaxb-impl.version>3.0.2</jaxb-impl.version>
 
 		<!--	Fiks og rydd opp	-->
-		<bootstrap.version>3.4.1</bootstrap.version>
 		<resteasy.version>2.3.10.Final</resteasy.version>
 
 		<guava.version>19.0</guava.version>
@@ -229,13 +228,6 @@
 				<groupId>org.apache.activemq</groupId>
 				<artifactId>activemq-jms-pool</artifactId>
 				<version>${activemq.version}</version>
-			</dependency>
-
-			<!-- web -->
-			<dependency>
-				<groupId>org.webjars</groupId>
-				<artifactId>bootstrap</artifactId>
-				<version>${bootstrap.version}</version>
 			</dependency>
 
 			<!-- modig -->

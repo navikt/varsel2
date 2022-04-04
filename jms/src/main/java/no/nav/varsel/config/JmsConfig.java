@@ -10,8 +10,8 @@ import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMe
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
 import no.nav.varsel.config.alias.ListenerProperties;
 import no.nav.varsel.config.alias.MqGatewayProperties;
-import no.nav.varsel.jms.JmsPingProvider;
 import no.nav.varsel.jms.to.xml.JmsReply;
+import org.apache.activemq.jms.pool.PooledConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
@@ -32,7 +32,6 @@ import org.springframework.jms.support.destination.BeanFactoryDestinationResolve
 import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.apache.activemq.jms.pool.PooledConnectionFactory;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
@@ -141,11 +140,6 @@ public class JmsConfig {
 		return pooledFactory;
 	}
 
-	@Bean
-	public JmsPingProvider jmsPingProvider() {
-		return new JmsPingProvider();
-	}
-
 	/**
 	 * Only convert to Message, not from Message, used for replies in jms
 	 */
@@ -162,7 +156,7 @@ public class JmsConfig {
 		}
 
 		@Override
-		public Object fromMessage(Message message) throws JMSException, MessageConversionException {
+		public Object fromMessage(Message message) throws MessageConversionException {
 			return message;
 		}
 	}
