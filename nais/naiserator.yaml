@@ -6,6 +6,8 @@ metadata:
   labels:
     team: teamdokumenthandtering
 spec:
+  kafka:
+    pool: {{ KAFKA_POOL }}
   env:
     - name: SPRING_DATASOURCE_URL
       value: {{ SPRING_DATASOURCE_URL }}

@@ -10,6 +10,8 @@ import no.nav.varsel.service.support.exception.functional.VarselInaktivVarselmal
 import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloeptException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
+import no.nav.varsel.tvarsel006.VarselUtsendelse;
+import no.nav.varsel.service.tvarsel006.support.VarselUtsendelseMapper;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
@@ -56,6 +58,12 @@ public class ServicemeldingService {
 	
 	@Autowired
 	private VarselbestillingRepo varselbestillingRepo;
+
+	@Autowired
+	private VarselUtsendelse varselUtsendelse;
+
+	@Autowired
+	private VarselUtsendelseMapper varselUtsendelseMapper;
 	
 	public void bestillServicemelding(BestillVarselTo bestilling) {
 		if (bestilling.getUtloepstidspunkt() != null && bestilling.getUtloepstidspunkt().isBefore(LocalDateTime.now())) {
@@ -90,11 +98,21 @@ public class ServicemeldingService {
 		varselbestillingRepo.saveAndFlush(varselbestilling);
 		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper.map(varselbestilling);
 
+		//FIXME Rydd opp i håndtering her.
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
-			varselutsendingProducer.produce(varselutsendingTo);
-			LOGG.info("Sending servicevarsel with varselbestillingsId=" + varselbestilling.getVarselbestillingId()
-					+ ", varselTypeId=" + varselbestilling.getVarseltypeId()
-					+ " to kanal=" + varselutsendingTo.getKanal());
+			if(hasKontaktInfo(bestilling)) {
+				varselUtsendelse.sendVarsel(varselUtsendelseMapper.mapNotifikasjonMedKontaktInfo(
+						bestilling,
+						varselbestilling,
+						varselutsendingTo,
+						varselInfoTo
+				));
+			} else {
+				varselutsendingProducer.produce(varselutsendingTo);
+				LOGG.info("Sending servicevarsel with varselbestillingsId=" + varselbestilling.getVarselbestillingId()
+						+ ", varselTypeId=" + varselbestilling.getVarseltypeId()
+						+ " to kanal=" + varselutsendingTo.getKanal());
+			}
 		}
 	}
 	
