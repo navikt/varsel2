@@ -4,10 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.doknotifikasjon.schemas.NotifikasjonMedkontaktInfo;
 import no.nav.varsel.kafka.KafkaEventProducer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@Import(KafkaEventProducer.class)
+//FIXME Rydd opp i dependency injection for hele appen. Kanskje endre til @ComponentScan?
 public class VarselUtsendelse {
 
 	private final KafkaEventProducer kafkaEventProducer;

@@ -9,6 +9,7 @@ import no.nav.varsel.service.interfaces.BrukervarselService;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
 import no.nav.varsel.service.tvarsel005.support.BrukervarselMapper;
+import no.nav.varsel.service.tvarsel006.support.VarselUtsendelseMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -61,4 +62,7 @@ public class ServiceConfig {
 	public BrukervarselMapper brukervarselMapper() {
 		return new BrukervarselMapper();
 	}
+
+	@Bean
+	public VarselUtsendelseMapper varselUtsendelseMapper() { return new VarselUtsendelseMapper(); }
 }
