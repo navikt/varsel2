@@ -1,6 +1,8 @@
 Varsel
 =====
 
+Varsel er en komponent for å sende ut varsel basert på bestillinger
+
 [Confluence](https://confluence.adeo.no/display/BOA/Varsel) for inforamsjon av applikasjonen.
 
 Local Server

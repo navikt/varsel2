@@ -6,7 +6,7 @@
 	<groupId>no.nav.varsel</groupId>
 	<artifactId>varsel</artifactId>
 	<packaging>pom</packaging>
-	<version>5.4.3-SNAPSHOT</version>
+	<version>1-SNAPSHOT</version>
 
 	<modules>
 		<module>config</module>
@@ -22,9 +22,6 @@
 		<module>ws-provider</module>
 	</modules>
 
-	<name>Varsel</name>
-	<description>Varsel er en komponent for å sende ut varsel basert på bestillinger</description>
-
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -33,12 +30,8 @@
 
 	<properties>
 		<modig-security.version>3.0.6</modig-security.version>
-		<cxf.version>3.3.10</cxf.version>
-		<javax.activation.version>1.2.0</javax.activation.version>
-		<jaxb-impl.version>3.0.2</jaxb-impl.version>
-		<jaxb-api.version>2.3.1</jaxb-api.version>
-		<bootstrap.version>3.4.1</bootstrap.version>
-		<resteasy.version>2.3.10.Final</resteasy.version>
+		<modig-log.version>1.1.2</modig-log.version>
+		<modig-log-filter.version>1.1.3</modig-log-filter.version>
 		<nav-varsel-v1.version>1.1.1</nav-varsel-v1.version>
 		<nav-virksomhet-varselutsending-v2.version>2.0.3</nav-virksomhet-varselutsending-v2.version>
 		<nav-varselKvittering-v1.version>1.0.0</nav-varselKvittering-v1.version>
@@ -48,36 +41,34 @@
 		</nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>
 		<dokkat-schemas.version>6.0.3</dokkat-schemas.version>
 		<nav-brukervarsel-v1-tjenestespesifikasjon.version>1.0.4</nav-brukervarsel-v1-tjenestespesifikasjon.version>
+
+		<cxf.version>3.3.10</cxf.version>
+		<javax.activation.version>1.2.0</javax.activation.version>
+		<jaxb-impl.version>3.0.2</jaxb-impl.version>
+
+		<!--	Fiks og rydd opp	-->
+		<bootstrap.version>3.4.1</bootstrap.version>
+		<resteasy.version>2.3.10.Final</resteasy.version>
+
 		<guava.version>19.0</guava.version>
 		<commons-io.version>2.7</commons-io.version>
-		<commons-lang3.version>3.11</commons-lang3.version>
-		<usertype.extended.version>3.2.0.GA</usertype.extended.version>
-		<modig-log.version>1.1.2</modig-log.version>
-		<modig-log-filter.version>1.1.3</modig-log-filter.version>
+
 		<xml-apis.version>1.4.01</xml-apis.version>
-		<spring-retry.version>1.2.4.RELEASE</spring-retry.version>
 		<metrics-spring.version>3.1.3</metrics-spring.version>
 		<spotify-logging.version>2.3.1</spotify-logging.version>
-		<!-- Overstyrer spring boot 1.5.22.RELEASE sin versjon 4.5.9 som har en kjent bug.
-		https://issues.apache.org/jira/browse/HTTPCLIENT-1997 -->
-		<httpclient.version>4.5.10</httpclient.version>
+
 		<!-- provided -->
 		<jaxws-ri.version>2.3.2</jaxws-ri.version>
 		<oracle.version>19.10.0.0</oracle.version>
 		<token-support.version>1.3.1</token-support.version>
+
 		<!-- test -->
 		<activemq-core.version>5.7.0</activemq-core.version>
 		<modig-testcertificates.version>1.2.5</modig-testcertificates.version>
-		<wiremock-jre8-standalone.version>2.26.2</wiremock-jre8-standalone.version>
-		<spring-cloud-contract-wiremock-version>1.2.5.RELEASE</spring-cloud-contract-wiremock-version>
+		<spring-cloud-contract-wiremock-version>3.1.1</spring-cloud-contract-wiremock-version>
 
 		<!--build-->
-		<wagon-webdav-jackrabbit.version>3.3.4</wagon-webdav-jackrabbit.version>
-		<maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
-		<maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
-		<maven-ear-plugin.version>3.0.1</maven-ear-plugin.version>
 		<maven-toolchains.version>3.0.0</maven-toolchains.version>
-		<awaitility.version>4.0.3</awaitility.version>
 		<wmq.version>9.2.2.0</wmq.version>
 	</properties>
 
@@ -153,11 +144,6 @@
 				<artifactId>varsel-web</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.springframework.retry</groupId>
-				<artifactId>spring-retry</artifactId>
-				<version>${spring-retry.version}</version>
-			</dependency>
 
 			<!--Tjenestespesifikasjoner-->
 			<dependency>
@@ -228,11 +214,6 @@
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>${commons-io.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
-				<version>${commons-lang3.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.ryantenney.metrics</groupId>
@@ -432,11 +413,6 @@
 				<version>${jaxb-impl.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>javax.xml.bind</groupId>
-				<artifactId>jaxb-api</artifactId>
-				<version>${jaxb-api.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>jakarta.xml.bind</groupId>
 				<artifactId>jakarta.xml.bind-api</artifactId>
 				<version>3.0.1</version>
@@ -470,11 +446,6 @@
 				<version>${spring-cloud-contract-wiremock-version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.tomakehurst</groupId>
-				<artifactId>wiremock-jre8-standalone</artifactId>
-				<version>${wiremock-jre8-standalone.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>org.apache.activemq</groupId>
 				<artifactId>activemq-core</artifactId>
 				<version>${activemq-core.version}</version>
@@ -497,12 +468,6 @@
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-rt-transports-http-jetty</artifactId>
 				<version>${cxf.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.awaitility</groupId>
-				<artifactId>awaitility</artifactId>
-				<version>${awaitility.version}</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>
@@ -532,12 +497,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>com.vaadin.external.google</groupId>
-					<artifactId>android-json</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.jayway.jsonpath</groupId>
@@ -560,13 +519,6 @@
 
 
 	<build>
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-webdav-jackrabbit</artifactId>
-				<version>${wagon-webdav-jackrabbit.version}</version>
-			</extension>
-		</extensions>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -599,50 +551,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>${maven-surefire-plugin.version}</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${maven-surefire-plugin.version}</version>
 			</plugin>
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<artifactId>maven-ear-plugin</artifactId>
-					<version>${maven-ear-plugin.version}</version>
-				</plugin>
-				<plugin>
-					<artifactId>maven-assembly-plugin</artifactId>
-					<version>${maven-assembly-plugin.version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<configuration>
-						<archive>
-							<manifestEntries>
-								<Dependencies>jdk.unsupported</Dependencies>
-							</manifestEntries>
-						</archive>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
-
-	<distributionManagement>
-		<repository>
-			<id>m2internal</id>
-			<name>NAV Internal Repository</name>
-			<url>dav:http://maven.adeo.no/nexus/content/repositories/m2internal</url>
-		</repository>
-		<snapshotRepository>
-			<id>m2snapshot</id>
-			<name>NAV Snapshot Repository</name>
-			<url>dav:http://maven.adeo.no/nexus/content/repositories/m2snapshot</url>
-		</snapshotRepository>
-	</distributionManagement>
-
 </project>
