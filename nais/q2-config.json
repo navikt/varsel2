@@ -1,4 +1,5 @@
 {
+  "KAFKA_POOL": "nav-dev",
   "NAMESPACE": "teamdokumenthandtering",
   "APP_NAME": "varsel2",
   "APPD_NAME": "varsel2",
