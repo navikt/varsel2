@@ -1,21 +1,21 @@
 package no.nav.varsel.wsconsumer.dkif.support;
 
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.Epostadresse;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.Kontaktinformasjon;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.Mobiltelefonnummer;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonResponse;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
+
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Unit test for {@link HentDigitalKontaktinformasjonMapper}
@@ -35,7 +35,7 @@ public class HentDigitalKontaktinformasjonMapperTest {
 	public static final XMLGregorianCalendar MOB_OPPDATERT;
 	public static final XMLGregorianCalendar MOB_VERIFISERT;
 
-	private HentDigitalKontaktinformasjonMapper mapper = new HentDigitalKontaktinformasjonMapper();
+	private final HentDigitalKontaktinformasjonMapper mapper = new HentDigitalKontaktinformasjonMapper();
 
 	static {
 		EPOST_OPPDATERT = createDate(1);
@@ -45,7 +45,7 @@ public class HentDigitalKontaktinformasjonMapperTest {
 	}
 
 	@Test
-	public void shouldMapResponse() throws Exception {
+	public void shouldMapResponse() {
 		KontaktregisterTo map = mapper.map(createResponse());
 		assertThat(map.isReservasjon(), is(RESERVASJON));
 		assertThat(map.getEpostadresse(), is(EPOSTADRESSE));
@@ -57,7 +57,7 @@ public class HentDigitalKontaktinformasjonMapperTest {
 	}
 
 	@Test
-	public void shouldMapBools() throws Exception {
+	public void shouldMapBools() {
 		assertThat(mapper.mapStringToBool("true"), is(true));
 		assertThat(mapper.mapStringToBool("false"), is(false));
 		assertThat(mapper.mapStringToBool("JA"), is(true));
@@ -67,7 +67,7 @@ public class HentDigitalKontaktinformasjonMapperTest {
 	}
 
 	@Test
-	public void shouldMapResponseNullEpostMobil() throws Exception {
+	public void shouldMapResponseNullEpostMobil() {
 		HentDigitalKontaktinformasjonResponse response = createResponse();
 		response.getDigitalKontaktinformasjon().setEpostadresse(null);
 		response.getDigitalKontaktinformasjon().setMobiltelefonnummer(null);
@@ -77,7 +77,7 @@ public class HentDigitalKontaktinformasjonMapperTest {
 	}
 
 	@Test
-	public void shouldMapResponseNullDate() throws Exception {
+	public void shouldMapResponseNullDate() {
 		HentDigitalKontaktinformasjonResponse response = createResponse();
 		response.getDigitalKontaktinformasjon().getMobiltelefonnummer()
 				.setSistVerifisert(null);
@@ -86,7 +86,7 @@ public class HentDigitalKontaktinformasjonMapperTest {
 	}
 
 	@Test
-	public void shoulRemoveWhitespaceFromEpostadresseAndMobiltelefonnummer() throws Exception {
+	public void shoulRemoveWhitespaceFromEpostadresseAndMobiltelefonnummer() {
 		HentDigitalKontaktinformasjonResponse response = createResponse();
 		
 		Mobiltelefonnummer mobiltelefonnummer = new Mobiltelefonnummer();

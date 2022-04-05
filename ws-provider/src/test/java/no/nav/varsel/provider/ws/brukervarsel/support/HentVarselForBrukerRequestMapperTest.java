@@ -1,20 +1,22 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.AktoerId;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Person;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
 import java.util.Calendar;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Unit test for {@link HentVarselForBrukerRequestMapper}
@@ -24,13 +26,13 @@ import java.util.Calendar;
 public class HentVarselForBrukerRequestMapperTest {
 	public static final String AKTOER_ID = "AKTOER_ID";
 	public static final String FNR = "FNR";
-	private HentVarselForBrukerRequestMapper mapper = new HentVarselForBrukerRequestMapper();
+	private final HentVarselForBrukerRequestMapper mapper = new HentVarselForBrukerRequestMapper();
 	private XMLGregorianCalendar firstOfJune2016;
 	private XMLGregorianCalendar twentiethOfJune2016;
 	private LocalDateTime twentiethOfJune2016LocalDateTime;
 	private LocalDateTime firstOfJune2016LocalDateTime;
 
-	@Before
+	@BeforeEach
 	public void onSetup() {
 		firstOfJune2016 = TestdataUtil.getXMLGregorianCalendar(2016, Calendar.JUNE, 1);
 		twentiethOfJune2016 = TestdataUtil.getXMLGregorianCalendar(2016, Calendar.JUNE, 20);
@@ -38,9 +40,9 @@ public class HentVarselForBrukerRequestMapperTest {
 		firstOfJune2016LocalDateTime = LocalDateTime.of(2016, 6, 1, 0, 0, 0, 0);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void throwsIllegalArgumentExceptionWhenNullIsParameter() {
-		mapper.map(null);
+		assertThrows(IllegalArgumentException.class, () -> mapper.map(null));
 	}
 
 	@Test
@@ -103,7 +105,7 @@ public class HentVarselForBrukerRequestMapperTest {
 	}
 
 	@Test
-	public void shouldHandleNullPeriode() throws Exception {
+	public void shouldHandleNullPeriode() {
 		HentVarselForBrukerRequest request = createRequestWithFnr();
 		request.setPeriode(null);
 

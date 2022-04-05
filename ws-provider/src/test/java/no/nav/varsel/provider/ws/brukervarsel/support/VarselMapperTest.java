@@ -1,15 +1,16 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varsel;
 import no.nav.varsel.service.tvarsel005.to.VarselTo;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
 import java.time.Month;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 /**
  * Unit test for VarselMapper
@@ -26,8 +27,8 @@ public class VarselMapperTest {
 	private static final String VARSEL_TEKST = "VARSEL_TEKST";
 	private static final String VARSEL_URL = "VARSEL_URL";
 	private static final boolean REVARSEL = true;
-	private static XMLGregorianCalendar DISTRIBUERT;
-	private static XMLGregorianCalendar SENDT;
+	private static final XMLGregorianCalendar DISTRIBUERT;
+	private static final XMLGregorianCalendar SENDT;
 
 	static {
 		SENDT = TestdataUtil.getXMLGregorianCalendar(2016, 6, 1);
@@ -36,9 +37,9 @@ public class VarselMapperTest {
 
 	private static final VarselMapper MAPPER = new VarselMapper();
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldThrowIllegalArgumentExceptionWhenParameterIsNull() {
-		MAPPER.map(null);
+		Assertions.assertThrows(IllegalArgumentException.class, () -> MAPPER.map(null));
 	}
 
 	@Test

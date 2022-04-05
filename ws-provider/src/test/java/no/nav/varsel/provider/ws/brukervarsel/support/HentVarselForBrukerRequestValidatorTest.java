@@ -1,21 +1,20 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.fail;
-
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.HentVarselForBrukerUgyldigInput;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.feil.UgydigInput;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.AktoerId;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Unit test for HentVarselForBrukerRequestValidator
@@ -36,8 +35,8 @@ public class HentVarselForBrukerRequestValidatorTest {
 	private XMLGregorianCalendar twentyDaysAgo;
 	private XMLGregorianCalendar tenDaysIntoTheFuture;
 
-	@Before
-	public void onSetup() throws DatatypeConfigurationException {
+	@BeforeEach
+	public void onSetup() {
 		aktoer = new AktoerId();
 		aktoer.setAktoerId("AKTOER_ID");
 
@@ -47,19 +46,19 @@ public class HentVarselForBrukerRequestValidatorTest {
 	}
 
 	@Test
-	public void shouldHaveBruker() throws Exception {
+	public void shouldHaveBruker() {
 		HentVarselForBrukerRequest request = createRequest(null, tenDaysAgo, tenDaysIntoTheFuture);
 		validate(request, PÅKREVD_INPUTPARAMETER_ER_IKKE_SATT_MESSAGE, INPUTPARAMETER_BRUKER_MANGLER_FEILAARSAK);
 	}
 
 	@Test
-	public void shouldHaveDatoTomLaterOrEqualToFomDatoIfBothAreSet() throws Exception {
+	public void shouldHaveDatoTomLaterOrEqualToFomDatoIfBothAreSet() {
 		HentVarselForBrukerRequest request = createRequest(aktoer, tenDaysAgo, twentyDaysAgo);
 		validate(request, UGYLDIG_BRUK_AV_DATO_FOM_OG_DATO_TOM_MESSAGE, PERIODENS_DATO_FOM_KAN_IKKE_VÆRE_SENERE_ENN_PERIODENS_DATO_TOM_FEILAARSAK);
 	}
 
 	@Test
-	public void shouldHaveDatoTomAtMaximumNowIfFomDatoIsSet() throws Exception {
+	public void shouldHaveDatoTomAtMaximumNowIfFomDatoIsSet() {
 		HentVarselForBrukerRequest request = createRequest(aktoer, tenDaysAgo, tenDaysIntoTheFuture);
 		validate(request, UGYLDIG_BRUK_AV_DATO_FOM_OG_DATO_TOM_MESSAGE, PERIODENS_DATO_TOM_KAN_IKKE_VÆRE_SENERE_ENN_DAGENS_DATO_FEILAARSAK);
 	}

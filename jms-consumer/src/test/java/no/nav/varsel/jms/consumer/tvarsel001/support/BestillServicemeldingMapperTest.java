@@ -1,12 +1,5 @@
 package no.nav.varsel.jms.consumer.tvarsel001.support;
 
-import static no.nav.varsel.Utils.formatDateTime;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import no.nav.melding.virksomhet.varsel.v1.varsel.AktoerId;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Parameter;
 import no.nav.melding.virksomhet.varsel.v1.varsel.PersonIdent;
@@ -15,13 +8,20 @@ import no.nav.melding.virksomhet.varsel.v1.varsel.Varslingstyper;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.service.to.BestillVarselTo;
 import org.apache.activemq.command.ActiveMQMessage;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import java.time.LocalDateTime;
+
+import static no.nav.varsel.Utils.formatDateTime;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * Unit test for {@link BestillServicemeldingMapper}
@@ -34,10 +34,10 @@ public class BestillServicemeldingMapperTest {
 	public static final String MOTTAKER = "mottakeren";
 	public static final String KEY = "mottaker";
 	public static final String VAL = "val";
-	private static DatatypeFactory datatypeFactory;
+	private static final DatatypeFactory datatypeFactory;
 
-	private BestillServicemeldingMapper mapper = new BestillServicemeldingMapper();
-	private Message defaultMessage = new ActiveMQMessage();
+	private final BestillServicemeldingMapper mapper = new BestillServicemeldingMapper();
+	private final Message defaultMessage = new ActiveMQMessage();
 
 	public static final String VARSELTYPE_ID = "varseltypeId";
 
@@ -50,7 +50,7 @@ public class BestillServicemeldingMapperTest {
 	}
 
 	@Test
-	public void shouldMap() throws Exception {
+	public void shouldMap() {
 		BestillVarselTo to = mapper.map(createVarsel(defaultMessage));
 
 		assertThat(to.getAktoerId(), is(MOTTAKER));
@@ -63,7 +63,7 @@ public class BestillServicemeldingMapperTest {
 	}
 
 	@Test
-	public void shouldMapPerson() throws Exception {
+	public void shouldMapPerson() {
 		ObjectMessageWrapper<Varsel> varsel = createVarsel(defaultMessage);
 		PersonIdent personIdent = new PersonIdent();
 		personIdent.setPersonIdent(MOTTAKER);
@@ -75,7 +75,7 @@ public class BestillServicemeldingMapperTest {
 	}
 
 	@Test
-	public void shouldMapNullMottaker() throws Exception {
+	public void shouldMapNullMottaker() {
 		ObjectMessageWrapper<Varsel> varsel = createVarsel(defaultMessage);
 		varsel.getObject().setMottaker(null);
 		BestillVarselTo to = mapper.map(varsel);
@@ -84,7 +84,7 @@ public class BestillServicemeldingMapperTest {
 	}
 
 	@Test
-	public void shouldMapNullVarseltype() throws Exception {
+	public void shouldMapNullVarseltype() {
 		ObjectMessageWrapper<Varsel> varsel = createVarsel(defaultMessage);
 		varsel.getObject().setVarslingstype(null);
 		BestillVarselTo to = mapper.map(varsel);
@@ -92,7 +92,7 @@ public class BestillServicemeldingMapperTest {
 	}
 
 	@Test
-	public void shouldMapNullUtlop() throws Exception {
+	public void shouldMapNullUtlop() {
 		ObjectMessageWrapper<Varsel> varsel = createVarsel(defaultMessage);
 		varsel.getObject().setUtloepstidspunkt(null);
 		BestillVarselTo to = mapper.map(varsel);
@@ -100,7 +100,7 @@ public class BestillServicemeldingMapperTest {
 	}
 
 	@Test
-	public void shouldMapEmptyParameter() throws Exception {
+	public void shouldMapEmptyParameter() {
 		ObjectMessageWrapper<Varsel> varsel = createVarsel(defaultMessage);
 		varsel.getObject().getParameterListe().clear();
 		BestillVarselTo to = mapper.map(varsel);

@@ -12,8 +12,8 @@ import no.nav.varsel.service.BrukervarselV1Service;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 import no.nav.varsel.service.tvarsel005.to.VarselTo;
 import no.nav.varsel.service.tvarsel005.to.VarselbestillingTo;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -93,7 +93,7 @@ public class BrukervarselV1ProviderTest {
 	private AktoerId bruker;
 
 
-	@Before
+	@BeforeEach
 	public void onSetup() {
 		varselbestillingMapper.setVarselMapper(varselMapper);
 		hentVarselForBrukerResponseMapper.setVarselbestillingMapper(varselbestillingMapper);

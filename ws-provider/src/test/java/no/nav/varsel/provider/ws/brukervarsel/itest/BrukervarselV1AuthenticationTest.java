@@ -8,16 +8,21 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerR
 import no.nav.varsel.provider.AbstractWsProviderITest;
 import no.nav.varsel.provider.ws.brukervarsel.AuthorizationException;
 import no.nav.varsel.provider.ws.brukervarsel.BrukervarselV1Endpoint;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 
+import static no.nav.modig.core.domain.IdentType.Prosess;
+import static no.nav.modig.core.domain.IdentType.Samhandler;
+import static no.nav.modig.core.domain.IdentType.Sikkerhet;
 import static no.nav.varsel.domain.Constants.USER_ID;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests the XACML-logic in BrukervarselV1 TVARSEL005
@@ -25,9 +30,6 @@ import static org.hamcrest.core.Is.is;
  * @author Roar Bjurstrom, Visma Consulting.
  */
 public class BrukervarselV1AuthenticationTest extends AbstractWsProviderITest {
-
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
 
 	@Autowired
 	private BrukervarselV1Endpoint brukervarselV1;
@@ -40,48 +42,38 @@ public class BrukervarselV1AuthenticationTest extends AbstractWsProviderITest {
 	}
 
 	@Test
-	public void shouldDenyAccessToEksternbruker() throws Exception {
+	public void shouldDenyAccessToEksternbruker() {
 		SubjectHandlerUtils.setEksternBruker(USER_ID, 4, "");
 
 		expectAuthException();
-
-		brukervarselV1.hentVarselForBruker(createHentVarselForBrukerRequest());
 	}
 
 	@Test
-	public void shouldDenyAccessToSystemRessurs() throws Exception {
+	public void shouldDenyAccessToSystemRessurs() {
 		SubjectHandlerUtils.setSystemressurs(USER_ID);
 
 		expectAuthException();
-
-		brukervarselV1.hentVarselForBruker(createHentVarselForBrukerRequest());
 	}
 
 	@Test
-	public void shouldDenyAccessToSamhandler() throws Exception {
-		setupSubjectWithIdentType(IdentType.Samhandler);
+	public void shouldDenyAccessToSamhandler() {
+		setupSubjectWithIdentType(Samhandler);
 
 		expectAuthException();
-
-		brukervarselV1.hentVarselForBruker(createHentVarselForBrukerRequest());
 	}
 
 	@Test
-	public void shouldDenyAccessToSikkerhet() throws Exception {
-		setupSubjectWithIdentType(IdentType.Sikkerhet);
+	public void shouldDenyAccessToSikkerhet() {
+		setupSubjectWithIdentType(Sikkerhet);
 
 		expectAuthException();
-
-		brukervarselV1.hentVarselForBruker(createHentVarselForBrukerRequest());
 	}
 
 	@Test
-	public void shouldDenyAccessToProsess() throws Exception {
-		setupSubjectWithIdentType(IdentType.Prosess);
+	public void shouldDenyAccessToProsess()  {
+		setupSubjectWithIdentType(Prosess);
 
 		expectAuthException();
-
-		brukervarselV1.hentVarselForBruker(createHentVarselForBrukerRequest());
 	}
 
 	private HentVarselForBrukerRequest createHentVarselForBrukerRequest() {
@@ -101,7 +93,7 @@ public class BrukervarselV1AuthenticationTest extends AbstractWsProviderITest {
 	}
 
 	private void expectAuthException() {
-		expectedException.expectMessage(is("Access denied"));
-		expectedException.expect(AuthorizationException.class);
+		Exception e = assertThrows(AuthorizationException.class, () -> brukervarselV1.hentVarselForBruker(createHentVarselForBrukerRequest()));
+		assertEquals("Access denied", e.getMessage());
 	}
 }

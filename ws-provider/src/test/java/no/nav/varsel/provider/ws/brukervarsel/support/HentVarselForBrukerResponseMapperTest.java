@@ -1,23 +1,23 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo.Builder.aHentVarselForBrukerResponseTo;
-import static no.nav.varsel.service.tvarsel005.to.VarselTo.Builder.aVarselTo;
-import static no.nav.varsel.service.tvarsel005.to.VarselbestillingTo.Builder.aVarselbestillingTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Brukervarsel;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varselbestilling;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo.Builder.aHentVarselForBrukerResponseTo;
+import static no.nav.varsel.service.tvarsel005.to.VarselTo.Builder.aVarselTo;
+import static no.nav.varsel.service.tvarsel005.to.VarselbestillingTo.Builder.aVarselbestillingTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Unit test for {@link VarselbestillingMapper}
@@ -45,14 +45,14 @@ public class HentVarselForBrukerResponseMapperTest {
 	@InjectMocks
 	private HentVarselForBrukerResponseMapper mapper;
 
-	@Before
+	@BeforeEach
 	public void onSetup() {
 		varselbestillingMapper.setVarselMapper(varselMapper);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldThrowIllegalArgumentExceptionWhenParameterIsNull() {
-		mapper.map(null);
+		assertThrows(IllegalArgumentException.class, () -> mapper.map(null));
 	}
 
 	@Test

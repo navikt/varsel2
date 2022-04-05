@@ -11,11 +11,9 @@ import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.JmsConsumer;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
 import no.nav.varsel.jms.to.xml.JmsReply;
-import org.apache.activemq.broker.Broker;
-import org.junit.Ignore;
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.jms.Message;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
@@ -37,12 +35,12 @@ import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjo
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static org.awaitility.Awaitility.await;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 // Testen er altfor brittle. Burde skrives om.
 public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {

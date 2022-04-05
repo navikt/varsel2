@@ -6,20 +6,20 @@ import no.nav.modig.testcertificates.TestCertificates;
 import no.nav.varsel.config.WsProviderTestConfig;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.repo.VarselbestillingRepo;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static no.nav.varsel.domain.Constants.USER_ID;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = WsProviderTestConfig.class)
 @ActiveProfiles({"itest", "local"})
 @AutoConfigureWireMock(port = 0)
@@ -32,8 +32,8 @@ public abstract class AbstractWsProviderITest {
 	protected VarselRepo varselRepo;
 
 
-	@BeforeClass
-	public static void setUpStatic() throws Exception {
+	@BeforeAll
+	public static void setUpStatic() {
 		System.setProperty("no.nav.modig.core.context.subjectHandlerImplementationClass", ThreadLocalSubjectHandler.class.getName());
 		System.setProperty("no.nav.modig.security.systemuser.username", "varsel");
 		System.setProperty("no.nav.modig.security.systemuser.password", "passord");
@@ -41,13 +41,13 @@ public abstract class AbstractWsProviderITest {
 		SubjectHandlerUtils.setInternBruker(USER_ID);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUpAbstract() {
 		varselbestillingRepo.deleteAll();
 		MDC.put(USER_ID, "wsprovitest");
 	}
 
-	@After
+	@AfterEach
 	public void tearDownAbstract() {
 		varselbestillingRepo.deleteAll();
 		MDC.remove(USER_ID);

@@ -5,18 +5,18 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerR
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
 import no.nav.varsel.provider.ws.brukervarsel.support.BrukervarselV1Provider;
 import no.nav.varsel.provider.ws.brukervarsel.support.HentVarselForBrukerRequestValidator;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static no.nav.varsel.provider.ws.brukervarsel.BrukervarselV1Endpoint.ACCESS_DENIED;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,9 +29,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class BrukervarselV1EndpointTest {
 
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
-
 	@Mock
 	private BrukervarselV1Provider brukervarselV1ProviderMock;
 	@Mock
@@ -40,8 +37,8 @@ public class BrukervarselV1EndpointTest {
 	@InjectMocks
 	private BrukervarselV1Endpoint brukervarselV1Endpoint;
 
-	@BeforeClass
-	public static void setUpSecurity() throws Exception {
+	@BeforeAll
+	public static void setUpSecurity() {
 		System.setProperty("varsel.serviceuser.username", "Varsel");
 		System.setProperty("no.nav.modig.core.context.subjectHandlerImplementationClass", ThreadLocalSubjectHandler.class.getName());
 	}
@@ -63,10 +60,8 @@ public class BrukervarselV1EndpointTest {
 		when(brukervarselV1ProviderMock.hentVarselForBruker(any(HentVarselForBrukerRequest.class)))
 				.thenThrow(new AuthorizationException(ACCESS_DENIED));
 
-		expectedException.expect(AuthorizationException.class);
-		expectedException.expectMessage(ACCESS_DENIED);
-
-		brukervarselV1Endpoint.hentVarselForBruker(new HentVarselForBrukerRequest());
+		Exception e = assertThrows(AuthorizationException.class, () -> brukervarselV1Endpoint.hentVarselForBruker(new HentVarselForBrukerRequest()));
+		Assertions.assertEquals(ACCESS_DENIED, e.getMessage());
 	}
 
 }

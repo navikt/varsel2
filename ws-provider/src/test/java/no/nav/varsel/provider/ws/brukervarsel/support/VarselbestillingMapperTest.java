@@ -1,17 +1,11 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varselbestilling;
 import no.nav.varsel.domain.utility.XmlGregorianConverter;
 import no.nav.varsel.service.tvarsel005.to.VarselTo;
 import no.nav.varsel.service.tvarsel005.to.VarselbestillingTo;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,6 +15,12 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Unit test for {@link VarselbestillingMapperTest}
@@ -44,9 +44,9 @@ public class VarselbestillingMapperTest {
 	@InjectMocks
 	private VarselbestillingMapper mapper;
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldThrowIllegalArgumentExceptionWhenParameterIsNull() {
-		mapper.map(null);
+		assertThrows(IllegalArgumentException.class, () -> mapper.map(null));
 	}
 
 	@Test

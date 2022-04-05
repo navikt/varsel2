@@ -1,5 +1,22 @@
 package no.nav.varsel.provider.ws.brukervarsel.itest;
 
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.AktoerId;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Person;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varsel;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varselbestilling;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
+import no.nav.varsel.domain.code.StatusCode;
+import no.nav.varsel.provider.AbstractWsProviderITest;
+import no.nav.varsel.provider.ws.brukervarsel.BrukervarselV1Endpoint;
+import no.nav.varsel.repo.TestdataUtil;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
+
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
 import static no.nav.varsel.repo.TestdataUtil.BESTILLING_TIDSPUNKT;
@@ -17,27 +34,10 @@ import static no.nav.varsel.repo.TestdataUtil.VARSEL_URL;
 import static no.nav.varsel.repo.TestdataUtil.createVarselBuilder;
 import static no.nav.varsel.repo.TestdataUtil.createVarselUnique;
 import static no.nav.varsel.repo.TestdataUtil.createVarselbestillingBuilder;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.AktoerId;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Person;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varsel;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varselbestilling;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
-import no.nav.varsel.domain.code.StatusCode;
-import no.nav.varsel.provider.AbstractWsProviderITest;
-import no.nav.varsel.provider.ws.brukervarsel.BrukervarselV1Endpoint;
-import no.nav.varsel.repo.TestdataUtil;
-import org.junit.Before;
-import org.junit.Test;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import java.time.LocalDateTime;
 
 /**
  * Itest for {@link no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.BrukervarselV1}
@@ -52,13 +52,13 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 	@Autowired
 	private BrukervarselV1Endpoint brukervarselV1;
 
-	@Before
-	public void setUp() throws Exception {
+	@BeforeEach
+	public void setUp() {
 		varselbestillingRepo.save(TestdataUtil.createVarselbestilling());
 	}
 
 	@Test
-	public void shouldPing() throws Exception {
+	public void shouldPing() {
 		brukervarselV1.ping();
 	}
 
