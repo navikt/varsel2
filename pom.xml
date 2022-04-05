@@ -46,9 +46,6 @@
 		<javax.activation.version>1.2.0</javax.activation.version>
 		<jaxb-impl.version>3.0.2</jaxb-impl.version>
 
-		<!--	Fiks og rydd opp	-->
-		<resteasy.version>2.3.10.Final</resteasy.version>
-
 		<guava.version>19.0</guava.version>
 		<commons-io.version>2.7</commons-io.version>
 
@@ -351,16 +348,6 @@
 				<artifactId>jaxws-ri</artifactId>
 				<version>${jaxws-ri.version}</version>
 				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.jboss.resteasy</groupId>
-				<artifactId>jaxrs-api</artifactId>
-				<version>${resteasy.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.jboss.resteasy</groupId>
-				<artifactId>resteasy-jaxrs</artifactId>
-				<version>${resteasy.version}</version>
 			</dependency>
 
 			<!-- cxf -->
