@@ -3,7 +3,6 @@ package no.nav.varsel.provider;
 import no.nav.modig.core.context.SubjectHandlerUtils;
 import no.nav.modig.core.context.ThreadLocalSubjectHandler;
 import no.nav.modig.testcertificates.TestCertificates;
-import no.nav.varsel.config.JmsTestConfig;
 import no.nav.varsel.config.WsProviderTestConfig;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.repo.VarselbestillingRepo;
@@ -12,12 +11,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static no.nav.varsel.domain.Constants.USER_ID;
 

@@ -29,6 +29,24 @@
 	</parent>
 
 	<properties>
+		<java.version>17</java.version>
+
+		<cxf.version>3.3.10</cxf.version>
+		<javax.activation.version>1.2.0</javax.activation.version>
+		<jaxb-impl.version>3.0.2</jaxb-impl.version>
+
+		<guava.version>19.0</guava.version>
+		<commons-io.version>2.7</commons-io.version>
+
+		<xml-apis.version>1.4.01</xml-apis.version>
+		<metrics-spring.version>3.1.3</metrics-spring.version>
+		<spotify-logging.version>2.3.1</spotify-logging.version>
+
+		<jaxws-ri.version>2.3.2</jaxws-ri.version>
+		<oracle.version>19.10.0.0</oracle.version>
+		<token-support.version>1.3.1</token-support.version>
+		<wmq.version>9.2.2.0</wmq.version>
+
 		<modig-security.version>3.0.6</modig-security.version>
 		<modig-log.version>1.1.2</modig-log.version>
 		<modig-log-filter.version>1.1.3</modig-log-filter.version>
@@ -42,30 +60,10 @@
 		<dokkat-schemas.version>6.0.3</dokkat-schemas.version>
 		<nav-brukervarsel-v1-tjenestespesifikasjon.version>1.0.4</nav-brukervarsel-v1-tjenestespesifikasjon.version>
 
-		<cxf.version>3.3.10</cxf.version>
-		<javax.activation.version>1.2.0</javax.activation.version>
-		<jaxb-impl.version>3.0.2</jaxb-impl.version>
-
-		<guava.version>19.0</guava.version>
-		<commons-io.version>2.7</commons-io.version>
-
-		<xml-apis.version>1.4.01</xml-apis.version>
-		<metrics-spring.version>3.1.3</metrics-spring.version>
-		<spotify-logging.version>2.3.1</spotify-logging.version>
-
-		<!-- provided -->
-		<jaxws-ri.version>2.3.2</jaxws-ri.version>
-		<oracle.version>19.10.0.0</oracle.version>
-		<token-support.version>1.3.1</token-support.version>
-
 		<!-- test -->
 		<activemq-core.version>5.7.0</activemq-core.version>
 		<modig-testcertificates.version>1.2.5</modig-testcertificates.version>
 		<spring-cloud-contract-wiremock-version>3.1.1</spring-cloud-contract-wiremock-version>
-
-		<!--build-->
-		<maven-toolchains.version>3.0.0</maven-toolchains.version>
-		<wmq.version>9.2.2.0</wmq.version>
 	</properties>
 
 	<dependencyManagement>
@@ -377,19 +375,9 @@
 				<version>${cxf.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.sun.xml.bind</groupId>
-				<artifactId>jaxb-impl</artifactId>
-				<version>${jaxb-impl.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.sun.activation</groupId>
 				<artifactId>javax.activation</artifactId>
 				<version>${javax.activation.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.xml.bind</groupId>
-				<artifactId>jaxb-core</artifactId>
-				<version>${jaxb-impl.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>jakarta.xml.bind</groupId>
@@ -487,22 +475,23 @@
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-transports-http-jetty</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- End test dependencies -->
 	</dependencies>
-
 
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-toolchains-plugin</artifactId>
-				<version>${maven-toolchains.version}</version>
+				<version>3.0.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -518,18 +507,6 @@
 						</jdk>
 					</toolchains>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>17</source>
-					<target>17</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
