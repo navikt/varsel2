@@ -45,8 +45,8 @@ spec:
       value: "{{ VARSEL_JMS_CONSUMER_ERROR_CONTEXT_TIME_SECONDS }}"
     - name: VARSEL_JMS_CONSUMER_ERROR_RESTART_DELAY_SECONDS
       value: "{{ VARSEL_JMS_CONSUMER_ERROR_RESTART_DELAY_SECONDS }}"
-    - name: LISTENER_AUTOSTART
-      value: "{{ LISTENER_AUTOSTART }}"
+    - name: LISTENER_AUTO_STARTUP
+      value: "{{ LISTENER_AUTO_STARTUP }}"
   image: {{ image }}
   ingresses:
     {{#each INGRESSES}}
