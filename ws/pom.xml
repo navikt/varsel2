@@ -51,11 +51,6 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.sun.xml.ws</groupId>
-			<artifactId>jaxws-ri</artifactId>
-			<type>pom</type>
-		</dependency>
-		<dependency>
 			<groupId>com.sun.activation</groupId>
 			<artifactId>javax.activation</artifactId>
 		</dependency>
