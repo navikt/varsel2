@@ -32,7 +32,6 @@
 		<java.version>17</java.version>
 
 		<cxf.version>3.3.10</cxf.version>
-		<javax.activation.version>1.2.0</javax.activation.version>
 		<jaxb-impl.version>3.0.2</jaxb-impl.version>
 
 		<guava.version>19.0</guava.version>
@@ -350,11 +349,6 @@
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-rt-core</artifactId>
 				<version>${cxf.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.activation</groupId>
-				<artifactId>javax.activation</artifactId>
-				<version>${javax.activation.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>jakarta.xml.bind</groupId>

@@ -48,12 +48,6 @@
 			<classifier>jaxws</classifier>
 		</dependency>
 
-		<!--provided-->
-		<dependency>
-			<groupId>com.sun.activation</groupId>
-			<artifactId>javax.activation</artifactId>
-		</dependency>
-
 		<!--test-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>

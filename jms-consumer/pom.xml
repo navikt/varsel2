@@ -21,12 +21,6 @@
 			<artifactId>varsel-service</artifactId>
 		</dependency>
 
-		<!-- provided -->
-		<dependency>
-			<groupId>com.sun.activation</groupId>
-			<artifactId>javax.activation</artifactId>
-		</dependency>
-
 		<!-- test -->
 		<dependency>
 			<groupId>no.nav.varsel</groupId>

@@ -53,11 +53,6 @@
 			<artifactId>modig-security-core</artifactId>
 		</dependency>
 
-		<!--provided-->
-		<dependency>
-			<groupId>com.sun.activation</groupId>
-			<artifactId>javax.activation</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>no.nav.security</groupId>
 			<artifactId>token-validation-spring</artifactId>
