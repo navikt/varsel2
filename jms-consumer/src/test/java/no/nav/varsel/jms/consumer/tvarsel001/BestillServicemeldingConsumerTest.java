@@ -103,8 +103,8 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	@Test
 	public void shouldPutOnBackoutAndRollbackIfFailedAfterDbSave() {
-		this.stubVarselInfoV1();
-		this.stubPdlConsumer();
+		stubVarselInfoV1();
+		stubPdlConsumer();
 		JAXBElement<Varsel> varsel = createVarsel();
 		varsel.getValue().getVarslingstype().setValue(FEIL_MQ_UT);
 		Message response = sendMessageListenBoq(bestillServicemeldingQueue, varsel);
