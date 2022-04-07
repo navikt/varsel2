@@ -58,11 +58,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>no.nav.modig</groupId>
 			<artifactId>modig-testcertificates</artifactId>
 			<scope>test</scope>
@@ -75,6 +70,11 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-contract-wiremock</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-activemq</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

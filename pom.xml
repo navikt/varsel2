@@ -56,7 +56,6 @@
 		<nav-brukervarsel-v1-tjenestespesifikasjon.version>1.0.4</nav-brukervarsel-v1-tjenestespesifikasjon.version>
 
 		<!-- test -->
-		<activemq-core.version>5.7.0</activemq-core.version>
 		<spring-cloud-contract-wiremock-version>3.1.1</spring-cloud-contract-wiremock-version>
 
 		<modig-testcertificates.version>1.2.5</modig-testcertificates.version>
@@ -271,12 +270,6 @@
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-contract-wiremock</artifactId>
 				<version>${spring-cloud-contract-wiremock-version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.activemq</groupId>
-				<artifactId>activemq-core</artifactId>
-				<version>${activemq-core.version}</version>
-				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.modig</groupId>
