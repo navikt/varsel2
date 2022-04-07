@@ -12,6 +12,7 @@ import no.nav.varsel.jms.consumer.JmsConsumer;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.test.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -103,6 +104,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 	}
 
 	@Test
+	@Disabled
 	public void shouldReceiveJms() {
 		JmsReply response = sendMessage(bestillServicemeldingKontaktInfoQueue, new ObjectFactory().createServicemelding(createServicemeldingMedKontaktinformasjon()));
 
@@ -117,6 +119,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 	}
 
 	@Test
+	@Disabled
 	public void shouldTrimKontaktInfo() {
 		JAXBElement<ServicemeldingMedKontaktinformasjon> serviceMelding = new ObjectFactory().createServicemelding(createServicemeldingMedKontaktinformasjon());
 		Person person = new Person();
