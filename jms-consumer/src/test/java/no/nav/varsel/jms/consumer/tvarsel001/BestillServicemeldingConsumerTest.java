@@ -85,7 +85,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	@Test
 	public void shouldPutOnBackoutIfFailedWs() {
 		JAXBElement<Varsel> varsel = createVarsel();
-		this.stubPdlConsumerTechnicalErrorWithInternalServerError();
+		stubPdlConsumerTechnicalErrorWithInternalServerError();
 		Message response = sendMessageListenBoq(bestillServicemeldingQueue, varsel);
 		isOk(response);
 	}
@@ -93,7 +93,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	@Test
 	public void shouldNotPutOnBackoutIfFailedWsFunksjonell() {
 		JAXBElement<Varsel> varsel = createVarsel();
-		this.stubPdlConsumerFunctionalErrorWithInternalServerError();
+		stubPdlConsumerFunctionalErrorWithInternalServerError();
 		JmsReply response = sendMessage(bestillServicemeldingQueue, varsel);
 		isOk(response);
 

@@ -1,7 +1,6 @@
 package no.nav.varsel.jms.consumer;
 
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
