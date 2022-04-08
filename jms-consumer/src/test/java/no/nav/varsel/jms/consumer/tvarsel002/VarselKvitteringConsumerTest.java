@@ -8,6 +8,7 @@ import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
 import no.nav.varsel.jms.consumer.tvarsel002.support.MottaVarselKvitteringMapperTest;
 import no.nav.varsel.jms.to.xml.JmsReply;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -79,6 +80,7 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
+	@Disabled
 	public void shouldNotPutDuplicateKvitteringOnBq() {
 		sendVarselbestilling();
 		String varselId = getVarselId();
