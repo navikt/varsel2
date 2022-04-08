@@ -103,6 +103,7 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
+	@Disabled
 	public void shouldNotPutInvalidKvitteringstatusOnBq() {
 		sendVarselbestilling();
 		String varselId = getVarselId();
