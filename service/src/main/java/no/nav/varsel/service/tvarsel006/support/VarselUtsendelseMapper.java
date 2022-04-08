@@ -10,6 +10,8 @@ import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 
 import java.util.stream.Stream;
 
+import static no.nav.varsel.domain.code.KanalCode.SMS;
+
 public class VarselUtsendelseMapper {
 
 	public NotifikasjonMedkontaktInfo mapNotifikasjonMedKontaktInfo(
@@ -27,7 +29,7 @@ public class VarselUtsendelseMapper {
 				.setEpostadresse(bestillVarselTo.getEpost())
 				.setAntallRenotifikasjoner(0)
 				.setRenotifikasjonIntervall(0)
-				.setTittel(varselInfoTo.getMal(varselutsendingTo.getKanal()).getTittel())
+				.setTittel(mapTittel(varselutsendingTo.getKanal(), varselInfoTo))
 				.setEpostTekst(varselutsendingTo.getVarselTekst()) //FIXME ??
 				.setSmsTekst(varselutsendingTo.getVarselTekst()) //FIXME ??
 				.setPrefererteKanaler(Stream.of(mapKanal(varselutsendingTo.getKanal())).toList())
@@ -37,5 +39,9 @@ public class VarselUtsendelseMapper {
 
 	public PrefererteKanal mapKanal(KanalCode kanalCode) {
 		return PrefererteKanal.valueOf(kanalCode.name());
+	}
+
+	private String mapTittel(KanalCode kanalCode, VarselInfoTo varselInfoTo) {
+		return SMS.equals(kanalCode) ? "Dummy tittel" : varselInfoTo.getMal(kanalCode).getTittel();
 	}
 }
