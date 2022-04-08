@@ -175,6 +175,16 @@
 				<groupId>no.nav.dokkat</groupId>
 				<artifactId>dokkat-schemas</artifactId>
 				<version>${dokkat-schemas.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>ch.qos.logback</groupId>
+						<artifactId>logback-core</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>com.fasterxml.jackson.core</groupId>
+						<artifactId>jackson-annotations</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.tjenester</groupId>
@@ -231,7 +241,7 @@
 				<version>${modig-log-filter.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>no.nav.modig</groupId>
+				<groupId>no.nav.modig</groupId>F
 				<artifactId>modig-log-jaxws</artifactId>
 				<version>${modig-log.version}</version>
 			</dependency>
