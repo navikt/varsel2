@@ -241,7 +241,7 @@
 				<version>${modig-log-filter.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>no.nav.modig</groupId>F
+				<groupId>no.nav.modig</groupId>
 				<artifactId>modig-log-jaxws</artifactId>
 				<version>${modig-log.version}</version>
 			</dependency>
