@@ -42,6 +42,7 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 	private Queue bestillServicemeldingQueue;
 
 	@Test
+	@Disabled
 	public void shouldPersistPlukketKvitteringsmelding() {
 		sendVarselbestilling();
 		String varselId = getVarselId();
@@ -54,6 +55,7 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
+	@Disabled
 	public void shouldPersistFeiletKvitteringsmelding() {
 		sendVarselbestilling();
 		String varselId = getVarselId();
@@ -73,6 +75,7 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
+	@Disabled
 	public void shouldNotPutInvalidEmptyKvitteringOnBq() {
 		JmsReply response = sendMessage(varselKvitteringQueue, createVarselKvitteringJaxBElement(new VarselKvittering()));
 
@@ -95,6 +98,7 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
+	@Disabled
 	public void shouldNotPutNonExistingVarselIdOnBq() {
 		JAXBElement<VarselKvittering> varselKvittering = createVarselKvitteringJaxBElement(UUID.randomUUID().toString());
 
