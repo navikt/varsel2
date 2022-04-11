@@ -49,14 +49,14 @@ public class Tvarsel006ITest {
 
 	private static final String FNR = "12345678910";
 	private static final String MOBILNR = "98765432";
-	private static final String EPOSTADR = "e@post.no";
+	private static final String EPOST = "e@post.no";
 	private static final String TOPIC = "privat-dok-notifikasjon-med-kontakt-info-test";
 
-	private final String SMS = """
+	private final String SMS_TEKST = """
 			Hei! Her er en sms fra NAV. Mvh NAV
 			""";
 
-	private final String EPOST = """
+	private final String EPOST_TEKST = """
 			<!DOCTYPE html>
 			<html>
 			<body>
@@ -75,7 +75,7 @@ public class Tvarsel006ITest {
 	private KafkaTestConsumer kafkaTestConsumer;
 
 	@Test
-	public void shouldPass() throws InterruptedException {
+	public void shouldPublishMessageOK() throws InterruptedException {
 
 		publishMessage(notifikasjonMedkontaktInfo());
 
@@ -101,12 +101,12 @@ public class Tvarsel006ITest {
 				.setBestillerId("varsel")
 				.setFodselsnummer(FNR)
 				.setMobiltelefonnummer(MOBILNR)
-				.setEpostadresse(EPOSTADR)
+				.setEpostadresse(EPOST)
 				.setAntallRenotifikasjoner(0)
 				.setRenotifikasjonIntervall(0)
 				.setTittel("Melding fra NAV")
-				.setEpostTekst(EPOST)
-				.setSmsTekst(SMS)
+				.setEpostTekst(EPOST_TEKST)
+				.setSmsTekst(SMS_TEKST)
 				.setPrefererteKanaler(Stream.of(PrefererteKanal.EPOST, PrefererteKanal.SMS).toList())
 				.build();
 	}

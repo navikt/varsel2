@@ -20,7 +20,6 @@ public class VarselUtsendelseMapper {
 			VarselutsendingTo varselutsendingTo,
 			VarselInfoTo varselInfoTo) {
 
-		//TODO Sjekk om dette blir rikig
 		return NotifikasjonMedkontaktInfo.newBuilder()
 				.setBestillingsId(varselbestilling.getVarselbestillingId())
 				.setBestillerId("varsel")
@@ -30,14 +29,14 @@ public class VarselUtsendelseMapper {
 				.setAntallRenotifikasjoner(0)
 				.setRenotifikasjonIntervall(0)
 				.setTittel(mapTittel(varselutsendingTo.getKanal(), varselInfoTo))
-				.setEpostTekst(varselutsendingTo.getVarselTekst()) //FIXME ??
-				.setSmsTekst(varselutsendingTo.getVarselTekst()) //FIXME ??
+				.setEpostTekst(varselutsendingTo.getVarselTekst())
+				.setSmsTekst(varselutsendingTo.getVarselTekst())
 				.setPrefererteKanaler(Stream.of(mapKanal(varselutsendingTo.getKanal())).toList())
 				.build();
 
 	}
 
-	public PrefererteKanal mapKanal(KanalCode kanalCode) {
+	private PrefererteKanal mapKanal(KanalCode kanalCode) {
 		return PrefererteKanal.valueOf(kanalCode.name());
 	}
 

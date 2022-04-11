@@ -98,7 +98,6 @@ public class ServicemeldingService {
 		varselbestillingRepo.saveAndFlush(varselbestilling);
 		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper.map(varselbestilling);
 
-		//FIXME Rydd opp i håndtering her.
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
 			if(hasKontaktInfo(bestilling)) {
 				varselUtsendelse.sendVarsel(varselUtsendelseMapper.mapNotifikasjonMedKontaktInfo(

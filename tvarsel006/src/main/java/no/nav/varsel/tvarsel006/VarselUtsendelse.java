@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Import(KafkaEventProducer.class)
-//FIXME Rydd opp i dependency injection for hele appen. Kanskje endre til @ComponentScan?
 public class VarselUtsendelse {
 
 	private final KafkaEventProducer kafkaEventProducer;
