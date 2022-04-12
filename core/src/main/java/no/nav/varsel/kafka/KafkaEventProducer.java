@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import no.nav.varsel.exception.technical.KafkaTechnicalException;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.errors.RetriableException;
+import org.apache.kafka.common.errors.TopicAuthorizationException;
+import org.springframework.kafka.KafkaException;
+import org.springframework.kafka.core.KafkaProducerException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.retry.annotation.Backoff;
@@ -17,13 +19,15 @@ import java.util.concurrent.ExecutionException;
 @Component
 public class KafkaEventProducer {
 
+	private static final String KAFKA_NOT_AUTHENTICATED = "Not authenticated to publish to topic: ";
+	private static final String KAFKA_FAILED_TO_SEND = "Failed to send message to kafka. Topic: ";
+
 	private final KafkaTemplate<Object, Object> kafkaTemplate;
 
 	KafkaEventProducer(KafkaTemplate<Object, Object> kafkaTemplate) {
 		this.kafkaTemplate = kafkaTemplate;
 	}
 
-	//@Monitor(createErrorMetric = true, errorMetricInclude = KafkaTechnicalException.class)
 	@Retryable(include = KafkaTechnicalException.class, backoff = @Backoff(delay = 2000))
 	public void publish(String topic, Object key, Object event) {
 		ProducerRecord<Object, Object> producerRecord = new ProducerRecord<>(
@@ -41,11 +45,15 @@ public class KafkaEventProducer {
 					sendResult.getRecordMetadata().partition(),
 					sendResult.getRecordMetadata().topic()
 			);
-		} catch (RetriableException e) {
-			throw new KafkaTechnicalException(String.format("Failed to send message to kafka. Topic: %s", topic), e);
-		} catch (ExecutionException | InterruptedException e) {
-			//TODO Noen hensikt å retry her?
-			e.printStackTrace();
+		} catch (ExecutionException executionException) {
+			if (executionException.getCause() instanceof KafkaProducerException kafkaProducerException) {
+				if (kafkaProducerException.getCause() instanceof TopicAuthorizationException) {
+					throw new KafkaTechnicalException(KAFKA_NOT_AUTHENTICATED + topic, kafkaProducerException.getCause());
+				}
+			}
+			throw new KafkaTechnicalException(KAFKA_FAILED_TO_SEND + topic, executionException);
+		} catch (InterruptedException | KafkaException e) {
+			throw new KafkaTechnicalException(KAFKA_FAILED_TO_SEND + topic, e);
 		}
 	}
 }
