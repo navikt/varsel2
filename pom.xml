@@ -61,8 +61,6 @@
 
 		<!-- test -->
 		<spring-cloud-contract-wiremock-version>3.1.1</spring-cloud-contract-wiremock-version>
-
-		<modig-testcertificates.version>1.2.5</modig-testcertificates.version>
 	</properties>
 
 	<dependencyManagement>
@@ -398,12 +396,6 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>no.nav.modig</groupId>
-				<artifactId>modig-testcertificates</artifactId>
-				<version>${modig-testcertificates.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-rt-transports-http-jetty</artifactId>
 				<version>${cxf.version}</version>
@@ -413,6 +405,12 @@
 	</dependencyManagement>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- Logging dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

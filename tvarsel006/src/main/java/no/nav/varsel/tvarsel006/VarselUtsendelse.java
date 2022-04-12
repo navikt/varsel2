@@ -25,7 +25,7 @@ public class VarselUtsendelse {
 
 		kafkaEventProducer.publish(
 				topic,
-				notifikasjonMedkontaktInfo.getBestillingsId(), //FIXME Blir key brukt til noe?
+				notifikasjonMedkontaktInfo.getBestillingsId(),
 				notifikasjonMedkontaktInfo);
 	}
 }

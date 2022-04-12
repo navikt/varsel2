@@ -55,7 +55,6 @@
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-tvarsel006</artifactId>
 			<version>${project.version}</version>
-			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 

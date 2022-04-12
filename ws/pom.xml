@@ -78,13 +78,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
-		<!--test-->
-		<dependency>
-			<groupId>no.nav.modig</groupId>
-			<artifactId>modig-testcertificates</artifactId>
-			<scope>provided</scope>
-		</dependency>
 	</dependencies>
 
 </project>

@@ -79,7 +79,7 @@ public class Tvarsel006ITest {
 
 		publishMessage(notifikasjonMedkontaktInfo());
 
-		kafkaTestConsumer.getLatch().await(10000, TimeUnit.MILLISECONDS);
+		kafkaTestConsumer.getLatch().await(10, TimeUnit.SECONDS);
 
 		assertEquals(kafkaTestConsumer.getLatch().getCount(), 0L);
 		assertEquals(TOPIC, kafkaTestConsumer.getConsumerRecord().topic());

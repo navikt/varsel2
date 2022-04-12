@@ -2,7 +2,6 @@ package no.nav.varsel.provider;
 
 import no.nav.modig.core.context.SubjectHandlerUtils;
 import no.nav.modig.core.context.ThreadLocalSubjectHandler;
-import no.nav.modig.testcertificates.TestCertificates;
 import no.nav.varsel.config.WsProviderTestConfig;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.repo.VarselbestillingRepo;
@@ -37,7 +36,6 @@ public abstract class AbstractWsProviderITest {
 		System.setProperty("no.nav.modig.core.context.subjectHandlerImplementationClass", ThreadLocalSubjectHandler.class.getName());
 		System.setProperty("no.nav.modig.security.systemuser.username", "varsel");
 		System.setProperty("no.nav.modig.security.systemuser.password", "passord");
-		TestCertificates.setupKeyAndTrustStore();
 		SubjectHandlerUtils.setInternBruker(USER_ID);
 	}
 

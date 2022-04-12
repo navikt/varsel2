@@ -8,9 +8,7 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerR
 import no.nav.varsel.provider.AbstractWsProviderITest;
 import no.nav.varsel.provider.ws.brukervarsel.AuthorizationException;
 import no.nav.varsel.provider.ws.brukervarsel.BrukervarselV1Endpoint;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
@@ -20,7 +18,6 @@ import static no.nav.modig.core.domain.IdentType.Samhandler;
 import static no.nav.modig.core.domain.IdentType.Sikkerhet;
 import static no.nav.varsel.domain.Constants.USER_ID;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
-import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
