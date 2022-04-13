@@ -24,7 +24,7 @@ public class VarselUtseldelseMapperTest {
 	private static final String BESTILLING_ID = "ABC-12345";
 	private static final String VARSEL_TITTEL = "Tittel";
 	private static final String VARSEL_TEKST = "Varsel tekst";
-	private static final String VARSEL_TITTEL_SMS = "Dummy tittel";
+	private static final String VARSEL_TITTEL_SMS = "SMS fra NAV";
 	private final VarselUtsendelseMapper varselUtsendelseMapper;
 
 	public VarselUtseldelseMapperTest() {
