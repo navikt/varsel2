@@ -10,6 +10,8 @@ import no.nav.varsel.service.support.exception.functional.VarselInaktivVarselmal
 import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloeptException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
+import no.nav.varsel.tvarsel006.VarselUtsendelse;
+import no.nav.varsel.service.tvarsel006.support.VarselUtsendelseMapper;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
@@ -31,7 +33,7 @@ import static org.springframework.util.StringUtils.hasText;
 
 public class ServicemeldingService {
 	
-	private static final Logger LOGG = LoggerFactory.getLogger(ServicemeldingService.class);
+	private static final Logger log = LoggerFactory.getLogger(ServicemeldingService.class);
 	
 	@Autowired
 	private AktoerService aktoerService;
@@ -56,7 +58,13 @@ public class ServicemeldingService {
 	
 	@Autowired
 	private VarselbestillingRepo varselbestillingRepo;
-	
+
+	@Autowired
+	private VarselUtsendelse varselUtsendelse;
+
+	@Autowired
+	private VarselUtsendelseMapper varselUtsendelseMapper;
+
 	public void bestillServicemelding(BestillVarselTo bestilling) {
 		if (bestilling.getUtloepstidspunkt() != null && bestilling.getUtloepstidspunkt().isBefore(LocalDateTime.now())) {
 			throw new VarselbestillingUtloeptException(bestilling.getVarselBestillingId(), bestilling.getUtloepstidspunkt());
@@ -90,11 +98,24 @@ public class ServicemeldingService {
 		varselbestillingRepo.saveAndFlush(varselbestilling);
 		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper.map(varselbestilling);
 
+		//TODO Blir en rework av denne logikken ved implementasjon av tvarsel001 funksjonalitet
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
-			varselutsendingProducer.produce(varselutsendingTo);
-			LOGG.info("Sending servicevarsel with varselbestillingsId=" + varselbestilling.getVarselbestillingId()
-					+ ", varselTypeId=" + varselbestilling.getVarseltypeId()
-					+ " to kanal=" + varselutsendingTo.getKanal());
+			if(hasKontaktInfo(bestilling)) {
+				varselUtsendelse.sendVarsel(varselUtsendelseMapper.mapNotifikasjonMedKontaktInfo(
+						bestilling,
+						varselbestilling,
+						varselutsendingTo,
+						varselInfoTo
+				));
+			} else {
+				varselutsendingProducer.produce(varselutsendingTo);
+			}
+
+			log.info(String.format("Sender %s med BestillingsId=%s, VarselTypeId=%s til kanal=%s",
+					hasKontaktInfo(bestilling) ? "ServicemeldingMedKontaktInfo" : "Servicemelding",
+					varselbestilling.getVarselbestillingId(),
+					varselbestilling.getVarseltypeId(),
+					varselutsendingTo.getKanal()));
 		}
 	}
 	

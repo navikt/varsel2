@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlRegistry;
  */
 public class ObjectFactoryTest {
 
-	private ObjectFactory objectFactory = new ObjectFactory();
+	private final ObjectFactory objectFactory = new ObjectFactory();
 	private JmsReply jmsReply;
 
 	@BeforeEach
@@ -29,7 +29,7 @@ public class ObjectFactoryTest {
 	}
 
 	@Test
-	public void shouldCreateJmsReplyJaxbElement() throws Exception {
+	public void shouldCreateJmsReplyJaxbElement() {
 		JAXBElement<JmsReply> replyJAXBElement = objectFactory.createJmsReply(this.jmsReply);
 		assertThat(replyJAXBElement.getValue(), is(jmsReply));
 		assertThat(replyJAXBElement.getName(), is(JMS_REPLY_QNAME));

@@ -1,5 +1,6 @@
 package no.nav.varsel.config;
 
+import no.nav.varsel.tvarsel006.VarselUtsendelse;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Import;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @EnableAutoConfiguration
-@Import({JmsTestConfig.class, RepoTestConfig.class, ProviderWsConfig.class, STSTestConfig.class})
+@Import({JmsTestConfig.class, RepoTestConfig.class, ProviderWsConfig.class, STSTestConfig.class, VarselUtsendelse.class})
 @Configuration
 public class WsProviderTestConfig {
 

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<artifactId>varsel</artifactId>
 		<groupId>no.nav.varsel</groupId>
-		<version>5.4.3-SNAPSHOT</version>
+		<version>1-SNAPSHOT</version>
 	</parent>
-	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>varsel-ws</artifactId>
 	<name>Varsel :: WebService</name>
@@ -49,7 +50,6 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>
@@ -77,13 +77,6 @@
 					<artifactId>spring-boot-starter-tomcat</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-
-		<!--test-->
-		<dependency>
-			<groupId>no.nav.modig</groupId>
-			<artifactId>modig-testcertificates</artifactId>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

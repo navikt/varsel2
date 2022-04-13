@@ -1,4 +1,5 @@
 {
+  "KAFKA_POOL": "nav-dev",
   "NAMESPACE": "teamdokumenthandtering",
   "APP_NAME": "varsel2",
   "APPD_NAME": "varsel2",
@@ -26,5 +27,5 @@
   "VARSEL_JMS_CONSUMER_ERROR_CONTEXT_TIME_SECONDS": "600",
   "VARSEL_JMS_CONSUMER_ERROR_RESTART_DELAY_SECONDS": "600",
   "SERVICEUSER_VAULT_PATH": "/serviceuser/data/dev/srvvarsel",
-  "LISTENER_AUTOSTART": "false"
+  "LISTENER_AUTO_STARTUP": "true"
 }

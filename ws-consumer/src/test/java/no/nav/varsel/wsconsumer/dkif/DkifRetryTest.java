@@ -12,17 +12,15 @@ import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.annotation.EnableRetry;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -77,7 +75,7 @@ public class DkifRetryTest {
 		}
 	}
 
-	@After
+	@AfterEach
 	public void resetMocks() {
 		Mockito.reset(digitalKontaktinformasjonV1Mock);
 	}

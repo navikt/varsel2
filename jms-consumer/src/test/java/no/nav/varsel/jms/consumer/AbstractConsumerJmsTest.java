@@ -2,24 +2,22 @@ package no.nav.varsel.jms.consumer;
 
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
 import no.nav.varsel.config.JmsConsumerTestConfig;
-import no.nav.varsel.config.JmsTestConfig;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.repo.VarselbestillingRepo;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.Message;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
@@ -29,16 +27,16 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 import static wiremock.org.apache.http.entity.ContentType.APPLICATION_JSON;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = JmsConsumerTestConfig.class)
 @ActiveProfiles({"itest", "local"})
 @AutoConfigureWireMock(port = 0)
@@ -62,7 +60,7 @@ public abstract class AbstractConsumerJmsTest {
 	@Autowired
 	private TransactionTemplate transactionTemplate;
 
-	@Before
+	@BeforeEach
 	public void setUpAbstract() {
 		this.stubStsConsumer();
 		this.stubPdlConsumer();
@@ -73,7 +71,7 @@ public abstract class AbstractConsumerJmsTest {
 		varselbestillingRepo.deleteAll();
 	}
 
-	@After
+	@AfterEach
 	public void tearDownAbstract() {
 		varselbestillingRepo.deleteAll();
 	}

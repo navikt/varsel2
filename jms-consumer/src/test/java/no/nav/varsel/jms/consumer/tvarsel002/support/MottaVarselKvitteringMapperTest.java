@@ -1,19 +1,18 @@
 package no.nav.varsel.jms.consumer.tvarsel002.support;
 
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import no.nav.melding.virksomhet.varselkvittering.v1.varselkvittering.VarselKvittering;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringStatusTo;
 import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringTo;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Unit tests for {@link MottaVarselKvitteringMapper}
@@ -30,13 +29,10 @@ public class MottaVarselKvitteringMapperTest {
 	public static final String STATUS_EXPIRED = "EXPIRED";
 	public static final String FEILMELDING = "feilmelding";
 
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
-
-	private MottaVarselKvitteringMapper mapper = new MottaVarselKvitteringMapper();
+	private final MottaVarselKvitteringMapper mapper = new MottaVarselKvitteringMapper();
 
 	@Test
-	public void shouldMap() throws Exception {
+	public void shouldMap() {
 		MottaVarselKvitteringTo mapped = mapper.map(createVarselKvittering());
 
 		assertThat(mapped.getVarselId(), equalTo(VARSEL_ID));
@@ -47,7 +43,7 @@ public class MottaVarselKvitteringMapperTest {
 	}
 
 	@Test
-	public void shouldMapWhenUtsendingstidspunktIsNull() throws Exception {
+	public void shouldMapWhenUtsendingstidspunktIsNull() {
 		VarselKvittering kvittering = createVarselKvittering();
 		kvittering.setUtsendingstidspunkt(null);
 
@@ -57,7 +53,7 @@ public class MottaVarselKvitteringMapperTest {
 	}
 
 	@Test
-	public void shouldMapWhenStatusIsNull() throws Exception {
+	public void shouldMapWhenStatusIsNull() {
 		VarselKvittering kvittering = createVarselKvittering();
 		kvittering.setStatus(null);
 
@@ -67,7 +63,7 @@ public class MottaVarselKvitteringMapperTest {
 	}
 
 	@Test
-	public void shouldMapStatusError() throws Exception {
+	public void shouldMapStatusError() {
 		VarselKvittering kvittering = createVarselKvittering();
 		kvittering.setStatus(STATUS_ERROR);
 
@@ -77,7 +73,7 @@ public class MottaVarselKvitteringMapperTest {
 	}
 
 	@Test
-	public void shouldMapStatusExpired() throws Exception {
+	public void shouldMapStatusExpired() {
 		VarselKvittering kvittering = createVarselKvittering();
 		kvittering.setStatus(STATUS_EXPIRED);
 
@@ -87,13 +83,11 @@ public class MottaVarselKvitteringMapperTest {
 	}
 
 	@Test
-	public void shouldThrowIllegalArgumentIfUnkownStatus() throws Exception {
-		expectedException.expect(IllegalArgumentException.class);
-
+	public void shouldThrowIllegalArgumentIfUnkownStatus() {
 		VarselKvittering kvittering = createVarselKvittering();
 		kvittering.setStatus("unknown");
 
-		mapper.map(kvittering);
+		assertThrows(IllegalArgumentException.class, () -> mapper.map(kvittering));
 	}
 
 	public static VarselKvittering createVarselKvittering() {

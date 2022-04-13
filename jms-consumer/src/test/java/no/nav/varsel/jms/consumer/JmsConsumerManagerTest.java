@@ -1,16 +1,15 @@
 package no.nav.varsel.jms.consumer;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.test.annotation.DirtiesContext;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static java.lang.Thread.sleep;
 import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING;
 import static no.nav.varsel.jms.consumer.JmsConsumer.VARSEL_KVITTERING;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS) // Denne testen manipulerer JmsTemplate og JmsConsumerManager for de ørvrige testene.
 public class JmsConsumerManagerTest extends AbstractConsumerJmsTest {
@@ -21,8 +20,8 @@ public class JmsConsumerManagerTest extends AbstractConsumerJmsTest {
 	@Autowired
 	protected JmsConsumerManager jmsConsumerManager;
 
-	@Before
-	public void setUp() throws Exception {
+	@BeforeEach
+	public void setUp() {
 		jmsConsumerManager.startAll();
 		jmsConsumerManager.setContextSize(3);
 		jmsConsumerManager.setContextTimeSeconds(CONTEXT_TIME_SECONDS);

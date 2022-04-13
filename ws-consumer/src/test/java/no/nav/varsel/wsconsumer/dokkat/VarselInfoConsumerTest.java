@@ -1,27 +1,25 @@
 package no.nav.varsel.wsconsumer.dokkat;
 
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
-
 import com.google.common.collect.Sets;
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.wsconsumer.dokkat.support.VarselInfoMapper;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit test for {@link VarselInfoConsumer}
@@ -49,9 +47,6 @@ public class VarselInfoConsumerTest {
 	private static final String VARSELTYPE_ID = "varseltypeIden";
 	private static final String DOKKAT_URL = "http://nav.no/varselinfo";
 
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
-
 	@Mock
 	private RestTemplate restTemplate;
 	@Mock
@@ -60,13 +55,13 @@ public class VarselInfoConsumerTest {
 	@InjectMocks
 	private VarselInfoConsumer varselInfoConsumer;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		varselInfoConsumer.setVarselinfoUrl(DOKKAT_URL);
 	}
 
 	@Test
-	public void shouldConsume() throws Exception {
+	public void shouldConsume() {
 		VarselInfoRestTo restTo = new VarselInfoRestTo();
 		when(restTemplate.getForObject(DOKKAT_URL + "/{varseltypeId}", VarselInfoRestTo.class, VARSELTYPE_ID))
 				.thenReturn(restTo);
@@ -74,18 +69,16 @@ public class VarselInfoConsumerTest {
 		when(varselInfoMapper.map(restTo)).thenReturn(mock);
 
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID);
-		Assert.assertThat(varselInfoTo, is(mock));
+		assertThat(varselInfoTo, is(mock));
 	}
 
 	@Test
-	public void shouldGiveVarseltypeIdInExceptionMessageWhen404() throws Exception {
+	public void shouldGiveVarseltypeIdInExceptionMessageWhen404() {
 		when(restTemplate.getForObject(DOKKAT_URL + "/{varseltypeId}", VarselInfoRestTo.class, VARSELTYPE_ID))
 				.thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
 
-		expectedException.expect(RuntimeException.class);
-		expectedException.expectMessage("Could not find varseltypeId=varseltypeIden from url=http://nav.no/varselinfo/{varseltypeId}");
-
-		varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID);
+		Exception e = Assertions.assertThrows(RuntimeException.class, () -> varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID));
+		Assertions.assertEquals("Could not find varseltypeId=varseltypeIden from url=http://nav.no/varselinfo/{varseltypeId}", e.getMessage());
 	}
 
 	public static VarselInfoTo createVarselInfoTo(String varseltype) {

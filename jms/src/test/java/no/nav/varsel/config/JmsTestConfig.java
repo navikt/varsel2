@@ -3,7 +3,6 @@ package no.nav.varsel.config;
 import com.atomikos.jms.AtomikosConnectionFactoryBean;
 import com.ibm.mq.jms.MQQueue;
 import no.nav.varsel.config.alias.ListenerProperties;
-import no.nav.varsel.config.alias.MqGatewayProperties;
 import org.apache.activemq.ActiveMQXAConnectionFactory;
 import org.apache.activemq.RedeliveryPolicy;
 import org.apache.activemq.broker.BrokerService;

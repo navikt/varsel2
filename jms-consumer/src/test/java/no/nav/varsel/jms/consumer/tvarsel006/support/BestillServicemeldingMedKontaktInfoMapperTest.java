@@ -11,18 +11,18 @@ import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicem
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.service.to.BestillVarselTo;
 import org.hamcrest.Matchers;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
 import static no.nav.varsel.Utils.formatDateTime;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BestillServicemeldingMedKontaktInfoMapperTest {
 
@@ -36,10 +36,7 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 	public static final String EPOST = "er@mocked.data";
 	public static final String TLF = "11223344";
 
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
-
-	private BestillServicemeldingMedKontaktInfoMapper mapper = new BestillServicemeldingMedKontaktInfoMapper();
+	private final BestillServicemeldingMedKontaktInfoMapper mapper = new BestillServicemeldingMedKontaktInfoMapper();
 
 	@Test
 	public void shouldMap() {
@@ -96,9 +93,8 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 		kontaktinformasjon.setKanal(createKommunkasjonskanaler(KanalCode.DITT_NAV));
 		varsel.getKontaktinformasjonListe().add(kontaktinformasjon);
 
-		expectedException.expectMessage("Invalid kommunikajsonskanal=DITT_NAV");
-		expectedException.expect(IllegalArgumentException.class);
-		mapper.map(varsel);
+		Exception e = assertThrows(IllegalArgumentException.class, () -> mapper.map(varsel));
+		assertEquals("Invalid kommunikajsonskanal=DITT_NAV", e.getMessage());
 	}
 
 	@Test
@@ -109,9 +105,8 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 		kontaktinformasjon.setKanal(null);
 		varsel.getKontaktinformasjonListe().add(kontaktinformasjon);
 
-		expectedException.expectMessage("Invalid kommunikajsonskanal=null");
-		expectedException.expect(IllegalArgumentException.class);
-		mapper.map(varsel);
+		Exception e = assertThrows(IllegalArgumentException.class, () -> mapper.map(varsel));
+		assertEquals("Invalid kommunikajsonskanal=null", e.getMessage());
 	}
 
 	public static ServicemeldingMedKontaktinformasjon createServicemeldingMedKontaktinformasjon() {

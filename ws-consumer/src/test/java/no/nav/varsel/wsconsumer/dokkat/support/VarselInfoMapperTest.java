@@ -6,7 +6,7 @@ import no.nav.dokkat.schemas.tkat021.VarselMalRestTo;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static no.nav.varsel.repo.TestdataUtil.ANTALL_REVARSLINGER;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
@@ -20,15 +20,15 @@ import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_KATE
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_NAVN;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
 
 public class VarselInfoMapperTest {
 
-	private VarselInfoMapper mapper = new VarselInfoMapper();
+	private final VarselInfoMapper mapper = new VarselInfoMapper();
 
 	@Test
 	public void shouldMap() {
