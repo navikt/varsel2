@@ -41,6 +41,6 @@ public class VarselUtsendelseMapper {
 	}
 
 	private String mapTittel(KanalCode kanalCode, VarselInfoTo varselInfoTo) {
-		return SMS.equals(kanalCode) ? "Dummy tittel" : varselInfoTo.getMal(kanalCode).getTittel();
+		return SMS.equals(kanalCode) ? "SMS fra NAV" : varselInfoTo.getMal(kanalCode).getTittel();
 	}
 }
