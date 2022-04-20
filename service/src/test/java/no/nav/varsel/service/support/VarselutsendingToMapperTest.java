@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.to.MottakerType;
-import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

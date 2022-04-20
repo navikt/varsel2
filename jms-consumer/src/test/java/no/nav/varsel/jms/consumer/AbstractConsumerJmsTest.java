@@ -42,6 +42,8 @@ import static wiremock.org.apache.http.entity.ContentType.APPLICATION_JSON;
 @AutoConfigureWireMock(port = 0)
 public abstract class AbstractConsumerJmsTest {
 
+	public static final String FEIL_MQ_UT = "feil_mq_ut";
+
 	@Autowired
 	protected JmsTemplate jmsTemplate;
 

@@ -3,7 +3,7 @@ package no.nav.varsel.service.tvarsel006.support;
 import no.nav.doknotifikasjon.schemas.PrefererteKanal;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
+import no.nav.varsel.service.support.VarselutsendingTo;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
@@ -16,7 +16,7 @@ import static no.nav.varsel.domain.code.KanalCode.SMS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class VarselUtseldelseMapperTest {
+public class NotifikasjonMedKontaktInfoMapperTest {
 
 	private static final String MOBILNUMMER = "12345678";
 	private static final String EPOST = "epost@post.no";
@@ -25,10 +25,10 @@ public class VarselUtseldelseMapperTest {
 	private static final String VARSEL_TITTEL = "Tittel";
 	private static final String VARSEL_TEKST = "Varsel tekst";
 	private static final String VARSEL_TITTEL_SMS = "SMS fra NAV";
-	private final VarselUtsendelseMapper varselUtsendelseMapper;
+	private final NotifikasjonMedkontaktInfoMapper notifikasjonMedkontaktInfoMapper;
 
-	public VarselUtseldelseMapperTest() {
-		this.varselUtsendelseMapper = new VarselUtsendelseMapper();
+	public NotifikasjonMedKontaktInfoMapperTest() {
+		this.notifikasjonMedkontaktInfoMapper = new NotifikasjonMedkontaktInfoMapper();
 	}
 
 	@Test
@@ -38,7 +38,7 @@ public class VarselUtseldelseMapperTest {
 		var varselutsendingTo = createVarselutsendingTo(KanalCode.EPOST);
 		var varselInfoTo = createVarselInfoTo();
 
-		var notifikasjonMedKontaktInfo = varselUtsendelseMapper.mapNotifikasjonMedKontaktInfo(
+		var notifikasjonMedKontaktInfo = notifikasjonMedkontaktInfoMapper.mapNotifikasjonMedKontaktInfo(
 				bestillVarselTo,
 				varselbestilling,
 				varselutsendingTo,
@@ -62,7 +62,7 @@ public class VarselUtseldelseMapperTest {
 		var varselutsendingTo = createVarselutsendingTo(KanalCode.SMS);
 		var varselInfoTo = createVarselInfoTo();
 
-		var notifikasjonMedKontaktInfo = varselUtsendelseMapper.mapNotifikasjonMedKontaktInfo(
+		var notifikasjonMedKontaktInfo = notifikasjonMedkontaktInfoMapper.mapNotifikasjonMedKontaktInfo(
 				bestillVarselTo,
 				varselbestilling,
 				varselutsendingTo,

@@ -2,16 +2,19 @@ package no.nav.varsel.service;
 
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.jms.producer.VarselutsendingProducer;
-import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
+import no.nav.varsel.service.support.VarselutsendingTo;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.support.exception.functional.VarselInaktivVarselmalException;
 import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloeptException;
 import no.nav.varsel.service.to.BestillVarselTo;
+import no.nav.varsel.service.tvarsel001.support.BrukernotifikasjonMapper;
+import no.nav.varsel.service.tvarsel001.support.EksternnotifikasjonMapper;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
-import no.nav.varsel.tvarsel006.VarselUtsendelse;
-import no.nav.varsel.service.tvarsel006.support.VarselUtsendelseMapper;
+import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedkontaktInfoMapper;
+import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
+import no.nav.varsel.tvarsel001.EksternnotifikasjonPublisher;
+import no.nav.varsel.tvarsel006.NotifikasjonMedKontaktinfoPublisher;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
@@ -19,8 +22,8 @@ import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,9 +35,9 @@ import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
 import static org.springframework.util.StringUtils.hasText;
 
 public class ServicemeldingService {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(ServicemeldingService.class);
-	
+
 	@Autowired
 	private AktoerService aktoerService;
 
@@ -48,36 +51,47 @@ public class ServicemeldingService {
 	private VarselKanalDecider varselKanalDecider;
 
 	@Autowired
-	private VarselutsendingProducer varselutsendingProducer;
+	private VarselutsendingToMapper varselutsendingToMapper;
 
 	@Autowired
-	private VarselutsendingToMapper varselutsendingToMapper;
-	
-	@Autowired
 	private VarselBestillingDomainMapper domainMapper;
-	
+
 	@Autowired
 	private VarselbestillingRepo varselbestillingRepo;
 
 	@Autowired
-	private VarselUtsendelse varselUtsendelse;
+	private NotifikasjonMedKontaktinfoPublisher notifikasjonMedKontaktinfoPublisher;
 
 	@Autowired
-	private VarselUtsendelseMapper varselUtsendelseMapper;
+	private NotifikasjonMedkontaktInfoMapper notifikasjonMedkontaktInfoMapper;
+
+	@Autowired
+	private EksternnotifikasjonPublisher eksternnotifikasjonPublisher;
+
+	@Autowired
+	private EksternnotifikasjonMapper eksternnotifikasjonMapper;
+
+	@Autowired
+	private BrukernotifikasjonBeskjedPublisher brukernotifikasjonBeskjedPublisher;
+
+	@Autowired
+	private BrukernotifikasjonMapper brukernotifikasjonMapper;
 
 	public void bestillServicemelding(BestillVarselTo bestilling) {
 		if (bestilling.getUtloepstidspunkt() != null && bestilling.getUtloepstidspunkt().isBefore(LocalDateTime.now())) {
 			throw new VarselbestillingUtloeptException(bestilling.getVarselBestillingId(), bestilling.getUtloepstidspunkt());
 		}
-		
+
+		//2.Hent Aktørid for Ident
 		bestilling.setMottaker(aktoerService.findMissingAktoer(bestilling));
-		
+
+		//3.Hent Varselinfo
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestilling.getVarseltypeId());
 		bestilling.setVarselBestillingId(UUID.randomUUID().toString());
 		validateVarselInfoForBestilling(bestilling, varselInfoTo);
-		
+
 		overridePreferertKanalForTestmelding(bestilling, varselInfoTo);
-		
+
 		KontaktregisterTo kontaktregisterTo;
 		if (hasKontaktInfo(bestilling)) {
 			//TVARSEL006 Path
@@ -86,29 +100,44 @@ public class ServicemeldingService {
 			kontaktregisterTo.setMobiltelefonnummer(bestilling.getMobiltelefonnummer() != null ? bestilling.getMobiltelefonnummer().trim() : null);
 			kontaktregisterTo.setEpostadresse(bestilling.getEpost() != null ? bestilling.getEpost().trim() : null);
 		} else {
+			//3.5.Hent digital kontaktinformasjon
 			//TVARSEL001 Path
 			kontaktregisterTo = dkifConsumer.hentDigitalKontaktinformasjon(bestilling.getPersonIdent());
 		}
-		
+
+		//4.Bestem varslingskanal
 		Collection<KanalCode> kanalCodes = varselKanalDecider.decideKanaler(kontaktregisterTo, varselInfoTo.getPreferertKanal());
 		kontaktregisterTo.setKanaler(kanalCodes);
-		
+
+		//5. Flett varsel
 		Varselbestilling varselbestilling = domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo);
-		
+
+		//6. Register varsel i DB
 		varselbestillingRepo.saveAndFlush(varselbestilling);
+
+		//7. Varselutsending
 		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper.map(varselbestilling);
 
-		//TODO Blir en rework av denne logikken ved implementasjon av tvarsel001 funksjonalitet
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
-			if(hasKontaktInfo(bestilling)) {
-				varselUtsendelse.sendVarsel(varselUtsendelseMapper.mapNotifikasjonMedKontaktInfo(
+			if (hasKontaktInfo(bestilling)) { //TVARSEL006
+				notifikasjonMedKontaktinfoPublisher.sendVarsel(notifikasjonMedkontaktInfoMapper.mapNotifikasjonMedKontaktInfo(
 						bestilling,
 						varselbestilling,
 						varselutsendingTo,
 						varselInfoTo
 				));
-			} else {
-				varselutsendingProducer.produce(varselutsendingTo);
+			} else { //TVARSEL001
+				eksternnotifikasjonPublisher.sendNotifikasjon(eksternnotifikasjonMapper.mapDoknotifikasjon(
+						varselbestilling,
+						varselutsendingTo,
+						varselInfoTo
+				));
+
+				if (kanalCodes.contains(DITT_NAV) && hasText(varselInfoTo.getMal(DITT_NAV).getFoerstegangsTekst())) {
+					brukernotifikasjonBeskjedPublisher.sendNotifikasjon(
+							brukernotifikasjonMapper.mapBeskjed(varselInfoTo, varselutsendingTo),
+							brukernotifikasjonMapper.mapNokkel(varselbestilling));
+				}
 			}
 
 			log.info(String.format("Sender %s med BestillingsId=%s, VarselTypeId=%s til kanal=%s",
@@ -118,17 +147,17 @@ public class ServicemeldingService {
 					varselutsendingTo.getKanal()));
 		}
 	}
-	
+
 	private boolean hasKontaktInfo(BestillVarselTo bestilling) {
 		return hasText(bestilling.getMobiltelefonnummer()) || hasText(bestilling.getEpost());
 	}
-	
+
 	private void validateVarselInfoForBestilling(BestillVarselTo to, VarselInfoTo varselInfoTo) {
 		if (varselInfoTo.isInaktiv() && !to.isTestvarsel()) {
 			throw new VarselInaktivVarselmalException(to.getPersonIdent(), to.getVarseltypeId(), to.getVarselBestillingId());
 		}
 	}
-	
+
 	private void overridePreferertKanalForTestmelding(BestillVarselTo to, VarselInfoTo varselInfoTo) {
 		if (to.isTestvarsel()) {
 			varselInfoTo.setPreferertKanal(new HashSet<>(Arrays.asList(KanalCode.values())));

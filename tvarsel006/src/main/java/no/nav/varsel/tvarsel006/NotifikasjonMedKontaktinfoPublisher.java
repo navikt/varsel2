@@ -10,19 +10,19 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Import(KafkaEventProducer.class)
-public class VarselUtsendelse {
+public class NotifikasjonMedKontaktinfoPublisher {
 
 	private final KafkaEventProducer kafkaEventProducer;
 	private final String topic;
 
-	public VarselUtsendelse(KafkaEventProducer kafkaEventProducer,
-							@Value("${varsel.doknotifikasjon.kontakt.info.topic}") String topic) {
+	public NotifikasjonMedKontaktinfoPublisher(KafkaEventProducer kafkaEventProducer,
+											   @Value("${varsel.doknotifikasjon.kontakt.info.topic}") String topic) {
 		this.kafkaEventProducer = kafkaEventProducer;
 		this.topic = topic;
 	}
 
 	public void sendVarsel(NotifikasjonMedkontaktInfo notifikasjonMedkontaktInfo) {
-
+		log.info("Sender notifikasjonMedKontaktinfo med bestillingsId=" + notifikasjonMedkontaktInfo.getBestillingsId());
 		kafkaEventProducer.publish(
 				topic,
 				notifikasjonMedkontaktInfo.getBestillingsId(),

@@ -28,7 +28,6 @@ import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldin
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VAL;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VARSELTYPE_ID;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.PERSON_IDENT;
-import static no.nav.varsel.jms.producer.VarselutsendingProducer.FEIL_MQ_UT;
 import static no.nav.varsel.repo.TestdataUtil.PERSONIDENT_WHITESPACE_TEST;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
@@ -48,9 +47,6 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	@Autowired
 	private Queue bestillServicemeldingQueue;
 
-	@Autowired
-	private Queue varselutsendingQueue;
-
 	@Test
 	public void shouldReceieveJms() {
 		JmsReply response = sendMessage(bestillServicemeldingQueue, createVarsel());
@@ -63,7 +59,6 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		String varselTekst = FOERSTE_GANG_TEKST.replace("{mottaker}", VAL);
 
 		String varselId = assertDb(varselTekst).getVarselId();
-		assertVarselutsendingQueue(varselTekst, varselId);
 	}
 
 	@Test
@@ -74,12 +69,6 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		varsel.getValue().setMottaker(personIdent);
 		JmsReply response = sendMessage(bestillServicemeldingQueue, varsel);
 		isOk(response);
-
-		Varselutsending varselutsending = receive(varselutsendingQueue);
-		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), equalTo(EPOSTADRESSE));
-		await().atMost(ofSeconds(5)).untilAsserted(() -> {
-			assertThat(varselbestillingRepo.count(), is(1L));
-		});
 	}
 
 	@Test
@@ -111,8 +100,6 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 		isOk(response);
 		assertThat(varselbestillingRepo.count(), is(0L));
-		Varselutsending varselutsending = receive(varselutsendingQueue);
-		assertThat(varselutsending, nullValue());
 	}
 
 	public static JAXBElement<Varsel> createVarsel() {
@@ -152,19 +139,5 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varsel.getChangeStamp().getOpprettetDato(), aboutNow());
 
 		return varsel;
-	}
-
-	private void assertVarselutsendingQueue(String varselTekst, String varselId) {
-		Varselutsending varselutsending = receive(varselutsendingQueue);
-		assertThat(varselutsending.getVarselId(), is(varselId));
-		assertThat(((no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Person)
-				varselutsending.getMottaker()).getIdent(), is(PERSON_IDENT));
-		assertThat(varselutsending.getUtloepstidspunkt(), equalTo(toXmlGregorianCalendar(UTLOEPSTIDSPUNKT_LDT)));
-		assertThat(varselutsending.getDistribusjon().getKanal().getValue(), is(EPOST.getKommunikasjonskanal()));
-		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), is(EPOSTADRESSE));
-		assertThat(varselutsending.getVarseltypeId(), is(VARSELTYPE_ID));
-		assertThat(varselutsending.getVarselTittel(), is(VARSEL_TITTEL));
-		assertThat(varselutsending.getVarselTekst(), is(varselTekst));
-		assertThat(varselutsending.getVarselURL(), nullValue());
 	}
 }

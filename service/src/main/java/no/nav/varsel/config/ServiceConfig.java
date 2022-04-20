@@ -7,9 +7,13 @@ import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.VarselFletter;
 import no.nav.varsel.service.interfaces.BrukervarselService;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
+import no.nav.varsel.service.tvarsel001.support.BrukernotifikasjonMapper;
+import no.nav.varsel.service.tvarsel001.support.EksternnotifikasjonMapper;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
 import no.nav.varsel.service.tvarsel005.support.BrukervarselMapper;
-import no.nav.varsel.service.tvarsel006.support.VarselUtsendelseMapper;
+import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedkontaktInfoMapper;
+import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
+import no.nav.varsel.tvarsel001.EksternnotifikasjonPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -20,7 +24,14 @@ import org.springframework.context.annotation.Import;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration
-@Import({RepoConfig.class, WsConsumerConfig.class, JmsProducerConfig.class})
+@Import({RepoConfig.class,
+		WsConsumerConfig.class,
+		JmsConfig.class,
+		EksternnotifikasjonPublisher.class,
+		EksternnotifikasjonMapper.class,
+		BrukernotifikasjonBeskjedPublisher.class,
+		BrukernotifikasjonMapper.class
+})
 public class ServiceConfig {
 
 	@Bean
@@ -64,5 +75,5 @@ public class ServiceConfig {
 	}
 
 	@Bean
-	public VarselUtsendelseMapper varselUtsendelseMapper() { return new VarselUtsendelseMapper(); }
+	public NotifikasjonMedkontaktInfoMapper varselUtsendelseMapper() { return new NotifikasjonMedkontaktInfoMapper(); }
 }

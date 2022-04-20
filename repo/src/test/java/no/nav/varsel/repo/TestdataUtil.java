@@ -24,6 +24,7 @@ public class TestdataUtil {
 	public static final String TLF = "11112222";
 	public static final String EPOST = "test@test.no";
 	public static final Set<KanalCode> PREFERERT_KANAL = Sets.newHashSet(KanalCode.EPOST);
+	public static final Set<KanalCode> PREFERERT_KANAL_MED_DITT_NAV = Sets.newHashSet(KanalCode.EPOST, KanalCode.DITT_NAV);
 	public static final Set<KanalCode> OVERSTYRT_PREFERERT_KANAL = Sets.newHashSet(KanalCode.values());
 	public static final LocalDateTime UTLOP_TIDSPUNKT = LocalDateTime.now().plusHours(1);
 	public static final String FNR = "11112222333";

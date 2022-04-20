@@ -33,7 +33,6 @@ import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldin
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.VAL;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.VARSELTYPE_ID;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.createServicemeldingMedKontaktinformasjon;
-import static no.nav.varsel.jms.producer.VarselutsendingProducer.FEIL_MQ_UT;
 import static no.nav.varsel.repo.TestdataUtil.PERSONIDENT_WHITESPACE_TEST;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
@@ -47,6 +46,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractConsumerJmsTest {
+
+
 
 	private TestUtils.MockAppender loggerMock = null;
 

@@ -3,7 +3,6 @@ package no.nav.varsel.service.support;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.domain.to.AktoerTo;
-import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
 
 import java.time.LocalDateTime;
 import java.util.List;

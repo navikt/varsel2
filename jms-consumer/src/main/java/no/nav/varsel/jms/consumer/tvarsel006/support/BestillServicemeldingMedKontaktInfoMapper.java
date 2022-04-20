@@ -6,7 +6,6 @@ import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicem
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.Parameter;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.Person;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
-import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.utility.XmlGregorianConverter;
 import no.nav.varsel.service.to.AktoerBestillingTo;
 import no.nav.varsel.service.to.BestillVarselTo;
@@ -14,6 +13,9 @@ import no.nav.varsel.service.to.BestillVarselTo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static no.nav.varsel.domain.code.KanalCode.EPOST;
+import static no.nav.varsel.domain.code.KanalCode.SMS;
 
 /**
  * Maps {@link ServicemeldingMedKontaktinformasjon} to {@link BestillVarselTo}
@@ -36,12 +38,12 @@ public class BestillServicemeldingMedKontaktInfoMapper {
 	private void mapKontaktInformasjon(ServicemeldingMedKontaktinformasjon input, BestillVarselTo to) {
 		for (Kontaktinformasjon kontaktinformasjon : input.getKontaktinformasjonListe()) {
 			String kanal = kontaktinformasjon.getKanal() != null ? kontaktinformasjon.getKanal().getValue() : null;
-			if (KanalCode.SMS.name().equals(kanal)) {
+			if (SMS.name().equals(kanal)) {
 				to.setMobiltelefonnummer(kontaktinformasjon.getKontaktinformasjon());
-			} else if (KanalCode.EPOST.name().equals(kanal)) {
+			} else if (EPOST.name().equals(kanal)) {
 				to.setEpost(kontaktinformasjon.getKontaktinformasjon());
 			} else {
-				throw new IllegalArgumentException("Invalid kommunikajsonskanal=" + kanal);
+				throw new IllegalArgumentException("Ugyldig kommunikasjonskanal=" + kanal);
 			}
 		}
 	}

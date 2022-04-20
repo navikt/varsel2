@@ -21,10 +21,6 @@
 			<artifactId>varsel-ws-consumer</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-jms-producer</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.retry</groupId>
 			<artifactId>spring-retry</artifactId>
 		</dependency>
@@ -55,6 +51,15 @@
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>varsel-tvarsel006</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>varsel-tvarsel001</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>varsel-jms</artifactId>
 		</dependency>
 	</dependencies>
 

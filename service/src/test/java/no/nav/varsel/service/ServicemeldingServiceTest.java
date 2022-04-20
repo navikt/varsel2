@@ -2,21 +2,31 @@ package no.nav.varsel.service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import no.nav.brukernotifikasjon.schemas.input.BeskjedInput;
+import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
+import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
+import no.nav.doknotifikasjon.schemas.NotifikasjonMedkontaktInfo;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.jms.producer.VarselutsendingProducer;
-import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
+import no.nav.varsel.service.support.VarselutsendingTo;
 import no.nav.varsel.repo.TestdataUtil;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.support.exception.functional.VarselInaktivVarselmalException;
 import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloeptException;
 import no.nav.varsel.service.to.BestillVarselTo;
+import no.nav.varsel.service.tvarsel001.support.BrukernotifikasjonMapper;
+import no.nav.varsel.service.tvarsel001.support.EksternnotifikasjonMapper;
 import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
+import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedkontaktInfoMapper;
+import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
+import no.nav.varsel.tvarsel001.EksternnotifikasjonPublisher;
+import no.nav.varsel.tvarsel006.NotifikasjonMedKontaktinfoPublisher;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
 import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +40,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static no.nav.varsel.domain.to.AktoerTo.newPersonIdent;
 import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
@@ -72,8 +85,6 @@ public class ServicemeldingServiceTest {
 	private HentDigitalKontaktinformasjonConsumer digitalKontaktinformasjonConsumer;
 
 	@Mock
-	private VarselutsendingProducer varselutsendingProducer;
-	@Mock
 	private VarselutsendingToMapper varselutsendingToMapper;
 
 	@Mock
@@ -83,14 +94,36 @@ public class ServicemeldingServiceTest {
 	@Mock
 	private VarselbestillingRepo varselbestillingRepo;
 
+	@Mock
+	private NotifikasjonMedKontaktinfoPublisher notifikasjonMedKontaktinfoPublisher;
+
+	@Mock
+	private NotifikasjonMedkontaktInfoMapper notifikasjonMedkontaktInfoMapper;
+
+	@Mock
+	private EksternnotifikasjonPublisher eksternnotifikasjonPublisher;
+
+	@Mock
+	private EksternnotifikasjonMapper eksternnotifikasjonMapper;
+
+	@Mock
+	private BrukernotifikasjonBeskjedPublisher brukernotifikasjonBeskjedPublisher;
+
+	@Mock
+	private BrukernotifikasjonMapper brukernotifikasjonMapper;
+
 	@InjectMocks
 	private ServicemeldingService servicemeldingService;
 
-	private ArrayList<VarselutsendingTo> varselutsendingTos = Lists.newArrayList(new VarselutsendingTo(), new VarselutsendingTo());
-	private Varselbestilling varselbestilling = new Varselbestilling();
-	private BestillVarselTo bestilling = new BestillVarselTo();
-	private KontaktregisterTo kontaktregisterTo = new KontaktregisterTo();
-	private VarselInfoTo varselInfoTo = new VarselInfoTo();
+	private final ArrayList<VarselutsendingTo> varselutsendingTos = Lists.newArrayList(new VarselutsendingTo(), new VarselutsendingTo());
+	private final Varselbestilling varselbestilling = new Varselbestilling();
+	private final BestillVarselTo bestilling = new BestillVarselTo();
+	private final KontaktregisterTo kontaktregisterTo = new KontaktregisterTo();
+	private final VarselInfoTo varselInfoTo = new VarselInfoTo();
+	private final Doknotifikasjon doknotifikasjon = new Doknotifikasjon();
+	private final BeskjedInput beskjedInput = new BeskjedInput();
+	private final NokkelInput nokkelInput = new NokkelInput();
+	private final NotifikasjonMedkontaktInfo notifikasjonMedkontaktInfo = new NotifikasjonMedkontaktInfo();
 
 	@BeforeEach
 	public void setUp() {
@@ -112,9 +145,55 @@ public class ServicemeldingServiceTest {
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
 		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
 		when(varselutsendingToMapper.map(eq(varselbestilling))).thenReturn(varselutsendingTos);
+
+		when(eksternnotifikasjonMapper.mapDoknotifikasjon(varselbestilling, varselutsendingTos.get(0), varselInfoTo)).thenReturn(doknotifikasjon);
+		when(eksternnotifikasjonMapper.mapDoknotifikasjon(varselbestilling, varselutsendingTos.get(1), varselInfoTo)).thenReturn(doknotifikasjon);
+
 		servicemeldingService.bestillServicemelding(bestilling);
 
 		assertOK();
+	}
+
+	@Test
+	public void shouldBestillServicemeldingMedBrukernotifikasjon() {
+		bestilling.setAktoerId(AKTOR_ID);
+		varselInfoTo.setMaler(createMaler());
+		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
+		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+
+		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
+		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL_MED_DITT_NAV);
+		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
+		when(varselutsendingToMapper.map(eq(varselbestilling))).thenReturn(varselutsendingTos);
+
+		when(eksternnotifikasjonMapper.mapDoknotifikasjon(varselbestilling, varselutsendingTos.get(0), varselInfoTo)).thenReturn(doknotifikasjon);
+		when(eksternnotifikasjonMapper.mapDoknotifikasjon(varselbestilling, varselutsendingTos.get(1), varselInfoTo)).thenReturn(doknotifikasjon);
+
+		when(brukernotifikasjonMapper.mapBeskjed(varselInfoTo, varselutsendingTos.get(0))).thenReturn(beskjedInput);
+		when(brukernotifikasjonMapper.mapBeskjed(varselInfoTo, varselutsendingTos.get(1))).thenReturn(beskjedInput);
+		when(brukernotifikasjonMapper.mapNokkel(varselbestilling)).thenReturn(nokkelInput);
+
+		servicemeldingService.bestillServicemelding(bestilling);
+
+		assertOkMedBrukernotifikasjon();
+	}
+
+	@Test
+	public void shouldBestillServicemeldingMedKontaktinfo() {
+		bestilling.setAktoerId(AKTOR_ID);
+		bestilling.setEpost("test@epost.no");
+		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
+		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(varselKanalDecider.decideKanaler(any(KontaktregisterTo.class), eq(PREFERERT_KANAL))).thenReturn(TestdataUtil.PREFERERT_KANAL);
+		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(eq(bestilling), eq(varselInfoTo), any(KontaktregisterTo.class))).thenReturn(varselbestilling);
+		when(varselutsendingToMapper.map(eq(varselbestilling))).thenReturn(varselutsendingTos);
+
+		when(notifikasjonMedkontaktInfoMapper.mapNotifikasjonMedKontaktInfo(bestilling, varselbestilling, varselutsendingTos.get(0), varselInfoTo)).thenReturn(notifikasjonMedkontaktInfo);
+		when(notifikasjonMedkontaktInfoMapper.mapNotifikasjonMedKontaktInfo(bestilling, varselbestilling, varselutsendingTos.get(1), varselInfoTo)).thenReturn(notifikasjonMedkontaktInfo);
+
+		servicemeldingService.bestillServicemelding(bestilling);
+
+		assertOkMedKontaktinfo();
 	}
 
 	@Test
@@ -234,12 +313,50 @@ public class ServicemeldingServiceTest {
 		bestilling.setOrgNr(TestdataUtil.ORG_NR);
 	}
 
+	private Set<VarselMalTo> createMaler() {
+
+		return Stream.of(
+				VarselMalTo.VarselMalToBuilder.aVarselMalTo()
+						.foerstegangsTekst("Førstegangstekst epost")
+						.revarslingTekst("Revarslingstekst epost")
+						.kanal(KanalCode.EPOST)
+						.tittel("Epost tittel")
+						.build(),
+				VarselMalTo.VarselMalToBuilder.aVarselMalTo()
+						.foerstegangsTekst("Førstegangstekst ditt nav")
+						.revarslingTekst("Revarslingstekst ditt nav")
+						.kanal(KanalCode.DITT_NAV)
+						.tittel("Ditt Nav tittel")
+						.build())
+				.collect(Collectors.toSet());
+	}
+
 	private void assertOK() {
 		assertThat(UUID.fromString(bestilling.getVarselBestillingId()).toString(), is(bestilling.getVarselBestillingId()));
 		verify(varselbestillingRepo).saveAndFlush(varselbestilling);
 
-		verify(varselutsendingProducer).produce(varselutsendingTos.get(0));
-		verify(varselutsendingProducer).produce(varselutsendingTos.get(1));
-		verifyNoMoreInteractions(varselutsendingProducer, varselbestillingRepo);
+		verify(eksternnotifikasjonPublisher, times(2)).sendNotifikasjon(any(Doknotifikasjon.class));
+		verify(brukernotifikasjonBeskjedPublisher, never()).sendNotifikasjon(any(BeskjedInput.class), any(NokkelInput.class));
+
+		verifyNoMoreInteractions(varselbestillingRepo);
+	}
+
+	private void assertOkMedBrukernotifikasjon() {
+		assertThat(UUID.fromString(bestilling.getVarselBestillingId()).toString(), is(bestilling.getVarselBestillingId()));
+		verify(varselbestillingRepo).saveAndFlush(varselbestilling);
+
+		verify(eksternnotifikasjonPublisher, times(2)).sendNotifikasjon(any(Doknotifikasjon.class));
+		verify(brukernotifikasjonBeskjedPublisher, times(2)).sendNotifikasjon(any(BeskjedInput.class), any(NokkelInput.class));
+
+		verifyNoMoreInteractions(varselbestillingRepo);
+	}
+
+	private void assertOkMedKontaktinfo() {
+		assertThat(UUID.fromString(bestilling.getVarselBestillingId()).toString(), is(bestilling.getVarselBestillingId()));
+		verify(varselbestillingRepo).saveAndFlush(varselbestilling);
+
+		verify(notifikasjonMedKontaktinfoPublisher, times(2)).sendVarsel(any(NotifikasjonMedkontaktInfo.class));
+
+		verifyNoMoreInteractions(varselbestillingRepo);
 	}
 }

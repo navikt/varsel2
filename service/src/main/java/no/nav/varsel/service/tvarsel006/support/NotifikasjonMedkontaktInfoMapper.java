@@ -4,7 +4,7 @@ import no.nav.doknotifikasjon.schemas.NotifikasjonMedkontaktInfo;
 import no.nav.doknotifikasjon.schemas.PrefererteKanal;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.jms.producer.varselutsending.to.VarselutsendingTo;
+import no.nav.varsel.service.support.VarselutsendingTo;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import static no.nav.varsel.domain.code.KanalCode.SMS;
 
-public class VarselUtsendelseMapper {
+public class NotifikasjonMedkontaktInfoMapper {
 
 	public NotifikasjonMedkontaktInfo mapNotifikasjonMedKontaktInfo(
 			BestillVarselTo bestillVarselTo,

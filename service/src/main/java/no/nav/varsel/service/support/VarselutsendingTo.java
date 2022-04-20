@@ -1,4 +1,4 @@
-package no.nav.varsel.jms.producer.varselutsending.to;
+package no.nav.varsel.service.support;
 
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.to.AktoerTo;
