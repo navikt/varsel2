@@ -9,7 +9,7 @@ import no.nav.varsel.service.interfaces.BrukervarselService;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.tvarsel001.support.BrukernotifikasjonMapper;
 import no.nav.varsel.service.tvarsel001.support.EksternnotifikasjonMapper;
-import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
+import no.nav.varsel.service.support.VarselBestillingDomainMapper;
 import no.nav.varsel.service.tvarsel005.support.BrukervarselMapper;
 import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedkontaktInfoMapper;
 import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;

@@ -17,7 +17,7 @@ import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloep
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.BrukernotifikasjonMapper;
 import no.nav.varsel.service.tvarsel001.support.EksternnotifikasjonMapper;
-import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
+import no.nav.varsel.service.support.VarselBestillingDomainMapper;
 import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedkontaktInfoMapper;
 import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
 import no.nav.varsel.tvarsel001.EksternnotifikasjonPublisher;

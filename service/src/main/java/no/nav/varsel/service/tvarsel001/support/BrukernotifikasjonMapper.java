@@ -7,7 +7,6 @@ import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.support.VarselutsendingTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -28,10 +27,6 @@ public class BrukernotifikasjonMapper {
 
 	public BrukernotifikasjonMapper() {
 		this.clock = Clock.systemDefaultZone();
-	}
-
-	BrukernotifikasjonMapper(Clock clock) {
-		this.clock = clock;
 	}
 
 	public NokkelInput mapNokkel(Varselbestilling varselbestilling) {

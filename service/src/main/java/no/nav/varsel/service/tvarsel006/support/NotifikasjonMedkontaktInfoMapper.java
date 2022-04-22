@@ -1,16 +1,13 @@
 package no.nav.varsel.service.tvarsel006.support;
 
 import no.nav.doknotifikasjon.schemas.NotifikasjonMedkontaktInfo;
-import no.nav.doknotifikasjon.schemas.PrefererteKanal;
-import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.support.VarselutsendingTo;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 
-import java.util.stream.Stream;
-
-import static no.nav.varsel.domain.code.KanalCode.SMS;
+import static no.nav.varsel.service.support.MapperUtils.mapKanalToSingletonList;
+import static no.nav.varsel.service.support.MapperUtils.mapTittel;
 
 public class NotifikasjonMedkontaktInfoMapper {
 
@@ -31,16 +28,9 @@ public class NotifikasjonMedkontaktInfoMapper {
 				.setTittel(mapTittel(varselutsendingTo.getKanal(), varselInfoTo))
 				.setEpostTekst(varselutsendingTo.getVarselTekst())
 				.setSmsTekst(varselutsendingTo.getVarselTekst())
-				.setPrefererteKanaler(Stream.of(mapKanal(varselutsendingTo.getKanal())).toList())
+				.setPrefererteKanaler(mapKanalToSingletonList(varselutsendingTo.getKanal()))
 				.build();
-
 	}
 
-	private PrefererteKanal mapKanal(KanalCode kanalCode) {
-		return PrefererteKanal.valueOf(kanalCode.name());
-	}
 
-	private String mapTittel(KanalCode kanalCode, VarselInfoTo varselInfoTo) {
-		return SMS.equals(kanalCode) ? "SMS fra NAV" : varselInfoTo.getMal(kanalCode).getTittel();
-	}
 }

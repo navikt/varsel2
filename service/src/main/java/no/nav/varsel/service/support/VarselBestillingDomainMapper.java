@@ -1,4 +1,4 @@
-package no.nav.varsel.service.tvarsel001.support;
+package no.nav.varsel.service.support;
 
 import static java.util.stream.Collectors.toMap;
 
