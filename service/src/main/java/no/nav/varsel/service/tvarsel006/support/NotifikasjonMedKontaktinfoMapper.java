@@ -9,9 +9,9 @@ import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import static no.nav.varsel.service.support.MapperUtils.mapKanalToSingletonList;
 import static no.nav.varsel.service.support.MapperUtils.mapTittel;
 
-public class NotifikasjonMedkontaktInfoMapper {
+public class NotifikasjonMedKontaktinfoMapper {
 
-	public NotifikasjonMedkontaktInfo mapNotifikasjonMedKontaktInfo(
+	public NotifikasjonMedkontaktInfo mapNotifikasjonMedKontaktinfo(
 			BestillVarselTo bestillVarselTo,
 			Varselbestilling varselbestilling,
 			VarselutsendingTo varselutsendingTo,

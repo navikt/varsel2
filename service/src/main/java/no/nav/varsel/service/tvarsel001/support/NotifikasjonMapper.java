@@ -12,20 +12,20 @@ import static no.nav.varsel.service.support.MapperUtils.mapKanalToSingletonList;
 import static no.nav.varsel.service.support.MapperUtils.mapTittel;
 
 @Component
-public class EksternnotifikasjonMapper {
+public class NotifikasjonMapper {
 
 	private static final Integer SIKKERHETSNIVAA = 3;
 
 	private final String applicationName;
 
 	@Autowired
-	public EksternnotifikasjonMapper(@Value("${applicationName}") String applicationName) {
+	public NotifikasjonMapper(@Value("${applicationName}") String applicationName) {
 		this.applicationName = applicationName;
 	}
 
-	public Doknotifikasjon mapDoknotifikasjon(Varselbestilling varselbestilling,
-											  VarselutsendingTo varselutsendingTo,
-											  VarselInfoTo varselInfoTo) {
+	public Doknotifikasjon mapNotifikasjon(Varselbestilling varselbestilling,
+										   VarselutsendingTo varselutsendingTo,
+										   VarselInfoTo varselInfoTo) {
 
 		return Doknotifikasjon.newBuilder()
 				.setBestillingsId(varselbestilling.getVarselbestillingId())

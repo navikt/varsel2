@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Import(KafkaEventProducer.class)
-public class EksternnotifikasjonPublisher {
+public class NotifikasjonPublisher {
 
 	private final KafkaEventProducer kafkaEventProducer;
 	private final String topic;
 
-	public EksternnotifikasjonPublisher(KafkaEventProducer kafkaEventProducer,
-										@Value("${varsel.doknotifikasjon.eksternnotifikasjon.topic}") String topic) {
+	public NotifikasjonPublisher(KafkaEventProducer kafkaEventProducer,
+								 @Value("${varsel.doknotifikasjon.eksternnotifikasjon.topic}") String topic) {
 		this.kafkaEventProducer = kafkaEventProducer;
 		this.topic = topic;
 	}

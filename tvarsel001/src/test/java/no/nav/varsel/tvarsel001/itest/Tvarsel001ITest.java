@@ -1,7 +1,6 @@
-package no.nav.varsel.tvarsel006.itest;
+package no.nav.varsel.tvarsel001.itest;
 
-import no.nav.doknotifikasjon.schemas.NotifikasjonMedkontaktInfo;
-import no.nav.doknotifikasjon.schemas.PrefererteKanal;
+import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.varsel.kafka.KafkaEventProducer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,6 +14,8 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
+import static no.nav.doknotifikasjon.schemas.PrefererteKanal.SMS;
+import static no.nav.doknotifikasjon.schemas.PrefererteKanal.EPOST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("itest")
@@ -25,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @EmbeddedKafka(
 		partitions = 1,
 		topics = {
-				"privat-dok-notifikasjon-med-kontakt-info-test"
+				"teamdokumenthandtering.dok-eksternnotifikasjon-test"
 		},
 		controlledShutdown = true,
 		brokerProperties = {
@@ -36,15 +37,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 				"transaction.state.log.min.isr=1"
 		}
 )
-@SpringBootTest(classes = {Tvarsel006ITest.class})
+@SpringBootTest(classes = {Tvarsel001ITest.class})
 @EnableAutoConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class Tvarsel006ITest {
+public class Tvarsel001ITest {
 
 	private static final String FNR = "12345678910";
-	private static final String MOBILNR = "98765432";
-	private static final String EPOST = "e@post.no";
-	private static final String TOPIC = "privat-dok-notifikasjon-med-kontakt-info-test";
+	private static final String TOPIC = "teamdokumenthandtering.dok-eksternnotifikasjon-test";
 
 	private final String SMS_TEKST = """
 			Hei! Her er en sms fra NAV. Mvh NAV
@@ -71,37 +70,34 @@ public class Tvarsel006ITest {
 	@Test
 	public void shouldPublishMessageOK() throws InterruptedException {
 
-		publishMessage(notifikasjonMedkontaktInfo());
+		publishMessage(doknotifikasjon());
 
 		kafkaTestConsumer.getLatch().await(10, TimeUnit.SECONDS);
 
 		assertEquals(kafkaTestConsumer.getLatch().getCount(), 0L);
 		assertEquals(TOPIC, kafkaTestConsumer.getConsumerRecord().topic());
 		assertEquals("key", kafkaTestConsumer.getConsumerRecord().key());
-		assertEquals(notifikasjonMedkontaktInfo(), kafkaTestConsumer.getConsumerRecord().value());
+		assertEquals(doknotifikasjon(), kafkaTestConsumer.getConsumerRecord().value());
 	}
 
-	private void publishMessage(NotifikasjonMedkontaktInfo notifikasjonMedkontaktInfo) {
+	private void publishMessage(Doknotifikasjon doknotifikasjon) {
 		kafkaEventProducer.publish(
 				TOPIC,
 				"key",
-				notifikasjonMedkontaktInfo
+				doknotifikasjon
 		);
 	}
 
-	private NotifikasjonMedkontaktInfo notifikasjonMedkontaktInfo() {
-		return NotifikasjonMedkontaktInfo.newBuilder()
+	private Doknotifikasjon doknotifikasjon() {
+		return Doknotifikasjon.newBuilder()
 				.setBestillingsId("12345")
 				.setBestillerId("varsel")
 				.setFodselsnummer(FNR)
-				.setMobiltelefonnummer(MOBILNR)
-				.setEpostadresse(EPOST)
-				.setAntallRenotifikasjoner(0)
-				.setRenotifikasjonIntervall(0)
-				.setTittel("Melding fra NAV")
+				.setTittel("Tittel")
 				.setEpostTekst(EPOST_TEKST)
 				.setSmsTekst(SMS_TEKST)
-				.setPrefererteKanaler(Stream.of(PrefererteKanal.EPOST, PrefererteKanal.SMS).toList())
+				.setPrefererteKanaler(Stream.of(EPOST, SMS).toList())
+				.setSikkerhetsnivaa(3)
 				.build();
 	}
 }

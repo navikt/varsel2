@@ -9,11 +9,11 @@ import no.nav.varsel.service.support.exception.functional.VarselInaktivVarselmal
 import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloeptException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.BrukernotifikasjonMapper;
-import no.nav.varsel.service.tvarsel001.support.EksternnotifikasjonMapper;
+import no.nav.varsel.service.tvarsel001.support.NotifikasjonMapper;
 import no.nav.varsel.service.support.VarselBestillingDomainMapper;
-import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedkontaktInfoMapper;
+import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedKontaktinfoMapper;
 import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
-import no.nav.varsel.tvarsel001.EksternnotifikasjonPublisher;
+import no.nav.varsel.tvarsel001.NotifikasjonPublisher;
 import no.nav.varsel.tvarsel006.NotifikasjonMedKontaktinfoPublisher;
 import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
@@ -63,13 +63,13 @@ public class ServicemeldingService {
 	private NotifikasjonMedKontaktinfoPublisher notifikasjonMedKontaktinfoPublisher;
 
 	@Autowired
-	private NotifikasjonMedkontaktInfoMapper notifikasjonMedkontaktInfoMapper;
+	private NotifikasjonMedKontaktinfoMapper notifikasjonMedKontaktinfoMapper;
 
 	@Autowired
-	private EksternnotifikasjonPublisher eksternnotifikasjonPublisher;
+	private NotifikasjonPublisher notifikasjonPublisher;
 
 	@Autowired
-	private EksternnotifikasjonMapper eksternnotifikasjonMapper;
+	private NotifikasjonMapper notifikasjonMapper;
 
 	@Autowired
 	private BrukernotifikasjonBeskjedPublisher brukernotifikasjonBeskjedPublisher;
@@ -120,14 +120,14 @@ public class ServicemeldingService {
 
 		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
 			if (hasKontaktInfo(bestilling)) { //TVARSEL006
-				notifikasjonMedKontaktinfoPublisher.sendVarsel(notifikasjonMedkontaktInfoMapper.mapNotifikasjonMedKontaktInfo(
+				notifikasjonMedKontaktinfoPublisher.sendVarsel(notifikasjonMedKontaktinfoMapper.mapNotifikasjonMedKontaktinfo(
 						bestilling,
 						varselbestilling,
 						varselutsendingTo,
 						varselInfoTo
 				));
 			} else { //TVARSEL001
-				eksternnotifikasjonPublisher.sendNotifikasjon(eksternnotifikasjonMapper.mapDoknotifikasjon(
+				notifikasjonPublisher.sendNotifikasjon(notifikasjonMapper.mapNotifikasjon(
 						varselbestilling,
 						varselutsendingTo,
 						varselInfoTo
