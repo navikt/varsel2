@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class NotifikasjonMapperTest {
 
-	private final NotifikasjonMapper eksternnotifikasjonMapper = new NotifikasjonMapper(APPNAVN);
+	private final NotifikasjonMapper notifikasjonMapper = new NotifikasjonMapper(APPNAVN);
 
 	@Test
 	void shouldMapNotifikasjon() {
@@ -17,7 +17,7 @@ class NotifikasjonMapperTest {
 		var varselutsendingTo = ServicemeldingUtil.createVarselutsending();
 		var varselInfoTo = ServicemeldingUtil.createVarselInfoTo();
 
-		var notifikasjon = eksternnotifikasjonMapper.mapNotifikasjon(varselbestilling, varselutsendingTo, varselInfoTo);
+		var notifikasjon = notifikasjonMapper.mapNotifikasjon(varselbestilling, varselutsendingTo, varselInfoTo);
 
 		assertEquals(varselbestilling.getVarselbestillingId(), notifikasjon.getBestillingsId());
 		assertEquals(APPNAVN, notifikasjon.getBestillerId());

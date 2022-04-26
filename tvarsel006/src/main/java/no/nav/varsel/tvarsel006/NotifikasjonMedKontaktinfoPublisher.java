@@ -16,13 +16,13 @@ public class NotifikasjonMedKontaktinfoPublisher {
 	private final String topic;
 
 	public NotifikasjonMedKontaktinfoPublisher(KafkaEventProducer kafkaEventProducer,
-											   @Value("${varsel.doknotifikasjon.kontakt.info.topic}") String topic) {
+											   @Value("${privat-dok-notifikasjon-med-kontakt-info.topic}") String topic) {
 		this.kafkaEventProducer = kafkaEventProducer;
 		this.topic = topic;
 	}
 
 	public void sendVarsel(NotifikasjonMedkontaktInfo notifikasjonMedkontaktInfo) {
-		log.info("Sender notifikasjonMedKontaktinfo med bestillingsId=" + notifikasjonMedkontaktInfo.getBestillingsId());
+		log.info("Sender notifikasjonMedKontaktinfo med bestillingsId={} til topic={}", notifikasjonMedkontaktInfo.getBestillingsId(), topic);
 		kafkaEventProducer.publish(
 				topic,
 				notifikasjonMedkontaktInfo.getBestillingsId(),

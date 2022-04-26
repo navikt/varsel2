@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @EmbeddedKafka(
 		partitions = 1,
 		topics = {
-				"teamdokumenthandtering.dok-eksternnotifikasjon-test"
+				"teamdokumenthandtering.privat-dok-notifikasjon-test"
 		},
 		controlledShutdown = true,
 		brokerProperties = {
@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Tvarsel001ITest {
 
 	private static final String FNR = "12345678910";
-	private static final String TOPIC = "teamdokumenthandtering.dok-eksternnotifikasjon-test";
+	private static final String TOPIC = "teamdokumenthandtering.privat-dok-notifikasjon-test";
 
 	private final String SMS_TEKST = """
 			Hei! Her er en sms fra NAV. Mvh NAV

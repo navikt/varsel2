@@ -23,7 +23,7 @@ public class BrukernotifikasjonBeskjedPublisher {
 	}
 
 	public void sendNotifikasjon(BeskjedInput beskjedInput, NokkelInput nokkelInput) {
-		log.info("Sender brukernotifikasjon med bestillingsId=" + nokkelInput.getEventId());
+		log.info("Sender brukernotifikasjon med bestillingsId={} til topic={}", nokkelInput.getEventId(), topic);
 		kafkaEventProducer.publish(topic, nokkelInput, beskjedInput);
 	}
 }

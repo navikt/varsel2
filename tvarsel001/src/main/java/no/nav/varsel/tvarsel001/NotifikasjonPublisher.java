@@ -16,13 +16,13 @@ public class NotifikasjonPublisher {
 	private final String topic;
 
 	public NotifikasjonPublisher(KafkaEventProducer kafkaEventProducer,
-								 @Value("${varsel.doknotifikasjon.eksternnotifikasjon.topic}") String topic) {
+								 @Value("${privat-dok-notifikasjon.topic}") String topic) {
 		this.kafkaEventProducer = kafkaEventProducer;
 		this.topic = topic;
 	}
 
 	public void sendNotifikasjon(Doknotifikasjon doknotifikasjon) {
-		log.info("Sender eksternnotifikasjon med bestillingsId=" + doknotifikasjon.getBestillingsId());
+		log.info("Sender notifikasjon med bestillingsId={} til topic={}", doknotifikasjon.getBestillingsId(), topic);
 		kafkaEventProducer.publish(topic, doknotifikasjon.getBestillingsId(), doknotifikasjon);
 	}
 }

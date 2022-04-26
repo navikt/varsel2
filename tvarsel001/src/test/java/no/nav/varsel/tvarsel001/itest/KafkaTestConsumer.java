@@ -14,7 +14,7 @@ public class KafkaTestConsumer {
 	private CountDownLatch latch = new CountDownLatch(1);
 	private ConsumerRecord<?, ?> consumerRecord;
 
-	@KafkaListener(topics = "${varsel.doknotifikasjon.eksternnotifikasjon.topic}")
+	@KafkaListener(topics = "${privat-dok-notifikasjon.topic}")
 	public void receive(ConsumerRecord<?, ?> consumerRecord) {
 		setConsumerRecord(consumerRecord);
 		latch.countDown();

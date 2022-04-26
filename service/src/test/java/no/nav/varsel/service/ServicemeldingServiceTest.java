@@ -98,10 +98,10 @@ public class ServicemeldingServiceTest {
 	private NotifikasjonMedKontaktinfoMapper notifikasjonMedkontaktInfoMapper;
 
 	@Mock
-	private NotifikasjonPublisher eksternnotifikasjonPublisher;
+	private NotifikasjonPublisher notifikasjonPublisher;
 
 	@Mock
-	private NotifikasjonMapper eksternnotifikasjonMapper;
+	private NotifikasjonMapper notifikasjonMapper;
 
 	@Mock
 	private BrukernotifikasjonBeskjedPublisher brukernotifikasjonBeskjedPublisher;
@@ -143,8 +143,8 @@ public class ServicemeldingServiceTest {
 		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
 		when(varselutsendingToMapper.map(eq(varselbestilling))).thenReturn(varselutsendingTos);
 
-		when(eksternnotifikasjonMapper.mapNotifikasjon(varselbestilling, varselutsendingTos.get(0), varselInfoTo)).thenReturn(doknotifikasjon);
-		when(eksternnotifikasjonMapper.mapNotifikasjon(varselbestilling, varselutsendingTos.get(1), varselInfoTo)).thenReturn(doknotifikasjon);
+		when(notifikasjonMapper.mapNotifikasjon(varselbestilling, varselutsendingTos.get(0), varselInfoTo)).thenReturn(doknotifikasjon);
+		when(notifikasjonMapper.mapNotifikasjon(varselbestilling, varselutsendingTos.get(1), varselInfoTo)).thenReturn(doknotifikasjon);
 
 		servicemeldingService.bestillServicemelding(bestilling);
 
@@ -163,8 +163,8 @@ public class ServicemeldingServiceTest {
 		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
 		when(varselutsendingToMapper.map(eq(varselbestilling))).thenReturn(varselutsendingTos);
 
-		when(eksternnotifikasjonMapper.mapNotifikasjon(varselbestilling, varselutsendingTos.get(0), varselInfoTo)).thenReturn(doknotifikasjon);
-		when(eksternnotifikasjonMapper.mapNotifikasjon(varselbestilling, varselutsendingTos.get(1), varselInfoTo)).thenReturn(doknotifikasjon);
+		when(notifikasjonMapper.mapNotifikasjon(varselbestilling, varselutsendingTos.get(0), varselInfoTo)).thenReturn(doknotifikasjon);
+		when(notifikasjonMapper.mapNotifikasjon(varselbestilling, varselutsendingTos.get(1), varselInfoTo)).thenReturn(doknotifikasjon);
 
 		when(brukernotifikasjonMapper.mapBeskjed(varselInfoTo, varselutsendingTos.get(0))).thenReturn(beskjedInput);
 		when(brukernotifikasjonMapper.mapBeskjed(varselInfoTo, varselutsendingTos.get(1))).thenReturn(beskjedInput);
@@ -314,7 +314,7 @@ public class ServicemeldingServiceTest {
 		assertThat(UUID.fromString(bestilling.getVarselBestillingId()).toString(), is(bestilling.getVarselBestillingId()));
 		verify(varselbestillingRepo).saveAndFlush(varselbestilling);
 
-		verify(eksternnotifikasjonPublisher, times(2)).sendNotifikasjon(any(Doknotifikasjon.class));
+		verify(notifikasjonPublisher, times(2)).sendNotifikasjon(any(Doknotifikasjon.class));
 		verify(brukernotifikasjonBeskjedPublisher, never()).sendNotifikasjon(any(BeskjedInput.class), any(NokkelInput.class));
 
 		verifyNoMoreInteractions(varselbestillingRepo);
@@ -324,7 +324,7 @@ public class ServicemeldingServiceTest {
 		assertThat(UUID.fromString(bestilling.getVarselBestillingId()).toString(), is(bestilling.getVarselBestillingId()));
 		verify(varselbestillingRepo).saveAndFlush(varselbestilling);
 
-		verify(eksternnotifikasjonPublisher, times(2)).sendNotifikasjon(any(Doknotifikasjon.class));
+		verify(notifikasjonPublisher, times(2)).sendNotifikasjon(any(Doknotifikasjon.class));
 		verify(brukernotifikasjonBeskjedPublisher, times(2)).sendNotifikasjon(any(BeskjedInput.class), any(NokkelInput.class));
 
 		verifyNoMoreInteractions(varselbestillingRepo);
