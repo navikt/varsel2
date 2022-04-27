@@ -1,5 +1,6 @@
 package no.nav.varsel.service.tvarsel001.support;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.support.VarselutsendingTo;
@@ -12,6 +13,7 @@ import static no.nav.varsel.service.support.MapperUtils.mapKanalToSingletonList;
 import static no.nav.varsel.service.support.MapperUtils.mapTittel;
 
 @Component
+@Slf4j
 public class NotifikasjonMapper {
 
 	private static final Integer SIKKERHETSNIVAA = 3;
@@ -27,6 +29,9 @@ public class NotifikasjonMapper {
 										   VarselutsendingTo varselutsendingTo,
 										   VarselInfoTo varselInfoTo) {
 
+		log.info("Varselbestilling: {}", varselbestilling.toString());
+		log.info("VarselutsendingTo: {}", varselutsendingTo.toString());
+		log.info("VarselInfoTo: {}", varselInfoTo.toString());
 		return Doknotifikasjon.newBuilder()
 				.setBestillingsId(varselbestilling.getVarselbestillingId())
 				.setBestillerId(applicationName)

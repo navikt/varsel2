@@ -1,5 +1,6 @@
 package no.nav.varsel.service.support;
 
+import lombok.ToString;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.to.AktoerTo;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
+@ToString
 public class VarselutsendingTo {
 	private LocalDateTime utloepstidspunkt;
 	private String varseltypeId;

@@ -1,6 +1,7 @@
 package no.nav.varsel.wsconsumer.dokkat.to;
 
 import com.google.common.collect.Sets;
+import lombok.ToString;
 import no.nav.varsel.domain.code.KanalCode;
 
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.Set;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
+@ToString
 public class VarselInfoTo {
 	private Set<KanalCode> preferertKanal = Sets.newHashSet();
 	private String varselNavn;

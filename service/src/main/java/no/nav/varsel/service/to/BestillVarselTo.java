@@ -4,6 +4,7 @@ package no.nav.varsel.service.to;
 import static no.nav.varsel.service.support.ValueValidator.hasText;
 import static no.nav.varsel.service.support.ValueValidator.notNull;
 
+import lombok.ToString;
 import no.nav.varsel.domain.exception.NoJmsBackoutException;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.Map;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
+@ToString
 public class BestillVarselTo extends AktoerBestillingTo {
 
 	public static final String TESTVARSEL = "Testvarsel";

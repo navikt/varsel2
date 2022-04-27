@@ -22,6 +22,31 @@ public class NotifikasjonMedKontaktinfoPublisher {
 	}
 
 	public void sendVarsel(NotifikasjonMedkontaktInfo notifikasjonMedkontaktInfo) {
+		log.info("""
+				bestillingsId={},
+				bestillerId={},
+				fodselsnummer={},
+				mobiltelefonnummer={},
+				epostadresse={},
+				antallRenotifikasjoner={},
+				renotifikasjonIntervall={},
+				tittel={},
+				epostTekst={},
+				smsTekst={},
+				prefererteKanaler={}
+				""",
+				notifikasjonMedkontaktInfo.getBestillingsId(),
+				notifikasjonMedkontaktInfo.getBestillerId(),
+				notifikasjonMedkontaktInfo.getFodselsnummer(),
+				notifikasjonMedkontaktInfo.getMobiltelefonnummer(),
+				notifikasjonMedkontaktInfo.getEpostadresse(),
+				notifikasjonMedkontaktInfo.getAntallRenotifikasjoner(),
+				notifikasjonMedkontaktInfo.getRenotifikasjonIntervall(),
+				notifikasjonMedkontaktInfo.getTittel(),
+				notifikasjonMedkontaktInfo.getEpostTekst(),
+				notifikasjonMedkontaktInfo.getSmsTekst(),
+				notifikasjonMedkontaktInfo.getPrefererteKanaler());
+
 		log.info("Sender notifikasjonMedKontaktinfo med bestillingsId={} til topic={}", notifikasjonMedkontaktInfo.getBestillingsId(), topic);
 		kafkaEventProducer.publish(
 				topic,

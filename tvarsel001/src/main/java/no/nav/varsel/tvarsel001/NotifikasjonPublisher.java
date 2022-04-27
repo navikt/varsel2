@@ -22,6 +22,19 @@ public class NotifikasjonPublisher {
 	}
 
 	public void sendNotifikasjon(Doknotifikasjon doknotifikasjon) {
+		log.info("""
+				bestillingsId={},
+				bestillerId={},
+				sikkerhetsnivaa={},
+				fodselsnummer={},
+				antallRenotifikasjoner={},
+				renotifikasjonIntervall={},
+				tittel={},
+				epostTekst={},
+				smsTekst={},
+				prefererteKanaler={}""",
+				doknotifikasjon.getBestillingsId(), doknotifikasjon.getBestillerId(), doknotifikasjon.getSikkerhetsnivaa(), doknotifikasjon.getFodselsnummer(), doknotifikasjon.getAntallRenotifikasjoner(), doknotifikasjon.getRenotifikasjonIntervall(), doknotifikasjon.getTittel(), doknotifikasjon.getEpostTekst(), doknotifikasjon.getSmsTekst(), doknotifikasjon.getPrefererteKanaler());
+
 		log.info("Sender notifikasjon med bestillingsId={} til topic={}", doknotifikasjon.getBestillingsId(), topic);
 		kafkaEventProducer.publish(topic, doknotifikasjon.getBestillingsId(), doknotifikasjon);
 	}
