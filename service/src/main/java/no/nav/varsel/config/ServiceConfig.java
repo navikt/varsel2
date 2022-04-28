@@ -14,6 +14,7 @@ import no.nav.varsel.service.tvarsel005.support.BrukervarselMapper;
 import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedKontaktinfoMapper;
 import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
 import no.nav.varsel.tvarsel001.NotifikasjonPublisher;
+import no.nav.varsel.tvarsel006.NotifikasjonMedKontaktinfoPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -29,6 +30,7 @@ import org.springframework.context.annotation.Import;
 		JmsConfig.class,
 		NotifikasjonPublisher.class,
 		NotifikasjonMapper.class,
+		NotifikasjonMedKontaktinfoPublisher.class,
 		BrukernotifikasjonBeskjedPublisher.class,
 		BrukernotifikasjonMapper.class
 })

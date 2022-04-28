@@ -4,6 +4,7 @@ import no.nav.doknotifikasjon.schemas.PrefererteKanal;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -19,7 +20,7 @@ import static no.nav.varsel.domain.code.KanalCode.EPOST;
 import static no.nav.varsel.domain.code.KanalCode.SMS;
 import static no.nav.varsel.service.support.MapperUtils.mapKanalToSingletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 
@@ -33,12 +34,9 @@ class MapperUtilsTest {
 		assertEquals(singletonList(PrefererteKanal.valueOf(kanalCode.name())), preferertKanalListe);
 	}
 
-	@ParameterizedTest
-	@EnumSource(value = KanalCode.class, names = {"DITT_NAV"})
-	void shouldNotMapKanalDittNavToSingletonList(KanalCode kanalCode) {
-		var preferertKanalListe = mapKanalToSingletonList(kanalCode);
-
-		assertTrue(preferertKanalListe.isEmpty());
+	@Test
+	void shouldThrowExceptionOnMapKanalDittNav() {
+		assertThrows(IllegalArgumentException.class, () -> mapKanalToSingletonList(DITT_NAV));
 	}
 
 	@ParameterizedTest
@@ -70,7 +68,7 @@ class MapperUtilsTest {
 								.build(),
 						VarselMalTo.VarselMalToBuilder.aVarselMalTo()
 								.kanal(DITT_NAV)
-								.tittel("Ditt Nav-tittel")
+								.tittel(null)
 								.build())
 				.collect(Collectors.toSet());
 	}

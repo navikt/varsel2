@@ -5,6 +5,7 @@ import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.varsel.kafka.KafkaEventProducer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Import;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Slf4j

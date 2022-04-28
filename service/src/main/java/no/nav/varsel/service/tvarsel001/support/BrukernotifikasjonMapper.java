@@ -1,5 +1,6 @@
 package no.nav.varsel.service.tvarsel001.support;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.brukernotifikasjon.schemas.builders.BeskjedInputBuilder;
 import no.nav.brukernotifikasjon.schemas.builders.NokkelInputBuilder;
 import no.nav.brukernotifikasjon.schemas.input.BeskjedInput;
@@ -16,6 +17,7 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+@Slf4j
 @Component
 public class BrukernotifikasjonMapper {
 
@@ -30,6 +32,12 @@ public class BrukernotifikasjonMapper {
 	}
 
 	public NokkelInput mapNokkel(Varselbestilling varselbestilling) {
+		log.info("BrukernotifikasjonMapper - map nokkel: eventId={}, grupperingsId={}, fodselsnummer={}, namespace={}, appnavn={}",
+				varselbestilling.getVarselbestillingId(),
+				varselbestilling.getVarselbestillingId(),
+				varselbestilling.getFnr(),
+				NAMESPACE,
+				APPNAVN);
 
 		return new NokkelInputBuilder()
 				.withEventId(varselbestilling.getVarselbestillingId())
@@ -42,6 +50,11 @@ public class BrukernotifikasjonMapper {
 
 	public BeskjedInput mapBeskjed(VarselInfoTo varselInfoTo,
 								   VarselutsendingTo varselutsendingTo) {
+		log.info("BrukernotifikasjonMapper - map beskjed: tidspunkt={}, tekst={}, link={}, sikkerhetsnivaa={}",
+				LocalDateTime.now(clock).atZone(ZoneId.systemDefault()).toLocalDateTime(),
+				varselutsendingTo.getVarselTekst(),
+				mapLink(varselInfoTo.getVarselUrl()),
+				SIKKERHETSNIVAA);
 
 		return new BeskjedInputBuilder()
 				.withTidspunkt(LocalDateTime.now(clock).atZone(ZoneId.systemDefault()).toLocalDateTime())

@@ -7,7 +7,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.errors.TopicAuthorizationException;
 import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaProducerException;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.RoutingKafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
@@ -22,10 +22,10 @@ public class KafkaEventProducer {
 	private static final String KAFKA_NOT_AUTHENTICATED = "Not authenticated to publish to topic: ";
 	private static final String KAFKA_FAILED_TO_SEND = "Failed to send message to kafka. Topic: ";
 
-	private final KafkaTemplate<Object, Object> kafkaTemplate;
+	private final RoutingKafkaTemplate routingKafkaTemplate;
 
-	KafkaEventProducer(KafkaTemplate<Object, Object> kafkaTemplate) {
-		this.kafkaTemplate = kafkaTemplate;
+	public KafkaEventProducer(RoutingKafkaTemplate routingKafkaTemplate) {
+		this.routingKafkaTemplate = routingKafkaTemplate;
 	}
 
 	@Retryable(include = KafkaTechnicalException.class, backoff = @Backoff(delay = 2000))
@@ -39,7 +39,7 @@ public class KafkaEventProducer {
 		);
 
 		try {
-			SendResult<Object, Object> sendResult = kafkaTemplate.send(producerRecord).get();
+			SendResult<Object, Object> sendResult = routingKafkaTemplate.send(producerRecord).get();
 			log.info("Hendelse skrevet til topic. Timestamp={}, partition={}, topic={}",
 					sendResult.getRecordMetadata().timestamp(),
 					sendResult.getRecordMetadata().partition(),

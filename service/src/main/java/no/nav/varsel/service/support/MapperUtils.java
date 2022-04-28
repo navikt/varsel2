@@ -14,10 +14,6 @@ import static no.nav.varsel.domain.code.KanalCode.SMS;
 public class MapperUtils {
 
 	public static List<PrefererteKanal> mapKanalToSingletonList(KanalCode kanalCode) {
-		if (DITT_NAV.equals(kanalCode)) {
-			return emptyList();
-		}
-
 		return singletonList(PrefererteKanal.valueOf(kanalCode.name()));
 	}
 

@@ -127,16 +127,21 @@ public class ServicemeldingService {
 						varselInfoTo
 				));
 			} else { //TVARSEL001
-				notifikasjonPublisher.sendNotifikasjon(notifikasjonMapper.mapNotifikasjon(
-						varselbestilling,
-						varselutsendingTo,
-						varselInfoTo
-				));
-
-				if (kanalCodes.contains(DITT_NAV) && hasText(varselInfoTo.getMal(DITT_NAV).getFoerstegangsTekst())) {
-					brukernotifikasjonBeskjedPublisher.sendNotifikasjon(
-							brukernotifikasjonMapper.mapBeskjed(varselInfoTo, varselutsendingTo),
-							brukernotifikasjonMapper.mapNokkel(varselbestilling));
+				if (DITT_NAV.equals(varselutsendingTo.getKanal())) {
+					if (hasText(varselInfoTo.getMal(DITT_NAV).getFoerstegangsTekst())) {
+						brukernotifikasjonBeskjedPublisher.sendNotifikasjon(
+								brukernotifikasjonMapper.mapBeskjed(varselInfoTo, varselutsendingTo),
+								brukernotifikasjonMapper.mapNokkel(varselbestilling)
+						);
+					} else {
+						log.info("Varsel med kanal DITT_NAV, bestillingsId={} og varseltypeId={} mangler foerstegangstekst. Sender ikke beskjed til DittNAV.",
+								varselbestilling.getVarselbestillingId(), varselbestilling.getVarseltypeId());
+					}
+				} else {
+					notifikasjonPublisher.sendNotifikasjon(notifikasjonMapper.mapNotifikasjon(
+							varselbestilling,
+							varselutsendingTo,
+							varselInfoTo));
 				}
 			}
 

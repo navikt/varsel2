@@ -1,9 +1,15 @@
 package no.nav.varsel.service.support;
 
+import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
+import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
+import no.nav.doknotifikasjon.schemas.PrefererteKanal;
+import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
+import no.nav.brukernotifikasjon.schemas.builders.NokkelInputBuilder;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -73,5 +79,45 @@ public class ServicemeldingUtil {
 				.collect(Collectors.toSet());
 	}
 
+	public static Set<VarselMalTo> createDittNavMalUtenFoerstegangstekst() {
+		return Stream.of(
+				VarselMalTo.VarselMalToBuilder.aVarselMalTo()
+						.foerstegangsTekst(null)
+						.revarslingTekst("Revarslingstekst epost")
+						.kanal(DITT_NAV)
+						.tittel(null)
+						.build()
+		).collect(Collectors.toSet());
+	}
 
+	public static VarselutsendingTo createVarselutsendingToWithKanal(KanalCode kanalCode) {
+
+		return VarselutsendingTo.VarselutsendingToBuilder.aVarselutsendingTo()
+				.kanal(kanalCode)
+				.build();
+	}
+
+	public static Doknotifikasjon createDoknotifikasjonWithKanalAndBestillingsId(KanalCode kanalCode, String bestillingsId) {
+		return Doknotifikasjon.newBuilder()
+				.setBestillingsId(bestillingsId)
+				.setBestillerId("varsel")
+				.setSikkerhetsnivaa(3)
+				.setFodselsnummer("12345678910")
+				.setTittel("tittel")
+				.setEpostTekst("Epost tekst")
+				.setSmsTekst("Sms tekst")
+				.setPrefererteKanaler(
+						kanalCode == null ? List.of() : List.of(PrefererteKanal.valueOf(kanalCode.name())))
+				.build();
+	}
+
+	public static NokkelInput createNokkelInputWithBestillingsId(String bestillingsId) {
+		return new NokkelInputBuilder()
+				.withEventId(bestillingsId)
+				.withGrupperingsId(bestillingsId)
+				.withFodselsnummer("12345678910")
+				.withNamespace("teamdokumenthandtering")
+				.withAppnavn("varsel")
+				.build();
+	}
 }
