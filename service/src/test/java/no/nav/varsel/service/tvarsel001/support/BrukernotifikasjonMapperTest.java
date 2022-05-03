@@ -3,8 +3,6 @@ package no.nav.varsel.service.tvarsel001.support;
 import no.nav.varsel.service.support.ServicemeldingUtil;
 import org.junit.jupiter.api.Test;
 
-import java.util.UUID;
-
 import static no.nav.varsel.service.support.ServicemeldingUtil.APPNAVN;
 import static no.nav.varsel.service.support.ServicemeldingUtil.NAMESPACE;
 import static no.nav.varsel.service.support.ServicemeldingUtil.SIKKERHETSNIVAA;

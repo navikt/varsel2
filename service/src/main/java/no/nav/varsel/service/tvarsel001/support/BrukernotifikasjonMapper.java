@@ -13,9 +13,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.Clock;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+
+import static java.time.ZoneOffset.UTC;
 
 @Slf4j
 @Component
@@ -24,12 +24,6 @@ public class BrukernotifikasjonMapper {
 	private static final String NAMESPACE = "teamdokumenthandtering";
 	private static final String APPNAVN = "varsel";
 	private static final Integer SIKKERHETSNIVAA = 3;
-
-	private final Clock clock;
-
-	public BrukernotifikasjonMapper() {
-		this.clock = Clock.systemDefaultZone();
-	}
 
 	public NokkelInput mapNokkel(Varselbestilling varselbestilling) {
 		log.info("BrukernotifikasjonMapper - map nokkel: eventId={}, grupperingsId={}, fodselsnummer={}, namespace={}, appnavn={}",
@@ -51,13 +45,13 @@ public class BrukernotifikasjonMapper {
 	public BeskjedInput mapBeskjed(VarselInfoTo varselInfoTo,
 								   VarselutsendingTo varselutsendingTo) {
 		log.info("BrukernotifikasjonMapper - map beskjed: tidspunkt={}, tekst={}, link={}, sikkerhetsnivaa={}",
-				LocalDateTime.now(clock).atZone(ZoneId.systemDefault()).toLocalDateTime(),
+				LocalDateTime.now(UTC),
 				varselutsendingTo.getVarselTekst(),
 				mapLink(varselInfoTo.getVarselUrl()),
 				SIKKERHETSNIVAA);
 
 		return new BeskjedInputBuilder()
-				.withTidspunkt(LocalDateTime.now(clock).atZone(ZoneId.systemDefault()).toLocalDateTime())
+				.withTidspunkt(LocalDateTime.now(UTC))
 				.withTekst(varselutsendingTo.getVarselTekst())
 				.withLink(mapLink(varselInfoTo.getVarselUrl()))
 				.withSikkerhetsnivaa(SIKKERHETSNIVAA)
