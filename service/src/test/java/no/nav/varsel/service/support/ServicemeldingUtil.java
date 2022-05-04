@@ -1,5 +1,6 @@
 package no.nav.varsel.service.support;
 
+import no.nav.brukernotifikasjon.schemas.builders.NokkelInputBuilder;
 import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
 import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.doknotifikasjon.schemas.PrefererteKanal;
@@ -7,7 +8,6 @@ import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
-import no.nav.brukernotifikasjon.schemas.builders.NokkelInputBuilder;
 
 import java.util.List;
 import java.util.Set;
@@ -54,7 +54,7 @@ public class ServicemeldingUtil {
 	}
 
 	public static VarselutsendingTo createVarselutsending() {
-		return VarselutsendingTo.VarselutsendingToBuilder.aVarselutsendingTo()
+		return VarselutsendingTo.builder()
 				.varselTekst(VARSELTEKST)
 				.kanal(EPOST)
 				.varselTittel(VARSELTITTEL)
@@ -92,7 +92,7 @@ public class ServicemeldingUtil {
 
 	public static VarselutsendingTo createVarselutsendingToWithKanal(KanalCode kanalCode) {
 
-		return VarselutsendingTo.VarselutsendingToBuilder.aVarselutsendingTo()
+		return VarselutsendingTo.builder()
 				.kanal(kanalCode)
 				.build();
 	}

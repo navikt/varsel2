@@ -2,15 +2,15 @@ package no.nav.varsel.service;
 
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.service.support.VarselutsendingTo;
 import no.nav.varsel.repo.VarselbestillingRepo;
+import no.nav.varsel.service.support.VarselBestillingDomainMapper;
+import no.nav.varsel.service.support.VarselutsendingTo;
 import no.nav.varsel.service.support.VarselutsendingToMapper;
 import no.nav.varsel.service.support.exception.functional.VarselInaktivVarselmalException;
 import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloeptException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.BrukernotifikasjonMapper;
 import no.nav.varsel.service.tvarsel001.support.NotifikasjonMapper;
-import no.nav.varsel.service.support.VarselBestillingDomainMapper;
 import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedKontaktinfoMapper;
 import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
 import no.nav.varsel.tvarsel001.NotifikasjonPublisher;
@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
+import static no.nav.varsel.domain.code.KanalCode.EPOST;
+import static no.nav.varsel.domain.code.KanalCode.SMS;
 import static org.springframework.util.StringUtils.hasText;
 
 public class ServicemeldingService {
@@ -118,39 +120,48 @@ public class ServicemeldingService {
 		//7. Varselutsending
 		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper.map(varselbestilling);
 
-		for (VarselutsendingTo varselutsendingTo : varselutsendingTos) {
-			if (hasKontaktInfo(bestilling)) { //TVARSEL006
-				notifikasjonMedKontaktinfoPublisher.sendVarsel(notifikasjonMedKontaktinfoMapper.mapNotifikasjonMedKontaktinfo(
-						bestilling,
+
+		if (hasKontaktInfo(bestilling)) { //TVARSEL006
+			notifikasjonMedKontaktinfoPublisher.sendVarsel(notifikasjonMedKontaktinfoMapper.mapNotifikasjonMedKontaktinfo(
+					varselutsendingTos,
+					varselbestilling,
+					bestilling,
+					varselInfoTo
+			));
+		} else { //TVARSEL001
+			if (harUtsendingTilEpostEllerSms(varselutsendingTos)) {
+				notifikasjonPublisher.sendNotifikasjon(notifikasjonMapper.mapNotifikasjon(
+						varselutsendingTos,
 						varselbestilling,
-						varselutsendingTo,
-						varselInfoTo
-				));
-			} else { //TVARSEL001
-				if (DITT_NAV.equals(varselutsendingTo.getKanal())) {
-					if (hasText(varselInfoTo.getMal(DITT_NAV).getFoerstegangsTekst())) {
-						brukernotifikasjonBeskjedPublisher.sendNotifikasjon(
-								brukernotifikasjonMapper.mapBeskjed(varselInfoTo, varselutsendingTo),
-								brukernotifikasjonMapper.mapNokkel(varselbestilling)
-						);
-					} else {
-						log.info("Varsel med kanal DITT_NAV, bestillingsId={} og varseltypeId={} mangler foerstegangstekst. Sender ikke beskjed til DittNAV.",
-								varselbestilling.getVarselbestillingId(), varselbestilling.getVarseltypeId());
-					}
-				} else {
-					notifikasjonPublisher.sendNotifikasjon(notifikasjonMapper.mapNotifikasjon(
-							varselbestilling,
-							varselutsendingTo,
-							varselInfoTo));
-				}
+						varselInfoTo));
 			}
 
-			log.info(String.format("Sender %s med BestillingsId=%s, VarselTypeId=%s til kanal=%s",
-					hasKontaktInfo(bestilling) ? "ServicemeldingMedKontaktInfo" : "Servicemelding",
-					varselbestilling.getVarselbestillingId(),
-					varselbestilling.getVarseltypeId(),
-					varselutsendingTo.getKanal()));
+			var dittNavTo = varselutsendingTos.stream()
+					.filter(it -> DITT_NAV.equals(it.getKanal()))
+					.findAny();
+
+			if (dittNavTo.isPresent()) {
+				if (hasText(varselInfoTo.getMal(DITT_NAV).getFoerstegangsTekst())) {
+					brukernotifikasjonBeskjedPublisher.sendNotifikasjon(
+							brukernotifikasjonMapper.mapBeskjed(varselInfoTo, dittNavTo.get()),
+							brukernotifikasjonMapper.mapNokkel(varselbestilling)
+					);
+				} else {
+					log.info("Varsel med kanal DITT_NAV, bestillingsId={} og varseltypeId={} mangler foerstegangstekst. Sender ikke beskjed til DittNAV.",
+							varselbestilling.getVarselbestillingId(), varselbestilling.getVarseltypeId());
+				}
+			}
 		}
+
+		log.info(String.format("Sender %s med BestillingsId=%s, VarselTypeId=%s til kanal(er)=%s",
+				hasKontaktInfo(bestilling) ? "ServicemeldingMedKontaktInfo" : "Servicemelding",
+				varselbestilling.getVarselbestillingId(),
+				varselbestilling.getVarseltypeId(),
+				varselutsendingTos.stream().map(it -> it.getKanal().name()).toList()));
+	}
+
+	private boolean harUtsendingTilEpostEllerSms(List<VarselutsendingTo> varselutsendingTos) {
+		return varselutsendingTos.stream().anyMatch(it -> List.of(EPOST, SMS).contains(it.getKanal()));
 	}
 
 	private boolean hasKontaktInfo(BestillVarselTo bestilling) {
