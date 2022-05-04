@@ -3,9 +3,8 @@ package no.nav.varsel.service.tvarsel006.support;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.doknotifikasjon.schemas.NotifikasjonMedkontaktInfo;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.service.support.VarselutsendingTo;
+import no.nav.varsel.service.support.Varselutsending;
 import no.nav.varsel.service.to.BestillVarselTo;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 
 import java.util.List;
 
@@ -18,10 +17,11 @@ import static no.nav.varsel.service.support.MapperUtils.mapTittel;
 @Slf4j
 public class NotifikasjonMedKontaktinfoMapper {
 
-	public NotifikasjonMedkontaktInfo mapNotifikasjonMedKontaktinfo(List<VarselutsendingTo> varselutsendingToList,
-																	Varselbestilling varselbestilling,
-																	BestillVarselTo bestillVarselTo,
-																	VarselInfoTo varselInfoTo) {
+	public NotifikasjonMedkontaktInfo mapNotifikasjonMedKontaktinfo(
+			List<Varselutsending> varselutsendingList,
+			Varselbestilling varselbestilling,
+			BestillVarselTo bestillVarselTo
+	) {
 
 		return NotifikasjonMedkontaktInfo.newBuilder()
 				.setBestillingsId(varselbestilling.getVarselbestillingId())
@@ -31,10 +31,10 @@ public class NotifikasjonMedKontaktinfoMapper {
 				.setEpostadresse(bestillVarselTo.getEpost())
 				.setAntallRenotifikasjoner(0)
 				.setRenotifikasjonIntervall(0)
-				.setTittel(mapTittel(varselutsendingToList, varselInfoTo))
-				.setEpostTekst(mapTekst(varselutsendingToList, EPOST))
-				.setSmsTekst(mapTekst(varselutsendingToList, SMS))
-				.setPrefererteKanaler(mapKanaler(varselutsendingToList))
+				.setTittel(mapTittel(varselutsendingList))
+				.setEpostTekst(mapTekst(varselutsendingList, EPOST))
+				.setSmsTekst(mapTekst(varselutsendingList, SMS))
+				.setPrefererteKanaler(mapKanaler(varselutsendingList))
 				.build();
 	}
 

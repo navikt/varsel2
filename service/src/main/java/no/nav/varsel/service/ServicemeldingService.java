@@ -4,8 +4,8 @@ import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselBestillingDomainMapper;
-import no.nav.varsel.service.support.VarselutsendingTo;
-import no.nav.varsel.service.support.VarselutsendingToMapper;
+import no.nav.varsel.service.support.Varselutsending;
+import no.nav.varsel.service.support.VarselutsendingMapper;
 import no.nav.varsel.service.support.exception.functional.VarselInaktivVarselmalException;
 import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloeptException;
 import no.nav.varsel.service.to.BestillVarselTo;
@@ -53,7 +53,7 @@ public class ServicemeldingService {
 	private VarselKanalDecider varselKanalDecider;
 
 	@Autowired
-	private VarselutsendingToMapper varselutsendingToMapper;
+	private VarselutsendingMapper varselutsendingMapper;
 
 	@Autowired
 	private VarselBestillingDomainMapper domainMapper;
@@ -118,25 +118,23 @@ public class ServicemeldingService {
 		varselbestillingRepo.saveAndFlush(varselbestilling);
 
 		//7. Varselutsending
-		List<VarselutsendingTo> varselutsendingTos = varselutsendingToMapper.map(varselbestilling);
-
+		List<Varselutsending> varselutsendingList = varselutsendingMapper.map(varselbestilling);
 
 		if (hasKontaktInfo(bestilling)) { //TVARSEL006
 			notifikasjonMedKontaktinfoPublisher.sendVarsel(notifikasjonMedKontaktinfoMapper.mapNotifikasjonMedKontaktinfo(
-					varselutsendingTos,
+					varselutsendingList,
 					varselbestilling,
-					bestilling,
-					varselInfoTo
+					bestilling
 			));
 		} else { //TVARSEL001
-			if (harUtsendingTilEpostEllerSms(varselutsendingTos)) {
+			if (harUtsendingTilEpostEllerSms(varselutsendingList)) {
 				notifikasjonPublisher.sendNotifikasjon(notifikasjonMapper.mapNotifikasjon(
-						varselutsendingTos,
-						varselbestilling,
-						varselInfoTo));
+						varselutsendingList,
+						varselbestilling
+				));
 			}
 
-			var dittNavTo = varselutsendingTos.stream()
+			var dittNavTo = varselutsendingList.stream()
 					.filter(it -> DITT_NAV.equals(it.getKanal()))
 					.findAny();
 
@@ -157,11 +155,11 @@ public class ServicemeldingService {
 				hasKontaktInfo(bestilling) ? "ServicemeldingMedKontaktInfo" : "Servicemelding",
 				varselbestilling.getVarselbestillingId(),
 				varselbestilling.getVarseltypeId(),
-				varselutsendingTos.stream().map(it -> it.getKanal().name()).toList()));
+				varselutsendingList.stream().map(it -> it.getKanal().name()).toList()));
 	}
 
-	private boolean harUtsendingTilEpostEllerSms(List<VarselutsendingTo> varselutsendingTos) {
-		return varselutsendingTos.stream().anyMatch(it -> List.of(EPOST, SMS).contains(it.getKanal()));
+	private boolean harUtsendingTilEpostEllerSms(List<Varselutsending> varselutsendingList) {
+		return varselutsendingList.stream().anyMatch(it -> List.of(EPOST, SMS).contains(it.getKanal()));
 	}
 
 	private boolean hasKontaktInfo(BestillVarselTo bestilling) {

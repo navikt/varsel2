@@ -3,11 +3,12 @@ package no.nav.varsel.service.tvarsel001.support;
 import no.nav.varsel.service.support.ServicemeldingUtil;
 import org.junit.jupiter.api.Test;
 
+import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
 import static no.nav.varsel.service.support.ServicemeldingUtil.APPNAVN;
 import static no.nav.varsel.service.support.ServicemeldingUtil.NAMESPACE;
 import static no.nav.varsel.service.support.ServicemeldingUtil.SIKKERHETSNIVAA;
 import static no.nav.varsel.service.support.ServicemeldingUtil.VARSELBESTILLINGS_ID;
-import static no.nav.varsel.service.support.ServicemeldingUtil.VARSELTEKST;
+import static no.nav.varsel.service.support.ServicemeldingUtil.VARSELTEKST_DITT_NAV;
 import static no.nav.varsel.service.support.ServicemeldingUtil.VARSEL_URL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -35,11 +36,11 @@ public class BrukernotifikasjonMapperTest {
 	@Test
 	public void shouldMapBeskjed() {
 		var varselinfo = ServicemeldingUtil.createVarselInfoTo();
-		var varselutsending = ServicemeldingUtil.createVarselutsending();
+		var varselutsending = ServicemeldingUtil.createVarselutsending(DITT_NAV);
 
 		var beskjed = brukernotifikasjonMapper.mapBeskjed(varselinfo, varselutsending);
 
-		assertEquals(VARSELTEKST, beskjed.getTekst());
+		assertEquals(VARSELTEKST_DITT_NAV, beskjed.getTekst());
 		assertEquals(VARSEL_URL, beskjed.getLink());
 		assertEquals(SIKKERHETSNIVAA, beskjed.getSikkerhetsnivaa());
 		assertEquals(EKSTERN_VARSLING, beskjed.getEksternVarsling());
@@ -48,7 +49,7 @@ public class BrukernotifikasjonMapperTest {
 	@Test
 	public void shouldFailOnInvalidVarselUrl() {
 		var varselinfoMedUgyldigUrl = ServicemeldingUtil.createVarselInfoToWithInvalidUrl();
-		var varselutsending = ServicemeldingUtil.createVarselutsending();
+		var varselutsending = ServicemeldingUtil.createVarselutsending(DITT_NAV);
 
 		Exception e = assertThrows(RuntimeException.class, () -> brukernotifikasjonMapper.mapBeskjed(varselinfoMedUgyldigUrl, varselutsending));
 		assertTrue(e.getMessage().contains("Ugyldig URL i varselbestilling"));

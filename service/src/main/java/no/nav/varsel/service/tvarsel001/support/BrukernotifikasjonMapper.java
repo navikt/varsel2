@@ -6,7 +6,7 @@ import no.nav.brukernotifikasjon.schemas.builders.NokkelInputBuilder;
 import no.nav.brukernotifikasjon.schemas.input.BeskjedInput;
 import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.service.support.VarselutsendingTo;
+import no.nav.varsel.service.support.Varselutsending;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -43,16 +43,16 @@ public class BrukernotifikasjonMapper {
 	}
 
 	public BeskjedInput mapBeskjed(VarselInfoTo varselInfoTo,
-								   VarselutsendingTo varselutsendingTo) {
+								   Varselutsending varselutsending) {
 		log.info("BrukernotifikasjonMapper - map beskjed: tidspunkt={}, tekst={}, link={}, sikkerhetsnivaa={}",
 				LocalDateTime.now(UTC),
-				varselutsendingTo.getVarselTekst(),
+				varselutsending.getVarselTekst(),
 				mapLink(varselInfoTo.getVarselUrl()),
 				SIKKERHETSNIVAA);
 
 		return new BeskjedInputBuilder()
 				.withTidspunkt(LocalDateTime.now(UTC))
-				.withTekst(varselutsendingTo.getVarselTekst())
+				.withTekst(varselutsending.getVarselTekst())
 				.withLink(mapLink(varselInfoTo.getVarselUrl()))
 				.withSikkerhetsnivaa(SIKKERHETSNIVAA)
 				.withEksternVarsling(false)

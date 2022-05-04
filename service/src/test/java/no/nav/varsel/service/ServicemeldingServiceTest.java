@@ -12,8 +12,8 @@ import no.nav.varsel.repo.TestdataUtil;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.ServicemeldingUtil;
 import no.nav.varsel.service.support.VarselBestillingDomainMapper;
-import no.nav.varsel.service.support.VarselutsendingTo;
-import no.nav.varsel.service.support.VarselutsendingToMapper;
+import no.nav.varsel.service.support.Varselutsending;
+import no.nav.varsel.service.support.VarselutsendingMapper;
 import no.nav.varsel.service.support.exception.functional.VarselInaktivVarselmalException;
 import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloeptException;
 import no.nav.varsel.service.to.BestillVarselTo;
@@ -54,7 +54,7 @@ import static no.nav.varsel.repo.TestdataUtil.TLF;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static no.nav.varsel.service.support.ServicemeldingUtil.createDoknotifikasjonWithKanalAndBestillingsId;
 import static no.nav.varsel.service.support.ServicemeldingUtil.createNokkelInputWithBestillingsId;
-import static no.nav.varsel.service.support.ServicemeldingUtil.createVarselutsendingToWithKanal;
+import static no.nav.varsel.service.support.ServicemeldingUtil.createVarselutsendingWithKanal;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -87,7 +87,7 @@ public class ServicemeldingServiceTest {
 	private HentDigitalKontaktinformasjonConsumer digitalKontaktinformasjonConsumer;
 
 	@Mock
-	private VarselutsendingToMapper varselutsendingToMapper;
+	private VarselutsendingMapper varselutsendingMapper;
 
 	@Mock
 	private VarselBestillingDomainMapper domainMapper;
@@ -117,7 +117,7 @@ public class ServicemeldingServiceTest {
 	@InjectMocks
 	private ServicemeldingService servicemeldingService;
 
-	private final ArrayList<VarselutsendingTo> varselutsendingTos = Lists.newArrayList(new VarselutsendingTo(), new VarselutsendingTo());
+	private final ArrayList<Varselutsending> varselutsendingList = Lists.newArrayList(new Varselutsending(), new Varselutsending());
 	private final Varselbestilling varselbestilling = new Varselbestilling();
 	private final BestillVarselTo bestilling = new BestillVarselTo();
 	private final KontaktregisterTo kontaktregisterTo = new KontaktregisterTo();
@@ -146,10 +146,9 @@ public class ServicemeldingServiceTest {
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
 		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
-		when(varselutsendingToMapper.map(eq(varselbestilling))).thenReturn(varselutsendingTos);
+		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
 
-//		when(notifikasjonMapper.mapNotifikasjon(varselbestilling, varselutsendingTos.get(0), varselInfoTo)).thenReturn(doknotifikasjon);
-//		when(notifikasjonMapper.mapNotifikasjon(varselbestilling, varselutsendingTos.get(1), varselInfoTo)).thenReturn(doknotifikasjon);
+		when(notifikasjonMapper.mapNotifikasjon(varselutsendingList, varselbestilling)).thenReturn(doknotifikasjon);
 
 		servicemeldingService.bestillServicemelding(bestilling);
 
@@ -161,10 +160,10 @@ public class ServicemeldingServiceTest {
 		bestilling.setAktoerId(AKTOR_ID);
 		varselInfoTo.setMaler(ServicemeldingUtil.createMaler());
 
-		var varselutsendingToEpost = createVarselutsendingToWithKanal(KanalCode.EPOST);
-		var varselutsendingToDittNav = createVarselutsendingToWithKanal(KanalCode.DITT_NAV);
+		var varselutsendingEpost = createVarselutsendingWithKanal(KanalCode.EPOST);
+		var varselutsendingDittNav = createVarselutsendingWithKanal(KanalCode.DITT_NAV);
 
-		var varselutsendingToList = List.of(varselutsendingToEpost, varselutsendingToDittNav);
+		var varselutsendingList = List.of(varselutsendingEpost, varselutsendingDittNav);
 
 		var doknotifikasjonEpost = createDoknotifikasjonWithKanalAndBestillingsId(KanalCode.EPOST, "beaa22a6-6233-4d9b-97c0-fc6b174f2a60");
 		var doknotifikasjonDittNav = createDoknotifikasjonWithKanalAndBestillingsId(null, "079d437a-dd4d-49e1-ac9e-dfcb13c9ce5f");
@@ -177,11 +176,11 @@ public class ServicemeldingServiceTest {
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL_MED_DITT_NAV);
 		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
-		when(varselutsendingToMapper.map(eq(varselbestilling))).thenReturn(varselutsendingToList);
+		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
 
-		//when(notifikasjonMapper.mapNotifikasjon(varselbestilling, varselutsendingToList.get(0), varselInfoTo)).thenReturn(doknotifikasjonEpost);
+		when(notifikasjonMapper.mapNotifikasjon(varselutsendingList, varselbestilling)).thenReturn(doknotifikasjonEpost);
 
-		when(brukernotifikasjonMapper.mapBeskjed(varselInfoTo, varselutsendingToList.get(1))).thenReturn(beskjedInput);
+		when(brukernotifikasjonMapper.mapBeskjed(varselInfoTo, varselutsendingList.get(1))).thenReturn(beskjedInput);
 		when(brukernotifikasjonMapper.mapNokkel(varselbestilling)).thenReturn(nokkelDittNav);
 
 		servicemeldingService.bestillServicemelding(bestilling);
@@ -194,8 +193,8 @@ public class ServicemeldingServiceTest {
 		bestilling.setAktoerId(AKTOR_ID);
 		varselInfoTo.setMaler(ServicemeldingUtil.createDittNavMalUtenFoerstegangstekst());
 
-		var varselutsendingToDittNav = createVarselutsendingToWithKanal(KanalCode.DITT_NAV);
-		var varselutsendingToList = singletonList(varselutsendingToDittNav);
+		var varselutsendingDittNav = createVarselutsendingWithKanal(KanalCode.DITT_NAV);
+		var varselutsendingList = singletonList(varselutsendingDittNav);
 		var doknotifikasjonDittNav = createDoknotifikasjonWithKanalAndBestillingsId(null, "079d437a-dd4d-49e1-ac9e-dfcb13c9ce5f");
 		var nokkelDittNav = createNokkelInputWithBestillingsId(doknotifikasjonDittNav.getBestillingsId());
 
@@ -205,7 +204,7 @@ public class ServicemeldingServiceTest {
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL_MED_DITT_NAV);
 		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
-		when(varselutsendingToMapper.map(eq(varselbestilling))).thenReturn(varselutsendingToList);
+		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
 
 		servicemeldingService.bestillServicemelding(bestilling);
 
@@ -220,10 +219,8 @@ public class ServicemeldingServiceTest {
 		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		when(varselKanalDecider.decideKanaler(any(KontaktregisterTo.class), eq(PREFERERT_KANAL))).thenReturn(TestdataUtil.PREFERERT_KANAL);
 		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(eq(bestilling), eq(varselInfoTo), any(KontaktregisterTo.class))).thenReturn(varselbestilling);
-		when(varselutsendingToMapper.map(eq(varselbestilling))).thenReturn(varselutsendingTos);
-
-//		when(notifikasjonMedkontaktInfoMapper.mapNotifikasjonMedKontaktinfo(bestilling, varselbestilling, varselutsendingTos.get(0), varselInfoTo)).thenReturn(notifikasjonMedkontaktInfo);
-//		when(notifikasjonMedkontaktInfoMapper.mapNotifikasjonMedKontaktinfo(bestilling, varselbestilling, varselutsendingTos.get(1), varselInfoTo)).thenReturn(notifikasjonMedkontaktInfo);
+		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
+		when(notifikasjonMedkontaktInfoMapper.mapNotifikasjonMedKontaktinfo(varselutsendingList, varselbestilling, bestilling)).thenReturn(notifikasjonMedkontaktInfo);
 
 		servicemeldingService.bestillServicemelding(bestilling);
 

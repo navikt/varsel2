@@ -3,9 +3,9 @@ package no.nav.varsel.tvarsel006;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.doknotifikasjon.schemas.NotifikasjonMedkontaktInfo;
 import no.nav.varsel.kafka.KafkaEventProducer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Import;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -16,6 +16,7 @@ public class NotifikasjonMedKontaktinfoPublisher {
 	private final KafkaEventProducer kafkaEventProducer;
 	private final String topic;
 
+	@Autowired
 	public NotifikasjonMedKontaktinfoPublisher(KafkaEventProducer kafkaEventProducer,
 											   @Value("${privat-dok-notifikasjon-med-kontakt-info.topic}") String topic) {
 		this.kafkaEventProducer = kafkaEventProducer;
@@ -24,18 +25,18 @@ public class NotifikasjonMedKontaktinfoPublisher {
 
 	public void sendVarsel(NotifikasjonMedkontaktInfo notifikasjonMedkontaktInfo) {
 		log.info("""
-				bestillingsId={},
-				bestillerId={},
-				fodselsnummer={},
-				mobiltelefonnummer={},
-				epostadresse={},
-				antallRenotifikasjoner={},
-				renotifikasjonIntervall={},
-				tittel={},
-				epostTekst={},
-				smsTekst={},
-				prefererteKanaler={}
-				""",
+						bestillingsId={},
+						bestillerId={},
+						fodselsnummer={},
+						mobiltelefonnummer={},
+						epostadresse={},
+						antallRenotifikasjoner={},
+						renotifikasjonIntervall={},
+						tittel={},
+						epostTekst={},
+						smsTekst={},
+						prefererteKanaler={}
+						""",
 				notifikasjonMedkontaktInfo.getBestillingsId(),
 				notifikasjonMedkontaktInfo.getBestillerId(),
 				notifikasjonMedkontaktInfo.getFodselsnummer(),

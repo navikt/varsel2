@@ -3,9 +3,7 @@ package no.nav.varsel.service.tvarsel001.support;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.service.support.VarselutsendingTo;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
-import org.springframework.beans.factory.annotation.Autowired;
+import no.nav.varsel.service.support.Varselutsending;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -25,23 +23,22 @@ public class NotifikasjonMapper {
 
 	private final String applicationName;
 
-	@Autowired
 	public NotifikasjonMapper(@Value("${applicationName}") String applicationName) {
 		this.applicationName = applicationName;
 	}
 
-	public Doknotifikasjon mapNotifikasjon(List<VarselutsendingTo> varselutsendingToList,
-										   Varselbestilling varselbestilling,
-										   VarselInfoTo varselInfoTo) {
+	public Doknotifikasjon mapNotifikasjon(List<Varselutsending> varselutsendingList,
+										   Varselbestilling varselbestilling
+	) {
 
 		return Doknotifikasjon.newBuilder()
 				.setBestillingsId(varselbestilling.getVarselbestillingId())
 				.setBestillerId(applicationName)
 				.setFodselsnummer(varselbestilling.getFnr())
-				.setTittel(mapTittel(varselutsendingToList, varselInfoTo))
-				.setEpostTekst(mapTekst(varselutsendingToList, EPOST))
-				.setSmsTekst(mapTekst(varselutsendingToList, SMS))
-				.setPrefererteKanaler(mapKanaler(varselutsendingToList))
+				.setTittel(mapTittel(varselutsendingList))
+				.setEpostTekst(mapTekst(varselutsendingList, EPOST))
+				.setSmsTekst(mapTekst(varselutsendingList, SMS))
+				.setPrefererteKanaler(mapKanaler(varselutsendingList))
 				.setSikkerhetsnivaa(SIKKERHETSNIVAA)
 				.build();
 	}

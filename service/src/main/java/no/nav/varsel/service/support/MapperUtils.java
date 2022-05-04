@@ -2,7 +2,6 @@ package no.nav.varsel.service.support;
 
 import no.nav.doknotifikasjon.schemas.PrefererteKanal;
 import no.nav.varsel.domain.code.KanalCode;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 
 import java.util.List;
 
@@ -16,31 +15,24 @@ public class MapperUtils {
 		return singletonList(PrefererteKanal.valueOf(kanalCode.name()));
 	}
 
-	public static String mapTittel(KanalCode kanalCode, VarselInfoTo varselInfoTo) {
-		return SMS.equals(kanalCode) ? "SMS fra NAV" : varselInfoTo.getMal(kanalCode).getTittel();
-	}
-
-	public static String mapTittel(List<VarselutsendingTo> varselutsendingToList, VarselInfoTo varselInfoTo) {
-
-		return varselutsendingToList.stream()
+	public static String mapTittel(List<Varselutsending> varselutsendingList) {
+		return varselutsendingList.stream()
 				.filter(it -> EPOST.equals(it.getKanal()))
-				.map(it -> varselInfoTo.getMal(EPOST).getTittel())
+				.map(Varselutsending::getVarselTittel)
 				.findAny()
 				.orElse("SMS fra NAV");
-
 	}
 
-	public static String mapTekst(List<VarselutsendingTo> varselutsendingToList, KanalCode kanalCode) {
-
-		return varselutsendingToList.stream()
+	public static String mapTekst(List<Varselutsending> varselutsendingList, KanalCode kanalCode) {
+		return varselutsendingList.stream()
 				.filter(it -> kanalCode.equals(it.getKanal()))
-				.map(VarselutsendingTo::getVarselTekst)
+				.map(Varselutsending::getVarselTekst)
 				.findAny()
 				.orElse(null);
 	}
 
-	public static List<PrefererteKanal> mapKanaler(List<VarselutsendingTo> varselutsendingToList) {
-		return varselutsendingToList.stream()
+	public static List<PrefererteKanal> mapKanaler(List<Varselutsending> varselutsendingList) {
+		return varselutsendingList.stream()
 				.filter(it -> List.of(EPOST, SMS).contains(it.getKanal()))
 				.map(it -> PrefererteKanal.valueOf(it.getKanal().name()))
 				.toList();

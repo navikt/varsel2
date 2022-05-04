@@ -6,10 +6,10 @@ import no.nav.varsel.service.MottaVarselKvitteringService;
 import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.VarselFletter;
 import no.nav.varsel.service.interfaces.BrukervarselService;
-import no.nav.varsel.service.support.VarselutsendingToMapper;
+import no.nav.varsel.service.support.VarselBestillingDomainMapper;
+import no.nav.varsel.service.support.VarselutsendingMapper;
 import no.nav.varsel.service.tvarsel001.support.BrukernotifikasjonMapper;
 import no.nav.varsel.service.tvarsel001.support.NotifikasjonMapper;
-import no.nav.varsel.service.support.VarselBestillingDomainMapper;
 import no.nav.varsel.service.tvarsel005.support.BrukervarselMapper;
 import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedKontaktinfoMapper;
 import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
@@ -52,8 +52,8 @@ public class ServiceConfig {
 	}
 
 	@Bean
-	public VarselutsendingToMapper varselutsendingToMapper() {
-		return new VarselutsendingToMapper();
+	public VarselutsendingMapper varselutsendingMapper() {
+		return new VarselutsendingMapper();
 	}
 
 	@Bean
@@ -77,5 +77,7 @@ public class ServiceConfig {
 	}
 
 	@Bean
-	public NotifikasjonMedKontaktinfoMapper varselUtsendelseMapper() { return new NotifikasjonMedKontaktinfoMapper(); }
+	public NotifikasjonMedKontaktinfoMapper varselUtsendelseMapper() {
+		return new NotifikasjonMedKontaktinfoMapper();
+	}
 }

@@ -27,9 +27,13 @@ public class ServicemeldingUtil {
 	public static final Integer SIKKERHETSNIVAA = 3;
 	public static final String VARSEL_URL = "https://www.varsel.com";
 	public static final String UGYLDIG_VARSEL_URL = "httpp://www.invalidurl.com";
-	public static final String VARSELTEKST = "Tekst i varselet";
+	public static final String VARSELTEKST_EPOST = "Tekst i epost-varsel";
+	public static final String VARSELTEKST_SMS = "Tekst i sms-varsel";
+	public static final String VARSELTEKST_DITT_NAV = "Tekst i Ditt NAV-varsel";
 	public static final String VARSELTYPE_ID = "NySykemelding";
-	public static final String VARSELTITTEL = "Epost tittel";
+	public static final String VARSELTITTEL_EPOST = "Epost-tittel";
+	public static final String VARSELTITTEL_SMS = "SMS fra NAV";
+	public static final String VARSELTITTEL_DITT_NAV = "Ditt NAV-tittel";
 
 	public static Varselbestilling createVarselbestilling() {
 		var varselbestilling = new Varselbestilling();
@@ -53,12 +57,33 @@ public class ServicemeldingUtil {
 				.build();
 	}
 
-	public static VarselutsendingTo createVarselutsending() {
-		return VarselutsendingTo.builder()
-				.varselTekst(VARSELTEKST)
-				.kanal(EPOST)
-				.varselTittel(VARSELTITTEL)
+	public static Varselutsending createVarselutsending(KanalCode kanalCode) {
+		return Varselutsending.builder()
+				.varselTekst(utledVarseltekst(kanalCode))
+				.kanal(kanalCode)
+				.varselTittel(utledTittel(kanalCode))
 				.build();
+	}
+
+	private static String utledVarseltekst(KanalCode kanalCode) {
+		return switch (kanalCode) {
+			case EPOST -> VARSELTEKST_EPOST;
+			case SMS -> VARSELTEKST_SMS;
+			case DITT_NAV -> VARSELTEKST_DITT_NAV;
+		};
+	}
+
+	private static String utledTittel(KanalCode kanalCode) {
+		return switch (kanalCode) {
+			case EPOST -> VARSELTITTEL_EPOST;
+			case SMS -> VARSELTITTEL_SMS;
+			case DITT_NAV -> VARSELTITTEL_DITT_NAV;
+		};
+	}
+
+
+	public static List<Varselutsending> createVarselutsendingForKanaler(List<KanalCode> kanaler) {
+		return kanaler.stream().map(ServicemeldingUtil::createVarselutsending).toList();
 	}
 
 	public static Set<VarselMalTo> createMaler() {
@@ -68,7 +93,7 @@ public class ServicemeldingUtil {
 								.foerstegangsTekst("Førstegangstekst epost")
 								.revarslingTekst("Revarslingstekst epost")
 								.kanal(EPOST)
-								.tittel("Epost tittel")
+								.tittel("Epost-tittel")
 								.build(),
 						VarselMalTo.VarselMalToBuilder.aVarselMalTo()
 								.foerstegangsTekst("Førstegangstekst ditt nav")
@@ -90,9 +115,9 @@ public class ServicemeldingUtil {
 		).collect(Collectors.toSet());
 	}
 
-	public static VarselutsendingTo createVarselutsendingToWithKanal(KanalCode kanalCode) {
+	public static Varselutsending createVarselutsendingWithKanal(KanalCode kanalCode) {
 
-		return VarselutsendingTo.builder()
+		return Varselutsending.builder()
 				.kanal(kanalCode)
 				.build();
 	}
