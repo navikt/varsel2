@@ -1,39 +1,38 @@
 package no.nav.varsel.service.tvarsel006.support;
 
 import no.nav.doknotifikasjon.schemas.PrefererteKanal;
-import no.nav.varsel.domain.code.KanalCode;
-import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.service.to.BestillVarselTo;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static no.nav.varsel.service.support.ServicemeldingUtil.VARSELTEKST_EPOST;
-import static no.nav.varsel.service.support.ServicemeldingUtil.VARSELTITTEL_EPOST;
-import static no.nav.varsel.service.support.ServicemeldingUtil.VARSELTITTEL_SMS;
-import static no.nav.varsel.service.support.ServicemeldingUtil.createVarselutsending;
+import static no.nav.varsel.domain.code.KanalCode.EPOST;
+import static no.nav.varsel.domain.code.KanalCode.SMS;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.APPNAVN;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.EPOSTADRESSE;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.FNR;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.MOBILNUMMER;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.VARSELBESTILLINGS_ID;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.VARSELTEKST_EPOST;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.VARSELTITTEL_EPOST;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.VARSELTITTEL_SMS;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.createBestillVarselTo;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.createVarselbestilling;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.createVarselutsending;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
-@Disabled
 public class NotifikasjonMedKontaktinfoMapperTest {
 
-	private static final String MOBILNUMMER = "12345678";
-	private static final String EPOST = "epost@post.no";
-	private static final String FNR = "12345678910";
-	private static final String BESTILLING_ID = "ABC-12345";
 	private final NotifikasjonMedKontaktinfoMapper notifikasjonMedkontaktInfoMapper;
 
 	public NotifikasjonMedKontaktinfoMapperTest() {
-		this.notifikasjonMedkontaktInfoMapper = new NotifikasjonMedKontaktinfoMapper();
+		this.notifikasjonMedkontaktInfoMapper = new NotifikasjonMedKontaktinfoMapper(APPNAVN);
 	}
 
 	@Test
 	public void shouldMapNotifikasjonMedKontaktinfoEpost() {
 		var bestillVarselTo = createBestillVarselTo();
-		var varselbestilling = createVarselBestilling();
-		var varselutsendingList = List.of(createVarselutsending(KanalCode.EPOST));
+		var varselbestilling = createVarselbestilling();
+		var varselutsendingList = List.of(createVarselutsending(EPOST));
 
 		var notifikasjonMedKontaktInfo = notifikasjonMedkontaktInfoMapper.mapNotifikasjonMedKontaktinfo(
 				varselutsendingList,
@@ -41,21 +40,21 @@ public class NotifikasjonMedKontaktinfoMapperTest {
 				bestillVarselTo
 		);
 
-		assertEquals(BESTILLING_ID, notifikasjonMedKontaktInfo.getBestillingsId());
+		assertEquals(VARSELBESTILLINGS_ID, notifikasjonMedKontaktInfo.getBestillingsId());
 		assertEquals(FNR, notifikasjonMedKontaktInfo.getFodselsnummer());
 		assertEquals(MOBILNUMMER, notifikasjonMedKontaktInfo.getMobiltelefonnummer());
-		assertEquals(EPOST, notifikasjonMedKontaktInfo.getEpostadresse());
+		assertEquals(EPOSTADRESSE, notifikasjonMedKontaktInfo.getEpostadresse());
 		assertEquals(VARSELTITTEL_EPOST, notifikasjonMedKontaktInfo.getTittel());
 		assertEquals(VARSELTEKST_EPOST, notifikasjonMedKontaktInfo.getEpostTekst());
-		assertNull(notifikasjonMedKontaktInfo.getSmsTekst());
+		assertEquals(String.format("%s fra NAV", SMS.name()), notifikasjonMedKontaktInfo.getSmsTekst());
 		assertEquals(List.of(PrefererteKanal.EPOST), notifikasjonMedKontaktInfo.getPrefererteKanaler());
 	}
 
 	@Test
 	public void shouldMapNotifikasjonMedKontaktinfoSMS() {
 		var bestillVarselTo = createBestillVarselTo();
-		var varselbestilling = createVarselBestilling();
-		var varselutsendingList = List.of(createVarselutsending(KanalCode.SMS));
+		var varselbestilling = createVarselbestilling();
+		var varselutsendingList = List.of(createVarselutsending(SMS));
 
 		var notifikasjonMedKontaktInfo = notifikasjonMedkontaktInfoMapper.mapNotifikasjonMedKontaktinfo(
 				varselutsendingList,
@@ -64,22 +63,7 @@ public class NotifikasjonMedKontaktinfoMapperTest {
 		);
 
 		assertEquals(VARSELTITTEL_SMS, notifikasjonMedKontaktInfo.getTittel());
+		assertEquals(String.format("%s fra NAV", EPOST.name()), notifikasjonMedKontaktInfo.getEpostTekst());
 		assertEquals(List.of(PrefererteKanal.SMS), notifikasjonMedKontaktInfo.getPrefererteKanaler());
 	}
-
-
-	private BestillVarselTo createBestillVarselTo() {
-		var bestillVarselTo = new BestillVarselTo();
-		bestillVarselTo.setMobiltelefonnummer(MOBILNUMMER);
-		bestillVarselTo.setEpost(EPOST);
-		return bestillVarselTo;
-	}
-
-	private Varselbestilling createVarselBestilling() {
-		var varselbestilling = new Varselbestilling();
-		varselbestilling.setVarselbestillingId(BESTILLING_ID);
-		varselbestilling.setFnr(FNR);
-		return varselbestilling;
-	}
-
 }

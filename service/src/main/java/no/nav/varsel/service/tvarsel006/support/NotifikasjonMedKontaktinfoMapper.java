@@ -5,6 +5,8 @@ import no.nav.doknotifikasjon.schemas.NotifikasjonMedkontaktInfo;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.support.Varselutsending;
 import no.nav.varsel.service.to.BestillVarselTo;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -15,7 +17,14 @@ import static no.nav.varsel.service.support.MapperUtils.mapTekst;
 import static no.nav.varsel.service.support.MapperUtils.mapTittel;
 
 @Slf4j
+@Component
 public class NotifikasjonMedKontaktinfoMapper {
+
+	private final String applicationName;
+
+	public NotifikasjonMedKontaktinfoMapper(@Value("${applicationName}") String applicationName) {
+		this.applicationName = applicationName;
+	}
 
 	public NotifikasjonMedkontaktInfo mapNotifikasjonMedKontaktinfo(
 			List<Varselutsending> varselutsendingList,
@@ -25,7 +34,7 @@ public class NotifikasjonMedKontaktinfoMapper {
 
 		return NotifikasjonMedkontaktInfo.newBuilder()
 				.setBestillingsId(varselbestilling.getVarselbestillingId())
-				.setBestillerId("varsel")
+				.setBestillerId(applicationName)
 				.setFodselsnummer(varselbestilling.getFnr())
 				.setMobiltelefonnummer(bestillVarselTo.getMobiltelefonnummer())
 				.setEpostadresse(bestillVarselTo.getEpost())

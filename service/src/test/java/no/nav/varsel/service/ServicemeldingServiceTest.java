@@ -10,7 +10,7 @@ import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.TestdataUtil;
 import no.nav.varsel.repo.VarselbestillingRepo;
-import no.nav.varsel.service.support.ServicemeldingUtil;
+import no.nav.varsel.service.support.ServicemeldingTestUtils;
 import no.nav.varsel.service.support.VarselBestillingDomainMapper;
 import no.nav.varsel.service.support.Varselutsending;
 import no.nav.varsel.service.support.VarselutsendingMapper;
@@ -52,9 +52,11 @@ import static no.nav.varsel.repo.TestdataUtil.OVERSTYRT_PREFERERT_KANAL;
 import static no.nav.varsel.repo.TestdataUtil.PREFERERT_KANAL;
 import static no.nav.varsel.repo.TestdataUtil.TLF;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
-import static no.nav.varsel.service.support.ServicemeldingUtil.createDoknotifikasjonWithKanalAndBestillingsId;
-import static no.nav.varsel.service.support.ServicemeldingUtil.createNokkelInputWithBestillingsId;
-import static no.nav.varsel.service.support.ServicemeldingUtil.createVarselutsendingWithKanal;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.createDittNavMalUtenFoerstegangstekst;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.createDoknotifikasjonWithKanalAndBestillingsId;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.createMaler;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.createNokkelInputWithBestillingsId;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.createVarselutsendingWithKanal;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -124,7 +126,6 @@ public class ServicemeldingServiceTest {
 	private final VarselInfoTo varselInfoTo = new VarselInfoTo();
 	private final Doknotifikasjon doknotifikasjon = new Doknotifikasjon();
 	private final BeskjedInput beskjedInput = new BeskjedInput();
-	private final NokkelInput nokkelInput = new NokkelInput();
 	private final NotifikasjonMedkontaktInfo notifikasjonMedkontaktInfo = new NotifikasjonMedkontaktInfo();
 
 	@BeforeEach
@@ -158,7 +159,7 @@ public class ServicemeldingServiceTest {
 	@Test
 	public void shouldBestillServicemeldingMedBrukernotifikasjon() {
 		bestilling.setAktoerId(AKTOR_ID);
-		varselInfoTo.setMaler(ServicemeldingUtil.createMaler());
+		varselInfoTo.setMaler(createMaler());
 
 		var varselutsendingEpost = createVarselutsendingWithKanal(KanalCode.EPOST);
 		var varselutsendingDittNav = createVarselutsendingWithKanal(KanalCode.DITT_NAV);
@@ -191,7 +192,7 @@ public class ServicemeldingServiceTest {
 	@Test
 	void shouldNotSendBrukernotifikasjonToDittNavWithoutFoerstegangsvarselTekst() {
 		bestilling.setAktoerId(AKTOR_ID);
-		varselInfoTo.setMaler(ServicemeldingUtil.createDittNavMalUtenFoerstegangstekst());
+		varselInfoTo.setMaler(createDittNavMalUtenFoerstegangstekst());
 
 		var varselutsendingDittNav = createVarselutsendingWithKanal(KanalCode.DITT_NAV);
 		var varselutsendingList = singletonList(varselutsendingDittNav);

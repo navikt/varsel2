@@ -6,6 +6,7 @@ import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.doknotifikasjon.schemas.PrefererteKanal;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
+import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
 
@@ -18,7 +19,7 @@ import java.util.stream.Stream;
 import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
 
-public class ServicemeldingUtil {
+public class ServicemeldingTestUtils {
 
 	public static final String VARSELBESTILLINGS_ID = UUID.randomUUID().toString();
 	public static final String FNR = "12345678910";
@@ -34,6 +35,9 @@ public class ServicemeldingUtil {
 	public static final String VARSELTITTEL_EPOST = "Epost-tittel";
 	public static final String VARSELTITTEL_SMS = "SMS fra NAV";
 	public static final String VARSELTITTEL_DITT_NAV = "Ditt NAV-tittel";
+	public static final String MOBILNUMMER = "12345678";
+	public static final String EPOSTADRESSE = "epost@post.no";
+
 
 	public static Varselbestilling createVarselbestilling() {
 		var varselbestilling = new Varselbestilling();
@@ -83,7 +87,7 @@ public class ServicemeldingUtil {
 
 
 	public static List<Varselutsending> createVarselutsendingForKanaler(List<KanalCode> kanaler) {
-		return kanaler.stream().map(ServicemeldingUtil::createVarselutsending).toList();
+		return kanaler.stream().map(ServicemeldingTestUtils::createVarselutsending).toList();
 	}
 
 	public static Set<VarselMalTo> createMaler() {
@@ -125,12 +129,12 @@ public class ServicemeldingUtil {
 	public static Doknotifikasjon createDoknotifikasjonWithKanalAndBestillingsId(KanalCode kanalCode, String bestillingsId) {
 		return Doknotifikasjon.newBuilder()
 				.setBestillingsId(bestillingsId)
-				.setBestillerId("varsel")
+				.setBestillerId(APPNAVN)
 				.setSikkerhetsnivaa(3)
-				.setFodselsnummer("12345678910")
-				.setTittel("tittel")
-				.setEpostTekst("Epost tekst")
-				.setSmsTekst("Sms tekst")
+				.setFodselsnummer(FNR)
+				.setTittel(utledTittel(kanalCode))
+				.setEpostTekst(VARSELTEKST_EPOST)
+				.setSmsTekst(VARSELTEKST_SMS)
 				.setPrefererteKanaler(
 						kanalCode == null ? List.of() : List.of(PrefererteKanal.valueOf(kanalCode.name())))
 				.build();
@@ -140,9 +144,17 @@ public class ServicemeldingUtil {
 		return new NokkelInputBuilder()
 				.withEventId(bestillingsId)
 				.withGrupperingsId(bestillingsId)
-				.withFodselsnummer("12345678910")
-				.withNamespace("teamdokumenthandtering")
-				.withAppnavn("varsel")
+				.withFodselsnummer(FNR)
+				.withNamespace(NAMESPACE)
+				.withAppnavn(APPNAVN)
 				.build();
 	}
+
+	public static BestillVarselTo createBestillVarselTo() {
+		var bestillVarselTo = new BestillVarselTo();
+		bestillVarselTo.setMobiltelefonnummer(MOBILNUMMER);
+		bestillVarselTo.setEpost(EPOSTADRESSE);
+		return bestillVarselTo;
+	}
+
 }

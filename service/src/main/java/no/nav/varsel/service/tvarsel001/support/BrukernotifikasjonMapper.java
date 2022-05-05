@@ -8,6 +8,7 @@ import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.support.Varselutsending;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -22,33 +23,27 @@ import static java.time.ZoneOffset.UTC;
 public class BrukernotifikasjonMapper {
 
 	private static final String NAMESPACE = "teamdokumenthandtering";
-	private static final String APPNAVN = "varsel";
 	private static final Integer SIKKERHETSNIVAA = 3;
 
+	private final String applicationName;
+
+	public BrukernotifikasjonMapper(@Value("${applicationName}") String applicationName) {
+		this.applicationName = applicationName;
+	}
+
 	public NokkelInput mapNokkel(Varselbestilling varselbestilling) {
-		log.info("BrukernotifikasjonMapper - map nokkel: eventId={}, grupperingsId={}, fodselsnummer={}, namespace={}, appnavn={}",
-				varselbestilling.getVarselbestillingId(),
-				varselbestilling.getVarselbestillingId(),
-				varselbestilling.getFnr(),
-				NAMESPACE,
-				APPNAVN);
 
 		return new NokkelInputBuilder()
 				.withEventId(varselbestilling.getVarselbestillingId())
 				.withGrupperingsId(varselbestilling.getVarselbestillingId())
 				.withFodselsnummer(varselbestilling.getFnr())
 				.withNamespace(NAMESPACE)
-				.withAppnavn(APPNAVN)
+				.withAppnavn(applicationName)
 				.build();
 	}
 
 	public BeskjedInput mapBeskjed(VarselInfoTo varselInfoTo,
 								   Varselutsending varselutsending) {
-		log.info("BrukernotifikasjonMapper - map beskjed: tidspunkt={}, tekst={}, link={}, sikkerhetsnivaa={}",
-				LocalDateTime.now(UTC),
-				varselutsending.getVarselTekst(),
-				mapLink(varselInfoTo.getVarselUrl()),
-				SIKKERHETSNIVAA);
 
 		return new BeskjedInputBuilder()
 				.withTidspunkt(LocalDateTime.now(UTC))

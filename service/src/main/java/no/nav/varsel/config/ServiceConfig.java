@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Import;
 		NotifikasjonPublisher.class,
 		NotifikasjonMapper.class,
 		NotifikasjonMedKontaktinfoPublisher.class,
+		NotifikasjonMedKontaktinfoMapper.class,
 		BrukernotifikasjonBeskjedPublisher.class,
 		BrukernotifikasjonMapper.class
 })
@@ -74,10 +75,5 @@ public class ServiceConfig {
 	@Bean
 	public BrukervarselMapper brukervarselMapper() {
 		return new BrukervarselMapper();
-	}
-
-	@Bean
-	public NotifikasjonMedKontaktinfoMapper varselUtsendelseMapper() {
-		return new NotifikasjonMedKontaktinfoMapper();
 	}
 }

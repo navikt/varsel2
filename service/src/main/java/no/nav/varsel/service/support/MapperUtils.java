@@ -11,10 +11,6 @@ import static no.nav.varsel.domain.code.KanalCode.SMS;
 
 public class MapperUtils {
 
-	public static List<PrefererteKanal> mapKanalToSingletonList(KanalCode kanalCode) {
-		return singletonList(PrefererteKanal.valueOf(kanalCode.name()));
-	}
-
 	public static String mapTittel(List<Varselutsending> varselutsendingList) {
 		return varselutsendingList.stream()
 				.filter(it -> EPOST.equals(it.getKanal()))
@@ -28,7 +24,7 @@ public class MapperUtils {
 				.filter(it -> kanalCode.equals(it.getKanal()))
 				.map(Varselutsending::getVarselTekst)
 				.findAny()
-				.orElse(null);
+				.orElse(String.format("%s fra NAV", kanalCode.name()));
 	}
 
 	public static List<PrefererteKanal> mapKanaler(List<Varselutsending> varselutsendingList) {
