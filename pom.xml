@@ -22,6 +22,7 @@
 		<module>core</module>
 		<module>tvarsel001</module>
 		<module>tvarsel006</module>
+		<module>kvarsel001</module>
 	</modules>
 
 	<parent>
@@ -98,6 +99,11 @@
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
+				<artifactId>varsel-service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.varsel</groupId>
 				<artifactId>domain</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -141,6 +147,12 @@
 				<artifactId>tvarsel006</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>no.nav.varsel</groupId>
+				<artifactId>varsel-kvarsel001</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
 				<artifactId>web</artifactId>

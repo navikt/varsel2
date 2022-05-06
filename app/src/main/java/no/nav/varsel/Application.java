@@ -4,9 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.varsel.config.AppConfig;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.retry.annotation.EnableRetry;
@@ -20,6 +22,7 @@ import org.springframework.retry.annotation.EnableRetry;
 @Import(AppConfig.class)
 @EnableRetry
 @Slf4j
+@SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
