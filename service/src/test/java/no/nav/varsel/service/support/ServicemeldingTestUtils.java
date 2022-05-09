@@ -78,6 +78,10 @@ public class ServicemeldingTestUtils {
 	}
 
 	private static String utledTittel(KanalCode kanalCode) {
+		if (kanalCode == null) {
+			return "Tittel hvis kanal ikke eksisterer";
+		}
+
 		return switch (kanalCode) {
 			case EPOST -> VARSELTITTEL_EPOST;
 			case SMS -> VARSELTITTEL_SMS;

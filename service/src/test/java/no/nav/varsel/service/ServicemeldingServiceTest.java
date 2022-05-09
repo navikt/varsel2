@@ -76,7 +76,6 @@ import static org.mockito.Mockito.when;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @ExtendWith({MockitoExtension.class})
-@Disabled
 public class ServicemeldingServiceTest {
 
 	private static final String TEKNISK = "teknisk";
@@ -119,7 +118,6 @@ public class ServicemeldingServiceTest {
 	@InjectMocks
 	private ServicemeldingService servicemeldingService;
 
-	private final ArrayList<Varselutsending> varselutsendingList = Lists.newArrayList(new Varselutsending(), new Varselutsending());
 	private final Varselbestilling varselbestilling = new Varselbestilling();
 	private final BestillVarselTo bestilling = new BestillVarselTo();
 	private final KontaktregisterTo kontaktregisterTo = new KontaktregisterTo();
@@ -142,6 +140,10 @@ public class ServicemeldingServiceTest {
 	@Test
 	public void shouldBestillServicemelding() {
 		bestilling.setAktoerId(AKTOR_ID);
+		var varselutsendingEpost = createVarselutsendingWithKanal(KanalCode.EPOST);
+		var varselutsendingSms = createVarselutsendingWithKanal(KanalCode.SMS);
+		var varselutsendingList = List.of(varselutsendingEpost, varselutsendingSms);
+
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
 		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
@@ -216,6 +218,11 @@ public class ServicemeldingServiceTest {
 	public void shouldBestillServicemeldingMedKontaktinfo() {
 		bestilling.setAktoerId(AKTOR_ID);
 		bestilling.setEpost("test@epost.no");
+
+		var varselutsendingEpost = createVarselutsendingWithKanal(KanalCode.EPOST);
+		var varselutsendingSms = createVarselutsendingWithKanal(KanalCode.SMS);
+		var varselutsendingList = List.of(varselutsendingEpost, varselutsendingSms);
+
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
 		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
 		when(varselKanalDecider.decideKanaler(any(KontaktregisterTo.class), eq(PREFERERT_KANAL))).thenReturn(TestdataUtil.PREFERERT_KANAL);
@@ -346,7 +353,7 @@ public class ServicemeldingServiceTest {
 	}
 
 	private void assertOK() {
-		verify(notifikasjonPublisher, times(2)).sendNotifikasjon(any(Doknotifikasjon.class));
+		verify(notifikasjonPublisher, times(1)).sendNotifikasjon(any(Doknotifikasjon.class));
 		verify(brukernotifikasjonBeskjedPublisher, never()).sendNotifikasjon(any(BeskjedInput.class), any(NokkelInput.class));
 	}
 
@@ -364,6 +371,7 @@ public class ServicemeldingServiceTest {
 	}
 
 	private void assertOkMedKontaktinfo() {
-		verify(notifikasjonMedKontaktinfoPublisher, times(2)).sendVarsel(any(NotifikasjonMedkontaktInfo.class));
+		verify(notifikasjonMedKontaktinfoPublisher, times(1)).sendVarsel(any(NotifikasjonMedkontaktInfo.class));
+		verify(brukernotifikasjonBeskjedPublisher, never()).sendNotifikasjon(any(BeskjedInput.class), any(NokkelInput.class));
 	}
 }

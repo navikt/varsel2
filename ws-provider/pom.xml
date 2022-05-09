@@ -8,17 +8,16 @@
 		<version>1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>varsel-ws-provider</artifactId>
-	<name>Varsel :: WebService Provider</name>
+	<artifactId>ws-provider</artifactId>
 
 	<dependencies>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-ws</artifactId>
+			<artifactId>ws</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-service</artifactId>
+			<artifactId>service</artifactId>
 		</dependency>
 
 		<!-- modig -->
@@ -56,28 +55,28 @@
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-config</artifactId>
+			<artifactId>config</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-repo</artifactId>
+			<artifactId>repo</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-jms</artifactId>
+			<artifactId>jms</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-ws-consumer</artifactId>
+			<artifactId>ws-consumer</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>

@@ -83,62 +83,67 @@
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>varsel-config</artifactId>
+				<artifactId>config</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>varsel-service</artifactId>
+				<artifactId>service</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>varsel-domain</artifactId>
+				<artifactId>core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>varsel-ws</artifactId>
+				<artifactId>domain</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>varsel-ws-provider</artifactId>
+				<artifactId>ws</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>varsel-ws-consumer</artifactId>
+				<artifactId>ws-provider</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>varsel-jms</artifactId>
+				<artifactId>ws-consumer</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>varsel-jms-consumer</artifactId>
+				<artifactId>jms</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>varsel-repo</artifactId>
+				<artifactId>jms-consumer</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>varsel-tvarsel006</artifactId>
+				<artifactId>repo</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>varsel-tvarsel001</artifactId>
+				<artifactId>tvarsel001</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>varsel-web</artifactId>
+				<artifactId>tvarsel006</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.varsel</groupId>
+				<artifactId>web</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 

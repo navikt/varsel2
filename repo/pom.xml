@@ -8,13 +8,12 @@
 		<version>1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>varsel-repo</artifactId>
-	<name>Varsel :: Repo</name>
+	<artifactId>repo</artifactId>
 
 	<dependencies>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-domain</artifactId>
+			<artifactId>domain</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.dropwizard.metrics</groupId>
@@ -33,7 +32,7 @@
 		<!-- test -->
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-config</artifactId>
+			<artifactId>config</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>

@@ -47,8 +47,6 @@ import static org.hamcrest.Matchers.nullValue;
 
 public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractConsumerJmsTest {
 
-
-
 	private TestUtils.MockAppender loggerMock = null;
 
 	@Autowired
@@ -105,7 +103,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 	}
 
 	@Test
-	@Disabled
+	@Disabled("Testen feiler på oppsett av Kafka. Vil i utgangspunktet stoppe testen før den kommer dit.")
 	public void shouldReceiveJms() {
 		JmsReply response = sendMessage(bestillServicemeldingKontaktInfoQueue, new ObjectFactory().createServicemelding(createServicemeldingMedKontaktinformasjon()));
 
@@ -117,25 +115,6 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 		String varselTekst = FOERSTE_GANG_TEKST.replace("{mottaker}", VAL);
 		String varselId = assertDb(varselTekst).getVarselId();
 		assertVarselutsendingQueue(varselTekst, varselId);
-	}
-
-	@Test
-	@Disabled
-	public void shouldTrimKontaktInfo() {
-		JAXBElement<ServicemeldingMedKontaktinformasjon> serviceMelding = new ObjectFactory().createServicemelding(createServicemeldingMedKontaktinformasjon());
-		Person person = new Person();
-		person.setIdent(PERSONIDENT_WHITESPACE_TEST);
-
-		serviceMelding.getValue().setMottaker(person);
-
-		JmsReply response = sendMessage(bestillServicemeldingKontaktInfoQueue, serviceMelding);
-
-		isOk(response);
-		await().atMost(ofSeconds(5)).untilAsserted(() -> {
-			assertThat(varselbestillingRepo.count(), is(1L));
-		});
-		Varselutsending varselutsending = receive(varselutsendingQueue);
-		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), equalTo(EPOSTADRESSE));
 	}
 
 	private no.nav.varsel.domain.object.Varsel assertDb(String varselTekst) {

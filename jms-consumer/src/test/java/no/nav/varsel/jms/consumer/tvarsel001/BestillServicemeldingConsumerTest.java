@@ -49,7 +49,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	private Queue bestillServicemeldingQueue;
 
 	@Test
-	@Disabled
+	@Disabled("Testen feiler på oppsett av Kafka. Vil i utgangspunktet stoppe testen før den kommer dit.")
 	public void shouldReceieveJms() {
 		JmsReply response = sendMessage(bestillServicemeldingQueue, createVarsel());
 
@@ -60,25 +60,16 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 		String varselTekst = FOERSTE_GANG_TEKST.replace("{mottaker}", VAL);
 
-		String varselId = assertDb(varselTekst).getVarselId();
-	}
-
-	@Test
-	@Disabled
-	public void shouldTrimKontaktInfo() {
-		JAXBElement<Varsel> varsel = createVarsel();
-		PersonIdent personIdent = new PersonIdent();
-		personIdent.setPersonIdent(PERSONIDENT_WHITESPACE_TEST);
-		varsel.getValue().setMottaker(personIdent);
-		JmsReply response = sendMessage(bestillServicemeldingQueue, varsel);
-		isOk(response);
+		assertDb(varselTekst);
 	}
 
 	@Test
 	public void shouldPutOnBackoutIfFailedWs() {
 		JAXBElement<Varsel> varsel = createVarsel();
 		stubPdlConsumerTechnicalErrorWithInternalServerError();
+
 		Message response = sendMessageListenBoq(bestillServicemeldingQueue, varsel);
+
 		isOk(response);
 	}
 

@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
@@ -39,6 +40,7 @@ import static org.springframework.util.StringUtils.hasText;
 public class ServicemeldingService {
 
 	private static final Logger log = LoggerFactory.getLogger(ServicemeldingService.class);
+	private static final EnumSet<KanalCode> SMS_OG_EPOST = EnumSet.of(EPOST, SMS);
 
 	@Autowired
 	private AktoerService aktoerService;
@@ -151,15 +153,15 @@ public class ServicemeldingService {
 			}
 		}
 
-		log.info(String.format("Sender %s med BestillingsId=%s, VarselTypeId=%s til kanal(er)=%s",
+		log.info("Sender {} med BestillingId={}, VarseltypeId={} til kanal(er)={}",
 				hasKontaktInfo(bestilling) ? "ServicemeldingMedKontaktInfo" : "Servicemelding",
-				varselbestilling.getVarselbestillingId(),
-				varselbestilling.getVarseltypeId(),
-				varselutsendingList.stream().map(it -> it.getKanal().name()).toList()));
+				bestilling.getVarselBestillingId(),
+				bestilling.getVarseltypeId(),
+				varselutsendingList.stream().map(it -> it.getKanal().name()).toList());
 	}
 
 	private boolean harUtsendingTilEpostEllerSms(List<Varselutsending> varselutsendingList) {
-		return varselutsendingList.stream().anyMatch(it -> List.of(EPOST, SMS).contains(it.getKanal()));
+		return varselutsendingList.stream().anyMatch(it -> SMS_OG_EPOST.contains(it.getKanal()));
 	}
 
 	private boolean hasKontaktInfo(BestillVarselTo bestilling) {

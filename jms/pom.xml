@@ -8,13 +8,12 @@
 		<version>1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>varsel-jms</artifactId>
-	<name>Varsel :: JMS</name>
+	<artifactId>jms</artifactId>
 
 	<dependencies>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-domain</artifactId>
+			<artifactId>domain</artifactId>
 		</dependency>
 
 		<dependency>
@@ -84,7 +83,7 @@
 		<!-- test -->
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-config</artifactId>
+			<artifactId>config</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
