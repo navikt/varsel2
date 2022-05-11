@@ -43,7 +43,7 @@ public class VarselKvitteringConsumer extends AbstractJmsConsumer<VarselKvitteri
 	}
 
 	@Override
-	@JmsListener(destination = VARSEL_KVITTERING_QUEUE, id = VARSEL_KVITTERING_NAME)
+//	@JmsListener(destination = VARSEL_KVITTERING_QUEUE, id = VARSEL_KVITTERING_NAME)
 	public JmsReply listen(TextMessage message) {
 		return doListen(message);
 	}
