@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Import;
  */
 @Import({ServiceConfig.class, JmsConfig.class,
 		BestillServicemeldingConsumer.class,
-		VarselKvitteringConsumer.class,
+//		VarselKvitteringConsumer.class,
 		BestillServicemeldingMedKontaktInfoConsumer.class})
 @Configuration
 public class JmsConsumerConfig {

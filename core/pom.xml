@@ -28,6 +28,18 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-autoconfigure</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.github.navikt</groupId>
+			<artifactId>brukernotifikasjon-schemas</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.teamdokumenthandtering</groupId>
+			<artifactId>teamdokumenthandtering-avro-schemas</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.confluent</groupId>
+			<artifactId>kafka-avro-serializer</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>

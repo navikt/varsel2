@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:servicemelding xmlns:ns2="http://nav.no/melding/virksomhet/servicemeldingMedKontaktinformasjon/v1/servicemeldingMedKontaktinformasjon">
+	<mottaker xsi:type="ns2:Person" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<ident>15084300133</ident>
+	</mottaker>
+	<tilhoerendeOrganisasjon>
+		<orgnummer>orgnummer</orgnummer>
+	</tilhoerendeOrganisasjon>
+	<kontaktinformasjonListe>
+		<kanal>SMS</kanal>
+		<kontaktinformasjon>12345678</kontaktinformasjon>
+	</kontaktinformasjonListe>
+	<varseltypeId>NyttSykepengevedtak</varseltypeId>
+	<parameterListe>
+		<key>sted</key>
+		<value>FA1</value>
+	</parameterListe>
+	<parameterListe>
+		<key>tid</key>
+		<value>2022-04-26T13:00:00</value>
+	</parameterListe>
+	<utloepstidspunkt>2022-04-26T18:46:58.803+02:00</utloepstidspunkt>
+</ns2:servicemelding>

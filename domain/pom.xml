@@ -8,13 +8,12 @@
 		<version>1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>varsel-domain</artifactId>
-	<name>Varsel :: Domain</name>
+	<artifactId>domain</artifactId>
 
 	<dependencies>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-config</artifactId>
+			<artifactId>config</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -32,7 +31,7 @@
 		<!-- test -->
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-config</artifactId>
+			<artifactId>config</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>

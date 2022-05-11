@@ -10,10 +10,14 @@
 		<version>1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>varsel-tvarsel006</artifactId>
-	<name>Varsel :: Tvarsel006</name>
+	<artifactId>tvarsel006</artifactId>
 
 	<dependencies>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>core</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>no.nav.teamdokumenthandtering</groupId>
 			<artifactId>teamdokumenthandtering-avro-schemas</artifactId>
@@ -26,11 +30,7 @@
 			<groupId>io.confluent</groupId>
 			<artifactId>kafka-avro-serializer</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>no.nav.varsel</groupId>
-			<artifactId>core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka-test</artifactId>
@@ -46,7 +46,6 @@
 			<artifactId>awaitility</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
 
 </project>

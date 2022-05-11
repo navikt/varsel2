@@ -21,6 +21,7 @@ import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.VarselFletter;
+import no.nav.varsel.service.support.VarselBestillingDomainMapper;
 import no.nav.varsel.service.support.exception.functional.VarselTekstMissingException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
@@ -79,12 +80,12 @@ public class VarselBestillingDomainMapperTest {
 	private VarselBestillingDomainMapper mapper;
 
 	@BeforeEach
-	public void setUp() throws Exception {
+	public void setUp() {
 		varselFletter.setVarselUrlFromFasit(BASE_URL);
 	}
 
 	@Test
-	public void shouldMapToDomainFoerstegangVarselUtenRevarsel() throws Exception {
+	public void shouldMapToDomainFoerstegangVarselUtenRevarsel() {
 		Varselbestilling varselbestilling = mapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(createBestillTo(), createVarselTo(), createDigitalKontaktinfoTo());
 
 		assertThat(varselbestilling.getVarselbestillingId(), is(BESTILLING_ID));
@@ -114,7 +115,7 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	@Test
-	public void shouldMapToDomainFoerstegangVarselMedRevarsel() throws Exception {
+	public void shouldMapToDomainFoerstegangVarselMedRevarsel() {
 		Varselbestilling varselbestilling = mapper.mapVarselbestillingFoerstegangVarselMedRevarsel(createBestillTo(), createVarselTo(), createDigitalKontaktinfoTo());
 
 		assertThat(varselbestilling.getVarselbestillingId(), is(BESTILLING_ID));
@@ -157,7 +158,7 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	@Test
-	public void shouldMapRevarslingVarsel() throws Exception {
+	public void shouldMapRevarslingVarsel() {
 		Varsel varsel = mapper.mapReVarsel(KanalCode.EPOST, createBestillTo(), createVarselTo(), createDigitalKontaktinfoTo());
 
 		assertThat(UUID.fromString(varsel.getVarselId()).toString(), is(varsel.getVarselId()));
@@ -172,7 +173,7 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	@Test
-	public void shouldMapUrlForDittNavButNotKontaktInfo() throws Exception {
+	public void shouldMapUrlForDittNavButNotKontaktInfo() {
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), createVarselTo(), createDigitalKontaktinfoTo());
 
 		assertThat(varsel.getKanal(), is(KanalCode.DITT_NAV));
@@ -181,7 +182,7 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	@Test
-	public void shouldUseFasitPropertyWhenVarselUrlEquals$navnobaseurl$() throws Exception {
+	public void shouldUseFasitPropertyWhenVarselUrlEquals$navnobaseurl$() {
 		VarselInfoTo varselTo = createVarselTo();
 		varselTo.setVarselUrl("$navnobaseurl$");
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
@@ -190,7 +191,7 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	@Test
-	public void shouldWeaveFasitPropertyWhenVarselUrlContains$navnobaseurl$() throws Exception {
+	public void shouldWeaveFasitPropertyWhenVarselUrlContains$navnobaseurl$() {
 		String postfix = "/din-innboks";
 		String prefix = "prefix";
 
@@ -203,7 +204,7 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	@Test
-	public void shouldUseVarselUrlFromDokkat() throws Exception {
+	public void shouldUseVarselUrlFromDokkat() {
 		VarselInfoTo varselTo = createVarselTo();
 		varselTo.setVarselUrl("dokkat");
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
@@ -212,7 +213,7 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	@Test
-	public void shouldHandleNoFlettingFromDokkat() throws Exception {
+	public void shouldHandleNoFlettingFromDokkat() {
 		VarselInfoTo varselTo = createVarselTo();
 		varselTo.setVarselUrl("dokkat");
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
@@ -221,7 +222,7 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	@Test
-	public void shouldFletteUrl() throws Exception {
+	public void shouldFletteUrl() {
 		VarselInfoTo varselTo = createVarselTo();
 		varselTo.setVarselUrl("dokkat/{id}");
 
@@ -247,7 +248,7 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	@Test
-	public void shouldNotSetRevarslingsfieldsWhenRevarslingIntervallIsNull() throws Exception {
+	public void shouldNotSetRevarslingsfieldsWhenRevarslingIntervallIsNull() {
 		VarselInfoTo varselTo = createVarselTo();
 		varselTo.setRevarslingIntervall(null);
 
@@ -261,7 +262,7 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	@Test
-	public void shouldNotSetRevarslingsfieldsWhenAntallRevarslingIsNull() throws Exception {
+	public void shouldNotSetRevarslingsfieldsWhenAntallRevarslingIsNull() {
 		VarselInfoTo varselTo = createVarselTo();
 		varselTo.setAntallRevarsling(null);
 

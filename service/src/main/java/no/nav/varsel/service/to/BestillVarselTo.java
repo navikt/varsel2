@@ -4,6 +4,7 @@ package no.nav.varsel.service.to;
 import static no.nav.varsel.service.support.ValueValidator.hasText;
 import static no.nav.varsel.service.support.ValueValidator.notNull;
 
+import lombok.ToString;
 import no.nav.varsel.domain.exception.NoJmsBackoutException;
 
 import java.time.LocalDateTime;
@@ -15,19 +16,24 @@ import java.util.Map;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
+@ToString
 public class BestillVarselTo extends AktoerBestillingTo {
 
 	public static final String TESTVARSEL = "Testvarsel";
 	private static final String VALIDATION_FAILED_FOR_INPUT = "Validation failed for input, ";
 	protected String varseltypeId;
+	@ToString.Exclude
 	private Map<String, String> parameters = new HashMap<>();
 	private LocalDateTime utloepstidspunkt;
 	private String varselBestillingId;
 	private LocalDateTime utsendelsesTidspunkt;
 	private Boolean revarsling;
 	private Boolean testvarsel = false;
+	@ToString.Exclude
 	private String orgNr;
+	@ToString.Exclude
 	private String epost;
+	@ToString.Exclude
 	private String mobiltelefonnummer;
 
 	public String getOrgNr() {

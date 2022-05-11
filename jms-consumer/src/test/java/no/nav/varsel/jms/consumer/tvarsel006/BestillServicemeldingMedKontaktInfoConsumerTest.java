@@ -33,7 +33,6 @@ import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldin
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.VAL;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.VARSELTYPE_ID;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.createServicemeldingMedKontaktinformasjon;
-import static no.nav.varsel.jms.producer.VarselutsendingProducer.FEIL_MQ_UT;
 import static no.nav.varsel.repo.TestdataUtil.PERSONIDENT_WHITESPACE_TEST;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
@@ -104,7 +103,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 	}
 
 	@Test
-	@Disabled
+	@Disabled("Testen feiler på oppsett av Kafka. Vil i utgangspunktet stoppe testen før den kommer dit.")
 	public void shouldReceiveJms() {
 		JmsReply response = sendMessage(bestillServicemeldingKontaktInfoQueue, new ObjectFactory().createServicemelding(createServicemeldingMedKontaktinformasjon()));
 
@@ -116,25 +115,6 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 		String varselTekst = FOERSTE_GANG_TEKST.replace("{mottaker}", VAL);
 		String varselId = assertDb(varselTekst).getVarselId();
 		assertVarselutsendingQueue(varselTekst, varselId);
-	}
-
-	@Test
-	@Disabled
-	public void shouldTrimKontaktInfo() {
-		JAXBElement<ServicemeldingMedKontaktinformasjon> serviceMelding = new ObjectFactory().createServicemelding(createServicemeldingMedKontaktinformasjon());
-		Person person = new Person();
-		person.setIdent(PERSONIDENT_WHITESPACE_TEST);
-
-		serviceMelding.getValue().setMottaker(person);
-
-		JmsReply response = sendMessage(bestillServicemeldingKontaktInfoQueue, serviceMelding);
-
-		isOk(response);
-		await().atMost(ofSeconds(5)).untilAsserted(() -> {
-			assertThat(varselbestillingRepo.count(), is(1L));
-		});
-		Varselutsending varselutsending = receive(varselutsendingQueue);
-		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), equalTo(EPOSTADRESSE));
 	}
 
 	private no.nav.varsel.domain.object.Varsel assertDb(String varselTekst) {

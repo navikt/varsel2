@@ -94,7 +94,7 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 		varsel.getKontaktinformasjonListe().add(kontaktinformasjon);
 
 		Exception e = assertThrows(IllegalArgumentException.class, () -> mapper.map(varsel));
-		assertEquals("Invalid kommunikajsonskanal=DITT_NAV", e.getMessage());
+		assertEquals("Ugyldig kommunikasjonskanal=DITT_NAV", e.getMessage());
 	}
 
 	@Test
@@ -106,7 +106,7 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 		varsel.getKontaktinformasjonListe().add(kontaktinformasjon);
 
 		Exception e = assertThrows(IllegalArgumentException.class, () -> mapper.map(varsel));
-		assertEquals("Invalid kommunikajsonskanal=null", e.getMessage());
+		assertEquals("Ugyldig kommunikasjonskanal=null", e.getMessage());
 	}
 
 	public static ServicemeldingMedKontaktinformasjon createServicemeldingMedKontaktinformasjon() {

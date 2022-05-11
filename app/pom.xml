@@ -9,16 +9,15 @@
 
 	<artifactId>app</artifactId>
 	<packaging>jar</packaging>
-	<name>Varsel :: App</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-ws-provider</artifactId>
+			<artifactId>ws-provider</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-jms-consumer</artifactId>
+			<artifactId>jms-consumer</artifactId>
 		</dependency>
 
 		<dependency>
@@ -66,28 +65,28 @@
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-config</artifactId>
+			<artifactId>config</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-repo</artifactId>
+			<artifactId>repo</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-jms</artifactId>
+			<artifactId>jms</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-ws-consumer</artifactId>
+			<artifactId>ws-consumer</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>

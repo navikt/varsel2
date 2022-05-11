@@ -36,12 +36,12 @@ public class JmsConsumerManagerTest extends AbstractConsumerJmsTest {
 		jmsConsumerManager.stop(BESTILL_SERVICEMELDING);
 
 		assertFalse(jmsConsumerManager.getListener(BESTILL_SERVICEMELDING).isRunning());
-		assertTrue(jmsConsumerManager.getListener(VARSEL_KVITTERING).isRunning());
+//		assertTrue(jmsConsumerManager.getListener(VARSEL_KVITTERING).isRunning());
 
 		jmsConsumerManager.start(BESTILL_SERVICEMELDING);
 
 		assertTrue(jmsConsumerManager.getListener(BESTILL_SERVICEMELDING).isRunning());
-		assertTrue(jmsConsumerManager.getListener(VARSEL_KVITTERING).isRunning());
+//		assertTrue(jmsConsumerManager.getListener(VARSEL_KVITTERING).isRunning());
 	}
 
 	@Test

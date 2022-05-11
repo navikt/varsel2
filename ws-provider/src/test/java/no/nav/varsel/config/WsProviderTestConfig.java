@@ -1,9 +1,8 @@
 package no.nav.varsel.config;
 
-import no.nav.varsel.tvarsel006.VarselUtsendelse;
+import no.nav.varsel.kafka.CustomKafkaTemplate;
+import no.nav.varsel.tvarsel006.NotifikasjonMedKontaktinfoPublisher;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -13,7 +12,7 @@ import org.springframework.context.annotation.Import;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @EnableAutoConfiguration
-@Import({JmsTestConfig.class, RepoTestConfig.class, ProviderWsConfig.class, STSTestConfig.class, VarselUtsendelse.class})
+@Import({JmsTestConfig.class, RepoTestConfig.class, ProviderWsConfig.class, STSTestConfig.class, NotifikasjonMedKontaktinfoPublisher.class, CustomKafkaTemplate.class})
 @Configuration
 public class WsProviderTestConfig {
 

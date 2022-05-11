@@ -9,8 +9,7 @@
 		<version>1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>varsel-ws</artifactId>
-	<name>Varsel :: WebService</name>
+	<artifactId>ws</artifactId>
 
 	<dependencies>
 		<dependency>

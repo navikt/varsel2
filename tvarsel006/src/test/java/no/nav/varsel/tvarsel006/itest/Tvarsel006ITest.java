@@ -2,10 +2,8 @@ package no.nav.varsel.tvarsel006.itest;
 
 import no.nav.doknotifikasjon.schemas.NotifikasjonMedkontaktInfo;
 import no.nav.doknotifikasjon.schemas.PrefererteKanal;
+import no.nav.varsel.kafka.CustomKafkaTemplate;
 import no.nav.varsel.kafka.KafkaEventProducer;
-import no.nav.varsel.tvarsel006.itest.config.CustomAvroDeserializer;
-import no.nav.varsel.tvarsel006.itest.config.CustomAvroSerializer;
-import no.nav.varsel.tvarsel006.itest.config.KafkaTestConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +17,18 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 @ActiveProfiles("itest")
 @Import({
 		KafkaTestConsumer.class,
-		KafkaTestConfig.class,
 		KafkaEventProducer.class,
-		CustomAvroSerializer.class,
-		CustomAvroDeserializer.class
+		CustomKafkaTemplate.class
 })
 @EmbeddedKafka(
 		partitions = 1,
 		topics = {
-				"privat-dok-notifikasjon-med-kontakt-info-test"
+				"teamdokumenthandtering.dok-notifikasjon-med-kontakt-info-test"
 		},
 		controlledShutdown = true,
 		brokerProperties = {
@@ -44,13 +41,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 )
 @SpringBootTest(classes = {Tvarsel006ITest.class})
 @EnableAutoConfiguration
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestInstance(PER_CLASS)
 public class Tvarsel006ITest {
 
 	private static final String FNR = "12345678910";
 	private static final String MOBILNR = "98765432";
 	private static final String EPOST = "e@post.no";
-	private static final String TOPIC = "privat-dok-notifikasjon-med-kontakt-info-test";
+	private static final String TOPIC = "teamdokumenthandtering.dok-notifikasjon-med-kontakt-info-test";
 
 	private final String SMS_TEKST = """
 			Hei! Her er en sms fra NAV. Mvh NAV

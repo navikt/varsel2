@@ -8,21 +8,16 @@
 		<version>1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>varsel-service</artifactId>
-	<name>Varsel :: Service</name>
+	<artifactId>service</artifactId>
 
 	<dependencies>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-repo</artifactId>
+			<artifactId>repo</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-ws-consumer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-jms-producer</artifactId>
+			<artifactId>ws-consumer</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.retry</groupId>
@@ -32,29 +27,36 @@
 		<!-- test -->
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-config</artifactId>
+			<artifactId>config</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-repo</artifactId>
+			<artifactId>repo</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-ws-consumer</artifactId>
+			<artifactId>ws-consumer</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-tvarsel006</artifactId>
-			<version>${project.version}</version>
+			<artifactId>tvarsel001</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>tvarsel006</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>jms</artifactId>
 		</dependency>
 	</dependencies>
 

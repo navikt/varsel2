@@ -6,10 +6,15 @@ import no.nav.varsel.service.MottaVarselKvitteringService;
 import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.VarselFletter;
 import no.nav.varsel.service.interfaces.BrukervarselService;
-import no.nav.varsel.service.support.VarselutsendingToMapper;
-import no.nav.varsel.service.tvarsel001.support.VarselBestillingDomainMapper;
+import no.nav.varsel.service.support.VarselBestillingDomainMapper;
+import no.nav.varsel.service.support.VarselutsendingMapper;
+import no.nav.varsel.service.tvarsel001.support.BrukernotifikasjonMapper;
+import no.nav.varsel.service.tvarsel001.support.NotifikasjonMapper;
 import no.nav.varsel.service.tvarsel005.support.BrukervarselMapper;
-import no.nav.varsel.service.tvarsel006.support.VarselUtsendelseMapper;
+import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedKontaktinfoMapper;
+import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
+import no.nav.varsel.tvarsel001.NotifikasjonPublisher;
+import no.nav.varsel.tvarsel006.NotifikasjonMedKontaktinfoPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -20,7 +25,16 @@ import org.springframework.context.annotation.Import;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration
-@Import({RepoConfig.class, WsConsumerConfig.class, JmsProducerConfig.class})
+@Import({RepoConfig.class,
+		WsConsumerConfig.class,
+		JmsConfig.class,
+		NotifikasjonPublisher.class,
+		NotifikasjonMapper.class,
+		NotifikasjonMedKontaktinfoPublisher.class,
+		NotifikasjonMedKontaktinfoMapper.class,
+		BrukernotifikasjonBeskjedPublisher.class,
+		BrukernotifikasjonMapper.class
+})
 public class ServiceConfig {
 
 	@Bean
@@ -39,8 +53,8 @@ public class ServiceConfig {
 	}
 
 	@Bean
-	public VarselutsendingToMapper varselutsendingToMapper() {
-		return new VarselutsendingToMapper();
+	public VarselutsendingMapper varselutsendingMapper() {
+		return new VarselutsendingMapper();
 	}
 
 	@Bean
@@ -62,7 +76,4 @@ public class ServiceConfig {
 	public BrukervarselMapper brukervarselMapper() {
 		return new BrukervarselMapper();
 	}
-
-	@Bean
-	public VarselUtsendelseMapper varselUtsendelseMapper() { return new VarselUtsendelseMapper(); }
 }

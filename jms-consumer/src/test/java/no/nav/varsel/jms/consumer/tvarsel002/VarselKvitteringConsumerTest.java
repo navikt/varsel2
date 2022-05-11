@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Roar Bjurstrom, Visma Consulting.
  */
+@Disabled("Tvarsel002 skal endres til å bruke Kafka i stedet for JMS, slik at tvarsel002 skal ryddes opp i")
 public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 	private static final String STATUS_ERROR = "Error";
 
@@ -42,7 +43,6 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 	private Queue bestillServicemeldingQueue;
 
 	@Test
-	@Disabled
 	public void shouldPersistPlukketKvitteringsmelding() {
 		sendVarselbestilling();
 		String varselId = getVarselId();
@@ -55,7 +55,6 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	@Disabled
 	public void shouldPersistFeiletKvitteringsmelding() {
 		sendVarselbestilling();
 		String varselId = getVarselId();
@@ -75,7 +74,6 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	@Disabled
 	public void shouldNotPutInvalidEmptyKvitteringOnBq() {
 		JmsReply response = sendMessage(varselKvitteringQueue, createVarselKvitteringJaxBElement(new VarselKvittering()));
 
@@ -83,7 +81,6 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	@Disabled
 	public void shouldNotPutDuplicateKvitteringOnBq() {
 		sendVarselbestilling();
 		String varselId = getVarselId();
@@ -98,7 +95,6 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	@Disabled
 	public void shouldNotPutNonExistingVarselIdOnBq() {
 		JAXBElement<VarselKvittering> varselKvittering = createVarselKvitteringJaxBElement(UUID.randomUUID().toString());
 
@@ -107,7 +103,6 @@ public class VarselKvitteringConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	@Disabled
 	public void shouldNotPutInvalidKvitteringstatusOnBq() {
 		sendVarselbestilling();
 		String varselId = getVarselId();

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:Varsel xmlns:ns2="http://nav.no/melding/virksomhet/varsel/v1/varsel">
+	<mottaker xsi:type="ns2:PersonIdent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<personIdent>15084300133</personIdent>
+	</mottaker>
+	<varslingstype>NyttSykepengevedtak</varslingstype>
+	<parameterListe>
+		<key>sted</key>
+		<value>FA1</value>
+	</parameterListe>
+	<parameterListe>
+		<key>tid</key>
+		<value>2022-04-26T13:00:00</value>
+	</parameterListe>
+	<utloepstidspunkt>2022-04-26T18:46:58.803+02:00</utloepstidspunkt>
+</ns2:Varsel>
