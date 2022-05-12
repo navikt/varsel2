@@ -1,0 +1,9 @@
+package no.nav.varsel.service.support.exception.functional;
+
+public class ServicemeldingMappingException extends FunctionalVarselException {
+
+	public ServicemeldingMappingException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+}

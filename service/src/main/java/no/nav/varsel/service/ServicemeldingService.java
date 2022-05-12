@@ -1,11 +1,15 @@
 package no.nav.varsel.service;
 
+import no.nav.brukernotifikasjon.schemas.input.BeskjedInput;
+import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
+import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.service.support.VarselBestillingDomainMapper;
 import no.nav.varsel.service.support.Varselutsending;
 import no.nav.varsel.service.support.VarselutsendingMapper;
+import no.nav.varsel.service.support.exception.functional.ServicemeldingMappingException;
 import no.nav.varsel.service.support.exception.functional.VarselInaktivVarselmalException;
 import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloeptException;
 import no.nav.varsel.service.to.BestillVarselTo;
@@ -96,18 +100,7 @@ public class ServicemeldingService {
 
 		overridePreferertKanalForTestmelding(bestilling, varselInfoTo);
 
-		KontaktregisterTo kontaktregisterTo;
-		if (hasKontaktInfo(bestilling)) {
-			//TVARSEL006 Path
-			varselInfoTo.getPreferertKanal().remove(DITT_NAV);
-			kontaktregisterTo = new KontaktregisterTo();
-			kontaktregisterTo.setMobiltelefonnummer(bestilling.getMobiltelefonnummer() != null ? bestilling.getMobiltelefonnummer().trim() : null);
-			kontaktregisterTo.setEpostadresse(bestilling.getEpost() != null ? bestilling.getEpost().trim() : null);
-		} else {
-			//3.5.Hent digital kontaktinformasjon
-			//TVARSEL001 Path
-			kontaktregisterTo = dkifConsumer.hentDigitalKontaktinformasjon(bestilling.getPersonIdent());
-		}
+		KontaktregisterTo kontaktregisterTo = hentKontaktregisterTo(bestilling, varselInfoTo);
 
 		//4.Bestem varslingskanal
 		Collection<KanalCode> kanalCodes = varselKanalDecider.decideKanaler(kontaktregisterTo, varselInfoTo.getPreferertKanal());
@@ -122,35 +115,17 @@ public class ServicemeldingService {
 		//7. Varselutsending
 		List<Varselutsending> varselutsendingList = varselutsendingMapper.map(varselbestilling);
 
-		if (hasKontaktInfo(bestilling)) { //TVARSEL006
-			notifikasjonMedKontaktinfoPublisher.sendVarsel(notifikasjonMedKontaktinfoMapper.mapNotifikasjonMedKontaktinfo(
-					varselutsendingList,
-					varselbestilling,
-					bestilling
-			));
-		} else { //TVARSEL001
-			if (harUtsendingTilEpostEllerSms(varselutsendingList)) {
-				notifikasjonPublisher.sendNotifikasjon(notifikasjonMapper.mapNotifikasjon(
-						varselutsendingList,
-						varselbestilling
-				));
+		try {
+			if (hasKontaktInfo(bestilling)) { //TVARSEL006
+				sendNotifikasjonMedKontaktinfo(bestilling, varselbestilling, varselutsendingList);
+			} else { //TVARSEL001
+				sendNotifikasjon(varselInfoTo, varselbestilling, varselutsendingList);
 			}
-
-			var dittNavTo = varselutsendingList.stream()
-					.filter(it -> DITT_NAV.equals(it.getKanal()))
-					.findAny();
-
-			if (dittNavTo.isPresent()) {
-				if (hasText(varselInfoTo.getMal(DITT_NAV).getFoerstegangsTekst())) {
-					brukernotifikasjonBeskjedPublisher.sendNotifikasjon(
-							brukernotifikasjonMapper.mapBeskjed(varselInfoTo, dittNavTo.get()),
-							brukernotifikasjonMapper.mapNokkel(varselbestilling)
-					);
-				} else {
-					log.info("Varsel med kanal DITT_NAV, bestillingsId={} og varseltypeId={} mangler foerstegangstekst. Sender ikke beskjed til DittNAV.",
-							varselbestilling.getVarselbestillingId(), varselbestilling.getVarseltypeId());
-				}
-			}
+		} catch (ServicemeldingMappingException e) {
+			log.error("Feil ved mapping av data til servicemelding med BestillingId={}. Feilmelding={}", bestilling.getVarselBestillingId(), e.getMessage());
+		} catch (Exception e) {
+			log.error("Ukjent feil ved sending av servicemelding med BestillingId={}. Feilmelding={}", bestilling.getVarselBestillingId(), e.getMessage());
+			throw e;
 		}
 
 		log.info("Sender {} med BestillingId={}, VarseltypeId={} til kanal(er)={}",
@@ -158,6 +133,65 @@ public class ServicemeldingService {
 				bestilling.getVarselBestillingId(),
 				bestilling.getVarseltypeId(),
 				varselutsendingList.stream().map(it -> it.getKanal().name()).toList());
+	}
+
+	private void sendNotifikasjon(VarselInfoTo varselInfoTo, Varselbestilling varselbestilling, List<Varselutsending> varselutsendingList) {
+		Doknotifikasjon doknotifikasjon = null;
+		BeskjedInput beskjed = null;
+		NokkelInput nokkel = null;
+
+		if (harUtsendingTilEpostEllerSms(varselutsendingList)) {
+			doknotifikasjon = notifikasjonMapper.mapNotifikasjon(
+					varselutsendingList,
+					varselbestilling
+			);
+		}
+
+		var dittNavTo = varselutsendingList.stream()
+				.filter(it -> DITT_NAV.equals(it.getKanal()))
+				.findAny();
+
+		if (dittNavTo.isPresent()) {
+			if (hasText(varselInfoTo.getMal(DITT_NAV).getFoerstegangsTekst())) {
+				beskjed = brukernotifikasjonMapper.mapBeskjed(dittNavTo.get());
+				nokkel = brukernotifikasjonMapper.mapNokkel(varselbestilling);
+
+			} else {
+				log.info("Varsel med kanal DITT_NAV, bestillingsId={} og varseltypeId={} mangler foerstegangstekst. Sender ikke beskjed til DittNAV.",
+						varselbestilling.getVarselbestillingId(), varselbestilling.getVarseltypeId());
+			}
+		}
+
+		if (doknotifikasjon != null) {
+			notifikasjonPublisher.sendNotifikasjon(doknotifikasjon);
+		}
+		if (beskjed != null && nokkel != null) {
+			brukernotifikasjonBeskjedPublisher.sendNotifikasjon(beskjed, nokkel);
+		}
+	}
+
+	private void sendNotifikasjonMedKontaktinfo(BestillVarselTo bestilling, Varselbestilling varselbestilling, List<Varselutsending> varselutsendingList) {
+		notifikasjonMedKontaktinfoPublisher.sendVarsel(notifikasjonMedKontaktinfoMapper.mapNotifikasjonMedKontaktinfo(
+				varselutsendingList,
+				varselbestilling,
+				bestilling
+		));
+	}
+
+	private KontaktregisterTo hentKontaktregisterTo(BestillVarselTo bestilling, VarselInfoTo varselInfoTo) {
+		KontaktregisterTo kontaktregisterTo;
+		if (hasKontaktInfo(bestilling)) {
+			//TVARSEL006 Path
+			varselInfoTo.getPreferertKanal().remove(DITT_NAV);
+			kontaktregisterTo = new KontaktregisterTo();
+			kontaktregisterTo.setMobiltelefonnummer(bestilling.getMobiltelefonnummer() != null ? bestilling.getMobiltelefonnummer().trim() : null);
+			kontaktregisterTo.setEpostadresse(bestilling.getEpost() != null ? bestilling.getEpost().trim() : null);
+		} else {
+			//3.5.Hent digital kontaktinformasjon
+			//TVARSEL001 Path
+			kontaktregisterTo = dkifConsumer.hentDigitalKontaktinformasjon(bestilling.getPersonIdent());
+		}
+		return kontaktregisterTo;
 	}
 
 	private boolean harUtsendingTilEpostEllerSms(List<Varselutsending> varselutsendingList) {

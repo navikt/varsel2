@@ -183,7 +183,7 @@ public class ServicemeldingServiceTest {
 
 		when(notifikasjonMapper.mapNotifikasjon(varselutsendingList, varselbestilling)).thenReturn(doknotifikasjonEpost);
 
-		when(brukernotifikasjonMapper.mapBeskjed(varselInfoTo, varselutsendingList.get(1))).thenReturn(beskjedInput);
+		when(brukernotifikasjonMapper.mapBeskjed(varselutsendingList.get(1))).thenReturn(beskjedInput);
 		when(brukernotifikasjonMapper.mapNokkel(varselbestilling)).thenReturn(nokkelDittNav);
 
 		servicemeldingService.bestillServicemelding(bestilling);

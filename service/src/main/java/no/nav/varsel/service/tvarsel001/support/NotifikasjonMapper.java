@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.support.Varselutsending;
+import no.nav.varsel.service.support.exception.functional.ServicemeldingMappingException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -31,15 +32,19 @@ public class NotifikasjonMapper {
 										   Varselbestilling varselbestilling
 	) {
 
-		return Doknotifikasjon.newBuilder()
-				.setBestillingsId(varselbestilling.getVarselbestillingId())
-				.setBestillerId(applicationName)
-				.setFodselsnummer(varselbestilling.getFnr())
-				.setTittel(mapTittel(varselutsendingList))
-				.setEpostTekst(mapTekst(varselutsendingList, EPOST))
-				.setSmsTekst(mapTekst(varselutsendingList, SMS))
-				.setPrefererteKanaler(mapKanaler(varselutsendingList))
-				.setSikkerhetsnivaa(SIKKERHETSNIVAA)
-				.build();
+		try {
+			return Doknotifikasjon.newBuilder()
+					.setBestillingsId(varselbestilling.getVarselbestillingId())
+					.setBestillerId(applicationName)
+					.setFodselsnummer(varselbestilling.getFnr())
+					.setTittel(mapTittel(varselutsendingList))
+					.setEpostTekst(mapTekst(varselutsendingList, EPOST))
+					.setSmsTekst(mapTekst(varselutsendingList, SMS))
+					.setPrefererteKanaler(mapKanaler(varselutsendingList))
+					.setSikkerhetsnivaa(SIKKERHETSNIVAA)
+					.build();
+		} catch (Exception e) {
+			throw new ServicemeldingMappingException(e.getMessage(), e.getCause());
+		}
 	}
 }

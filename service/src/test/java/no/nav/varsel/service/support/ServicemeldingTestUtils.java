@@ -48,20 +48,25 @@ public class ServicemeldingTestUtils {
 		return varselbestilling;
 	}
 
-	public static VarselInfoTo createVarselInfoTo() {
-		return VarselInfoTo.VarselInfoToBuilder.aVarselInfoTo()
+	public static Varselutsending createVarselutsending(KanalCode kanalCode) {
+		return Varselutsending.builder()
+				.varselTekst(utledVarseltekst(kanalCode))
+				.kanal(kanalCode)
+				.varselTittel(utledTittel(kanalCode))
 				.varselUrl(VARSEL_URL)
-				.maler(createMaler())
 				.build();
 	}
 
-	public static VarselInfoTo createVarselInfoToWithInvalidUrl() {
-		return VarselInfoTo.VarselInfoToBuilder.aVarselInfoTo()
+	public static Varselutsending createVarselutsendingMedUgyldigUrl(KanalCode kanalCode) {
+		return Varselutsending.builder()
+				.varselTekst(utledVarseltekst(kanalCode))
+				.kanal(kanalCode)
+				.varselTittel(utledTittel(kanalCode))
 				.varselUrl(UGYLDIG_VARSEL_URL)
 				.build();
 	}
 
-	public static Varselutsending createVarselutsending(KanalCode kanalCode) {
+	public static Varselutsending createVarselutsendingUtenUrl(KanalCode kanalCode) {
 		return Varselutsending.builder()
 				.varselTekst(utledVarseltekst(kanalCode))
 				.kanal(kanalCode)
