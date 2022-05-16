@@ -19,6 +19,7 @@ import no.nav.varsel.service.tvarsel002.to.MottaVarselKvitteringToTest;
 import no.nav.varsel.wsconsumer.pdl.support.PdlFunctionalException;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
@@ -32,6 +33,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author Roar Bjurstrom, Visma Consulting.
  */
 @ExtendWith(MockitoExtension.class)
+@Disabled
 public class MottaVarselKvitteringServiceTest {
 
 	@Mock

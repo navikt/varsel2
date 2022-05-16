@@ -11,12 +11,19 @@
 	</parent>
 
 	<artifactId>varsel-kvarsel001</artifactId>
-	<name>Varsel :: Kvarsel001</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>repo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>service</artifactId>
 		</dependency>
 
 		<dependency>

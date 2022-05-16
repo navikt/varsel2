@@ -46,7 +46,7 @@ public class MottaVarselKvitteringService {
 
 	private void validateVarselStatus(Varsel varsel) {
 		if (!(varsel.getStatus() == StatusCode.SENDT || varsel.getStatus() == StatusCode.FERDIGBEHANDLET)) {
-			throw new InvalidVarselStatusException(varsel);
+			throw new InvalidVarselStatusException(varsel.getVarselId(), varsel.getStatus().toString());
 		}
 	}
 	

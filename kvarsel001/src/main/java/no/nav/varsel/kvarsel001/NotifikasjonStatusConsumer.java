@@ -4,20 +4,36 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.doknotifikasjon.schemas.DoknotifikasjonStatus;
+import no.nav.varsel.domain.code.StatusCode;
+import no.nav.varsel.domain.object.Varselbestilling;
+import no.nav.varsel.repo.VarselbestillingRepo;
+import no.nav.varsel.service.support.exception.functional.InvalidVarselStatusException;
+import no.nav.varsel.service.support.exception.functional.StatusmeldingMappingException;
+import no.nav.varsel.service.support.exception.functional.VarselbestillingNotExistException;
+import no.nav.varsel.util.MDCGenerate;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Component
 public class NotifikasjonStatusConsumer {
 
 	private static final String KAFKA_TOPIC_DOK_NOTIFIKASJON_STATUS = "teamdokumenthandtering.aapen-dok-notifikasjon-status";
+	private static final String FEILET = "FEILET";
+	private static final String FERDIGSTILT = "FERDIGSTILT";
+	private static final List<String> FEILET_ELLER_FERDIGSTILT = List.of(FEILET, FERDIGSTILT);
 
 	private final ObjectMapper objectMapper;
+	private final VarselbestillingRepo varselbestillingRepo;
 
-	public NotifikasjonStatusConsumer(ObjectMapper objectMapper) {
+	public NotifikasjonStatusConsumer(ObjectMapper objectMapper, VarselbestillingRepo varselbestillingRepo) {
 		this.objectMapper = objectMapper;
+		this.varselbestillingRepo = varselbestillingRepo;
 		log.info("no.nav.varsel.kvarsel001.NotifikasjonStatusConsumer created!");
 	}
 
@@ -26,23 +42,113 @@ public class NotifikasjonStatusConsumer {
 			groupId = "varsel-kvarsel001"
 	)
 	public void onMessage(final ConsumerRecord<String, Object> record) {
+		setUserIdAndGenerateCallId();
 
-		log.info("Innkommende kafka record til topic={}, partition={}, offset={}", record.topic(), record.partition(), record.offset());
+		log.info("Innkommende Kafka-record til topic={}, partition={}, offset={}", record.topic(), record.partition(), record.offset());
 
 		try {
 			DoknotifikasjonStatus doknotifikasjonStatus = objectMapper.readValue(record.value().toString(), DoknotifikasjonStatus.class);
+			if (meldingSkalIkkeProsesseres(doknotifikasjonStatus)) return;
 
-			log.info("DoknotifikasjonStatus: bestillingsId={}, bestillerId={}, status={}, melding={}, distribusjonId={}",
+			log.info("Mottok statusmelding med bestillingsId={}, bestillerId={}, status={}, melding={}, distribusjonId={}",
 					doknotifikasjonStatus.getBestillingsId(),
 					doknotifikasjonStatus.getBestillerId(),
 					doknotifikasjonStatus.getStatus(),
 					doknotifikasjonStatus.getMelding(),
 					doknotifikasjonStatus.getDistribusjonId());
 
+			Varselbestilling varselbestilling = findAndValidateVarselbestilling(doknotifikasjonStatus);
+			oppdaterStatusForVarsler(doknotifikasjonStatus, varselbestilling);
+			varselbestillingRepo.saveAndFlush(varselbestilling);
+
+			log.info("Varsler i bestillingsId={} oppdatert til status={}", doknotifikasjonStatus.getBestillingsId(), doknotifikasjonStatus.getStatus());
 		} catch (JsonProcessingException e) {
-			log.error("JsonProcessingException", e);
+			log.error("Mapping av statusmelding (kvarsel001) feilet med melding={}", e.getMessage());
+			throw new StatusmeldingMappingException(e.getMessage(), e.getCause());
 		} catch (Exception e) {
-			log.error("Ukjent teknisk feil for knot004 (status). Konsumerer hendelse på nytt. Dette må følges opp.", e);
+			log.error("Ukjent teknisk feil under prosessering av statusmelding (kvarsel001). Konsumerer hendelse på nytt.", e);
+			throw e;
+		} finally {
+			clearUserIdAndCallId();
 		}
+	}
+
+	private boolean meldingSkalIkkeProsesseres(DoknotifikasjonStatus doknotifikasjonStatus) {
+		if (!doknotifikasjonStatus.getBestillerId().equals("varsel")) {
+			log.warn("Avslutter behandling av statusmelding med feil bestillerId={} og bestillingsId={}.",
+					doknotifikasjonStatus.getBestillerId(),
+					doknotifikasjonStatus.getBestillingsId()
+			);
+			return true;
+		}
+
+		if (doknotifikasjonStatus.getDistribusjonId() != null) {
+			log.warn("Avslutter behandling av statusmelding med distribusjonId={}. bestillingsId={}, bestillerId={}, status={}, melding={}",
+					doknotifikasjonStatus.getDistribusjonId(),
+					doknotifikasjonStatus.getBestillingsId(),
+					doknotifikasjonStatus.getBestillerId(),
+					doknotifikasjonStatus.getStatus(),
+					doknotifikasjonStatus.getMelding()
+			);
+			return true;
+		}
+
+		if (doknotifikasjonStatus.getBestillingsId() == null) {
+			log.error("Avslutter behandling av statusmelding med manglende bestillingsId. bestillingsId={}, bestillerId={}, status={}, melding={}, distribusjonId={}",
+					doknotifikasjonStatus.getBestillingsId(),
+					doknotifikasjonStatus.getBestillerId(),
+					doknotifikasjonStatus.getStatus(),
+					doknotifikasjonStatus.getMelding(),
+					doknotifikasjonStatus.getDistribusjonId());
+			return true;
+		}
+
+		return false;
+	}
+
+	private Varselbestilling findAndValidateVarselbestilling(DoknotifikasjonStatus doknotifikasjonStatus) {
+		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(doknotifikasjonStatus.getBestillingsId());
+
+		if (varselbestilling == null) {
+			throw new VarselbestillingNotExistException(doknotifikasjonStatus.getBestillingsId());
+		}
+
+		if (!statusErFeiletEllerFerdigstilt(doknotifikasjonStatus.getStatus())) {
+			throw new InvalidVarselStatusException(doknotifikasjonStatus.getBestillingsId(), doknotifikasjonStatus.getStatus());
+		}
+
+		return varselbestilling;
+	}
+
+	private boolean statusErFeiletEllerFerdigstilt(String status) {
+		return FEILET_ELLER_FERDIGSTILT.contains(status);
+	}
+
+	private void oppdaterStatusForVarsler(DoknotifikasjonStatus doknotifikasjonStatus, Varselbestilling varselbestilling) {
+		var tidspunkt = LocalDateTime.now();
+
+		varselbestilling.getVarsels().forEach(varsel -> {
+			if (FEILET.equals(doknotifikasjonStatus.getStatus())) {
+				varsel.setStatus(StatusCode.FEILET);
+				varsel.setFeilbeskrivelse(doknotifikasjonStatus.getMelding());
+			}
+
+			if (FERDIGSTILT.equals(doknotifikasjonStatus.getStatus())) {
+				varsel.setStatus(StatusCode.FERDIGBEHANDLET);
+				varsel.setDistribusjonTidspunkt(tidspunkt);
+			}
+
+			varsel.setKvitteringTidspunkt(tidspunkt);
+		});
+	}
+
+	private void setUserIdAndGenerateCallId() {
+		MDCGenerate.generateCallId();
+		MDCGenerate.setUserId("kvarsel001");
+	}
+
+	private void clearUserIdAndCallId() {
+		MDCGenerate.clearUserId();
+		MDCGenerate.clearCallId();
 	}
 }
