@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.doknotifikasjon.schemas.NotifikasjonMedkontaktInfo;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.support.Varselutsending;
+import no.nav.varsel.service.support.exception.functional.ServicemeldingMappingException;
 import no.nav.varsel.service.to.BestillVarselTo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -32,19 +33,23 @@ public class NotifikasjonMedKontaktinfoMapper {
 			BestillVarselTo bestillVarselTo
 	) {
 
-		return NotifikasjonMedkontaktInfo.newBuilder()
-				.setBestillingsId(varselbestilling.getVarselbestillingId())
-				.setBestillerId(applicationName)
-				.setFodselsnummer(varselbestilling.getFnr())
-				.setMobiltelefonnummer(bestillVarselTo.getMobiltelefonnummer())
-				.setEpostadresse(bestillVarselTo.getEpost())
-				.setAntallRenotifikasjoner(0)
-				.setRenotifikasjonIntervall(0)
-				.setTittel(mapTittel(varselutsendingList))
-				.setEpostTekst(mapTekst(varselutsendingList, EPOST))
-				.setSmsTekst(mapTekst(varselutsendingList, SMS))
-				.setPrefererteKanaler(mapKanaler(varselutsendingList))
-				.build();
+		try {
+			return NotifikasjonMedkontaktInfo.newBuilder()
+					.setBestillingsId(varselbestilling.getVarselbestillingId())
+					.setBestillerId(applicationName)
+					.setFodselsnummer(varselbestilling.getFnr())
+					.setMobiltelefonnummer(bestillVarselTo.getMobiltelefonnummer())
+					.setEpostadresse(bestillVarselTo.getEpost())
+					.setAntallRenotifikasjoner(0)
+					.setRenotifikasjonIntervall(0)
+					.setTittel(mapTittel(varselutsendingList))
+					.setEpostTekst(mapTekst(varselutsendingList, EPOST))
+					.setSmsTekst(mapTekst(varselutsendingList, SMS))
+					.setPrefererteKanaler(mapKanaler(varselutsendingList))
+					.build();
+		} catch (Exception e) {
+			throw new ServicemeldingMappingException(e.getMessage(), e.getCause());
+		}
 	}
 
 }

@@ -3,6 +3,7 @@ package no.nav.varsel.tvarsel006;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.doknotifikasjon.schemas.NotifikasjonMedkontaktInfo;
 import no.nav.varsel.kafka.KafkaEventProducer;
+import no.nav.varsel.util.MDCGenerate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Import;
@@ -28,7 +29,7 @@ public class NotifikasjonMedKontaktinfoPublisher {
 		log.info("Sender notifikasjonMedKontaktinfo med bestillingsId={} til topic={}", notifikasjonMedkontaktInfo.getBestillingsId(), topic);
 		kafkaEventProducer.publish(
 				topic,
-				notifikasjonMedkontaktInfo.getBestillingsId(),
+				MDCGenerate.getCallId(),
 				notifikasjonMedkontaktInfo);
 	}
 }

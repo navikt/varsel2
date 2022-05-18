@@ -1,6 +1,7 @@
 package no.nav.varsel.service.tvarsel001.support;
 
 import no.nav.varsel.service.support.ServicemeldingTestUtils;
+import no.nav.varsel.service.support.exception.functional.ServicemeldingMappingException;
 import org.junit.jupiter.api.Test;
 
 import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
@@ -10,10 +11,10 @@ import static no.nav.varsel.service.support.ServicemeldingTestUtils.SIKKERHETSNI
 import static no.nav.varsel.service.support.ServicemeldingTestUtils.VARSELBESTILLINGS_ID;
 import static no.nav.varsel.service.support.ServicemeldingTestUtils.VARSELTEKST_DITT_NAV;
 import static no.nav.varsel.service.support.ServicemeldingTestUtils.VARSEL_URL;
-import static no.nav.varsel.service.support.ServicemeldingTestUtils.createVarselInfoTo;
-import static no.nav.varsel.service.support.ServicemeldingTestUtils.createVarselInfoToWithInvalidUrl;
 import static no.nav.varsel.service.support.ServicemeldingTestUtils.createVarselbestilling;
 import static no.nav.varsel.service.support.ServicemeldingTestUtils.createVarselutsending;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.createVarselutsendingMedUgyldigUrl;
+import static no.nav.varsel.service.support.ServicemeldingTestUtils.createVarselutsendingUtenUrl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -38,10 +39,9 @@ public class BrukernotifikasjonMapperTest {
 
 	@Test
 	public void shouldMapBeskjed() {
-		var varselinfo = createVarselInfoTo();
 		var varselutsending = createVarselutsending(DITT_NAV);
 
-		var beskjed = brukernotifikasjonMapper.mapBeskjed(varselinfo, varselutsending);
+		var beskjed = brukernotifikasjonMapper.mapBeskjed(varselutsending);
 
 		assertEquals(VARSELTEKST_DITT_NAV, beskjed.getTekst());
 		assertEquals(VARSEL_URL, beskjed.getLink());
@@ -50,11 +50,22 @@ public class BrukernotifikasjonMapperTest {
 	}
 
 	@Test
-	public void shouldFailOnInvalidVarselUrl() {
-		var varselinfoMedUgyldigUrl = createVarselInfoToWithInvalidUrl();
-		var varselutsending = createVarselutsending(DITT_NAV);
+	public void shouldMapBeskjedUtenUrl() {
+		var varselutsending = createVarselutsendingUtenUrl(DITT_NAV);
 
-		Exception e = assertThrows(RuntimeException.class, () -> brukernotifikasjonMapper.mapBeskjed(varselinfoMedUgyldigUrl, varselutsending));
+		var beskjed = brukernotifikasjonMapper.mapBeskjed(varselutsending);
+
+		assertEquals(VARSELTEKST_DITT_NAV, beskjed.getTekst());
+		assertEquals("",beskjed.getLink());
+		assertEquals(SIKKERHETSNIVAA, beskjed.getSikkerhetsnivaa());
+		assertFalse(beskjed.getEksternVarsling());
+	}
+
+	@Test
+	public void shouldFailOnInvalidVarselUrl() {
+		var varselutsending = createVarselutsendingMedUgyldigUrl(DITT_NAV);
+
+		Exception e = assertThrows(ServicemeldingMappingException.class, () -> brukernotifikasjonMapper.mapBeskjed(varselutsending));
 		assertTrue(e.getMessage().contains("Ugyldig URL i varselbestilling"));
 	}
 }

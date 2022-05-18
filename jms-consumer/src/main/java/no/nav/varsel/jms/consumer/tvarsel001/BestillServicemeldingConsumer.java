@@ -17,6 +17,8 @@ import javax.jms.TextMessage;
 
 import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING;
 import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_SERVICEMELDING_NAME;
+import static no.nav.varsel.util.MDCGenerate.clearCallId;
+import static no.nav.varsel.util.MDCGenerate.generateCallId;
 
 /**
  * Consumer for TVARSEL001 BestillServicemelding
@@ -47,9 +49,11 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 
 	@Override
 	protected void handleMessage(ObjectMessageWrapper<Varsel> varsel) {
+		generateCallId();
 		BestillVarselTo to = bestillServicemeldingMapper.map(varsel);
-		log.info("bestillServicemelding mottatt varselBestillingId={}, varselTypeId={}", to.getVarselBestillingId(), to.getVarseltypeId());
+		log.info("bestillServicemelding mottatt med varselTypeId={}", to.getVarseltypeId());
 		to.validateTvarsel001Input();
 		servicemeldingService.bestillServicemelding(to);
+		clearCallId();
 	}
 }

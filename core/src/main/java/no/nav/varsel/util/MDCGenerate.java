@@ -1,0 +1,23 @@
+package no.nav.varsel.util;
+
+import org.slf4j.MDC;
+
+import java.util.UUID;
+
+public class MDCGenerate {
+	public static final String CALL_ID = "Nav-Call-Id";
+
+	public static void generateCallId() {
+		MDC.put(CALL_ID, UUID.randomUUID().toString());
+	}
+
+	public static void clearCallId() {
+		if (MDC.get(CALL_ID) != null) {
+			MDC.remove(CALL_ID);
+		}
+	}
+
+	public static String getCallId() {
+		return MDC.get(CALL_ID);
+	}
+}

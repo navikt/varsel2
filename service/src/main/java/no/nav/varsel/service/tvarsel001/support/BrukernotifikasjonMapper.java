@@ -7,6 +7,7 @@ import no.nav.brukernotifikasjon.schemas.input.BeskjedInput;
 import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.support.Varselutsending;
+import no.nav.varsel.service.support.exception.functional.ServicemeldingMappingException;
 import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -33,25 +34,36 @@ public class BrukernotifikasjonMapper {
 
 	public NokkelInput mapNokkel(Varselbestilling varselbestilling) {
 
-		return new NokkelInputBuilder()
-				.withEventId(varselbestilling.getVarselbestillingId())
-				.withGrupperingsId(varselbestilling.getVarselbestillingId())
-				.withFodselsnummer(varselbestilling.getFnr())
-				.withNamespace(NAMESPACE)
-				.withAppnavn(applicationName)
-				.build();
+		try {
+			return new NokkelInputBuilder()
+					.withEventId(varselbestilling.getVarselbestillingId())
+					.withGrupperingsId(varselbestilling.getVarselbestillingId())
+					.withFodselsnummer(varselbestilling.getFnr())
+					.withNamespace(NAMESPACE)
+					.withAppnavn(applicationName)
+					.build();
+		} catch (Exception e) {
+			throw new ServicemeldingMappingException(e.getMessage(), e.getCause());
+		}
 	}
 
-	public BeskjedInput mapBeskjed(VarselInfoTo varselInfoTo,
-								   Varselutsending varselutsending) {
+	public BeskjedInput mapBeskjed(Varselutsending varselutsending) {
 
-		return new BeskjedInputBuilder()
-				.withTidspunkt(LocalDateTime.now(UTC))
-				.withTekst(varselutsending.getVarselTekst())
-				.withLink(mapLink(varselInfoTo.getVarselUrl()))
-				.withSikkerhetsnivaa(SIKKERHETSNIVAA)
-				.withEksternVarsling(false)
-				.build();
+		try {
+			var builder = new BeskjedInputBuilder()
+					.withTidspunkt(LocalDateTime.now(UTC))
+					.withTekst(varselutsending.getVarselTekst())
+					.withSikkerhetsnivaa(SIKKERHETSNIVAA)
+					.withEksternVarsling(false);
+
+			if(varselutsending.getVarselUrl() != null) {
+				return builder.withLink(mapLink(varselutsending.getVarselUrl())).build();
+			}
+
+			return builder.build();
+		} catch(Exception e) {
+			throw new ServicemeldingMappingException(e.getMessage(), e.getCause());
+		}
 	}
 
 	private URL mapLink(String varselUrl) {
