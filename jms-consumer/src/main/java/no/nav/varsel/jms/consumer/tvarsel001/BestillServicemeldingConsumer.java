@@ -51,7 +51,7 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 	protected void handleMessage(ObjectMessageWrapper<Varsel> varsel) {
 		generateCallId();
 		BestillVarselTo to = bestillServicemeldingMapper.map(varsel);
-		log.info("bestillServicemelding mottatt varselBestillingId={}, varselTypeId={}", to.getVarselBestillingId(), to.getVarseltypeId());
+		log.info("bestillServicemelding mottatt med varselTypeId={}", to.getVarseltypeId());
 		to.validateTvarsel001Input();
 		servicemeldingService.bestillServicemelding(to);
 		clearCallId();

@@ -38,8 +38,6 @@ public class KafkaEventProducer {
 				event
 		);
 
-		log.info("ProducerRecord Key={} Value={}", producerRecord.key(), producerRecord.value());
-
 		try {
 			SendResult<Object, Object> sendResult = routingKafkaTemplate.send(producerRecord).get();
 			log.info("Hendelse skrevet til topic. Timestamp={}, partition={}, topic={}",

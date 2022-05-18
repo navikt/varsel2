@@ -45,8 +45,7 @@ public class BestillServicemeldingMedKontaktInfoConsumer extends AbstractJmsCons
 	protected void handleMessage(ObjectMessageWrapper<ServicemeldingMedKontaktinformasjon> objectMessageWrapper) {
 		generateCallId();
 		BestillVarselTo to = mapper.map(objectMessageWrapper.getObject());
-		log.info("bestillServiceMeldingMedKontaktInfo mottatt varselBestillingId={}, varselTypeId={}",
-				to.getVarselBestillingId(), to.getVarseltypeId());
+		log.info("bestillServiceMeldingMedKontaktInfo mottatt med varselTypeId={}", to.getVarseltypeId());
 		to.validateTvarsel006Input();
 
 		servicemeldingService.bestillServicemelding(to);
