@@ -7,14 +7,13 @@ import no.nav.doknotifikasjon.schemas.DoknotifikasjonStatus;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.VarselbestillingRepo;
-import no.nav.varsel.service.support.exception.functional.InvalidVarselStatusException;
 import no.nav.varsel.service.support.exception.functional.StatusmeldingMappingException;
+import no.nav.varsel.service.support.exception.functional.StatusmeldingValidationException;
 import no.nav.varsel.service.support.exception.functional.VarselbestillingNotExistException;
 import no.nav.varsel.util.MDCGenerate;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,7 +33,6 @@ public class NotifikasjonStatusConsumer {
 	public NotifikasjonStatusConsumer(ObjectMapper objectMapper, VarselbestillingRepo varselbestillingRepo) {
 		this.objectMapper = objectMapper;
 		this.varselbestillingRepo = varselbestillingRepo;
-		log.info("no.nav.varsel.kvarsel001.NotifikasjonStatusConsumer created!");
 	}
 
 	@KafkaListener(
@@ -48,7 +46,6 @@ public class NotifikasjonStatusConsumer {
 
 		try {
 			DoknotifikasjonStatus doknotifikasjonStatus = objectMapper.readValue(record.value().toString(), DoknotifikasjonStatus.class);
-			if (meldingSkalIkkeProsesseres(doknotifikasjonStatus)) return;
 
 			log.info("Mottok statusmelding med bestillingsId={}, bestillerId={}, status={}, melding={}, distribusjonId={}",
 					doknotifikasjonStatus.getBestillingsId(),
@@ -57,7 +54,10 @@ public class NotifikasjonStatusConsumer {
 					doknotifikasjonStatus.getMelding(),
 					doknotifikasjonStatus.getDistribusjonId());
 
-			Varselbestilling varselbestilling = findAndValidateVarselbestilling(doknotifikasjonStatus);
+			if (!validerDistribusjonId(doknotifikasjonStatus)) return;
+			validerStatusmelding(doknotifikasjonStatus);
+
+			Varselbestilling varselbestilling = finnVarselbestilling(doknotifikasjonStatus);
 			oppdaterStatusForVarsler(doknotifikasjonStatus, varselbestilling);
 			varselbestillingRepo.saveAndFlush(varselbestilling);
 
@@ -65,6 +65,8 @@ public class NotifikasjonStatusConsumer {
 		} catch (JsonProcessingException e) {
 			log.error("Mapping av statusmelding (kvarsel001) feilet med melding={}", e.getMessage());
 			throw new StatusmeldingMappingException(e.getMessage(), e.getCause());
+		} catch (StatusmeldingValidationException e) {
+			throw e;
 		} catch (Exception e) {
 			log.error("Ukjent teknisk feil under prosessering av statusmelding (kvarsel001). Konsumerer hendelse på nytt.", e);
 			throw e;
@@ -73,48 +75,42 @@ public class NotifikasjonStatusConsumer {
 		}
 	}
 
-	private boolean meldingSkalIkkeProsesseres(DoknotifikasjonStatus doknotifikasjonStatus) {
-		if (!doknotifikasjonStatus.getBestillerId().equals("varsel")) {
-			log.warn("Avslutter behandling av statusmelding med feil bestillerId={} og bestillingsId={}.",
-					doknotifikasjonStatus.getBestillerId(),
-					doknotifikasjonStatus.getBestillingsId()
-			);
-			return true;
-		}
-
+	private boolean validerDistribusjonId(DoknotifikasjonStatus doknotifikasjonStatus) {
 		if (doknotifikasjonStatus.getDistribusjonId() != null) {
-			log.warn("Avslutter behandling av statusmelding med distribusjonId={}. bestillingsId={}, bestillerId={}, status={}, melding={}",
-					doknotifikasjonStatus.getDistribusjonId(),
+			log.info("Statusmelding med bestillingsId={} har ugyldig distribusjonId={}. Avslutter behandling.",
 					doknotifikasjonStatus.getBestillingsId(),
-					doknotifikasjonStatus.getBestillerId(),
-					doknotifikasjonStatus.getStatus(),
-					doknotifikasjonStatus.getMelding()
+					doknotifikasjonStatus.getDistribusjonId()
 			);
-			return true;
+			return false;
+		}
+		return true;
+	}
+
+	private void validerStatusmelding(DoknotifikasjonStatus doknotifikasjonStatus) {
+		if (!doknotifikasjonStatus.getBestillerId().equals("varsel")) {
+			throw new StatusmeldingValidationException(String.format("Statusmelding med bestillingsId=%s har ugyldig bestillerId=%s. Avslutter behandling.",
+					doknotifikasjonStatus.getBestillingsId(),
+					doknotifikasjonStatus.getBestillerId()
+			));
 		}
 
 		if (doknotifikasjonStatus.getBestillingsId() == null) {
-			log.error("Avslutter behandling av statusmelding med manglende bestillingsId. bestillingsId={}, bestillerId={}, status={}, melding={}, distribusjonId={}",
-					doknotifikasjonStatus.getBestillingsId(),
-					doknotifikasjonStatus.getBestillerId(),
-					doknotifikasjonStatus.getStatus(),
-					doknotifikasjonStatus.getMelding(),
-					doknotifikasjonStatus.getDistribusjonId());
-			return true;
+			throw new StatusmeldingValidationException("Statusmelding har bestillingsId=null. Avslutter behandling.");
 		}
 
-		return false;
+		if (!statusErFeiletEllerFerdigstilt(doknotifikasjonStatus.getStatus())) {
+			throw new StatusmeldingValidationException(String.format("Statusmelding med bestillingsId=%s har status=%s, som er ulik 'feilet' eller 'ferdigstilt'",
+					doknotifikasjonStatus.getBestillingsId(),
+					doknotifikasjonStatus.getStatus()
+			));
+		}
 	}
 
-	private Varselbestilling findAndValidateVarselbestilling(DoknotifikasjonStatus doknotifikasjonStatus) {
+	private Varselbestilling finnVarselbestilling(DoknotifikasjonStatus doknotifikasjonStatus) {
 		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(doknotifikasjonStatus.getBestillingsId());
 
 		if (varselbestilling == null) {
 			throw new VarselbestillingNotExistException(doknotifikasjonStatus.getBestillingsId());
-		}
-
-		if (!statusErFeiletEllerFerdigstilt(doknotifikasjonStatus.getStatus())) {
-			throw new InvalidVarselStatusException(doknotifikasjonStatus.getBestillingsId(), doknotifikasjonStatus.getStatus());
 		}
 
 		return varselbestilling;

@@ -10,7 +10,7 @@
 		<version>1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>varsel-kvarsel001</artifactId>
+	<artifactId>kvarsel001</artifactId>
 
 	<dependencies>
 		<dependency>
@@ -38,6 +38,11 @@
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.awaitility</groupId>
+			<artifactId>awaitility</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

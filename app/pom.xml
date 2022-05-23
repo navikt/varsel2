@@ -103,7 +103,7 @@
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>varsel-kvarsel001</artifactId>
+			<artifactId>kvarsel001</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
