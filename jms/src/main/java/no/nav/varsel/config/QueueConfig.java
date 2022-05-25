@@ -22,11 +22,6 @@ public class QueueConfig {
 	}
 
 	@Bean
-	public Queue varselKvitteringQueue(@Value("${varselkvittering.queuename}") String varselKvitteringQueueName) throws JMSException {
-		return new MQQueue(varselKvitteringQueueName);
-	}
-
-	@Bean
 	public Queue varselutsendingQueue(@Value("${varselutsending.queuename}") String varselutsendingQueueName) throws JMSException {
 		return new MQQueue(varselutsendingQueueName);
 	}

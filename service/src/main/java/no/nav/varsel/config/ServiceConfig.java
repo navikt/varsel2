@@ -2,7 +2,6 @@ package no.nav.varsel.config;
 
 import no.nav.varsel.service.AktoerService;
 import no.nav.varsel.service.BrukervarselV1Service;
-import no.nav.varsel.service.MottaVarselKvitteringService;
 import no.nav.varsel.service.ServicemeldingService;
 import no.nav.varsel.service.VarselFletter;
 import no.nav.varsel.service.interfaces.BrukervarselService;
@@ -55,11 +54,6 @@ public class ServiceConfig {
 	@Bean
 	public VarselutsendingMapper varselutsendingMapper() {
 		return new VarselutsendingMapper();
-	}
-
-	@Bean
-	public MottaVarselKvitteringService mottaVarselKvitteringService() {
-		return new MottaVarselKvitteringService();
 	}
 
 	@Bean
