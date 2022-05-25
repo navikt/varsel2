@@ -28,7 +28,6 @@ import org.springframework.context.annotation.Import;
 		ProviderWsConfig.class,
 		RetryLoggingInterceptor.class,
 		CustomKafkaTemplate.class,
-//		KafkaConfig.class,
 		NotifikasjonStatusConsumer.class
 })
 public class AppConfig {
