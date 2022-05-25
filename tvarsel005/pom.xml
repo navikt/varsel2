@@ -8,7 +8,7 @@
 		<version>1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ws-provider</artifactId>
+	<artifactId>tvarsel005</artifactId>
 
 	<dependencies>
 		<dependency>

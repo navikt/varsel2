@@ -18,7 +18,7 @@
 		<module>ws-consumer</module>
 		<module>service</module>
 		<module>app</module>
-		<module>ws-provider</module>
+		<module>tvarsel005</module>
 		<module>core</module>
 		<module>tvarsel001</module>
 		<module>tvarsel006</module>
@@ -113,7 +113,7 @@
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>ws-provider</artifactId>
+				<artifactId>tvarsel005</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
