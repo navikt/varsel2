@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class BestillVarselToTvarsel006Test {
 
 	private static final String ORG_NR = "orgnr";
-	private static final String VARSELTYPE_ID = "varsel";
+	private static final String VARSELTYPE_ID = "no/nav/varsel";
 	private static final String EPOST = "test@test.no";
 
 	@Test

@@ -1,5 +1,6 @@
 package no.nav.varsel.config;
 
+import no.nav.varsel.repo.config.RepoConfig;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

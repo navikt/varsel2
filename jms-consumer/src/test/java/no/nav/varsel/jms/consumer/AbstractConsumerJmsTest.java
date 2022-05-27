@@ -150,28 +150,28 @@ public abstract class AbstractConsumerJmsTest {
 
 
 	public void stubVarselInfoV1() {
-		stubFor(get("/varsel/rest/varselInfoV1/varseltypeId")
+		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varseltypeId")
 				.willReturn(aResponse().withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
 						.withBodyFile("varselInfoV1/varselInfoV1-happy.json")));
 	}
 
 	public void stubVarselInfoV1VarselFeil() {
-		stubFor(get("/varsel/rest/varselInfoV1/varsel_test_feil")
+		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_test_feil")
 				.willReturn(aResponse().withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
 						.withBodyFile("varselInfoV1/varsel-test-feil.json")));
 	}
 
 	public void stubVarselInfoV1VarselURL() {
-		stubFor(get("/varsel/rest/varselInfoV1/varsel_varselUrl")
+		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_varselUrl")
 				.willReturn(aResponse().withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
 						.withBodyFile("varselInfoV1/varsel-varsel-url.json")));
 	}
 
 	public void stubVarselInfoV1VarselMissing() {
-		stubFor(get("/varsel/rest/varselInfoV1/varsel_missing")
+		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_missing")
 				.willReturn(aResponse().withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
 						.withBodyFile("varselInfoV1/varsel-missing.json")));

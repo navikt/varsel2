@@ -9,7 +9,6 @@
 	<version>1-SNAPSHOT</version>
 
 	<modules>
-		<module>repo</module>
 		<module>jms-consumer</module>
 		<module>jms</module>
 		<module>ws</module>
@@ -81,27 +80,12 @@
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>config</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
 				<artifactId>service</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
 				<artifactId>core</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
-				<artifactId>varsel-service</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
-				<artifactId>domain</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -131,11 +115,6 @@
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>repo</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
 				<artifactId>tvarsel001</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -149,7 +128,6 @@
 				<artifactId>kvarsel001</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
 				<artifactId>web</artifactId>

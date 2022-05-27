@@ -1,5 +1,6 @@
 package no.nav.varsel.repo.support;
 
+import no.nav.varsel.repo.support.VarselbestillingRepoImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

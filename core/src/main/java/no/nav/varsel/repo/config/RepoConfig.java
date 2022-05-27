@@ -1,4 +1,4 @@
-package no.nav.varsel.config;
+package no.nav.varsel.repo.config;
 
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.VarselRepo;

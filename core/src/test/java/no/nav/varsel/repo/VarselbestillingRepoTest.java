@@ -1,12 +1,11 @@
 package no.nav.varsel.repo;
 
-import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
-import static no.nav.varsel.repo.TestdataUtil.createVarselbestilling;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 
 import no.nav.varsel.domain.object.Varselbestilling;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -20,50 +19,50 @@ public class VarselbestillingRepoTest extends AbstractRepoTest {
 
 	@Test
 	public void shouldSave() throws Exception {
-		varselbestillingRepo.save(createVarselbestilling());
+		varselbestillingRepo.save(TestdataUtil.createVarselbestilling());
 
-		assertThat(varselbestillingRepo.findAll(), hasSize(1));
+		MatcherAssert.assertThat(varselbestillingRepo.findAll(), hasSize(1));
 	}
 
 	@Test
 	public void shouldFindyByVarselbestillingId() throws Exception {
-		varselbestillingRepo.saveAndFlush(createVarselbestilling());
+		varselbestillingRepo.saveAndFlush(TestdataUtil.createVarselbestilling());
 
-		assertThat(varselbestillingRepo.findByVarselbestillingId(VARSELBESTILLING_ID), notNullValue());
+		MatcherAssert.assertThat(varselbestillingRepo.findByVarselbestillingId(TestdataUtil.VARSELBESTILLING_ID), notNullValue());
 	}
 
 	@Test
 	public void shouldFindyByVarselbestillingIdWhenNoVarsel() throws Exception {
-		Varselbestilling varselbestilling = createVarselbestilling();
+		Varselbestilling varselbestilling = TestdataUtil.createVarselbestilling();
 		varselbestilling.getVarsels().clear();
 		varselbestillingRepo.saveAndFlush(varselbestilling);
 
-		assertThat(varselbestillingRepo.findByVarselbestillingId(VARSELBESTILLING_ID), notNullValue());
+		MatcherAssert.assertThat(varselbestillingRepo.findByVarselbestillingId(TestdataUtil.VARSELBESTILLING_ID), notNullValue());
 	}
 
 	@Test
 	public void shouldFindOneEager() throws Exception {
-		varselbestillingRepo.saveAndFlush(createVarselbestilling());
+		varselbestillingRepo.saveAndFlush(TestdataUtil.createVarselbestilling());
 
-		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
+		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(TestdataUtil.VARSELBESTILLING_ID);
 		assertThat(varselbestilling, notNullValue());
 		assertThat(varselbestilling.getVarsels(), notNullValue());
 	}
 
 	@Test
 	public void shouldFindOneEagerWhenNoVarsel() throws Exception {
-		Varselbestilling varselbestilling = createVarselbestilling();
+		Varselbestilling varselbestilling = TestdataUtil.createVarselbestilling();
 		varselbestilling.getVarsels().clear();
 		varselbestillingRepo.saveAndFlush(varselbestilling);
 
-		varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(VARSELBESTILLING_ID);
+		varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(TestdataUtil.VARSELBESTILLING_ID);
 		assertThat(varselbestilling, notNullValue());
 		assertThat(varselbestilling.getVarsels(), notNullValue());
 	}
 
 	@Test
 	public void shouldFindAllEager() throws Exception {
-		varselbestillingRepo.saveAndFlush(createVarselbestilling());
+		varselbestillingRepo.saveAndFlush(TestdataUtil.createVarselbestilling());
 
 		List<Varselbestilling> allEager = varselbestillingRepo.findAllEager();
 		assertThat(allEager, hasSize(1));
@@ -74,7 +73,7 @@ public class VarselbestillingRepoTest extends AbstractRepoTest {
 
 	@Test
 	public void shouldFindAllEagerWhenNoVarsel() throws Exception {
-		Varselbestilling varselbestilling = createVarselbestilling();
+		Varselbestilling varselbestilling = TestdataUtil.createVarselbestilling();
 		varselbestilling.getVarsels().clear();
 		varselbestillingRepo.saveAndFlush(varselbestilling);
 

@@ -4,8 +4,8 @@ import no.nav.varsel.domain.builder.VarselbestillingBuilder;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.repo.AbstractRepoTest;
 import no.nav.varsel.repo.TestdataUtil;
+import no.nav.varsel.repo.AbstractRepoTest;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +18,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
-import static no.nav.varsel.repo.TestdataUtil.FNR;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
@@ -82,7 +80,7 @@ public class FindFerdigbehandletVarselbestillingerTest extends AbstractRepoTest 
 	@Test
 	public void findFerdigbehandletVarselBestillingNaarDatoFomOgDatoTomErSatt() {
 		List<Varselbestilling> varselbestillinger =
-				varselbestillingRepo.findFerdigbehandletVarselbestillinger(FNR, datoFom, datoTom);
+				varselbestillingRepo.findFerdigbehandletVarselbestillinger(TestdataUtil.FNR, datoFom, datoTom);
 
 		assertVarselbestillingerIs(varselbestillinger,
 				"ferdigbehandletVarselbestilling", "varselbestillingMedVarslerDerMinstEttErFerdigbehandlet");
@@ -91,7 +89,7 @@ public class FindFerdigbehandletVarselbestillingerTest extends AbstractRepoTest 
 	@Test
 	public void findFerdigbehandletVarselBestillingNaarDatoFomOgDatoTomErSattForAktoerId() {
 		List<Varselbestilling> varselbestillinger =
-				varselbestillingRepo.findFerdigbehandletVarselbestillinger(AKTOR_ID, datoFom, datoTom);
+				varselbestillingRepo.findFerdigbehandletVarselbestillinger(TestdataUtil.AKTOR_ID, datoFom, datoTom);
 
 		assertVarselbestillingerIs(varselbestillinger,
 				"ferdigbehandletVarselbestilling", "varselbestillingMedVarslerDerMinstEttErFerdigbehandlet");
@@ -100,7 +98,7 @@ public class FindFerdigbehandletVarselbestillingerTest extends AbstractRepoTest 
 	@Test
 	public void findFerdigbehandletVarselBestillingNaarBareDatoFomErSatt() {
 		List<Varselbestilling> varselbestillinger =
-				varselbestillingRepo.findFerdigbehandletVarselbestillinger(FNR, datoFom, null);
+				varselbestillingRepo.findFerdigbehandletVarselbestillinger(TestdataUtil.FNR, datoFom, null);
 
 		assertVarselbestillingerIs(varselbestillinger,
 				"ferdigbehandletVarselbestilling", "ferdigbehandletVarselbestillingInFarFuture",
@@ -110,7 +108,7 @@ public class FindFerdigbehandletVarselbestillingerTest extends AbstractRepoTest 
 	@Test
 	public void findFerdigbehandletVarselBestillingNaarBareDatoTomErSatt() {
 		List<Varselbestilling> varselbestillinger =
-				varselbestillingRepo.findFerdigbehandletVarselbestillinger(FNR, null, datoTom);
+				varselbestillingRepo.findFerdigbehandletVarselbestillinger(TestdataUtil.FNR, null, datoTom);
 
 		assertVarselbestillingerIs(varselbestillinger,
 				"ferdigbehandletVarselbestilling", "ferdigbehandletVarselbestillingInFarPast",
@@ -120,7 +118,7 @@ public class FindFerdigbehandletVarselbestillingerTest extends AbstractRepoTest 
 	@Test
 	public void findFerdigbehandletVarselBestillingWhenNoDateParameters() {
 		List<Varselbestilling> varselbestillinger =
-				varselbestillingRepo.findFerdigbehandletVarselbestillinger(FNR, null, null);
+				varselbestillingRepo.findFerdigbehandletVarselbestillinger(TestdataUtil.FNR, null, null);
 
 		assertVarselbestillingerIs(varselbestillinger,
 				"ferdigbehandletVarselbestilling", "ferdigbehandletVarselbestillingInFarPast",
