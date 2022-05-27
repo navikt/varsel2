@@ -1,7 +1,5 @@
 package no.nav.varsel.service.support.exception.functional;
 
-import no.nav.varsel.domain.object.Varsel;
-
 /**
  * Exception thrown when a Varsel has an invalid status
  *

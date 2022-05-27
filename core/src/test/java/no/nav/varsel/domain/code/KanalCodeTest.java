@@ -1,5 +1,6 @@
 package no.nav.varsel.domain.code;
 
+import no.nav.varsel.domain.code.KanalCode;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

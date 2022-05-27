@@ -8,7 +8,6 @@ import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.support.Varselutsending;
 import no.nav.varsel.service.support.exception.functional.ServicemeldingMappingException;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;

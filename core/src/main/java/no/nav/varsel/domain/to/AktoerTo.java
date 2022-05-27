@@ -2,8 +2,6 @@ package no.nav.varsel.domain.to;
 
 import java.util.Objects;
 
-import static no.nav.varsel.domain.to.MottakerType.*;
-
 
 public class AktoerTo {
 
@@ -13,11 +11,11 @@ public class AktoerTo {
 	public AktoerTo() {}
 
 	public static AktoerTo newAktoerId(String aktoerId) {
-		return new AktoerTo(AKTOER, aktoerId);
+		return new AktoerTo(MottakerType.AKTOER, aktoerId);
 	}
 
 	public static AktoerTo newPersonIdent(String ident) {
-		return new AktoerTo(PERSON, ident);
+		return new AktoerTo(MottakerType.PERSON, ident);
 	}
 
 	private AktoerTo(MottakerType mottakerType, String ident) {

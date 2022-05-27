@@ -1,7 +1,6 @@
 package no.nav.varsel.service.tvarsel001.support;
 
 import no.nav.doknotifikasjon.schemas.PrefererteKanal;
-import no.nav.varsel.service.support.ServicemeldingTestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

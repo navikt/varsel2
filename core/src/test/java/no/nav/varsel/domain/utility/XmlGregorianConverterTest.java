@@ -7,6 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.nullValue;
 
 
+import no.nav.varsel.domain.utility.XmlGregorianConverter;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 

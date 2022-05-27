@@ -16,6 +16,10 @@
 			<artifactId>domain</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>core</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>io.dropwizard.metrics</groupId>
 			<artifactId>metrics-core</artifactId>
 		</dependency>

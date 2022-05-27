@@ -1,8 +1,6 @@
 package no.nav.varsel.jms.consumer.tvarsel001;
 
-import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.melding.virksomhet.varsel.v1.varsel.ObjectFactory;
-import no.nav.melding.virksomhet.varsel.v1.varsel.PersonIdent;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
@@ -11,10 +9,8 @@ import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.JmsConsumer;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
 import no.nav.varsel.jms.to.xml.JmsReply;
-import no.nav.varsel.tvarsel001.NotifikasjonPublisher;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.jms.Message;
@@ -29,7 +25,6 @@ import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldin
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VAL;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VARSELTYPE_ID;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.PERSON_IDENT;
-import static no.nav.varsel.repo.TestdataUtil.PERSONIDENT_WHITESPACE_TEST;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
 import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;

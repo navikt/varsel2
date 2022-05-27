@@ -17,6 +17,10 @@
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
+			<artifactId>core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
 			<artifactId>ws</artifactId>
 		</dependency>
 		<dependency>

@@ -10,7 +10,6 @@
 
 	<modules>
 		<module>config</module>
-		<module>domain</module>
 		<module>repo</module>
 		<module>jms-consumer</module>
 		<module>jms</module>
