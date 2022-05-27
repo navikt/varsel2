@@ -9,7 +9,6 @@
 	<version>1-SNAPSHOT</version>
 
 	<modules>
-		<module>config</module>
 		<module>repo</module>
 		<module>jms-consumer</module>
 		<module>jms</module>
