@@ -1,5 +1,6 @@
 package no.nav.varsel.config;
 
+import no.nav.varsel.consumer.config.WsConsumerConfig;
 import no.nav.varsel.repo.config.RepoConfig;
 import no.nav.varsel.service.AktoerService;
 import no.nav.varsel.service.BrukervarselV1Service;

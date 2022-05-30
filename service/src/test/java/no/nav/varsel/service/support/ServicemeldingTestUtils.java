@@ -7,7 +7,7 @@ import no.nav.doknotifikasjon.schemas.PrefererteKanal;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.to.BestillVarselTo;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
+import no.nav.varsel.consumer.dokkat.to.VarselMalTo;
 
 import java.util.List;
 import java.util.Set;

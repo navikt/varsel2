@@ -20,11 +20,11 @@ import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedKontaktinfoMapper
 import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
 import no.nav.varsel.tvarsel001.NotifikasjonPublisher;
 import no.nav.varsel.tvarsel006.NotifikasjonMedKontaktinfoPublisher;
-import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
-import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
+import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
+import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
+import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
+import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.consumer.support.VarselKanalDecider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -11,8 +11,6 @@
 	<modules>
 		<module>jms-consumer</module>
 		<module>jms</module>
-		<module>ws</module>
-		<module>ws-consumer</module>
 		<module>service</module>
 		<module>app</module>
 		<module>tvarsel005</module>

@@ -26,9 +26,9 @@ import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldin
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VARSELTYPE_ID;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.PERSON_IDENT;
 import static no.nav.varsel.test.TestUtils.aboutNow;
-import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
+import static no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
+import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
+import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

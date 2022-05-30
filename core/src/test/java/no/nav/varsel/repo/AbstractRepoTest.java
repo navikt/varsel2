@@ -1,6 +1,6 @@
 package no.nav.varsel.repo;
 
-import no.nav.varsel.config.RepoTestConfig;
+import no.nav.varsel.repo.config.RepoTestConfig;
 import no.nav.varsel.domain.Constants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

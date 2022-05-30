@@ -15,9 +15,9 @@ import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.VarselFletter;
 import no.nav.varsel.service.support.exception.functional.VarselTekstMissingException;
 import no.nav.varsel.service.to.BestillVarselTo;
-import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
+import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
+import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.consumer.dokkat.to.VarselMalTo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

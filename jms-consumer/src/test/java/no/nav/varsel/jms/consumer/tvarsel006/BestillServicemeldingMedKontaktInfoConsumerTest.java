@@ -34,8 +34,8 @@ import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldin
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.VARSELTYPE_ID;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.createServicemeldingMedKontaktinformasjon;
 import static no.nav.varsel.test.TestUtils.aboutNow;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
+import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
+import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
