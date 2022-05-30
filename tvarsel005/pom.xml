@@ -13,11 +13,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>ws</artifactId>
+			<artifactId>service</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>service</artifactId>
+			<artifactId>core</artifactId>
 		</dependency>
 
 		<!-- modig -->
@@ -63,13 +63,6 @@
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>jms</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.varsel</groupId>
-			<artifactId>ws-consumer</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>

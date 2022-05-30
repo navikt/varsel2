@@ -43,13 +43,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>no.nav.varsel</groupId>
-			<artifactId>ws-consumer</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.awaitility</groupId>
 			<artifactId>awaitility</artifactId>
 			<scope>test</scope>
