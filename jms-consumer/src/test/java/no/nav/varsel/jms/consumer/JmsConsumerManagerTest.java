@@ -7,7 +7,6 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import static java.lang.Thread.sleep;
 import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING;
-import static no.nav.varsel.jms.consumer.JmsConsumer.VARSEL_KVITTERING;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,14 +33,10 @@ public class JmsConsumerManagerTest extends AbstractConsumerJmsTest {
 	@Test
 	public void shouldStopAndStartConsumer() {
 		jmsConsumerManager.stop(BESTILL_SERVICEMELDING);
-
 		assertFalse(jmsConsumerManager.getListener(BESTILL_SERVICEMELDING).isRunning());
-//		assertTrue(jmsConsumerManager.getListener(VARSEL_KVITTERING).isRunning());
 
 		jmsConsumerManager.start(BESTILL_SERVICEMELDING);
-
 		assertTrue(jmsConsumerManager.getListener(BESTILL_SERVICEMELDING).isRunning());
-//		assertTrue(jmsConsumerManager.getListener(VARSEL_KVITTERING).isRunning());
 	}
 
 	@Test
@@ -82,6 +77,5 @@ public class JmsConsumerManagerTest extends AbstractConsumerJmsTest {
 		// Should start again
 		sleep(RESTART_TIME_SECONDS * 1000);
 		assertTrue(jmsConsumerManager.getListener(BESTILL_SERVICEMELDING).isRunning());
-
 	}
 }
