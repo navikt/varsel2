@@ -1,5 +1,7 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
+import no.nav.modig.core.context.SubjectHandlerUtils;
+import no.nav.modig.core.context.ThreadLocalSubjectHandler;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.HentVarselForBrukerUgyldigInput;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.AktoerId;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
@@ -34,6 +36,8 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
+
+import static no.nav.varsel.domain.Constants.USER_ID;
 
 
 /**
@@ -95,6 +99,11 @@ public class BrukervarselV1ProviderTest {
 
 	@BeforeEach
 	public void onSetup() {
+		System.setProperty("no.nav.modig.core.context.subjectHandlerImplementationClass", ThreadLocalSubjectHandler.class.getName());
+		System.setProperty("no.nav.modig.security.systemuser.username", "varsel");
+		System.setProperty("no.nav.modig.security.systemuser.password", "passord");
+		SubjectHandlerUtils.setInternBruker(USER_ID);
+
 		varselbestillingMapper.setVarselMapper(varselMapper);
 		hentVarselForBrukerResponseMapper.setVarselbestillingMapper(varselbestillingMapper);
 		bruker = new AktoerId();

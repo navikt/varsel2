@@ -7,12 +7,16 @@ import static no.nav.varsel.xacml.attributeid.EnvironmentAttributeIds.ATTR_ENVIR
 import static no.nav.varsel.xacml.attributeid.EnvironmentAttributeIds.INTERNAL;
 import static no.nav.varsel.xacml.attributeid.ResourceAttributeIds.VARSELBESTILLING;
 
+import lombok.extern.slf4j.Slf4j;
+import no.nav.modig.core.context.SubjectHandler;
+import no.nav.modig.core.domain.IdentType;
 import no.nav.modig.security.tilgangskontroll.policy.pep.AccessControl;
 import no.nav.modig.security.tilgangskontroll.policy.pep.AccessControlAttribute;
 import no.nav.modig.security.tilgangskontroll.policy.pep.AttributeType;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.HentVarselForBrukerUgyldigInput;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
+import no.nav.varsel.provider.ws.brukervarsel.AuthorizationException;
 import no.nav.varsel.service.interfaces.BrukervarselService;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 
@@ -23,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author Lars Aune
  */
+@Slf4j
 public class BrukervarselV1Provider {
 
 	@Autowired
@@ -38,16 +43,13 @@ public class BrukervarselV1Provider {
 		//ping
 	}
 
-	@AccessControl(attributes = {
-			@AccessControlAttribute(name = ATTR_ACTION_ID, value = READ_OPERATION, type = AttributeType.ACTION),
-			@AccessControlAttribute(name = ATTR_RESOURCE_ID, value = VARSELBESTILLING, type = AttributeType.RESOURCE),
-			@AccessControlAttribute(name = ATTR_ENVIRONMENT_RECIEVER, value = INTERNAL, type = AttributeType.SUBJECT)
-			// ATTR_ENVIRONMENT_RECIEVER burde vært laget med type=environment, men en bug i
-			// modig-security gjør at "environment"-variabler aldri blir sendt
-			// inn som en del av XACML-requesten. Se EnvironmentAttributeIds-klassen for mer info.
-	})
 	public HentVarselForBrukerResponse hentVarselForBruker(HentVarselForBrukerRequest hentVarselForBrukerRequest)
 			throws HentVarselForBrukerUgyldigInput {
+
+		if (SubjectHandler.getSubjectHandler().getIdentType() != IdentType.InternBruker) {
+			throw new AuthorizationException("Access denied");
+		}
+
 		HentVarselForBrukerResponseTo hentVarselForBrukerResponseTo =
 				brukervarselV1Service.hentVarselForBruker(hentVarselForBrukerRequestMapper.map(hentVarselForBrukerRequest));
 		return hentVarselForbrukerResponseMapper.map(hentVarselForBrukerResponseTo);

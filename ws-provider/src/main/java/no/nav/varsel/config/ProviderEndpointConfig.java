@@ -2,6 +2,7 @@ package no.nav.varsel.config;
 
 import no.nav.modig.security.ws.SAMLInInterceptor;
 import no.nav.varsel.provider.ws.brukervarsel.BrukervarselV1Endpoint;
+import no.nav.varsel.provider.ws.interceptor.ValidateSamlInInterceptor;
 import org.apache.cxf.Bus;
 import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.interceptor.LoggingOutInterceptor;
@@ -32,6 +33,7 @@ public class ProviderEndpointConfig {
 		EndpointImpl endpoint = new EndpointImpl(bus, serviceImpl);
 		Map<String, Object> map = new HashMap<>();
 		map.put(WSHandlerConstants.SIG_SUBJECT_CERT_CONSTRAINTS, ".*");
+		endpoint.getInInterceptors().add(new ValidateSamlInInterceptor());
 		endpoint.getInInterceptors().add(new SAMLInInterceptor(map));
 		endpoint.getInInterceptors().add(new LoggingInInterceptor());
 		endpoint.getOutInterceptors().add(new LoggingOutInterceptor());

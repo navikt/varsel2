@@ -28,7 +28,6 @@ import javax.transaction.Transactional;
 		serviceName = "Brukervarsel_v1",
 		portName = "Brukervarsel_v1Port"
 )
-@HandlerChain(file = "/jboss-provider-handlers.xml")
 @Transactional
 public class BrukervarselV1Endpoint implements BrukervarselV1 {
 
