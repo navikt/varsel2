@@ -75,6 +75,12 @@
 				<groupId>com.github.navikt</groupId>
 				<artifactId>brukernotifikasjon-schemas</artifactId>
 				<version>${brukernotifikasjon.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.apache.avro</groupId>
+						<artifactId>avro</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
