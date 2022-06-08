@@ -3,8 +3,8 @@ package no.nav.varsel.service.tvarsel001.support;
 import static java.util.Collections.singletonMap;
 
 import static no.nav.varsel.test.TestUtils.aboutNow;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_NAVN;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_URL;
+import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.VARSEL_NAVN;
+import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.VARSEL_URL;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -24,9 +24,9 @@ import no.nav.varsel.service.VarselFletter;
 import no.nav.varsel.service.support.VarselBestillingDomainMapper;
 import no.nav.varsel.service.support.exception.functional.VarselTekstMissingException;
 import no.nav.varsel.service.to.BestillVarselTo;
-import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
+import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
+import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.consumer.dokkat.to.VarselMalTo;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

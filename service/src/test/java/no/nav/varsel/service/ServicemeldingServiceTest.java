@@ -1,6 +1,5 @@
 package no.nav.varsel.service;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import no.nav.brukernotifikasjon.schemas.input.BeskjedInput;
 import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
@@ -10,9 +9,7 @@ import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.TestdataUtil;
 import no.nav.varsel.repo.VarselbestillingRepo;
-import no.nav.varsel.service.support.ServicemeldingTestUtils;
 import no.nav.varsel.service.support.VarselBestillingDomainMapper;
-import no.nav.varsel.service.support.Varselutsending;
 import no.nav.varsel.service.support.VarselutsendingMapper;
 import no.nav.varsel.service.support.exception.functional.VarselInaktivVarselmalException;
 import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloeptException;
@@ -23,14 +20,13 @@ import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedKontaktinfoMapper
 import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
 import no.nav.varsel.tvarsel001.NotifikasjonPublisher;
 import no.nav.varsel.tvarsel006.NotifikasjonMedKontaktinfoPublisher;
-import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
-import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
+import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
+import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
+import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
+import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.consumer.support.VarselKanalDecider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
@@ -40,7 +36,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.singletonList;

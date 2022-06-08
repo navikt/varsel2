@@ -19,10 +19,6 @@
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>repo</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.varsel</groupId>
 			<artifactId>service</artifactId>
 		</dependency>
 

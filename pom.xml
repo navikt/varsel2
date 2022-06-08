@@ -9,16 +9,11 @@
 	<version>1-SNAPSHOT</version>
 
 	<modules>
-		<module>config</module>
-		<module>domain</module>
-		<module>repo</module>
 		<module>jms-consumer</module>
 		<module>jms</module>
-		<module>ws</module>
-		<module>ws-consumer</module>
 		<module>service</module>
 		<module>app</module>
-		<module>ws-provider</module>
+		<module>tvarsel005</module>
 		<module>core</module>
 		<module>tvarsel001</module>
 		<module>tvarsel006</module>
@@ -83,11 +78,6 @@
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>config</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
 				<artifactId>service</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -98,27 +88,7 @@
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>varsel-service</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
-				<artifactId>domain</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
-				<artifactId>ws</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
-				<artifactId>ws-provider</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
-				<artifactId>ws-consumer</artifactId>
+				<artifactId>tvarsel005</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -129,11 +99,6 @@
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
 				<artifactId>jms-consumer</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
-				<artifactId>repo</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -151,7 +116,6 @@
 				<artifactId>kvarsel001</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
 				<artifactId>web</artifactId>

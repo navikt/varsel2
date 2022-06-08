@@ -19,11 +19,11 @@ import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedKontaktinfoMapper
 import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
 import no.nav.varsel.tvarsel001.NotifikasjonPublisher;
 import no.nav.varsel.tvarsel006.NotifikasjonMedKontaktinfoPublisher;
-import no.nav.varsel.wsconsumer.dkif.HentDigitalKontaktinformasjonConsumer;
-import no.nav.varsel.wsconsumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumer;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.wsconsumer.support.VarselKanalDecider;
+import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
+import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
+import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
+import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.consumer.support.VarselKanalDecider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

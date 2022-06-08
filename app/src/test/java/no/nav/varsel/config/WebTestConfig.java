@@ -1,6 +1,8 @@
 package no.nav.varsel.config;
 
 import no.nav.varsel.Application;
+import no.nav.varsel.consumer.config.STSTestConfig;
+import no.nav.varsel.repo.config.RepoTestConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 

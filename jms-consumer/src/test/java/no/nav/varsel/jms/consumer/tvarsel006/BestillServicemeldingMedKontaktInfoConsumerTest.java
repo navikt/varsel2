@@ -1,7 +1,7 @@
 package no.nav.varsel.jms.consumer.tvarsel006;
 
+import no.nav.varsel.domain.object.Varsel;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ObjectFactory;
-import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.Person;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
 import no.nav.varsel.domain.code.KanalCode;
@@ -33,11 +33,9 @@ import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldin
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.VAL;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.VARSELTYPE_ID;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.createServicemeldingMedKontaktinformasjon;
-import static no.nav.varsel.repo.TestdataUtil.PERSONIDENT_WHITESPACE_TEST;
 import static no.nav.varsel.test.TestUtils.aboutNow;
-import static no.nav.varsel.wsconsumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
-import static no.nav.varsel.wsconsumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
+import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
+import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -117,7 +115,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 		assertVarselutsendingQueue(varselTekst, varselId);
 	}
 
-	private no.nav.varsel.domain.object.Varsel assertDb(String varselTekst) {
+	private Varsel assertDb(String varselTekst) {
 		Varselbestilling varselbestilling = varselbestillingRepo.findAllEager().get(0);
 		assertThat(UUID.fromString(varselbestilling.getVarselbestillingId()).toString(), is(varselbestilling.getVarselbestillingId()));
 		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
@@ -135,7 +133,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 
 		assertThat(varselbestilling.getVarsels(), hasSize(1));
 
-		no.nav.varsel.domain.object.Varsel varsel = varselbestilling.getVarsels().iterator().next();
+		Varsel varsel = varselbestilling.getVarsels().iterator().next();
 		assertThat(UUID.fromString(varsel.getVarselId()).toString(), is(varsel.getVarselId()));
 		assertThat(varsel.getKanal(), is(KanalCode.EPOST));
 		assertThat(varsel.getSendtTidspunkt(), aboutNow());

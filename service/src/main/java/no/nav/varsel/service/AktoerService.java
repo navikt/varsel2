@@ -2,8 +2,8 @@ package no.nav.varsel.service;
 
 import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.service.to.AktoerBestillingTo;
-import no.nav.varsel.wsconsumer.pdl.PdlIdentConsumer;
-import no.nav.varsel.wsconsumer.pdl.support.AktoerIkkeFunnetException;
+import no.nav.varsel.consumer.pdl.PdlIdentConsumer;
+import no.nav.varsel.consumer.pdl.support.AktoerIkkeFunnetException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

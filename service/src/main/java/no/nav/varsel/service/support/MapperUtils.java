@@ -5,7 +5,6 @@ import no.nav.varsel.domain.code.KanalCode;
 
 import java.util.List;
 
-import static java.util.Collections.singletonList;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
 import static no.nav.varsel.domain.code.KanalCode.SMS;
 

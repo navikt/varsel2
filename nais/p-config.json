@@ -4,8 +4,6 @@
   "APP_NAME": "varsel2",
   "APPD_NAME": "varsel2",
   "INGRESSES": [
-    "https://varsel2.nais.adeo.no",
-    "https://varsel2.prod-fss.nais.io",
     "https://varsel2.intern.nav.no",
     "https://app.adeo.no/varsel"
   ],

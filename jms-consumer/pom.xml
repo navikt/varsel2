@@ -23,14 +23,7 @@
 		<!-- test -->
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>config</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.varsel</groupId>
-			<artifactId>repo</artifactId>
+			<artifactId>core</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
@@ -45,13 +38,6 @@
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>service</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.varsel</groupId>
-			<artifactId>ws-consumer</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>

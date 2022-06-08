@@ -7,8 +7,7 @@ import no.nav.doknotifikasjon.schemas.PrefererteKanal;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.to.BestillVarselTo;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.wsconsumer.dokkat.to.VarselMalTo;
+import no.nav.varsel.consumer.dokkat.to.VarselMalTo;
 
 import java.util.List;
 import java.util.Set;
@@ -24,7 +23,7 @@ public class ServicemeldingTestUtils {
 	public static final String VARSELBESTILLINGS_ID = UUID.randomUUID().toString();
 	public static final String FNR = "12345678910";
 	public static final String NAMESPACE = "teamdokumenthandtering";
-	public static final String APPNAVN = "varsel";
+	public static final String APPNAVN = "no/nav/varsel";
 	public static final Integer SIKKERHETSNIVAA = 3;
 	public static final String VARSEL_URL = "https://www.varsel.com";
 	public static final String UGYLDIG_VARSEL_URL = "httpp://www.invalidurl.com";
