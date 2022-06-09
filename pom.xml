@@ -9,13 +9,13 @@
 	<version>1-SNAPSHOT</version>
 
 	<modules>
-		<module>jms-consumer</module>
-		<module>jms</module>
-		<module>service</module>
 		<module>app</module>
-		<module>tvarsel005</module>
 		<module>core</module>
+		<module>service</module>
+		<module>jms</module>
+		<module>jms-consumer</module>
 		<module>tvarsel001</module>
+		<module>tvarsel005</module>
 		<module>tvarsel006</module>
 		<module>kvarsel001</module>
 	</modules>
@@ -23,40 +23,40 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.7</version>
+		<version>2.6.8</version>
 	</parent>
 
 	<properties>
 		<java.version>17</java.version>
 
-		<cxf.version>3.5.1</cxf.version>
+		<cxf.version>3.5.2</cxf.version>
 		<javax.activation.version>1.2.0</javax.activation.version>
 		<jaxb-impl.version>3.0.2</jaxb-impl.version>
 		<jaxws-ri.version>2.3.2</jaxws-ri.version>
 		<guava.version>31.1-jre</guava.version>
 		<oracle.version>19.14.0.0</oracle.version>
-		<token-support.version>2.0.14</token-support.version>
+		<token-support.version>2.0.21</token-support.version>
 		<wmq.version>9.2.5.0</wmq.version>
 		<metrics-spring.version>3.1.3</metrics-spring.version>
-		<confluent.version>7.0.1</confluent.version>
-		<teamdokumenthandtering-avro-schemas.version>96ec5ebb</teamdokumenthandtering-avro-schemas.version>
+		<spotify-logging.version>2.3.3</spotify-logging.version>
+		<confluent.version>7.1.1</confluent.version>
+		<teamdokumenthandtering-avro-schemas.version>357738b9</teamdokumenthandtering-avro-schemas.version>
 		<brukernotifikasjon.version>v2.5.1</brukernotifikasjon.version>
 
 		<modig-security.version>3.0.6</modig-security.version>
 		<modig-log.version>1.1.2</modig-log.version>
 		<modig-log-filter.version>1.1.3</modig-log-filter.version>
-		<spotify-logging.version>2.3.1</spotify-logging.version>
 		<nav-varsel-v1.version>1.1.1</nav-varsel-v1.version>
 		<nav-virksomhet-varselutsending-v2.version>2.0.3</nav-virksomhet-varselutsending-v2.version>
 		<nav-digitalKontaktinformasjon-v1.version>2.0.0</nav-digitalKontaktinformasjon-v1.version>
 		<nav-virksomhet-varselMedHandling-v1.version>1.0.0</nav-virksomhet-varselMedHandling-v1.version>
 		<nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>1.0.0
 		</nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>
-		<dokkat-schemas.version>6.0.3</dokkat-schemas.version>
 		<nav-brukervarsel-v1-tjenestespesifikasjon.version>1.0.4</nav-brukervarsel-v1-tjenestespesifikasjon.version>
+		<dokkat-schemas.version>6.0.3</dokkat-schemas.version>
 
 		<!-- test -->
-		<spring-cloud-contract-wiremock-version>3.1.1</spring-cloud-contract-wiremock-version>
+		<spring-cloud-contract-wiremock-version>3.1.3</spring-cloud-contract-wiremock-version>
 	</properties>
 
 	<dependencyManagement>

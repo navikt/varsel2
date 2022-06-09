@@ -27,13 +27,13 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
+import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
-import static wiremock.org.apache.http.entity.ContentType.APPLICATION_JSON;
 
 
 @ExtendWith(SpringExtension.class)
