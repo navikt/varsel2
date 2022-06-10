@@ -39,8 +39,8 @@
 		<wmq.version>9.2.5.0</wmq.version>
 		<metrics-spring.version>3.1.3</metrics-spring.version>
 		<spotify-logging.version>2.3.3</spotify-logging.version>
-		<confluent.version>7.1.1</confluent.version>
-		<teamdokumenthandtering-avro-schemas.version>357738b9</teamdokumenthandtering-avro-schemas.version>
+		<confluent.version>7.0.1</confluent.version>
+		<teamdokumenthandtering-avro-schemas.version>96ec5ebb</teamdokumenthandtering-avro-schemas.version>
 		<brukernotifikasjon.version>v2.5.1</brukernotifikasjon.version>
 
 		<modig-security.version>3.0.6</modig-security.version>
