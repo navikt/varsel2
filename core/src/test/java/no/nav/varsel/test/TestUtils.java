@@ -24,20 +24,11 @@ import java.time.temporal.Temporal;
  */
 public class TestUtils {
 
-
 	/**
 	 * Get a log mock for a given class, use {@link MockAppender#verify(java.lang.String)} to assert logs
 	 */
 	public static MockAppender getMockedAppender(String name) {
 		Logger testLogger = (Logger) LoggerFactory.getLogger(name);
-		return getMockAppender(testLogger);
-	}
-
-	/**
-	 * Get a log mock for a given class, use {@link MockAppender#verify(java.lang.String)} to assert logs
-	 */
-	public static MockAppender getMockedAppender(Class clazz) {
-		Logger testLogger = (Logger) LoggerFactory.getLogger(clazz);
 		return getMockAppender(testLogger);
 	}
 
@@ -62,18 +53,13 @@ public class TestUtils {
 		}
 
 		private static ArgumentMatcher<ILoggingEvent> hasMessageContaining(final String token) {
-			return new ArgumentMatcher<ILoggingEvent>() {
-				@Override
-				public boolean matches(ILoggingEvent iLoggingEvent) {
-					return iLoggingEvent.getFormattedMessage().contains(token);
-				}
-			};
+			return iLoggingEvent -> iLoggingEvent.getFormattedMessage().contains(token);
 		}
 
 	}
 
 	public static Matcher<? super LocalDateTime> aboutNow() {
-		return new BaseMatcher<LocalDateTime>() {
+		return new BaseMatcher<>() {
 			@Override
 			public boolean matches(Object o) {
 				if (o instanceof LocalDateTime) {
