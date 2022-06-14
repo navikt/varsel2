@@ -34,6 +34,11 @@ public class ValidateSamlInInterceptor extends WSS4JInInterceptor {
 		setProperty(WSHandlerConstants.ACTION, WSHandlerConstants.SAML_TOKEN_SIGNED);
 	}
 
+	public ValidateSamlInInterceptor(Map<String, Object> properties) {
+		super(properties);
+		setProperty(WSHandlerConstants.ACTION, WSHandlerConstants.SAML_TOKEN_SIGNED);
+	}
+
 	@Override
 	public Crypto loadSignatureCrypto(RequestData requestData) throws WSSecurityException {
 

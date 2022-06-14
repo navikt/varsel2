@@ -1,6 +1,5 @@
 {
   "KAFKA_POOL": "nav-dev",
-  "NAMESPACE": "teamdokumenthandtering",
   "APP_NAME": "varsel2",
   "APPD_NAME": "varsel2",
   "INGRESSES": [
@@ -13,6 +12,7 @@
   "MQGATEWAY01_PORT": "1413",
   "MQGATEWAY01_NAME": "MQLS01",
   "VARSELCHANNEL_NAME": "Q2_VARSELPRODUKSJON",
+  "VARSEL_SIGSUBJECTCERTCONSTRAINTS": ".*DC=test.*DC=local,.*test.local.*,.*DC=preprod.*DC=local,.*preprod.local.*",
   "DKIF_WS_ENDPOINTURL": "https://dkif.dev.adeo.no/ws/DigitalKontaktinformasjon/v1",
   "SECURITYTOKENSERVICE_URL": "https://sts-q2.preprod.local/SecurityTokenServiceProvider/",
   "SECURITY_TOKEN_REST_SERVICE_URL": "https://security-token-service.nais.preprod.local/rest/v1/sts/token",
