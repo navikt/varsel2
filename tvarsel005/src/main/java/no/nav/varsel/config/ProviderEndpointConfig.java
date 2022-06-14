@@ -38,7 +38,7 @@ public class ProviderEndpointConfig {
 		Map<String, Object> map = new HashMap<>();
 		map.put(WSHandlerConstants.SIG_SUBJECT_CERT_CONSTRAINTS, sigSubjectCertConstraints);
 
-		endpoint.getInInterceptors().add(new ValidateSamlInInterceptor());
+		endpoint.getInInterceptors().add(new ValidateSamlInInterceptor(map));
 		endpoint.getInInterceptors().add(new SAMLInInterceptor(map));
 		endpoint.getInInterceptors().add(new LoggingInInterceptor());
 		endpoint.getOutInterceptors().add(new LoggingOutInterceptor());
