@@ -83,3 +83,6 @@ spec:
         mountPath: /var/run/secrets/nais.io/varselDS
       - kvPath: {{SERVICEUSER_VAULT_PATH}}
         mountPath: /secrets/serviceuser/srvvarsel
+  azure:
+    application:
+      enabled: true
