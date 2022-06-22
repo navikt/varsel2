@@ -26,5 +26,9 @@
   "VARSEL_JMS_CONSUMER_ERROR_CONTEXT_TIME_SECONDS": "600",
   "VARSEL_JMS_CONSUMER_ERROR_RESTART_DELAY_SECONDS": "600",
   "SERVICEUSER_VAULT_PATH": "/serviceuser/data/prod/srvvarsel",
-  "LISTENER_AUTO_STARTUP": "true"
+  "LISTENER_AUTO_STARTUP": "true",
+  "VARSEL_PROXY_HOST": "webproxy.nais",
+  "VARSEL_PROXY_PORT": "8088",
+  "AZURE_APP_TOKEN_URL": "https://login.microsoftonline.com/62366534-1ec3-4962-8869-9b5535279d0b/oauth2/v2.0/token",
+  "AZURE_APP_SCOPE": "api://prod-gcp.team-rocket.digdir-krr-proxy/.default"
 }

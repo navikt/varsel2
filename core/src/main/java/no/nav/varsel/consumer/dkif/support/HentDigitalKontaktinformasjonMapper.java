@@ -4,7 +4,7 @@ import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime
 import static no.nav.varsel.consumer.dkif.to.KontaktregisterTo.KontaktregisterToBuilder.aKontaktregisterTo;
 
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.Kontaktinformasjon;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonResponse;
+import no.nav.varsel.consumer.dkif.DigitalKontaktInfoResponse;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,21 +16,17 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class HentDigitalKontaktinformasjonMapper {
 	
-	public KontaktregisterTo map(HentDigitalKontaktinformasjonResponse response) {
-		Kontaktinformasjon dki = response.getDigitalKontaktinformasjon();
+	public KontaktregisterTo map(DigitalKontaktInfoResponse.DigitalKontaktinfo dki) {
+
 		
 		KontaktregisterTo.KontaktregisterToBuilder builder = aKontaktregisterTo()
-				.reservasjon(mapStringToBool(dki.getReservasjon()));
+				.reservasjon(dki.isReservert());
 		
-		if (dki.getEpostadresse() != null && dki.getEpostadresse().getValue() != null) {
-			builder.epostadresse(dki.getEpostadresse().getValue().trim())
-					.epostSistOppdatert(toLocalDateTime(dki.getEpostadresse().getSistOppdatert()))
-					.epostSistVerifisert(toLocalDateTime(dki.getEpostadresse().getSistVerifisert()));
+		if (dki.getEpostadresse() != null) {
+			builder.epostadresse(dki.getEpostadresse().trim());
 		}
-		if (dki.getMobiltelefonnummer() != null && dki.getMobiltelefonnummer().getValue() != null) {
-			builder.mobiltelefonnummer(dki.getMobiltelefonnummer().getValue().trim())
-					.mobiltelefonSistOppdatert(toLocalDateTime(dki.getMobiltelefonnummer().getSistOppdatert()))
-					.mobiltelefonSistVerifisert(toLocalDateTime(dki.getMobiltelefonnummer().getSistVerifisert()));
+		if (dki.getMobiltelefonnummer() != null) {
+			builder.mobiltelefonnummer(dki.getMobiltelefonnummer().trim());
 		}
 		
 		return builder.build();

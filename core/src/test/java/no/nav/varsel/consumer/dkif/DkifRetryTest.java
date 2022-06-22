@@ -8,23 +8,38 @@ import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigit
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonSikkerhetsbegrensing;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonRequest;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonResponse;
+import no.nav.varsel.azure.AzureTokenConsumer;
+import no.nav.varsel.azure.TokenConsumer;
+import no.nav.varsel.azure.TokenResponse;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -36,6 +51,7 @@ import static org.mockito.Mockito.when;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @SpringBootTest(classes = {DkifRetryTest.Config.class, HentDigitalKontaktinformasjonConsumer.class})
+@ActiveProfiles("itest")
 public class DkifRetryTest {
 
 	private static final String PERSON_ID = "id";
@@ -44,15 +60,16 @@ public class DkifRetryTest {
 	private HentDigitalKontaktinformasjonConsumer hentDigitalKontaktinformasjonConsumer;
 
 	@Autowired
-	private DigitalKontaktinformasjonV1 digitalKontaktinformasjonV1Mock;
-
-	@Autowired
 	private HentDigitalKontaktinformasjonMapper hentDigitalKontaktinformasjonMapper;
 
 	@Autowired
 	private VarselKanalDecider varselKanalDecider;
 
+	@Autowired
+	private RestTemplateBuilder restTemplateBuilder;
+
 	public static final Set<KanalCode> PREFERERT_KANAL = Sets.newHashSet(KanalCode.DITT_NAV);
+
 
 
 	@EnableRetry
@@ -65,47 +82,48 @@ public class DkifRetryTest {
 		}
 
 		@Bean
-		public DigitalKontaktinformasjonV1 digitalKontaktinformasjonV1() {
-			return mock(DigitalKontaktinformasjonV1.class);
+		public TokenConsumer tokenConsumer() {
+			return (TokenConsumer) () -> new TokenResponse();
+		}
+
+		@Bean
+		public RestTemplateBuilder restTemplateBuilder() {
+			RestTemplateBuilder rtb = mock(RestTemplateBuilder.class);
+			RestTemplate restTemplate = mock(RestTemplate.class);
+			when(rtb.setReadTimeout(any())).thenReturn(rtb);
+			when(rtb.setConnectTimeout(any())).thenReturn(rtb);
+			when(rtb.build()).thenReturn(restTemplate);
+			return rtb;
 		}
 
 		@Bean
 		public HentDigitalKontaktinformasjonMapper hentDigitalKontaktinformasjonMapper() {
 			return mock(HentDigitalKontaktinformasjonMapper.class);
 		}
-	}
-
-	@AfterEach
-	public void resetMocks() {
-		Mockito.reset(digitalKontaktinformasjonV1Mock);
-	}
-
-	@Test
-	public void shouldRetryOnException() throws HentDigitalKontaktinformasjonSikkerhetsbegrensing, HentDigitalKontaktinformasjonKontaktinformasjonIkkeFunnet, HentDigitalKontaktinformasjonPersonIkkeFunnet {
-		HentDigitalKontaktinformasjonResponse response = new HentDigitalKontaktinformasjonResponse();
-
-		when(digitalKontaktinformasjonV1Mock.hentDigitalKontaktinformasjon(any(HentDigitalKontaktinformasjonRequest.class))).thenThrow(new RuntimeException()).thenReturn(response);
-		when(hentDigitalKontaktinformasjonMapper.map(response)).thenReturn(new KontaktregisterTo());
-
-		hentDigitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(PERSON_ID);
-
-		verify(digitalKontaktinformasjonV1Mock, times(2)).hentDigitalKontaktinformasjon(any());
 
 	}
 
 	@Test
 	public void shouldRetryOnExceptionhentDigitalKontaktinformasjonAndDecideKanal() throws HentDigitalKontaktinformasjonSikkerhetsbegrensing, HentDigitalKontaktinformasjonKontaktinformasjonIkkeFunnet, HentDigitalKontaktinformasjonPersonIkkeFunnet {
-		HentDigitalKontaktinformasjonResponse response = new HentDigitalKontaktinformasjonResponse();
+		DigitalKontaktInfoResponse response = createResponse();
 		ArrayList<KanalCode> kanalCodes = Lists.newArrayList(KanalCode.DITT_NAV);
-
-		when(digitalKontaktinformasjonV1Mock.hentDigitalKontaktinformasjon(any(HentDigitalKontaktinformasjonRequest.class))).thenThrow(new RuntimeException()).thenReturn(response);
-		when(hentDigitalKontaktinformasjonMapper.map(response)).thenReturn(new KontaktregisterTo());
+		RestTemplate restTemplate = restTemplateBuilder.build();
+		when(restTemplate.postForEntity(anyString(),any(), any(Class.class))).thenThrow(new RuntimeException()).thenReturn((new ResponseEntity(response, HttpStatus.OK)));
+		when(hentDigitalKontaktinformasjonMapper.map(response.getPersoner().get(PERSON_ID))).thenReturn(new KontaktregisterTo());
 		when(varselKanalDecider.decideKanaler(any(), any())).thenReturn(kanalCodes);
 
 		hentDigitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjonAndDecideKanal(PERSON_ID, PREFERERT_KANAL);
 
-		verify(digitalKontaktinformasjonV1Mock, times(2)).hentDigitalKontaktinformasjon(any());
+		verify(restTemplate, times(2)).postForEntity(anyString(),any(), any(Class.class));
 
+	}
+
+	private DigitalKontaktInfoResponse createResponse(){
+		DigitalKontaktInfoResponse response = new DigitalKontaktInfoResponse();
+		Map<String, DigitalKontaktInfoResponse.DigitalKontaktinfo> map = new HashMap<>();
+		map.put(PERSON_ID, DigitalKontaktInfoResponse.DigitalKontaktinfo.builder().build());
+		response.setPersoner(map);
+		return response;
 	}
 
 }

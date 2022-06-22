@@ -49,11 +49,7 @@ public class DigitalKontaktinformasjonV1Mock implements DigitalKontaktinformasjo
 
 	@Override
 	public HentDigitalKontaktinformasjonResponse hentDigitalKontaktinformasjon(HentDigitalKontaktinformasjonRequest hentDigitalKontaktinformasjonRequest) throws HentDigitalKontaktinformasjonKontaktinformasjonIkkeFunnet, HentDigitalKontaktinformasjonPersonIkkeFunnet, HentDigitalKontaktinformasjonSikkerhetsbegrensing {
-		HentDigitalKontaktinformasjonResponse response = createResponse();
-		if(PERSONIDENT_WHITESPACE_TEST.equals(hentDigitalKontaktinformasjonRequest.getPersonident())) {
-			response.getDigitalKontaktinformasjon().getEpostadresse().setValue(
-					response.getDigitalKontaktinformasjon().getEpostadresse().getValue() + " ");
-		}
+		HentDigitalKontaktinformasjonResponse response = new HentDigitalKontaktinformasjonResponse();
 		return response;
 	}
 

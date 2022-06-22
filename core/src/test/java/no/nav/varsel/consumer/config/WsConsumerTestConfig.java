@@ -23,16 +23,4 @@ import javax.xml.ws.Endpoint;
 @Configuration
 public class WsConsumerTestConfig {
 
-	@Value("${dkif.ws.endpointUrl}")
-	private String dkifUrl;
-
-	@Bean(destroyMethod = "stop")
-	public Endpoint digitalKontaktinformasjonV1MockEndpoint() {
-		return Endpoint.publish(dkifUrl, digitalKontaktinformasjonV1Mock());
-	}
-
-	@Bean
-	public DigitalKontaktinformasjonV1 digitalKontaktinformasjonV1Mock() {
-		return new DigitalKontaktinformasjonV1Mock();
-	}
 }

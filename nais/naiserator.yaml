@@ -9,6 +9,14 @@ spec:
   kafka:
     pool: {{ KAFKA_POOL }}
   env:
+    - name: AZURE_APP_TOKEN_URL
+      value: {{AZURE_APP_TOKEN_URL}}
+    - name: AZURE_APP_SCOPE
+      value: {{AZURE_APP_SCOPE}}
+    - name: VARSEL_PROXY_HOST
+      value: {{VARSEL_PROXY_HOST}}
+    - name: VARSEL_PROXY_PORT
+      value: "{{VARSEL_PROXY_PORT}}"
     - name: SPRING_DATASOURCE_URL
       value: {{ SPRING_DATASOURCE_URL }}
     - name: MQGATEWAY01_HOSTNAME
