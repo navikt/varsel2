@@ -27,8 +27,8 @@ spec:
       value: {{ MQGATEWAY01_NAME }}
     - name: VARSELCHANNEL_NAME
       value: {{ VARSELCHANNEL_NAME }}
-    - name: DKIF_WS_ENDPOINTURL
-      value: {{ DKIF_WS_ENDPOINTURL }}
+    - name: DIGDIR_KRR_PROXY_URL
+      value: {{ DIGDIR_KRR_PROXY_URL }}
     - name: SECURITYTOKENSERVICE_URL
       value: {{ SECURITYTOKENSERVICE_URL }}
     - name: SECURITY_TOKEN_REST_SERVICE_URL
