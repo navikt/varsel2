@@ -13,7 +13,7 @@
   "MQGATEWAY01_NAME": "MPLS01",
   "VARSELCHANNEL_NAME": "P_VARSELPRODUKSJON",
   "VARSEL_SIGSUBJECTCERTCONSTRAINTS": ".*DC=adeo.*DC=no,.*adeo.no.*",
-  "DKIF_WS_ENDPOINTURL": "https://dkif.nais.adeo.no/ws/DigitalKontaktinformasjon/v1",
+  "DIGDIR_KRR_PROXY_URL": "https://digdir-krr-proxy.intern.nav.no",
   "SECURITYTOKENSERVICE_URL": "https://sts.adeo.no/SecurityTokenServiceProvider/",
   "SECURITY_TOKEN_REST_SERVICE_URL": "https://security-token-service.nais.adeo.no/rest/v1/sts/token",
   "DOKKAT_VARSELINFO_REST_URL": "https://app.adeo.no/dokkat/rest/varselinfo/v1",
