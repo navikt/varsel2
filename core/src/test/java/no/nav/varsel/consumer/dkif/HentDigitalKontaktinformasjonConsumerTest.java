@@ -2,26 +2,15 @@ package no.nav.varsel.consumer.dkif;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.DigitalKontaktinformasjonV1;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonKontaktinformasjonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonPersonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonSikkerhetsbegrensing;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.feil.KontaktinformasjonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.feil.PersonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.feil.Sikkerhetsbegrensing;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonRequest;
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
-import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
+import no.nav.varsel.domain.code.KanalCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -123,7 +112,7 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 
 	@Test
 	public void shouldHentDigitalKontaktinfo() throws Exception {
-		when(restTemplateBuilder.build().postForEntity(anyString(),any(), any(Class.class))).thenReturn((new ResponseEntity(response, HttpStatus.OK)));
+		when(restTemplateBuilder.build().postForEntity(anyString(), any(), any(Class.class))).thenReturn((new ResponseEntity(response, HttpStatus.OK)));
 		when(mapper.map(response.getPersoner().get(ID_OK))).thenReturn(kontaktregisterTo);
 
 		KontaktregisterTo kontaktregisterTo = consumer.hentDigitalKontaktinformasjon(ID_OK);
@@ -133,7 +122,7 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 
 	@Test
 	public void shouldHentDigitalKontaktinfoAndDecideKanaler() throws Exception {
-		when(restTemplateBuilder.build().postForEntity(anyString(),any(), any(Class.class))).thenReturn((new ResponseEntity(response, HttpStatus.OK)));
+		when(restTemplateBuilder.build().postForEntity(anyString(), any(), any(Class.class))).thenReturn((new ResponseEntity(response, HttpStatus.OK)));
 		when(mapper.map(response.getPersoner().get(ID_OK))).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(kanalCodes);
 
@@ -144,7 +133,7 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 
 	@Test
 	public void shouldHentDigitalKontaktinfoAndDecideKanalerWhenNullResponseFromDKif() throws Exception {
-		when(restTemplateBuilder.build().postForEntity(anyString(),any(), any(Class.class))).thenReturn((new ResponseEntity(responseFeil, HttpStatus.OK)));
+		when(restTemplateBuilder.build().postForEntity(anyString(), any(), any(Class.class))).thenReturn((new ResponseEntity(responseFeil, HttpStatus.OK)));
 		when(varselKanalDecider.decideKanaler(any(KontaktregisterTo.class), eq(PREFERERT_KANAL_2))).thenReturn(kanalCodes2);
 
 		KontaktregisterTo kontaktregisterTo = consumer.hentDigitalKontaktinformasjonAndDecideKanal(ID_404, PREFERERT_KANAL_2);
@@ -163,7 +152,7 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 
 	@Test
 	public void shouldReturnNullOn_NotFoundKontaktInfo() throws Exception {
-		when(restTemplateBuilder.build().postForEntity(anyString(),any(), any(Class.class))).thenReturn((new ResponseEntity(responseFeil, HttpStatus.OK)));
+		when(restTemplateBuilder.build().postForEntity(anyString(), any(), any(Class.class))).thenReturn((new ResponseEntity(responseFeil, HttpStatus.OK)));
 
 		KontaktregisterTo actual = consumer.hentDigitalKontaktinformasjon(ID_KON404);
 
@@ -172,7 +161,7 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 
 	@Test
 	public void shouldReturnNullOn_Sikkerhetsbegrensning() throws Exception {
-		when(restTemplateBuilder.build().postForEntity(anyString(),any(), any(Class.class))).thenReturn((new ResponseEntity(responseFeil, HttpStatus.OK)));
+		when(restTemplateBuilder.build().postForEntity(anyString(), any(), any(Class.class))).thenReturn((new ResponseEntity(responseFeil, HttpStatus.OK)));
 
 		KontaktregisterTo actual = consumer.hentDigitalKontaktinformasjon(ID_500);
 

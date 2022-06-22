@@ -2,15 +2,13 @@ package no.nav.varsel.consumer.dkif.support;
 
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.Epostadresse;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.Mobiltelefonnummer;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonResponse;
-import no.nav.varsel.consumer.dkif.DigitalKontaktInfoResponse;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import org.junit.jupiter.api.Test;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
 
-import static no.nav.varsel.consumer.dkif.DigitalKontaktInfoResponse.*;
+import static no.nav.varsel.consumer.dkif.DigitalKontaktInfoResponse.DigitalKontaktinfo;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -74,15 +72,15 @@ public class HentDigitalKontaktinformasjonMapperTest {
 	@Test
 	public void shoulRemoveWhitespaceFromEpostadresseAndMobiltelefonnummer() {
 		DigitalKontaktinfo response = createResponse();
-		
+
 		Mobiltelefonnummer mobiltelefonnummer = new Mobiltelefonnummer();
 		mobiltelefonnummer.setValue(" " + MOBILTELEFONNUMMER + " ");
 		response.setMobiltelefonnummer(mobiltelefonnummer.getValue());
-		
+
 		Epostadresse epostadresse = new Epostadresse();
 		epostadresse.setValue(" " + EPOSTADRESSE + " ");
 		response.setEpostadresse(epostadresse.getValue());
-		
+
 		KontaktregisterTo map = mapper.map(response);
 		assertEquals(map.getMobiltelefonnummer(), MOBILTELEFONNUMMER);
 		assertEquals(map.getEpostadresse(), EPOSTADRESSE);

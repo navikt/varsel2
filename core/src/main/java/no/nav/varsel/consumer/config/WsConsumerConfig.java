@@ -2,14 +2,13 @@ package no.nav.varsel.consumer.config;
 
 import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.azure.AzureTokenConsumer;
-import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
+import no.nav.varsel.consumer.pdl.PdlIdentConsumer;
 import no.nav.varsel.consumer.sts.StsRestConsumer;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
-import no.nav.varsel.consumer.pdl.PdlIdentConsumer;
 import no.nav.varsel.ws.config.CxfConfig;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.HttpClientConnectionManager;
@@ -20,7 +19,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Import({
-		STSConfig.class,
 		CxfConfig.class,
 		ConsumerEndpointConfig.class,
 		RestConsumerConfig.class,

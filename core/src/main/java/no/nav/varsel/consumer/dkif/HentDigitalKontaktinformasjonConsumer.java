@@ -65,7 +65,6 @@ public class HentDigitalKontaktinformasjonConsumer {
 	}
 
 
-
 	@Retryable(maxAttempts = 5, backoff = @Backoff(delay = 1000L, multiplier = 2))
 	public KontaktregisterTo hentDigitalKontaktinformasjonAndDecideKanal(String personIdent, Set<KanalCode> preferertKanal) {
 		KontaktregisterTo kontaktregisterTo = hentDigitalKontaktinformasjon(personIdent);

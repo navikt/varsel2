@@ -18,7 +18,7 @@ public class VarselProperties {
 		private int port;
 
 		public boolean isSet() {
-			return (host!=null && !host.equals(""));
+			return (host != null && !host.equals(""));
 		}
 	}
 }

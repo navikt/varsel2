@@ -1,8 +1,5 @@
 package no.nav.varsel.consumer.mock;
 
-import static no.nav.varsel.repo.TestdataUtil.PERSONIDENT_WHITESPACE_TEST;
-import static no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.createResponse;
-
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.DigitalKontaktinformasjonV1;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonBolkForMangeForespoersler;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonBolkSikkerhetsbegrensing;

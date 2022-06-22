@@ -2,26 +2,16 @@ package no.nav.varsel.consumer.dkif;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.DigitalKontaktinformasjonV1;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonKontaktinformasjonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonSikkerhetsbegrensing;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonRequest;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonResponse;
-import no.nav.varsel.azure.AzureTokenConsumer;
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
-import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import no.nav.varsel.domain.code.KanalCode;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -71,7 +61,6 @@ public class DkifRetryTest {
 	public static final Set<KanalCode> PREFERERT_KANAL = Sets.newHashSet(KanalCode.DITT_NAV);
 
 
-
 	@EnableRetry
 	@Configuration
 	public static class Config {
@@ -108,17 +97,17 @@ public class DkifRetryTest {
 		DigitalKontaktInfoResponse response = createResponse();
 		ArrayList<KanalCode> kanalCodes = Lists.newArrayList(KanalCode.DITT_NAV);
 		RestTemplate restTemplate = restTemplateBuilder.build();
-		when(restTemplate.postForEntity(anyString(),any(), any(Class.class))).thenThrow(new RuntimeException()).thenReturn((new ResponseEntity(response, HttpStatus.OK)));
+		when(restTemplate.postForEntity(anyString(), any(), any(Class.class))).thenThrow(new RuntimeException()).thenReturn((new ResponseEntity(response, HttpStatus.OK)));
 		when(hentDigitalKontaktinformasjonMapper.map(response.getPersoner().get(PERSON_ID))).thenReturn(new KontaktregisterTo());
 		when(varselKanalDecider.decideKanaler(any(), any())).thenReturn(kanalCodes);
 
 		hentDigitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjonAndDecideKanal(PERSON_ID, PREFERERT_KANAL);
 
-		verify(restTemplate, times(2)).postForEntity(anyString(),any(), any(Class.class));
+		verify(restTemplate, times(2)).postForEntity(anyString(), any(), any(Class.class));
 
 	}
 
-	private DigitalKontaktInfoResponse createResponse(){
+	private DigitalKontaktInfoResponse createResponse() {
 		DigitalKontaktInfoResponse response = new DigitalKontaktInfoResponse();
 		Map<String, DigitalKontaktInfoResponse.DigitalKontaktinfo> map = new HashMap<>();
 		map.put(PERSON_ID, DigitalKontaktInfoResponse.DigitalKontaktinfo.builder().build());
