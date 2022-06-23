@@ -3,6 +3,7 @@ package no.nav.varsel.consumer.dkif.support;
 import no.nav.varsel.consumer.dkif.DigitalKontaktInfoResponse;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import static no.nav.varsel.consumer.dkif.to.KontaktregisterTo.KontaktregisterToBuilder.aKontaktregisterTo;
 
@@ -12,6 +13,7 @@ import static no.nav.varsel.consumer.dkif.to.KontaktregisterTo.KontaktregisterTo
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
+@Component
 public class HentDigitalKontaktinformasjonMapper {
 
 	public KontaktregisterTo map(DigitalKontaktInfoResponse.DigitalKontaktinfo dki) {

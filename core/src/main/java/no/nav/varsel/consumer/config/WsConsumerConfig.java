@@ -1,8 +1,6 @@
 package no.nav.varsel.consumer.config;
 
-import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.azure.AzureTokenConsumer;
-import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
@@ -23,28 +21,15 @@ import org.springframework.context.annotation.Import;
 		ConsumerEndpointConfig.class,
 		RestConsumerConfig.class,
 		PdlIdentConsumer.class,
-		StsRestConsumer.class,
-		HentDigitalKontaktinformasjonConsumer.class,
-		AzureTokenConsumer.class,
-		AzureProperties.class,
-		VarselProperties.class
+		StsRestConsumer.class
 })
 @Configuration
 public class WsConsumerConfig {
 
-	@Bean
-	public HentDigitalKontaktinformasjonMapper hentDigitalKontaktinformasjonMapper() {
-		return new HentDigitalKontaktinformasjonMapper();
-	}
 
 	@Bean
 	public VarselInfoConsumer varselInfoConsumer() {
 		return new VarselInfoConsumer();
-	}
-
-	@Bean
-	public VarselKanalDecider varselKanalDecider() {
-		return new VarselKanalDecider();
 	}
 
 	@Bean
