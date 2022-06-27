@@ -113,7 +113,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 		TokenResponse clientCredentialToken = tokenConsumer.getClientCredentialToken();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set(HttpHeaders.AUTHORIZATION, BEARER_PREFIX + clientCredentialToken.getAccess_token());
+headers.setBearerAuth(clientCredentialToken.getAccess_token());
 		headers.add(NAV_CONSUMER_ID, APP_NAME);
 		headers.add(CALL_ID, MDC.get(CALL_ID));
 		return headers;
