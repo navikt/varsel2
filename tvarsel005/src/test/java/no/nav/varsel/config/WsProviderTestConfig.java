@@ -2,6 +2,7 @@ package no.nav.varsel.config;
 
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
+import no.nav.varsel.azure.digdir.AzureProperties;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
@@ -25,7 +26,19 @@ public class WsProviderTestConfig {
 
 	@Bean
 	public TokenConsumer tokenConsumer() {
-		return (TokenConsumer) () -> new TokenResponse();
+		return (String s) -> new TokenResponse();
+	}
+
+	@Bean
+	public AzureProperties azureProperties() {
+		AzureProperties azureproperties = new AzureProperties();
+		azureproperties.setScopeDigdirKrr("scope");
+		azureproperties.setClientId("clientId");
+		azureproperties.setClientSecret("secret");
+		azureproperties.setTenantId("tenantId");
+		azureproperties.setTokenUrl("url");
+		azureproperties.setWellKnownUrl("wellKnown");
+		return azureproperties;
 	}
 
 }

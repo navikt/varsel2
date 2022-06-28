@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
+import no.nav.varsel.azure.digdir.AzureProperties;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
@@ -40,7 +41,7 @@ import static org.mockito.Mockito.when;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@SpringBootTest(classes = {HentDigitalKontaktinformasjonConsumerTest.Config.class, HentDigitalKontaktinformasjonConsumer.class})
+@SpringBootTest(classes = {HentDigitalKontaktinformasjonConsumerTest.Config.class, HentDigitalKontaktinformasjonConsumer.class, AzureProperties.class})
 public class HentDigitalKontaktinformasjonConsumerTest {
 
 	private static final String ID_OK = "ok";
@@ -77,7 +78,7 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 
 		@Bean
 		public TokenConsumer tokenConsumer() {
-			return (TokenConsumer) () -> new TokenResponse();
+			return (String s) -> new TokenResponse();
 		}
 
 		@Bean

@@ -1,5 +1,5 @@
 package no.nav.varsel.azure;
 
 public interface TokenConsumer {
-	TokenResponse getClientCredentialToken();
+	TokenResponse getClientCredentialToken(String token);
 }

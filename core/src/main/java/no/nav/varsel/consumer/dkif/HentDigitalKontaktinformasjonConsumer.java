@@ -2,6 +2,7 @@ package no.nav.varsel.consumer.dkif;
 
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
+import no.nav.varsel.azure.digdir.AzureProperties;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dkif.support.PostPersonerRequest;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
@@ -29,7 +30,6 @@ import java.util.Collection;
 import java.util.Set;
 
 import static no.nav.varsel.consumer.pdl.helper.DomainConstants.APP_NAME;
-import static no.nav.varsel.consumer.pdl.helper.DomainConstants.BEARER_PREFIX;
 import static no.nav.varsel.util.MDCGenerate.CALL_ID;
 
 /**
@@ -47,13 +47,14 @@ public class HentDigitalKontaktinformasjonConsumer {
 	private final TokenConsumer tokenConsumer;
 	private final HentDigitalKontaktinformasjonMapper mapper;
 	private static final String NAV_CONSUMER_ID = "Nav-Consumer-Id";
+	private final AzureProperties azureProperties;
 
 	@Autowired
 	public HentDigitalKontaktinformasjonConsumer(VarselKanalDecider varselKanalDecider,
 												 HentDigitalKontaktinformasjonMapper mapper,
 												 @Value("${digdir_krr_proxy_url}") String dkiUrl,
 												 TokenConsumer tokenConsumer,
-												 RestTemplateBuilder restTemplateBuilder) {
+												 RestTemplateBuilder restTemplateBuilder, AzureProperties azureProperties) {
 		this.mapper = mapper;
 		this.varselKanalDecider = varselKanalDecider;
 		this.dkiUrl = dkiUrl;
@@ -62,6 +63,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 				.setConnectTimeout(Duration.ofSeconds(5))
 				.setReadTimeout(Duration.ofSeconds(20))
 				.build();
+		this.azureProperties = azureProperties;
 	}
 
 
@@ -111,7 +113,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 	}
 
 	private HttpHeaders createHeaders() {
-		TokenResponse clientCredentialToken = tokenConsumer.getClientCredentialToken();
+		TokenResponse clientCredentialToken = tokenConsumer.getClientCredentialToken(azureProperties.getScopeDigdirKrr());
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 headers.setBearerAuth(clientCredentialToken.getAccess_token());
