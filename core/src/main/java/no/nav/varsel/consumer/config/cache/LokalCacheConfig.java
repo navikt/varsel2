@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class LokalCacheConfig {
 
 	public static final String STS_CACHE = "stsCache";
-	public static final String AZURE_CLIENT_CREDENTIAL_TOKEN_CACHE = "AZUREAD";
+	public static final String AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE = "DIGDIRKRRAZUREAD";
 
 	@Bean
 	@Primary
@@ -28,7 +28,7 @@ public class LokalCacheConfig {
 		manager.setCaches(Arrays.asList(
 				new CaffeineCache(STS_CACHE, Caffeine.newBuilder()
 						.expireAfterWrite(55, TimeUnit.MINUTES).build()),
-				new CaffeineCache(AZURE_CLIENT_CREDENTIAL_TOKEN_CACHE, Caffeine.newBuilder()
+				new CaffeineCache(AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE, Caffeine.newBuilder()
 						.expireAfterWrite(50, TimeUnit.MINUTES).maximumSize(1).build()))
 
 		);

@@ -2,9 +2,6 @@ package no.nav.varsel.consumer.dkif;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonKontaktinformasjonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonPersonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.binding.HentDigitalKontaktinformasjonSikkerhetsbegrensing;
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
@@ -93,7 +90,7 @@ public class DkifRetryTest {
 	}
 
 	@Test
-	public void shouldRetryOnExceptionhentDigitalKontaktinformasjonAndDecideKanal() throws HentDigitalKontaktinformasjonSikkerhetsbegrensing, HentDigitalKontaktinformasjonKontaktinformasjonIkkeFunnet, HentDigitalKontaktinformasjonPersonIkkeFunnet {
+	public void shouldRetryOnExceptionhentDigitalKontaktinformasjonAndDecideKanal() {
 		DigitalKontaktInfoResponse response = createResponse();
 		ArrayList<KanalCode> kanalCodes = Lists.newArrayList(KanalCode.DITT_NAV);
 		RestTemplate restTemplate = restTemplateBuilder.build();

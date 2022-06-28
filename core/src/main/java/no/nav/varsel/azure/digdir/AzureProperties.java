@@ -1,4 +1,4 @@
-package no.nav.varsel.azure;
+package no.nav.varsel.azure.digdir;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -24,5 +24,5 @@ public class AzureProperties {
 	@NotEmpty
 	private String wellKnownUrl;
 	@NotEmpty
-	private String scope;
+	private String scopeDigdirKrr;
 }

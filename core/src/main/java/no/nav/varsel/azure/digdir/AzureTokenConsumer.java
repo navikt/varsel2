@@ -1,7 +1,10 @@
-package no.nav.varsel.azure;
+package no.nav.varsel.azure.digdir;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
+import no.nav.varsel.azure.AzureTokenException;
+import no.nav.varsel.azure.TokenConsumer;
+import no.nav.varsel.azure.TokenResponse;
 import no.nav.varsel.config.VarselProperties;
 import org.apache.http.HttpHost;
 import org.apache.http.conn.HttpClientConnectionManager;
@@ -22,7 +25,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Duration;
 import java.util.Collections;
 
-import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.AZURE_CLIENT_CREDENTIAL_TOKEN_CACHE;
+import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -66,11 +69,11 @@ public class AzureTokenConsumer implements TokenConsumer {
 
 	@Retry(name = AZURE_TOKEN_INSTANCE)
 	@CircuitBreaker(name = AZURE_TOKEN_INSTANCE)
-	@Cacheable(AZURE_CLIENT_CREDENTIAL_TOKEN_CACHE)
+	@Cacheable(AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE)
 	public TokenResponse getClientCredentialToken() {
 		try {
 			HttpHeaders headers = createHeaders();
-			String form = "grant_type=client_credentials&scope=" + azureProperties.getScope() + "&client_id=" +
+			String form = "grant_type=client_credentials&scope=" + azureProperties.getScopeDigdirKrr()+ "&client_id=" +
 					azureProperties.getClientId() + "&client_secret=" + azureProperties.getClientSecret();
 			HttpEntity<String> requestEntity = new HttpEntity<>(form, headers);
 

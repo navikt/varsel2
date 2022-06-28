@@ -2,7 +2,6 @@ package no.nav.varsel.consumer.dkif;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonRequest;
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
@@ -111,7 +110,7 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 	}
 
 	@Test
-	public void shouldHentDigitalKontaktinfo() throws Exception {
+	public void shouldHentDigitalKontaktinfo() {
 		when(restTemplateBuilder.build().postForEntity(anyString(), any(), any(Class.class))).thenReturn((new ResponseEntity(response, HttpStatus.OK)));
 		when(mapper.map(response.getPersoner().get(ID_OK))).thenReturn(kontaktregisterTo);
 
@@ -121,7 +120,7 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 	}
 
 	@Test
-	public void shouldHentDigitalKontaktinfoAndDecideKanaler() throws Exception {
+	public void shouldHentDigitalKontaktinfoAndDecideKanaler() {
 		when(restTemplateBuilder.build().postForEntity(anyString(), any(), any(Class.class))).thenReturn((new ResponseEntity(response, HttpStatus.OK)));
 		when(mapper.map(response.getPersoner().get(ID_OK))).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(kanalCodes);
@@ -132,7 +131,7 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 	}
 
 	@Test
-	public void shouldHentDigitalKontaktinfoAndDecideKanalerWhenNullResponseFromDKif() throws Exception {
+	public void shouldHentDigitalKontaktinfoAndDecideKanalerWhenNullResponseFromDKif() {
 		when(restTemplateBuilder.build().postForEntity(anyString(), any(), any(Class.class))).thenReturn((new ResponseEntity(responseFeil, HttpStatus.OK)));
 		when(varselKanalDecider.decideKanaler(any(KontaktregisterTo.class), eq(PREFERERT_KANAL_2))).thenReturn(kanalCodes2);
 
@@ -142,7 +141,7 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 	}
 
 	@Test
-	public void shouldReturnNullOn_NotFound() throws Exception {
+	public void shouldReturnNullOn_NotFound() {
 		when(restTemplateBuilder.build().postForEntity(any(), any(), any())).thenReturn((new ResponseEntity(responseFeil, HttpStatus.OK)));
 
 		KontaktregisterTo actual = consumer.hentDigitalKontaktinformasjon(ID_404);
@@ -160,7 +159,7 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 	}
 
 	@Test
-	public void shouldReturnNullOn_Sikkerhetsbegrensning() throws Exception {
+	public void shouldReturnNullOn_Sikkerhetsbegrensning() {
 		when(restTemplateBuilder.build().postForEntity(anyString(), any(), any(Class.class))).thenReturn((new ResponseEntity(responseFeil, HttpStatus.OK)));
 
 		KontaktregisterTo actual = consumer.hentDigitalKontaktinformasjon(ID_500);
@@ -174,15 +173,4 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 		assertThat(actual.getMobiltelefonnummer(), nullValue());
 	}
 
-	private HentDigitalKontaktinformasjonRequest reqId(String ident) {
-		HentDigitalKontaktinformasjonRequest request = new HentDigitalKontaktinformasjonRequest() {
-			@Override
-			public boolean equals(Object obj) {
-				return obj instanceof HentDigitalKontaktinformasjonRequest &&
-						this.getPersonident().equals(((HentDigitalKontaktinformasjonRequest) obj).getPersonident());
-			}
-		};
-		request.setPersonident(ident);
-		return eq(request);
-	}
 }

@@ -88,7 +88,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 			LOG.warn(String.format("Feil mot DKIF %s: %s", e.getClass().getSimpleName(), e.getMessage()));
 			return new KontaktregisterTo();
 		}
-		if (isValidRespons(response, fnrTrimmed)) {
+		if (isValidResponse(response, fnrTrimmed)) {
 			KontaktregisterTo kontaktregisterTo = mapper.map(response.getPersoner().get(fnrTrimmed));
 			return kontaktregisterTo;
 		} else {
@@ -97,7 +97,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 		}
 	}
 
-	private boolean isValidRespons(DigitalKontaktInfoResponse response, String fnr) {
+	private boolean isValidResponse(DigitalKontaktInfoResponse response, String fnr) {
 		return response != null && response.getPersoner() != null && response.getPersoner().get(fnr) != null;
 	}
 
