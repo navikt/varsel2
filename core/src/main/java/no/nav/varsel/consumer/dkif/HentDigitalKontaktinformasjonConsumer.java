@@ -90,6 +90,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 		}
 		if (isValidResponse(response, fnrTrimmed)) {
 			KontaktregisterTo kontaktregisterTo = mapper.map(response.getPersoner().get(fnrTrimmed));
+			kontaktregisterTo.cleanExpiredInfo();
 			return kontaktregisterTo;
 		} else {
 			LOG.warn(String.format("Feil mot DKIF: %s", getErrorMsg(response, fnrTrimmed)));

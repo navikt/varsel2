@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 @Data
@@ -20,8 +21,10 @@ public class DigitalKontaktInfoResponse {
 	@Builder
 	public static class DigitalKontaktinfo {
 		private String epostadresse;
+		private ZonedDateTime epostadresseOppdatert;
 		private boolean kanVarsles;
 		private String mobiltelefonnummer;
+		private ZonedDateTime mobiltelefonnummerOppdatert;
 		private boolean reservert;
 		private SikkerDigitalPostkasse sikkerDigitalPostkasse;
 	}

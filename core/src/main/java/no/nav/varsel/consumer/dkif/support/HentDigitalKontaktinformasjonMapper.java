@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import static no.nav.varsel.consumer.dkif.to.KontaktregisterTo.KontaktregisterToBuilder.aKontaktregisterTo;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
 
 
 /**
@@ -23,10 +24,12 @@ public class HentDigitalKontaktinformasjonMapper {
 				.reservasjon(dki.isReservert());
 
 		if (dki.getEpostadresse() != null) {
-			builder.epostadresse(dki.getEpostadresse().trim());
+			builder.epostadresse(dki.getEpostadresse().trim())
+					.epostSistOppdatert(dki.getEpostadresseOppdatert()!=null?dki.getEpostadresseOppdatert().toLocalDateTime():null);
 		}
 		if (dki.getMobiltelefonnummer() != null) {
-			builder.mobiltelefonnummer(dki.getMobiltelefonnummer().trim());
+			builder.mobiltelefonnummer(dki.getMobiltelefonnummer().trim())
+					.mobiltelefonSistOppdatert(dki.getMobiltelefonnummerOppdatert()!=null?dki.getMobiltelefonnummerOppdatert().toLocalDateTime():null);
 		}
 
 		return builder.build();
