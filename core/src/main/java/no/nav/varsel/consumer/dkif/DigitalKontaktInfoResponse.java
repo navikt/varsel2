@@ -1,0 +1,39 @@
+package no.nav.varsel.consumer.dkif;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.ZonedDateTime;
+import java.util.Map;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class DigitalKontaktInfoResponse {
+
+	private Map<String, String> feil;
+	private Map<String, DigitalKontaktinfo> personer;
+
+	@Data
+	@Builder
+	public static class DigitalKontaktinfo {
+		private String epostadresse;
+		private ZonedDateTime epostadresseOppdatert;
+		private boolean kanVarsles;
+		private String mobiltelefonnummer;
+		private ZonedDateTime mobiltelefonnummerOppdatert;
+		private boolean reservert;
+		private SikkerDigitalPostkasse sikkerDigitalPostkasse;
+	}
+
+	@Data
+	@Builder
+	public static class SikkerDigitalPostkasse {
+		private String adresse;
+		private String leverandoerAdresse;
+		private String leverandoerSertifikat;
+	}
+}

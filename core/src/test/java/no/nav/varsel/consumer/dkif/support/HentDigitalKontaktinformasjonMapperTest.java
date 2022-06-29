@@ -1,17 +1,12 @@
 package no.nav.varsel.consumer.dkif.support;
 
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.Epostadresse;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.Kontaktinformasjon;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.Mobiltelefonnummer;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.HentDigitalKontaktinformasjonResponse;
-import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import org.junit.jupiter.api.Test;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
 
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
+import static no.nav.varsel.consumer.dkif.DigitalKontaktInfoResponse.DigitalKontaktinfo;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,7 +22,6 @@ public class HentDigitalKontaktinformasjonMapperTest {
 
 	public static final String ID = "id";
 	public static final boolean RESERVASJON = false;
-	public static final String RESERVASJON_STRING = String.valueOf(RESERVASJON);
 	public static final String EPOSTADRESSE = "er@mocked.data";
 	public static final String MOBILTELEFONNUMMER = "54621378";
 
@@ -50,11 +44,7 @@ public class HentDigitalKontaktinformasjonMapperTest {
 		KontaktregisterTo map = mapper.map(createResponse());
 		assertThat(map.isReservasjon(), is(RESERVASJON));
 		assertThat(map.getEpostadresse(), is(EPOSTADRESSE));
-		assertThat(map.getEpostSistOppdatert(), is(toLocalDateTime(EPOST_OPPDATERT)));
-		assertThat(map.getEpostSistVerifisert(), is(toLocalDateTime(EPOST_VERIFISERT)));
 		assertThat(map.getMobiltelefonnummer(), is(MOBILTELEFONNUMMER));
-		assertThat(map.getMobiltelefonSistOppdatert(), is(toLocalDateTime(MOB_OPPDATERT)));
-		assertThat(map.getMobiltelefonSistVerifisert(), is(toLocalDateTime(MOB_VERIFISERT)));
 	}
 
 	@Test
@@ -69,59 +59,29 @@ public class HentDigitalKontaktinformasjonMapperTest {
 
 	@Test
 	public void shouldMapResponseNullEpostMobil() {
-		HentDigitalKontaktinformasjonResponse response = createResponse();
-		response.getDigitalKontaktinformasjon().setEpostadresse(null);
-		response.getDigitalKontaktinformasjon().setMobiltelefonnummer(null);
+		DigitalKontaktinfo response = createResponse();
+		response.setEpostadresse(null);
+		response.setMobiltelefonnummer(null);
 		KontaktregisterTo map = mapper.map(response);
 		assertThat(map.getMobiltelefonnummer(), nullValue());
 		assertThat(map.getEpostadresse(), nullValue());
 	}
 
 	@Test
-	public void shouldMapResponseNullDate() {
-		HentDigitalKontaktinformasjonResponse response = createResponse();
-		response.getDigitalKontaktinformasjon().getMobiltelefonnummer()
-				.setSistVerifisert(null);
-		KontaktregisterTo map = mapper.map(response);
-		assertThat(map.getMobiltelefonSistVerifisert(), nullValue());
-	}
-
-	@Test
 	public void shoulRemoveWhitespaceFromEpostadresseAndMobiltelefonnummer() {
-		HentDigitalKontaktinformasjonResponse response = createResponse();
-		
-		Mobiltelefonnummer mobiltelefonnummer = new Mobiltelefonnummer();
-		mobiltelefonnummer.setValue(" " + MOBILTELEFONNUMMER + " ");
-		response.getDigitalKontaktinformasjon().setMobiltelefonnummer(mobiltelefonnummer);
-		
-		Epostadresse epostadresse = new Epostadresse();
-		epostadresse.setValue(" " + EPOSTADRESSE + " ");
-		response.getDigitalKontaktinformasjon().setEpostadresse(epostadresse);
-		
+		DigitalKontaktinfo response = createResponse();
 		KontaktregisterTo map = mapper.map(response);
 		assertEquals(map.getMobiltelefonnummer(), MOBILTELEFONNUMMER);
 		assertEquals(map.getEpostadresse(), EPOSTADRESSE);
 	}
 
-	public static HentDigitalKontaktinformasjonResponse createResponse() {
-		HentDigitalKontaktinformasjonResponse response = new HentDigitalKontaktinformasjonResponse();
-		Kontaktinformasjon kontaktinformasjon = new Kontaktinformasjon();
-		response.setDigitalKontaktinformasjon(kontaktinformasjon);
-
-		kontaktinformasjon.setPersonident(ID);
-		kontaktinformasjon.setReservasjon(RESERVASJON_STRING);
-		Epostadresse epostadresse = new Epostadresse();
-		epostadresse.setValue(EPOSTADRESSE);
-		epostadresse.setSistOppdatert(EPOST_OPPDATERT);
-		epostadresse.setSistVerifisert(EPOST_VERIFISERT);
-		kontaktinformasjon.setEpostadresse(epostadresse);
-		Mobiltelefonnummer mobiltelefonnummer = new Mobiltelefonnummer();
-		mobiltelefonnummer.setValue(MOBILTELEFONNUMMER);
-		mobiltelefonnummer.setSistOppdatert(MOB_OPPDATERT);
-		mobiltelefonnummer.setSistVerifisert(MOB_VERIFISERT);
-		kontaktinformasjon.setMobiltelefonnummer(mobiltelefonnummer);
-
-		return response;
+	public static DigitalKontaktinfo createResponse() {
+		DigitalKontaktinfo kontaktinformasjon = DigitalKontaktinfo.builder()
+				.reservert(RESERVASJON)
+				.epostadresse(EPOSTADRESSE)
+				.mobiltelefonnummer(MOBILTELEFONNUMMER)
+				.build();
+		return kontaktinformasjon;
 	}
 
 	private static XMLGregorianCalendar createDate(int i) {

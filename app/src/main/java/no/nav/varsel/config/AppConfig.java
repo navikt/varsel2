@@ -1,5 +1,6 @@
 package no.nav.varsel.config;
 
+import no.nav.varsel.azure.digdir.AzureProperties;
 import no.nav.varsel.config.alias.ListenerProperties;
 import no.nav.varsel.config.alias.MqGatewayProperties;
 import no.nav.varsel.kafka.CustomKafkaTemplate;
@@ -18,7 +19,9 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @EnableConfigurationProperties({
 		MqGatewayProperties.class,
-		ListenerProperties.class
+		ListenerProperties.class,
+		VarselProperties.class,
+		AzureProperties.class
 })
 @EnableAutoConfiguration
 @Import({

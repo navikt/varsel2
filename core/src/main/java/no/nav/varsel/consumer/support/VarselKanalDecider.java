@@ -6,6 +6,7 @@ import static no.nav.varsel.domain.code.KanalCode.SMS;
 
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.domain.code.KanalCode;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -16,6 +17,7 @@ import java.util.Set;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
+@Component
 public class VarselKanalDecider {
 
 	public Collection<KanalCode> decideKanaler(KontaktregisterTo kontaktregisterTo, Set<KanalCode> preferertKanalDokkat) {

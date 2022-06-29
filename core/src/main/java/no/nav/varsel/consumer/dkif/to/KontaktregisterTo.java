@@ -21,10 +21,8 @@ public class KontaktregisterTo implements Serializable {
 	private boolean reservasjon;
 	private String epostadresse;
 	private LocalDateTime epostSistOppdatert;
-	private LocalDateTime epostSistVerifisert;
 	private String mobiltelefonnummer;
 	private LocalDateTime mobiltelefonSistOppdatert;
-	private LocalDateTime mobiltelefonSistVerifisert;
 	private String kontaktInfo;
 	private Collection<KanalCode> kanaler;
 
@@ -52,14 +50,6 @@ public class KontaktregisterTo implements Serializable {
 		this.epostSistOppdatert = epostSistOppdatert;
 	}
 
-	public LocalDateTime getEpostSistVerifisert() {
-		return epostSistVerifisert;
-	}
-
-	public void setEpostSistVerifisert(LocalDateTime epostSistVerifisert) {
-		this.epostSistVerifisert = epostSistVerifisert;
-	}
-
 	public String getMobiltelefonnummer() {
 		return mobiltelefonnummer;
 	}
@@ -74,14 +64,6 @@ public class KontaktregisterTo implements Serializable {
 
 	public void setMobiltelefonSistOppdatert(LocalDateTime mobiltelefonSistOppdatert) {
 		this.mobiltelefonSistOppdatert = mobiltelefonSistOppdatert;
-	}
-
-	public LocalDateTime getMobiltelefonSistVerifisert() {
-		return mobiltelefonSistVerifisert;
-	}
-
-	public void setMobiltelefonSistVerifisert(LocalDateTime mobiltelefonSistVerifisert) {
-		this.mobiltelefonSistVerifisert = mobiltelefonSistVerifisert;
 	}
 
 	public String getKontaktInfo() {
@@ -101,11 +83,11 @@ public class KontaktregisterTo implements Serializable {
 	}
 
 	public boolean isEpostDateInvalid() {
-		return isInvalid(getEpostSistOppdatert()) && isInvalid(getEpostSistVerifisert());
+		return isInvalid(getEpostSistOppdatert());
 	}
 
 	public boolean isMobilDateInvalid() {
-		return isInvalid(getMobiltelefonSistOppdatert()) && isInvalid(getMobiltelefonSistVerifisert());
+		return isInvalid(getMobiltelefonSistOppdatert());
 	}
 
 	private boolean isInvalid(LocalDateTime dateTime) {
@@ -125,10 +107,8 @@ public class KontaktregisterTo implements Serializable {
 		private boolean reservasjon;
 		private String epostadresse;
 		private LocalDateTime epostSistOppdatert;
-		private LocalDateTime epostSistVerifisert;
 		private String mobiltelefonnummer;
 		private LocalDateTime mobiltelefonSistOppdatert;
-		private LocalDateTime mobiltelefonSistVerifisert;
 		private String kontaktInfo;
 		private Collection<KanalCode> kanaler;
 
@@ -155,11 +135,6 @@ public class KontaktregisterTo implements Serializable {
 			return this;
 		}
 
-		public KontaktregisterToBuilder epostSistVerifisert(LocalDateTime epostSistVerifisert) {
-			this.epostSistVerifisert = epostSistVerifisert;
-			return this;
-		}
-
 		public KontaktregisterToBuilder mobiltelefonnummer(String mobiltelefonnummer) {
 			this.mobiltelefonnummer = mobiltelefonnummer;
 			return this;
@@ -167,11 +142,6 @@ public class KontaktregisterTo implements Serializable {
 
 		public KontaktregisterToBuilder mobiltelefonSistOppdatert(LocalDateTime mobiltelefonSistOppdatert) {
 			this.mobiltelefonSistOppdatert = mobiltelefonSistOppdatert;
-			return this;
-		}
-
-		public KontaktregisterToBuilder mobiltelefonSistVerifisert(LocalDateTime mobiltelefonSistVerifisert) {
-			this.mobiltelefonSistVerifisert = mobiltelefonSistVerifisert;
 			return this;
 		}
 
@@ -190,10 +160,8 @@ public class KontaktregisterTo implements Serializable {
 			kontaktregisterTo.setReservasjon(reservasjon);
 			kontaktregisterTo.setEpostadresse(epostadresse);
 			kontaktregisterTo.setEpostSistOppdatert(epostSistOppdatert);
-			kontaktregisterTo.setEpostSistVerifisert(epostSistVerifisert);
 			kontaktregisterTo.setMobiltelefonnummer(mobiltelefonnummer);
 			kontaktregisterTo.setMobiltelefonSistOppdatert(mobiltelefonSistOppdatert);
-			kontaktregisterTo.setMobiltelefonSistVerifisert(mobiltelefonSistVerifisert);
 			kontaktregisterTo.setKontaktInfo(kontaktInfo);
 			kontaktregisterTo.setKanaler(kanaler);
 			return kontaktregisterTo;

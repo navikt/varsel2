@@ -1,6 +1,5 @@
 package no.nav.varsel.consumer.config;
 
-import no.nav.varsel.consumer.config.endpoint.DkifEndpoint;
 import no.nav.varsel.consumer.pdl.PdlIdentConsumer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -11,6 +10,6 @@ import org.springframework.context.annotation.Import;
  * @author Andreas Skomedal, Visma Consulting.
  */
 @Configuration
-@Import({PdlIdentConsumer.class, DkifEndpoint.class})
+@Import({PdlIdentConsumer.class})
 public class ConsumerEndpointConfig {
 }

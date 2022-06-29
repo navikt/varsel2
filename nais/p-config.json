@@ -13,7 +13,7 @@
   "MQGATEWAY01_NAME": "MPLS01",
   "VARSELCHANNEL_NAME": "P_VARSELPRODUKSJON",
   "VARSEL_SIGSUBJECTCERTCONSTRAINTS": ".*DC=adeo.*DC=no,.*adeo.no.*",
-  "DKIF_WS_ENDPOINTURL": "https://dkif.nais.adeo.no/ws/DigitalKontaktinformasjon/v1",
+  "DIGDIR_KRR_PROXY_URL": "https://digdir-krr-proxy.intern.nav.no",
   "SECURITYTOKENSERVICE_URL": "https://sts.adeo.no/SecurityTokenServiceProvider/",
   "SECURITY_TOKEN_REST_SERVICE_URL": "https://security-token-service.nais.adeo.no/rest/v1/sts/token",
   "DOKKAT_VARSELINFO_REST_URL": "https://app.adeo.no/dokkat/rest/varselinfo/v1",
@@ -26,5 +26,9 @@
   "VARSEL_JMS_CONSUMER_ERROR_CONTEXT_TIME_SECONDS": "600",
   "VARSEL_JMS_CONSUMER_ERROR_RESTART_DELAY_SECONDS": "600",
   "SERVICEUSER_VAULT_PATH": "/serviceuser/data/prod/srvvarsel",
-  "LISTENER_AUTO_STARTUP": "true"
+  "LISTENER_AUTO_STARTUP": "true",
+  "VARSEL_PROXY_HOST": "webproxy.nais",
+  "VARSEL_PROXY_PORT": "8088",
+  "AZURE_APP_TOKEN_URL": "https://login.microsoftonline.com/62366534-1ec3-4962-8869-9b5535279d0b/oauth2/v2.0/token",
+  "AZURE_APP_SCOPE_DIGDIR_KRR": "api://prod-gcp.team-rocket.digdir-krr-proxy/.default"
 }
