@@ -3,11 +3,13 @@ package no.nav.varsel.consumer.dkif.support;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import org.junit.jupiter.api.Test;
 
-import javax.xml.datatype.XMLGregorianCalendar;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 import static no.nav.varsel.consumer.dkif.DigitalKontaktInfoResponse.DigitalKontaktinfo;
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -25,38 +27,33 @@ public class HentDigitalKontaktinformasjonMapperTest {
 	public static final String EPOSTADRESSE = "er@mocked.data";
 	public static final String MOBILTELEFONNUMMER = "54621378";
 
-	public static final XMLGregorianCalendar EPOST_OPPDATERT;
-	public static final XMLGregorianCalendar EPOST_VERIFISERT;
-	public static final XMLGregorianCalendar MOB_OPPDATERT;
-	public static final XMLGregorianCalendar MOB_VERIFISERT;
+	public static final LocalTime MIDNATT = LocalTime.of(0, 0, 0);
+	public static final ZonedDateTime EPOST_OPPDATERT = ZonedDateTime.of(LocalDateTime.of(LocalDate.of(2020, 1, 1), MIDNATT), ZoneOffset.systemDefault());
+	public static final ZonedDateTime EPOST_VERIFISERT = ZonedDateTime.of(LocalDateTime.of(LocalDate.of(2022, 1, 1), MIDNATT), ZoneOffset.systemDefault());
+	public static final ZonedDateTime MOB_OPPDATERT = ZonedDateTime.of(LocalDateTime.of(LocalDate.of(2020, 1, 1), MIDNATT), ZoneOffset.systemDefault());
+	public static final ZonedDateTime MOB_VERIFISERT = ZonedDateTime.of(LocalDateTime.of(LocalDate.of(2022, 1, 1), MIDNATT), ZoneOffset.systemDefault());
 
 	private final HentDigitalKontaktinformasjonMapper mapper = new HentDigitalKontaktinformasjonMapper();
-
-	static {
-		EPOST_OPPDATERT = createDate(1);
-		EPOST_VERIFISERT = createDate(2);
-		MOB_OPPDATERT = createDate(3);
-		MOB_VERIFISERT = createDate(4);
-	}
 
 	@Test
 	public void shouldMapResponse() {
 		KontaktregisterTo map = mapper.map(createResponse());
 		assertThat(map.isReservasjon(), is(RESERVASJON));
 		assertThat(map.getEpostadresse(), is(EPOSTADRESSE));
+		assertThat(map.getEpostSistOppdatert(), is(EPOST_OPPDATERT.toLocalDateTime()));
+		assertThat(map.getEpostSistVerifisert(), is(EPOST_VERIFISERT.toLocalDateTime()));
 		assertThat(map.getMobiltelefonnummer(), is(MOBILTELEFONNUMMER));
+		assertThat(map.getMobiltelefonSistOppdatert(), is(MOB_OPPDATERT.toLocalDateTime()));
+		assertThat(map.getMobiltelefonSistVerifisert(), is(MOB_VERIFISERT.toLocalDateTime()));
 	}
 
 	@Test
-	public void shouldMapBools() {
-		assertThat(mapper.mapStringToBool("true"), is(true));
-		assertThat(mapper.mapStringToBool("false"), is(false));
-		assertThat(mapper.mapStringToBool("JA"), is(true));
-		assertThat(mapper.mapStringToBool("NEI"), is(false));
-		assertThat(mapper.mapStringToBool(""), is(true));
-		assertThat(mapper.mapStringToBool(null), is(true));
+	public void shouldMapResponseNullDate() {
+		DigitalKontaktinfo response = createResponse();
+		response.setMobiltelefonnummerVerifisert(null);
+		KontaktregisterTo map = mapper.map(response);
+		assertThat(map.getMobiltelefonSistVerifisert(), nullValue());
 	}
-
 	@Test
 	public void shouldMapResponseNullEpostMobil() {
 		DigitalKontaktinfo response = createResponse();
@@ -76,15 +73,14 @@ public class HentDigitalKontaktinformasjonMapperTest {
 	}
 
 	public static DigitalKontaktinfo createResponse() {
-		DigitalKontaktinfo kontaktinformasjon = DigitalKontaktinfo.builder()
+		return DigitalKontaktinfo.builder()
 				.reservert(RESERVASJON)
 				.epostadresse(EPOSTADRESSE)
 				.mobiltelefonnummer(MOBILTELEFONNUMMER)
+				.epostadresseOppdatert(EPOST_OPPDATERT)
+				.epostadresseVerifisert(EPOST_VERIFISERT)
+				.mobiltelefonnummerOppdatert(MOB_OPPDATERT)
+				.mobiltelefonnummerVerifisert(MOB_VERIFISERT)
 				.build();
-		return kontaktinformasjon;
-	}
-
-	private static XMLGregorianCalendar createDate(int i) {
-		return toXmlGregorianCalendar(LocalDateTime.now().minusHours(i));
 	}
 }

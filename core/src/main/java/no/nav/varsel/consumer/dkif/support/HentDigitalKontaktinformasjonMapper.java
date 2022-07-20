@@ -2,11 +2,9 @@ package no.nav.varsel.consumer.dkif.support;
 
 import no.nav.varsel.consumer.dkif.DigitalKontaktInfoResponse;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import static no.nav.varsel.consumer.dkif.to.KontaktregisterTo.KontaktregisterToBuilder.aKontaktregisterTo;
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
 
 
 /**
@@ -25,27 +23,15 @@ public class HentDigitalKontaktinformasjonMapper {
 
 		if (dki.getEpostadresse() != null) {
 			builder.epostadresse(dki.getEpostadresse().trim())
-					.epostSistOppdatert(dki.getEpostadresseOppdatert() != null ? dki.getEpostadresseOppdatert().toLocalDateTime() : null);
+					.epostSistOppdatert(dki.getEpostadresseOppdatert() != null ? dki.getEpostadresseOppdatert().toLocalDateTime() : null)
+					.epostSistVerifisert(dki.getEpostadresseVerifisert() != null ? dki.getEpostadresseVerifisert().toLocalDateTime() : null);
 		}
 		if (dki.getMobiltelefonnummer() != null) {
 			builder.mobiltelefonnummer(dki.getMobiltelefonnummer().trim())
-					.mobiltelefonSistOppdatert(dki.getMobiltelefonnummerOppdatert() != null ? dki.getMobiltelefonnummerOppdatert().toLocalDateTime() : null);
+					.mobiltelefonSistOppdatert(dki.getMobiltelefonnummerOppdatert() != null ? dki.getMobiltelefonnummerOppdatert().toLocalDateTime() : null)
+					.mobiltelefonSistVerifisert(dki.getMobiltelefonnummerVerifisert() != null ? dki.getMobiltelefonnummerVerifisert().toLocalDateTime() : null);
 		}
 
 		return builder.build();
-	}
-
-
-	boolean mapStringToBool(String bool) {
-		if (StringUtils.isBlank(bool)) {
-			return true;
-		}
-		switch (bool.toLowerCase()) {
-			case "ja":
-			case "true":
-				return true;
-			default:
-				return false;
-		}
 	}
 }

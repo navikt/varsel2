@@ -22,9 +22,11 @@ public class DigitalKontaktInfoResponse {
 	public static class DigitalKontaktinfo {
 		private String epostadresse;
 		private ZonedDateTime epostadresseOppdatert;
+		private ZonedDateTime epostadresseVerifisert;
 		private boolean kanVarsles;
 		private String mobiltelefonnummer;
 		private ZonedDateTime mobiltelefonnummerOppdatert;
+		private ZonedDateTime mobiltelefonnummerVerifisert;
 		private boolean reservert;
 		private SikkerDigitalPostkasse sikkerDigitalPostkasse;
 	}
