@@ -1,5 +1,6 @@
 package no.nav.varsel.consumer.dkif.to;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.varsel.domain.code.KanalCode;
 
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.util.Collection;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
+@Slf4j
 public class KontaktregisterTo implements Serializable {
 
 	private static final long serialVersionUID = 373780690208148963L;
@@ -96,9 +98,19 @@ public class KontaktregisterTo implements Serializable {
 
 	public void cleanExpiredInfo() {
 		if (isMobilDateInvalid()) {
+			if(mobiltelefonnummer == null) {
+				log.info("Sender ikke SMS. Mobiltelefonnummer er null. Sist oppdatert må være maks 18 måneder siden. mobiltelefonSistOppdatert={}", mobiltelefonSistOppdatert);
+			} else {
+				log.info("Sender ikke SMS. Mobiltelefonnummer er satt. Sist oppdatert må være maks 18 måneder siden. mobiltelefonSistOppdatert={}", mobiltelefonSistOppdatert);
+			}
 			setMobiltelefonnummer(null);
 		}
 		if (isEpostDateInvalid()) {
+			if(epostadresse == null) {
+				log.info("Sender ikke EPOST. Epostadresse er null. Sist oppdatert må være maks 18 måneder siden. epostSistOppdatert={}", epostSistOppdatert);
+			} else {
+				log.info("Sender ikke EPOST. Epostadresse er satt. Sist oppdatert må være maks 18 måneder siden. epostSistOppdatert={}", epostSistOppdatert);
+			}
 			setEpostadresse(null);
 		}
 	}

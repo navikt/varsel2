@@ -25,11 +25,11 @@ public class HentDigitalKontaktinformasjonMapper {
 
 		if (dki.getEpostadresse() != null) {
 			builder.epostadresse(dki.getEpostadresse().trim())
-					.epostSistOppdatert(dki.getEpostadresseOppdatert()!=null?dki.getEpostadresseOppdatert().toLocalDateTime():null);
+					.epostSistOppdatert(dki.getEpostadresseOppdatert() != null ? dki.getEpostadresseOppdatert().toLocalDateTime() : null);
 		}
 		if (dki.getMobiltelefonnummer() != null) {
 			builder.mobiltelefonnummer(dki.getMobiltelefonnummer().trim())
-					.mobiltelefonSistOppdatert(dki.getMobiltelefonnummerOppdatert()!=null?dki.getMobiltelefonnummerOppdatert().toLocalDateTime():null);
+					.mobiltelefonSistOppdatert(dki.getMobiltelefonnummerOppdatert() != null ? dki.getMobiltelefonnummerOppdatert().toLocalDateTime() : null);
 		}
 
 		return builder.build();
