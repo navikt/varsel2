@@ -36,11 +36,10 @@ import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Spring config for JMS
- *
- * @author Andreas Skomedal, Visma Consulting.
  */
 @EnableJms
 @Import({QueueConfig.class})
@@ -135,6 +134,8 @@ public class JmsConfig {
 		pooledFactory.setConnectionFactory(adapter);
 		pooledFactory.setMaxConnections(10);
 		pooledFactory.setMaximumActiveSessionPerConnection(10);
+		pooledFactory.setReconnectOnException(true);
+		pooledFactory.setExpiryTimeout(TimeUnit.HOURS.toMillis(24));
 		return pooledFactory;
 	}
 
