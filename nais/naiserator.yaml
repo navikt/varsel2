@@ -61,16 +61,16 @@ spec:
        - {{ this }}
            {{/each}}
   liveness:
-    path: varsel/isAlive
+    path: /varsel/actuator/health/liveness
     port: 8080
     initialDelay: 30
     failureThreshold: 10
   port: 8080
   prometheus:
     enabled: true
-    path: /actuator/prometheus
+    path: /varsel/actuator/prometheus
   readiness:
-    path: varsel/isReady
+    path: /varsel/actuator/health/readiness
     port: 8080
     initialDelay: 30
     timeout: 3

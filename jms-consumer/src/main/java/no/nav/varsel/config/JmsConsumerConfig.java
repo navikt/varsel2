@@ -11,10 +11,8 @@ import org.springframework.context.annotation.Import;
 
 /**
  * Spring config for JMS Consumers
- *
- * @author Andreas Skomedal, Visma Consulting.
  */
-@Import({ServiceConfig.class, JmsConfig.class,
+@Import({ServiceConfig.class, JmsConfig.class, ShutdownHook.class,
 		BestillServicemeldingConsumer.class,
 		BestillServicemeldingMedKontaktInfoConsumer.class})
 @Configuration
