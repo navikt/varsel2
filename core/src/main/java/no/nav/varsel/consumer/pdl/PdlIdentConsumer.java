@@ -7,7 +7,9 @@ import no.nav.varsel.consumer.pdl.support.ServerErrorException;
 import no.nav.varsel.consumer.pdl.to.PdlRequest;
 import no.nav.varsel.consumer.pdl.to.PdlResponse;
 import no.nav.varsel.consumer.sts.StsRestConsumer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.RequestEntity;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
@@ -17,8 +19,8 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import java.net.URI;
+import java.time.Duration;
 import java.util.HashMap;
 
 import static java.util.Objects.requireNonNull;
@@ -44,10 +46,13 @@ public class PdlIdentConsumer {
 	@Autowired
 	public PdlIdentConsumer(
 			@Value("${pdl.url}") String pdlUrl,
-			RestTemplate restTemplate,
+			RestTemplateBuilder restTemplateBuilder,
 			StsRestConsumer stsRestConsumer
 	) {
-		this.restTemplate = restTemplate;
+		this.restTemplate = restTemplateBuilder
+				.setConnectTimeout(Duration.ofSeconds(5))
+				.setReadTimeout(Duration.ofSeconds(20))
+				.build();
 		this.stsRestConsumer = stsRestConsumer;
 		this.pdlUri = UriComponentsBuilder.fromHttpUrl(pdlUrl).build().toUri();
 	}
