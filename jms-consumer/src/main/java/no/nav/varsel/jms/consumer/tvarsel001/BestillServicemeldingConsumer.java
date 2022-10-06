@@ -31,6 +31,7 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 	private static final Logger log = LoggerFactory.getLogger(BestillServicemeldingConsumer.class);
 
 	private static final String BESTILL_SERVICEMELDING_QUEUE = "bestillServicemeldingQueue";
+	private static final String BESTILL_SERVICEMELDING_FUNKSJONELL_FEIL_QUEUE = "bestillServicemeldingFunksjonellFeilQueue";
 
 	private final BestillServicemeldingMapper bestillServicemeldingMapper;
 	private final ServicemeldingService servicemeldingService;

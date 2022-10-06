@@ -31,6 +31,7 @@ public class BestillServicemeldingMedKontaktInfoConsumer extends AbstractJmsCons
 	private static final Logger log = LoggerFactory.getLogger(BestillServicemeldingMedKontaktInfoConsumer.class);
 
 	private static final String SERVICEMELDING_KONTAKT_INFO_QUEUE = "bestillServicemeldingKontaktInfoQueue";
+	private static final String BESTILL_SERVICEMELDING_FUNKSJONELL_FEIL_QUEUE = "bestillServicemeldingKontaktInfoFunksjonellFeilQueue";
 
 	@Autowired
 	private BestillServicemeldingMedKontaktInfoMapper mapper;

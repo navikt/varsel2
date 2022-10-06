@@ -22,6 +22,11 @@ public class QueueConfig {
 	}
 
 	@Bean
+	public Queue bestillServicemeldingFunksjonellFeilQueue(@Value("${bestillservicemelding.funkfeil.queuename}") String bestillServicemeldingFunksjonellFeilQueueName) throws JMSException {
+		return new MQQueue(bestillServicemeldingFunksjonellFeilQueueName);
+	}
+
+	@Bean
 	public Queue varselutsendingQueue(@Value("${varselutsending.queuename}") String varselutsendingQueueName) throws JMSException {
 		return new MQQueue(varselutsendingQueueName);
 	}
@@ -31,4 +36,8 @@ public class QueueConfig {
 		return new MQQueue(bestillServicemeldingKontaktInfoQueueName);
 	}
 
+	@Bean
+	public Queue bestillServicemeldingKontaktInfoFunksjonellFeilQueue(@Value("${bestillservicemeldingkontaktinfo.funkfeil.queuename}") String bestillServicemeldingKontaktInfoFunksjonellFeilQueueName) throws JMSException {
+		return new MQQueue(bestillServicemeldingKontaktInfoFunksjonellFeilQueueName);
+	}
 }
