@@ -35,6 +35,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -82,8 +84,13 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		Object backout = receive(backoutQueue);
 		assertNull(backout);
 
-		Object functionalFail = receive(bestillServicemeldingFunksjonellFeilQueue);
+		Varsel functionalFail = receive(bestillServicemeldingFunksjonellFeilQueue);
 		assertNotNull(functionalFail);
+		assertAll(
+				() -> assertThat(varsel.getValue().getVarslingstype(), is(samePropertyValuesAs(functionalFail.getVarslingstype()))),
+				() -> assertThat(varsel.getValue().getMottaker(), is(samePropertyValuesAs(functionalFail.getMottaker()))),
+				() -> assertThat(varsel.getValue().getUtloepstidspunkt().toString(), equalTo(functionalFail.getUtloepstidspunkt().toString()))
+		);
 	}
 
 	@Test

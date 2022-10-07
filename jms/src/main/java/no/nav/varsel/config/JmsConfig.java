@@ -98,14 +98,6 @@ public class JmsConfig {
 		return factory;
 	}
 
-	public JmsTemplate funkjsonellFeilSendJmsTemplate(DestinationResolver destinationResolver,
-																		  ConnectionFactory connectionFactory) {
-		var jmsTemplate = new JmsTemplate(connectionFactory);
-		jmsTemplate.setDestinationResolver(destinationResolver);
-		jmsTemplate.setMessageConverter(new ConsumerMessageConverter(converter()));
-		return jmsTemplate;
-	}
-
 	@Bean
 	public MessageConverter converter() {
 		MarshallingMessageConverter converter = new MarshallingMessageConverter(marshaller());
