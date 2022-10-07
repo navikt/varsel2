@@ -1,6 +1,7 @@
 package no.nav.varsel.jms.consumer.tvarsel006;
 
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
+import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapper;
@@ -10,9 +11,9 @@ import no.nav.varsel.service.to.BestillVarselTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListener;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.TextMessage;
 
 import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING_KONTAKTINFO;
@@ -31,15 +32,15 @@ public class BestillServicemeldingMedKontaktInfoConsumer extends AbstractJmsCons
 	private static final Logger log = LoggerFactory.getLogger(BestillServicemeldingMedKontaktInfoConsumer.class);
 
 	private static final String SERVICEMELDING_KONTAKT_INFO_QUEUE = "bestillServicemeldingKontaktInfoQueue";
-	private static final String BESTILL_SERVICEMELDING_FUNKSJONELL_FEIL_QUEUE = "bestillServicemeldingKontaktInfoFunksjonellFeilQueue";
+	private static final String BESTILL_SERVICEMELDING_KONTAKT_INFO_FUNKSJONELL_FEIL_QUEUE = "bestillServicemeldingKontaktInfoFunksjonellFeilQueue";
 
-	@Autowired
-	private BestillServicemeldingMedKontaktInfoMapper mapper;
-	@Autowired
-	private ServicemeldingService servicemeldingService;
+	private final BestillServicemeldingMedKontaktInfoMapper mapper;
+	private final ServicemeldingService servicemeldingService;
 
-	public BestillServicemeldingMedKontaktInfoConsumer() {
-		super(BESTILL_SERVICEMELDING_KONTAKTINFO, ServicemeldingMedKontaktinformasjon.class);
+	public BestillServicemeldingMedKontaktInfoConsumer(BestillServicemeldingMedKontaktInfoMapper bestillServicemeldingMedKontaktInfoMapper, ServicemeldingService servicemeldingService, JmsTemplate funksjonellFeilSendJmsTemplate) {
+		super(BESTILL_SERVICEMELDING_KONTAKTINFO, funksjonellFeilSendJmsTemplate, ServicemeldingMedKontaktinformasjon.class);
+		this.servicemeldingService = servicemeldingService;
+		this.mapper = bestillServicemeldingMedKontaktInfoMapper;
 	}
 
 	@Override
@@ -57,5 +58,11 @@ public class BestillServicemeldingMedKontaktInfoConsumer extends AbstractJmsCons
 	@JmsListener(destination = SERVICEMELDING_KONTAKT_INFO_QUEUE, id = BESTILL_SERVICEMELDING_KONTAKTINFO_NAME)
 	public JmsReply listen(TextMessage message) {
 		return doListen(message);
+	}
+
+	@Override
+	protected void handleNoJmsBackout(NoJmsBackoutException e, TextMessage message) {
+		super.handleNoJmsBackout(e, message);
+		jmsSend.send(BESTILL_SERVICEMELDING_KONTAKT_INFO_FUNKSJONELL_FEIL_QUEUE, session -> message);
 	}
 }

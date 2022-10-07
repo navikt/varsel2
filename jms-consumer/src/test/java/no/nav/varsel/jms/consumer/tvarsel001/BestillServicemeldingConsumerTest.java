@@ -35,6 +35,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 // Testen er altfor brittle. Burde skrives om.
@@ -42,6 +43,9 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	@Autowired
 	private Queue bestillServicemeldingQueue;
+
+	@Autowired
+	private Queue bestillServicemeldingFunksjonellFeilQueue;
 
 	@Test
 	@Disabled("Testen feiler på oppsett av Kafka. Vil i utgangspunktet stoppe testen før den kommer dit.")
@@ -69,7 +73,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	public void shouldNotPutOnBackoutIfFailedWsFunksjonell() {
+	public void shouldNotPutOnBackoutButOnTheOtherOneIfFailedWsFunksjonell() {
 		JAXBElement<Varsel> varsel = createVarsel();
 		stubPdlConsumerFunctionalErrorWithInternalServerError();
 		JmsReply response = sendMessage(bestillServicemeldingQueue, varsel);
@@ -77,6 +81,9 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 		Object backout = receive(backoutQueue);
 		assertNull(backout);
+
+		Object functionalFail = receive(bestillServicemeldingFunksjonellFeilQueue);
+		assertNotNull(functionalFail);
 	}
 
 	@Test
