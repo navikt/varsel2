@@ -61,8 +61,7 @@ public class BestillServicemeldingMedKontaktInfoConsumer extends AbstractJmsCons
 	}
 
 	@Override
-	protected void handleNoJmsBackout(NoJmsBackoutException e, TextMessage message) {
-		super.handleNoJmsBackout(e, message);
+	protected void performWriteToFunctionalErrorQueue(TextMessage message) {
 		jmsSend.send(BESTILL_SERVICEMELDING_KONTAKT_INFO_FUNKSJONELL_FEIL_QUEUE, session -> message);
 	}
 }

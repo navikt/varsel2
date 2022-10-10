@@ -114,11 +114,17 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 		return unmarshalledObject;
 	}
 
-	protected void handleNoJmsBackout(NoJmsBackoutException e, TextMessage message) {
+	private void handleNoJmsBackout(NoJmsBackoutException originalError, TextMessage message) {
 		noBackoutExceptionMeter.mark();
-		NO_BACKOUTLOG.warn("Nonbackout Error in service=" + jmsConsumer.getServiceName(), e);
-		// TODO: add a JMS write here
+		NO_BACKOUTLOG.warn("Nonbackout Error in service={}. Writing to functional error queue", jmsConsumer.getServiceName(), originalError);
+		try {
+			performWriteToFunctionalErrorQueue(message);
+		} catch (Exception e) {
+			NO_BACKOUTLOG.error("Unable to write message to functional error queue in service={}. Message discarded.", jmsConsumer.getServiceName(), e);
+		}
 	}
+
+	protected abstract void performWriteToFunctionalErrorQueue(TextMessage message);
 
 	@SuppressWarnings("unchecked")
 	private T unmarshal(TextMessage message) {
