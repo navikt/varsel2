@@ -12,6 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.retry.annotation.EnableRetry;
 
+import static java.lang.System.getenv;
+import static java.lang.System.setProperty;
+
 /**
  * Servlet 3.0 Spring Boot Application Initializer for Varsel
  *
@@ -25,6 +28,7 @@ import org.springframework.retry.annotation.EnableRetry;
 public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
+		setProperty("javax.net.ssl.keyStorePassword", getenv("VARSEL_CERT_KEYSTORE_PASSWORD"));
 		SpringApplication.run(Application.class, args);
 	}
 
