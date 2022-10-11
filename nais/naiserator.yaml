@@ -9,6 +9,14 @@ spec:
   kafka:
     pool: {{ KAFKA_POOL }}
   env:
+    - name: AZURE_APP_TOKEN_URL
+      value: {{AZURE_APP_TOKEN_URL}}
+    - name: AZURE_APP_SCOPE_DIGDIR_KRR
+      value: {{AZURE_APP_SCOPE_DIGDIR_KRR}}
+    - name: VARSEL_PROXY_HOST
+      value: {{VARSEL_PROXY_HOST}}
+    - name: VARSEL_PROXY_PORT
+      value: "{{VARSEL_PROXY_PORT}}"
     - name: SPRING_DATASOURCE_URL
       value: {{ SPRING_DATASOURCE_URL }}
     - name: MQGATEWAY01_HOSTNAME
@@ -17,12 +25,8 @@ spec:
       value: "{{ MQGATEWAY01_PORT }}"
     - name: MQGATEWAY01_NAME
       value: {{ MQGATEWAY01_NAME }}
-    - name: MQGATEWAY01_CHANNEL_NAME
-      value: {{ MQGATEWAY01_CHANNEL_NAME }}
-    - name: MQGATEWAY01_CHANNEL_SECURENAME
-      value: {{ MQGATEWAY01_CHANNEL_SECURENAME }}
-    - name: MQGATEWAY01_CHANNEL_ENABLETLS
-      value: "{{ MQGATEWAY01_CHANNEL_ENABLETLS }}"
+    - name: VARSELCHANNEL_NAME
+      value: {{ VARSELCHANNEL_NAME }}
     - name: DIGDIR_KRR_PROXY_URL
       value: {{ DIGDIR_KRR_PROXY_URL }}
     - name: SECURITYTOKENSERVICE_URL
@@ -33,6 +37,8 @@ spec:
       value: {{ DOKKAT_VARSELINFO_REST_URL }}
     - name: PDL_URL
       value: {{ PDL_URL }}
+    - name: VARSEL_SIGSUBJECTCERTCONSTRAINTS
+      value: {{ VARSEL_SIGSUBJECTCERTCONSTRAINTS }}
     - name: VARSELUTSENDING_QUEUENAME
       value: {{ VARSELUTSENDING_QUEUENAME }}
     - name: BESTILLSERVICEMELDING_QUEUENAME
@@ -55,16 +61,16 @@ spec:
        - {{ this }}
            {{/each}}
   liveness:
-    path: varsel/isAlive
+    path: /varsel/actuator/health/liveness
     port: 8080
     initialDelay: 30
     failureThreshold: 10
   port: 8080
   prometheus:
     enabled: true
-    path: /actuator/prometheus
+    path: /varsel/actuator/prometheus
   readiness:
-    path: varsel/isReady
+    path: /varsel/actuator/health/readiness
     port: 8080
     initialDelay: 30
     timeout: 3
@@ -87,3 +93,6 @@ spec:
         mountPath: /secrets/serviceuser/srvvarsel
       - kvPath: {{ VARSEL_CERT }}
         mountPath: /var/run/secrets/nais.io/certificate
+  azure:
+    application:
+      enabled: true
