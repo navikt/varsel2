@@ -42,6 +42,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractConsumerJmsTest {
 
@@ -52,6 +55,9 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 
 	@Autowired
 	private Queue varselutsendingQueue;
+
+	@Autowired
+	private Queue bestillServicemeldingKontaktInfoFunksjonellFeilQueue;
 
 	@BeforeEach
 	public void setUp() {
@@ -79,6 +85,13 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 		isOk(response);
 
 		loggerMock.verify("Nonbackout Error in service=tvarsel006");
+
+		ServicemeldingMedKontaktinformasjon functionalFail = receive(bestillServicemeldingKontaktInfoFunksjonellFeilQueue);
+		assertNotNull(functionalFail);
+		assertAll(
+				() -> assertThat(servicemelding.getValue().getMottaker(), is(samePropertyValuesAs(functionalFail.getMottaker()))),
+				() -> assertThat(servicemelding.getValue().getUtloepstidspunkt().toString(), equalTo(functionalFail.getUtloepstidspunkt().toString()))
+		);
 	}
 
 	@Test

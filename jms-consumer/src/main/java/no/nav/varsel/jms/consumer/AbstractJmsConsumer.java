@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jms.annotation.JmsListener;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.util.Assert;
 
@@ -36,6 +37,7 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractJmsConsumer.class);
 
 	private final JmsConsumer jmsConsumer;
+	protected final JmsTemplate jmsSend;
 	private final Class<T> inputType;
 
 	private Jaxb2Marshaller marshaller;
@@ -46,8 +48,9 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 	private Meter exceptionMeter;
 	private Meter noBackoutExceptionMeter;
 
-	public AbstractJmsConsumer(JmsConsumer jmsConsumer, Class<T> inputType) {
+	public AbstractJmsConsumer(JmsConsumer jmsConsumer, JmsTemplate jmsSend, Class<T> inputType) {
 		this.jmsConsumer = jmsConsumer;
+		this.jmsSend = jmsSend;
 		this.inputType = inputType;
 	}
 
@@ -102,8 +105,7 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 			unmarshalledObject = unmarshal(message);
 			handleMessage(new ObjectMessageWrapper<>(unmarshalledObject, message));
 		} catch (NoJmsBackoutException e) {
-			noBackoutExceptionMeter.mark();
-			NO_BACKOUTLOG.warn("Nonbackout Error in service=" + jmsConsumer.getServiceName(), e);
+			handleNoJmsBackout(e, message);
 		} catch (Exception e) {
 			exceptionMeter.mark();
 			jmsConsumerManager.registerError(jmsConsumer);
@@ -111,6 +113,18 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 		}
 		return unmarshalledObject;
 	}
+
+	private void handleNoJmsBackout(NoJmsBackoutException originalError, TextMessage message) {
+		noBackoutExceptionMeter.mark();
+		NO_BACKOUTLOG.warn("Nonbackout Error in service={}. Writing to functional error queue", jmsConsumer.getServiceName(), originalError);
+		try {
+			performWriteToFunctionalErrorQueue(message);
+		} catch (Exception e) {
+			NO_BACKOUTLOG.error("Unable to write message to functional error queue in service={}. Message discarded.", jmsConsumer.getServiceName(), e);
+		}
+	}
+
+	protected abstract void performWriteToFunctionalErrorQueue(TextMessage message);
 
 	@SuppressWarnings("unchecked")
 	private T unmarshal(TextMessage message) {

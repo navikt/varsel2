@@ -2,6 +2,7 @@ package no.nav.varsel.jms.consumer.tvarsel001;
 
 
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
+import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapper;
@@ -11,6 +12,7 @@ import no.nav.varsel.service.to.BestillVarselTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListener;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.jms.TextMessage;
@@ -31,12 +33,13 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 	private static final Logger log = LoggerFactory.getLogger(BestillServicemeldingConsumer.class);
 
 	private static final String BESTILL_SERVICEMELDING_QUEUE = "bestillServicemeldingQueue";
+	private static final String BESTILL_SERVICEMELDING_FUNKSJONELL_FEIL_QUEUE = "bestillServicemeldingFunksjonellFeilQueue";
 
 	private final BestillServicemeldingMapper bestillServicemeldingMapper;
 	private final ServicemeldingService servicemeldingService;
 
-	public BestillServicemeldingConsumer(BestillServicemeldingMapper bestillServicemeldingMapper, ServicemeldingService servicemeldingService) {
-		super(BESTILL_SERVICEMELDING, Varsel.class);
+	public BestillServicemeldingConsumer(BestillServicemeldingMapper bestillServicemeldingMapper, ServicemeldingService servicemeldingService, JmsTemplate funksjonellFeilSendJmsTemplate) {
+		super(BESTILL_SERVICEMELDING, funksjonellFeilSendJmsTemplate, Varsel.class);
 		this.bestillServicemeldingMapper = bestillServicemeldingMapper;
 		this.servicemeldingService = servicemeldingService;
 	}
@@ -55,5 +58,10 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 		to.validateTvarsel001Input();
 		servicemeldingService.bestillServicemelding(to);
 		clearCallId();
+	}
+
+	@Override
+	protected void performWriteToFunctionalErrorQueue(TextMessage message) {
+		jmsSend.send(BESTILL_SERVICEMELDING_FUNKSJONELL_FEIL_QUEUE, session -> message);
 	}
 }
