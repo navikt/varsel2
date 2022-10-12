@@ -36,6 +36,7 @@ import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
+import javax.net.ssl.SSLSocketFactory;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -58,6 +59,8 @@ public class JmsConfig {
 	private String srvVarselPassword;
 
 	private static final Logger LOG = LoggerFactory.getLogger(JmsConfig.class);
+	private static final String ANY_TLS13_OR_HIGHER = "*TLS13ORHIGHER";
+
 
 	@Bean
 	public JmsTemplate jmsTemplate(DestinationResolver destinationResolver,
@@ -119,13 +122,22 @@ public class JmsConfig {
 	}
 
 	@Bean
-	public ConnectionFactory connectionFactory(final MqGatewayProperties mqGatewayAlias, final @Value("${varselchannel.name}") String channelName) throws JMSException {
+	public ConnectionFactory connectionFactory(final MqGatewayProperties mqGatewayAlias) throws JMSException {
 		MQConnectionFactory connectionFactory = new MQConnectionFactory();
 		connectionFactory.setHostName(mqGatewayAlias.getHostname());
 		connectionFactory.setPort(mqGatewayAlias.getPort());
-		connectionFactory.setChannel(channelName);
 		connectionFactory.setQueueManager(mqGatewayAlias.getName());
 		connectionFactory.setTransportType(WMQConstants.WMQ_CM_CLIENT);
+
+		if (mqGatewayAlias.getChannel().isEnabletls()) {
+			connectionFactory.setSSLCipherSuite(ANY_TLS13_OR_HIGHER);
+			SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+			connectionFactory.setSSLSocketFactory(factory);
+			connectionFactory.setChannel(mqGatewayAlias.getChannel().getSecurename());
+		} else {
+			connectionFactory.setChannel(mqGatewayAlias.getChannel().getName());
+		}
+
 		UserCredentialsConnectionFactoryAdapter adapter = new UserCredentialsConnectionFactoryAdapter();
 		adapter.setTargetConnectionFactory(connectionFactory);
 		adapter.setUsername(srvVarselUsername);
