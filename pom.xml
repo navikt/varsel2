@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.9</version>
+		<version>2.7.5</version>
 	</parent>
 
 	<properties>
@@ -58,6 +58,8 @@
 
 		<!-- test -->
 		<spring-cloud-contract-wiremock.version>3.1.4</spring-cloud-contract-wiremock.version>
+		<!-- Spring Boot 2.7.x drar inn versjon 2.1.x av h2 som gir problem for testene -->
+		<h2.version>1.4.200</h2.version>
 	</properties>
 
 	<dependencyManagement>
