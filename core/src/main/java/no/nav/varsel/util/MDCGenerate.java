@@ -7,6 +7,7 @@ import java.util.UUID;
 public class MDCGenerate {
 	public static final String CALL_ID = "Nav-Call-Id";
 	public static final String USER_ID = "userId";
+	public static final String NAV_CONSUMER_ID = "Nav-Consumer-Id";
 
 	public static void generateCallId() {
 		MDC.put(CALL_ID, UUID.randomUUID().toString());
