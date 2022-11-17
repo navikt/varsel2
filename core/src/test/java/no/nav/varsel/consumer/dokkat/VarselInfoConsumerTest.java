@@ -63,7 +63,7 @@ public class VarselInfoConsumerTest {
 	public void shouldConsume() {
 		VarselInfoRestTo varselInfoRestTo = new VarselInfoRestTo();
 		ResponseEntity<VarselInfoRestTo> response = new ResponseEntity<>(varselInfoRestTo, HttpStatus.OK);
-		when(restTemplate.exchange(anyString(), eq(GET), any(HttpEntity.class), eq(VarselInfoRestTo.class)))
+		when(restTemplate.exchange(anyString(), eq(GET), any(HttpEntity.class), eq(VarselInfoRestTo.class), anyString()))
 				.thenReturn(response);
 
 		VarselInfoTo mock = new VarselInfoTo();
@@ -75,7 +75,7 @@ public class VarselInfoConsumerTest {
 
 	@Test
 	public void shouldGiveVarseltypeIdInExceptionMessageWhen404() {
-		when(restTemplate.exchange(anyString(), eq(GET), any(HttpEntity.class), eq(VarselInfoRestTo.class)))
+		when(restTemplate.exchange(anyString(), eq(GET), any(HttpEntity.class), eq(VarselInfoRestTo.class), anyString()))
 				.thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
 
 		Exception e = Assertions.assertThrows(RuntimeException.class, () -> varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID));

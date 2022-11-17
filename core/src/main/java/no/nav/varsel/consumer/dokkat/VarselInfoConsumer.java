@@ -2,22 +2,14 @@ package no.nav.varsel.consumer.dokkat;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
-import no.nav.varsel.azure.TokenConsumer;
-import no.nav.varsel.azure.TokenResponse;
-import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.consumer.dokkat.support.VarselInfoMapper;
 import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriBuilder;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import static no.nav.varsel.consumer.pdl.helper.DomainConstants.APP_NAME;
 import static no.nav.varsel.util.MDCGenerate.CALL_ID;
@@ -43,13 +35,12 @@ public class VarselInfoConsumer {
 	public VarselInfoTo hentVarselInfo(String varseltypeId) {
 		VarselInfoRestTo varselInfo;
 		HttpHeaders headers = createHeaders();
-		String url = varselinfoUrl + "/" + varseltypeId;
 
 		try {
 			HttpEntity<String> request = new HttpEntity<>(headers);
-			varselInfo = restTemplate.exchange(url, GET, request, VarselInfoRestTo.class).getBody();
+			varselInfo = restTemplate.exchange(varselinfoUrl + "/{varseltypeId}", GET, request, VarselInfoRestTo.class, varseltypeId).getBody();
 		} catch (Exception e) {
-			throw new RuntimeException("Could not find varseltypeId=" + varseltypeId + " from url=" + url, e);
+			throw new RuntimeException("Could not find varseltypeId=" + varseltypeId + " from url=" + varselinfoUrl, e);
 		}
 		return varselInfoMapper.map(varselInfo);
 	}
