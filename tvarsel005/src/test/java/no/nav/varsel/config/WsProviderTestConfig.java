@@ -44,7 +44,6 @@ public class WsProviderTestConfig {
 	public AzureProperties azureProperties() {
 		AzureProperties azureproperties = new AzureProperties();
 		azureproperties.setAppScopeDigdirKrr("scope");
-		azureproperties.setAppScopeDokmet("scope_dokmet");
 		azureproperties.setAppClientId("clientId");
 		azureproperties.setAppClientSecret("secret");
 		azureproperties.setOpenidConfigTokenEndpoint("url");

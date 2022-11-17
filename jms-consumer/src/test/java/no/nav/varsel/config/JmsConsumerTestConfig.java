@@ -40,7 +40,6 @@ public class JmsConsumerTestConfig {
 	public AzureProperties azureProperties() {
 		AzureProperties azureproperties = new AzureProperties();
 		azureproperties.setAppScopeDigdirKrr("scope");
-		azureproperties.setAppScopeDokmet("dokmet_scope");
 		azureproperties.setAppClientId("clientId");
 		azureproperties.setAppClientSecret("secret");
 		azureproperties.setOpenidConfigTokenEndpoint("url");

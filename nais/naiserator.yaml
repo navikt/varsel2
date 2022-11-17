@@ -11,8 +11,6 @@ spec:
   env:
     - name: AZURE_APP_SCOPE_DIGDIR_KRR
       value: {{AZURE_APP_SCOPE_DIGDIR_KRR}}
-    - name: AZURE_APP_SCOPE_DOKMET
-      value: {{AZURE_APP_SCOPE_DOKMET}}
     - name: VARSEL_PROXY_HOST
       value: {{VARSEL_PROXY_HOST}}
     - name: VARSEL_PROXY_PORT

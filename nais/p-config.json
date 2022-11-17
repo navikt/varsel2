@@ -31,6 +31,5 @@
   "LISTENER_AUTO_STARTUP": "true",
   "VARSEL_PROXY_HOST": "webproxy.nais",
   "VARSEL_PROXY_PORT": "8088",
-  "AZURE_APP_SCOPE_DIGDIR_KRR": "api://prod-gcp.team-rocket.digdir-krr-proxy/.default",
-  "AZURE_APP_SCOPE_DOKMET": "api://prod-fss.teamdokumenthandtering.dokmet/.default"
+  "AZURE_APP_SCOPE_DIGDIR_KRR": "api://prod-gcp.team-rocket.digdir-krr-proxy/.default"
 }
