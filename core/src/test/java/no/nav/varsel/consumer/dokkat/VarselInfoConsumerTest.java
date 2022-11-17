@@ -1,33 +1,41 @@
 package no.nav.varsel.consumer.dokkat;
 
-import com.google.common.collect.Sets;
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
-import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
-import no.nav.varsel.domain.code.KanalCode;
+import no.nav.varsel.azure.TokenConsumer;
+import no.nav.varsel.azure.TokenResponse;
+import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.consumer.dokkat.support.VarselInfoMapper;
 import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.consumer.dokkat.to.VarselMalTo;
+import no.nav.varsel.domain.code.KanalCode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpMethod.GET;
 
 /**
  * Unit test for {@link VarselInfoConsumer}
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(classes = {VarselInfoConsumer.class})
+@ActiveProfiles({"itest"})
 public class VarselInfoConsumerTest {
 
 	public static final String VARSEL_TITTEL = "Varsel Tittel";
@@ -37,37 +45,29 @@ public class VarselInfoConsumerTest {
 	public static final String VARSEL_KATEGORI = "varkat";
 	public static final boolean INAKTIV = false;
 	public static final int REVARSLING_INTERVALL = 4;
-	public static final int ANTALL_REVARSLING = 2;
 	public static final KanalCode PREFERERT_KANAL = KanalCode.EPOST;
 	public static final String VARSEL_NAVN = "varselnavn";
 	public static final String VARSEL_URL = "http://nav.no";
 
-	public static final String VARSEL_URL_MED_FLETTING = VARSEL_URL + "/{param}";
-	public static final KanalCode VARSEL_URL_PREFERERT_KANAL = KanalCode.DITT_NAV;
-
 	private static final String VARSELTYPE_ID = "varseltypeIden";
-	private static final String DOKKAT_URL = "http://nav.no/varselinfo";
 
-	@Mock
+	@MockBean
 	private RestTemplate restTemplate;
-	@Mock
+	@MockBean
 	private VarselInfoMapper varselInfoMapper;
 
-	@InjectMocks
+	@Autowired
 	private VarselInfoConsumer varselInfoConsumer;
-
-	@BeforeEach
-	public void setUp() throws Exception {
-		varselInfoConsumer.setVarselinfoUrl(DOKKAT_URL);
-	}
 
 	@Test
 	public void shouldConsume() {
-		VarselInfoRestTo restTo = new VarselInfoRestTo();
-		when(restTemplate.getForObject(DOKKAT_URL + "/{varseltypeId}", VarselInfoRestTo.class, VARSELTYPE_ID))
-				.thenReturn(restTo);
+		VarselInfoRestTo varselInfoRestTo = new VarselInfoRestTo();
+		ResponseEntity<VarselInfoRestTo> response = new ResponseEntity<>(varselInfoRestTo, HttpStatus.OK);
+		when(restTemplate.exchange(anyString(), eq(GET), any(HttpEntity.class), eq(VarselInfoRestTo.class), anyString()))
+				.thenReturn(response);
+
 		VarselInfoTo mock = new VarselInfoTo();
-		when(varselInfoMapper.map(restTo)).thenReturn(mock);
+		when(varselInfoMapper.map(varselInfoRestTo)).thenReturn(mock);
 
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID);
 		assertThat(varselInfoTo, is(mock));
@@ -75,33 +75,10 @@ public class VarselInfoConsumerTest {
 
 	@Test
 	public void shouldGiveVarseltypeIdInExceptionMessageWhen404() {
-		when(restTemplate.getForObject(DOKKAT_URL + "/{varseltypeId}", VarselInfoRestTo.class, VARSELTYPE_ID))
+		when(restTemplate.exchange(anyString(), eq(GET), any(HttpEntity.class), eq(VarselInfoRestTo.class), anyString()))
 				.thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
 
 		Exception e = Assertions.assertThrows(RuntimeException.class, () -> varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID));
-		Assertions.assertEquals("Could not find varseltypeId=varseltypeIden from url=http://nav.no/varselinfo/{varseltypeId}", e.getMessage());
+		Assertions.assertTrue(e.getMessage().contains("Could not find varseltypeId=varseltypeIden from url="));
 	}
-
-	public static VarselInfoTo createVarselInfoTo(String varseltype) {
-		VarselInfoTo varselInfoTo = new VarselInfoTo();
-		varselInfoTo.setVarseltypeId(varseltype);
-		varselInfoTo.setVarselNavn(VARSEL_NAVN);
-		varselInfoTo.setVarselForDistKanal(VARSEL_FOR_DIST_KANAL);
-		varselInfoTo.setVarselKategori(VARSEL_KATEGORI);
-		varselInfoTo.setInaktiv(INAKTIV);
-		varselInfoTo.setRevarslingIntervall(REVARSLING_INTERVALL);
-		varselInfoTo.setAntallRevarsling(ANTALL_REVARSLING);
-		varselInfoTo.setVarselUrl(VARSEL_URL);
-		varselInfoTo.addPreferertKanal(PREFERERT_KANAL);
-
-		VarselMalTo varselMalTo = new VarselMalTo();
-		varselMalTo.setKanal(PREFERERT_KANAL);
-		varselMalTo.setTittel(VARSEL_TITTEL);
-		varselMalTo.setFoerstegangsTekst(FOERSTE_GANG_TEKST);
-		varselMalTo.setRevarslingTekst(REVARSLING_TEKST);
-
-		varselInfoTo.setMaler(Sets.newHashSet(varselMalTo));
-		return varselInfoTo;
-	}
-
 }

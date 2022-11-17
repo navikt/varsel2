@@ -1,4 +1,4 @@
-package no.nav.varsel.azure.digdir;
+package no.nav.varsel.azure;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,19 +10,15 @@ import javax.validation.constraints.NotEmpty;
  * Konfigurert av naiserator. https://doc.nais.io/security/auth/azure-ad/#runtime-variables-credentials
  */
 @Data
-@ConfigurationProperties("azure.app")
+@ConfigurationProperties("azure")
 @Validated
 public class AzureProperties {
 	@NotEmpty
-	private String tokenUrl;
+	private String openidConfigTokenEndpoint;
 	@NotEmpty
-	private String clientId;
+	private String appClientId;
 	@NotEmpty
-	private String clientSecret;
+	private String appClientSecret;
 	@NotEmpty
-	private String tenantId;
-	@NotEmpty
-	private String wellKnownUrl;
-	@NotEmpty
-	private String scopeDigdirKrr;
+	private String appScopeDigdirKrr;
 }

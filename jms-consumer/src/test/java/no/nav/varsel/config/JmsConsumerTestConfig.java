@@ -2,9 +2,10 @@ package no.nav.varsel.config;
 
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
-import no.nav.varsel.azure.digdir.AzureProperties;
+import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
+import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
 import no.nav.varsel.kafka.CustomKafkaTemplate;
 import no.nav.varsel.repo.config.RepoTestConfig;
@@ -17,12 +18,15 @@ import org.springframework.context.annotation.Import;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@Import({JmsTestConfig.class, RepoTestConfig.class,
-		ServiceTestConfig.class, JmsConsumerConfig.class,
+@Import({JmsTestConfig.class,
+		RepoTestConfig.class,
+		ServiceTestConfig.class,
+		JmsConsumerConfig.class,
 		CustomKafkaTemplate.class,
 		HentDigitalKontaktinformasjonConsumer.class,
 		VarselKanalDecider.class,
-		HentDigitalKontaktinformasjonMapper.class
+		HentDigitalKontaktinformasjonMapper.class,
+		VarselInfoConsumer.class
 })
 @Configuration
 public class JmsConsumerTestConfig {
@@ -35,12 +39,10 @@ public class JmsConsumerTestConfig {
 	@Bean
 	public AzureProperties azureProperties() {
 		AzureProperties azureproperties = new AzureProperties();
-		azureproperties.setScopeDigdirKrr("scope");
-		azureproperties.setClientId("clientId");
-		azureproperties.setClientSecret("secret");
-		azureproperties.setTenantId("tenantId");
-		azureproperties.setTokenUrl("url");
-		azureproperties.setWellKnownUrl("wellKnown");
+		azureproperties.setAppScopeDigdirKrr("scope");
+		azureproperties.setAppClientId("clientId");
+		azureproperties.setAppClientSecret("secret");
+		azureproperties.setOpenidConfigTokenEndpoint("url");
 		return azureproperties;
 	}
 

@@ -9,8 +9,6 @@ spec:
   kafka:
     pool: {{ KAFKA_POOL }}
   env:
-    - name: AZURE_APP_TOKEN_URL
-      value: {{AZURE_APP_TOKEN_URL}}
     - name: AZURE_APP_SCOPE_DIGDIR_KRR
       value: {{AZURE_APP_SCOPE_DIGDIR_KRR}}
     - name: VARSEL_PROXY_HOST
@@ -37,8 +35,8 @@ spec:
       value: {{ SECURITYTOKENSERVICE_URL }}
     - name: SECURITY_TOKEN_REST_SERVICE_URL
       value: {{ SECURITY_TOKEN_REST_SERVICE_URL }}
-    - name: DOKKAT_VARSELINFO_REST_URL
-      value: {{ DOKKAT_VARSELINFO_REST_URL }}
+    - name: DOKMET_VARSELINFO_URL
+      value: {{ DOKMET_VARSELINFO_URL }}
     - name: PDL_URL
       value: {{ PDL_URL }}
     - name: VARSEL_SIGSUBJECTCERTCONSTRAINTS

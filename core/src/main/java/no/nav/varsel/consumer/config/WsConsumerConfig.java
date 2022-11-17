@@ -22,12 +22,6 @@ import org.springframework.context.annotation.Import;
 @Configuration
 public class WsConsumerConfig {
 
-
-	@Bean
-	public VarselInfoConsumer varselInfoConsumer() {
-		return new VarselInfoConsumer();
-	}
-
 	@Bean
 	HttpClient httpClient(HttpClientConnectionManager connectionManager) {
 		return HttpClients.custom()

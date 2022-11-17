@@ -1,46 +1,54 @@
 package no.nav.varsel.consumer.dokkat;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
 import no.nav.varsel.consumer.dokkat.support.VarselInfoMapper;
 import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.Assert;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import static no.nav.varsel.consumer.pdl.helper.DomainConstants.APP_NAME;
+import static no.nav.varsel.util.MDCGenerate.CALL_ID;
+import static no.nav.varsel.util.MDCGenerate.NAV_CONSUMER_ID;
+import static org.springframework.http.HttpMethod.GET;
 
-
+@Component
+@Slf4j
 public class VarselInfoConsumer {
 
-	@Autowired
-	private RestTemplate restTemplate;
+	private final RestTemplate restTemplate;
+	private final VarselInfoMapper varselInfoMapper;
+	private final String varselinfoUrl;
 
-	private String varselinfoUrlGet;
-
-	@Autowired
-	private VarselInfoMapper varselInfoMapper;
+	public VarselInfoConsumer(@Value("${dokmet.varselinfo.url}") String varselinfoUrl,
+							  RestTemplate restTemplate,
+							  VarselInfoMapper varselInfoMapper) {
+		this.restTemplate = restTemplate;
+		this.varselinfoUrl = varselinfoUrl;
+		this.varselInfoMapper = varselInfoMapper;
+	}
 
 	public VarselInfoTo hentVarselInfo(String varseltypeId) {
 		VarselInfoRestTo varselInfo;
+		HttpHeaders headers = createHeaders();
+
 		try {
-			varselInfo = restTemplate.getForObject(varselinfoUrlGet, VarselInfoRestTo.class, varseltypeId);
+			HttpEntity<String> request = new HttpEntity<>(headers);
+			varselInfo = restTemplate.exchange(varselinfoUrl + "/{varseltypeId}", GET, request, VarselInfoRestTo.class, varseltypeId).getBody();
 		} catch (Exception e) {
-			throw new RuntimeException("Could not find varseltypeId=" + varseltypeId + " from url=" + varselinfoUrlGet, e);
+			throw new RuntimeException("Could not find varseltypeId=" + varseltypeId + " from url=" + varselinfoUrl, e);
 		}
 		return varselInfoMapper.map(varselInfo);
 	}
 
-	@Autowired
-	public void setVarselinfoUrl(@Value("${dokkat.varselinfo.rest.url}") String varselinfoUrl) {
-		varselinfoUrlGet = varselinfoUrl;
-		if (!varselinfoUrlGet.endsWith("/")) {
-			varselinfoUrlGet += "/";
-		}
-		varselinfoUrlGet += "{varseltypeId}";
-	}
-
-	public void ping() {
-		String ping = restTemplate.getForObject(varselinfoUrlGet, String.class, "ping");
-		Assert.isTrue("\"ok\"".equals(ping), "VarselInfo ping failed " + ping);
+	private HttpHeaders createHeaders() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(NAV_CONSUMER_ID, APP_NAME);
+		headers.add(CALL_ID, MDC.get(CALL_ID));
+		return headers;
 	}
 }

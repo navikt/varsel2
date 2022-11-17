@@ -2,7 +2,7 @@ package no.nav.varsel.consumer.dkif;
 
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
-import no.nav.varsel.azure.digdir.AzureProperties;
+import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dkif.support.PostPersonerRequest;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
@@ -113,7 +113,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 	}
 
 	private HttpHeaders createHeaders() {
-		TokenResponse clientCredentialToken = tokenConsumer.getClientCredentialToken(azureProperties.getScopeDigdirKrr());
+		TokenResponse clientCredentialToken = tokenConsumer.getClientCredentialToken(azureProperties.getAppScopeDigdirKrr());
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 headers.setBearerAuth(clientCredentialToken.getAccess_token());
