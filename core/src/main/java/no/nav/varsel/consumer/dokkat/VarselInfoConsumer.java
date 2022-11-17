@@ -1,5 +1,6 @@
 package no.nav.varsel.consumer.dokkat;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -23,24 +25,19 @@ import static no.nav.varsel.util.MDCGenerate.NAV_CONSUMER_ID;
 import static org.springframework.http.HttpMethod.GET;
 
 @Component
+@Slf4j
 public class VarselInfoConsumer {
 
 	private final RestTemplate restTemplate;
 	private final VarselInfoMapper varselInfoMapper;
-	private final TokenConsumer tokenConsumer;
-	private final AzureProperties azureProperties;
 	private final String varselinfoUrl;
 
 	public VarselInfoConsumer(@Value("${dokmet.varselinfo.url}") String varselinfoUrl,
 							  RestTemplate restTemplate,
-							  VarselInfoMapper varselInfoMapper,
-							  TokenConsumer tokenConsumer,
-							  AzureProperties azureProperties) {
+							  VarselInfoMapper varselInfoMapper) {
 		this.restTemplate = restTemplate;
 		this.varselinfoUrl = varselinfoUrl;
 		this.varselInfoMapper = varselInfoMapper;
-		this.tokenConsumer = tokenConsumer;
-		this.azureProperties = azureProperties;
 	}
 
 	public VarselInfoTo hentVarselInfo(String varseltypeId) {
@@ -58,12 +55,9 @@ public class VarselInfoConsumer {
 	}
 
 	private HttpHeaders createHeaders() {
-		TokenResponse clientCredentialToken = tokenConsumer.getClientCredentialToken(azureProperties.getAppScopeDokmet());
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(clientCredentialToken.getAccess_token());
 		headers.add(NAV_CONSUMER_ID, APP_NAME);
 		headers.add(CALL_ID, MDC.get(CALL_ID));
 		return headers;
 	}
-
 }

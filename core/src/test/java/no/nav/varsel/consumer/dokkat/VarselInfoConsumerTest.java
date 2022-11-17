@@ -34,7 +34,7 @@ import static org.springframework.http.HttpMethod.GET;
  *
  * @author Andreas Skomedal, Visma Consulting.
  */
-@SpringBootTest(classes = {VarselInfoConsumer.class, AzureProperties.class})
+@SpringBootTest(classes = {VarselInfoConsumer.class})
 @ActiveProfiles({"itest"})
 public class VarselInfoConsumerTest {
 
@@ -50,22 +50,14 @@ public class VarselInfoConsumerTest {
 	public static final String VARSEL_URL = "http://nav.no";
 
 	private static final String VARSELTYPE_ID = "varseltypeIden";
-	private static final String DOKKAT_URL = "http://nav.no/varselinfo";
 
 	@MockBean
 	private RestTemplate restTemplate;
 	@MockBean
 	private VarselInfoMapper varselInfoMapper;
-	@MockBean
-	private TokenConsumer tokenConsumer;
 
 	@Autowired
 	private VarselInfoConsumer varselInfoConsumer;
-
-	@BeforeEach
-	public void setUp() throws Exception {
-		when(tokenConsumer.getClientCredentialToken(any())).thenReturn(new TokenResponse());
-	}
 
 	@Test
 	public void shouldConsume() {
