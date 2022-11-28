@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Import;
 		ProviderWsConfig.class,
 		RetryLoggingInterceptor.class,
 		CustomKafkaTemplate.class,
-		ExponentialBackoffErrorHandlerBeans.class,
+		ExponentialBackoffErrorHandlers.class,
 		NotifikasjonStatusConsumer.class
 })
 public class AppConfig {

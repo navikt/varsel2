@@ -9,7 +9,7 @@ import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 import org.springframework.util.backoff.ExponentialBackOff;
 
 @Configuration
-public class ExponentialBackoffErrorHandlerBeans {
+public class ExponentialBackoffErrorHandlers {
 
 	@Bean
 	public <K, V> ContainerCustomizer<K, V, KafkaMessageListenerContainer<K, V>> defaultKafkaMessageListenerCustomizer(
