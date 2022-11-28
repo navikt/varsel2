@@ -9,11 +9,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -25,6 +27,7 @@ import static no.nav.varsel.kvarsel001.TestUtils.createVarselbestilling;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest(classes = Kvarsel001ITest.class)
 @EmbeddedKafka(
@@ -40,12 +43,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 )
 @ActiveProfiles("itest")
 @EnableAutoConfiguration
-@Import({NotifikasjonStatusConsumer.class, RepoTestConfig.class})
+@Import(RepoTestConfig.class)
 public class Kvarsel001ITest {
 
 	private static final String TOPIC = "teamdokumenthandtering.aapen-dok-notifikasjon-status";
 
 	private DoknotifikasjonStatus doknotifikasjonStatus;
+
+	@Autowired
+	DefaultErrorHandler spyableExponentialBackoffErrorhandler;
 
 	@Autowired
 	KafkaTemplate<String, Object> kafkaTemplate;
@@ -90,4 +96,23 @@ public class Kvarsel001ITest {
 		});
 	}
 
+	@Test
+	public void shouldRetryAndBackoffOnNotExistingInDb() {
+		varselbestillingRepo.deleteAll();
+		varselRepo.deleteAll();
+		kafkaTemplate.send(TOPIC, doknotifikasjonStatus);
+
+		await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+			Mockito.verify(spyableExponentialBackoffErrorhandler, Mockito.times(4)).handleRemaining(any(), any(), any(), any());
+		});
+
+		var varselbestilling = varselbestillingRepo.save(createVarselbestilling());
+		varselRepo.save(createVarsel(varselbestilling));
+
+		await().atMost(Duration.ofSeconds(10)).untilAsserted(() -> {
+			var result = varselRepo.findAll().get(0);
+			assertEquals(StatusCode.FERDIGBEHANDLET, result.getStatus());
+			assertNotNull(result.getDistribusjonTidspunkt());
+		});
+	}
 }
