@@ -1,18 +1,14 @@
 package no.nav.varsel.service;
 
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
-import static java.util.regex.Pattern.compile;
-import static no.nav.varsel.domain.Constants.LOCALE_NO;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import no.nav.varsel.service.support.exception.functional.FletteparameterMissingException;
 import no.nav.varsel.service.support.exception.functional.InvalidDateTimeFormatException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -21,11 +17,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Helper for replacing values in a varsel
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import static java.util.regex.Pattern.compile;
+import static no.nav.varsel.domain.Constants.LOCALE_NO;
+
 public class VarselFletter {
 
 	private static final Pattern TEKST_PARAMETER_PATTERN = compile("\\{([æøåA-Z0-9\\-_]+)}", CASE_INSENSITIVE);

@@ -23,11 +23,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-/**
- * Unit test for {@link BestillServicemeldingMapper}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class BestillServicemeldingMapperTest {
 
 	public static final LocalDateTime UTLOEPSTIDSPUNKT_LDT = LocalDateTime.now().plusHours(1);

@@ -12,12 +12,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Implementation of {@link VarselbestillingRepoCustom}
- *
- * @author Lars Aune
- * @author Andreas Skomedal, Visma Consulting
- */
 public class VarselbestillingRepoImpl implements VarselbestillingRepoCustom {
 
 	@PersistenceContext

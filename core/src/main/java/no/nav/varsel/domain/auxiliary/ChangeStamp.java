@@ -5,11 +5,6 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/**
- * ChangeStamp used to track changes in no.nav.varsel.domain objects.
- *
- * @author Thomas Eugen Bjørge, Visma Consulting
- */
 @Embeddable
 public class ChangeStamp implements Serializable {
 

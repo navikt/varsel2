@@ -1,10 +1,5 @@
 package no.nav.varsel.service.tvarsel005.support;
 
-import static java.util.stream.Collectors.toList;
-import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo.Builder.aHentVarselForBrukerResponseTo;
-import static no.nav.varsel.service.tvarsel005.to.VarselTo.Builder.aVarselTo;
-import static no.nav.varsel.service.tvarsel005.to.VarselbestillingTo.Builder.aVarselbestillingTo;
-
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
@@ -14,11 +9,11 @@ import no.nav.varsel.service.tvarsel005.to.VarselbestillingTo;
 
 import java.util.List;
 
-/**
- * Service mapper fro Tvarsel005 hent bruker varsel
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static java.util.stream.Collectors.toList;
+import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo.Builder.aHentVarselForBrukerResponseTo;
+import static no.nav.varsel.service.tvarsel005.to.VarselTo.Builder.aVarselTo;
+import static no.nav.varsel.service.tvarsel005.to.VarselbestillingTo.Builder.aVarselbestillingTo;
+
 public class BrukervarselMapper {
 
 	public HentVarselForBrukerResponseTo map(List<Varselbestilling> varselbestillings) {

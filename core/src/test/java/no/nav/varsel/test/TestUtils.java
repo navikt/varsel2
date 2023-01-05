@@ -1,8 +1,5 @@
 package no.nav.varsel.test;
 
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.when;
-
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
@@ -17,11 +14,9 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
 
-/**
- * Test utils
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.when;
+
 public class TestUtils {
 
 	/**

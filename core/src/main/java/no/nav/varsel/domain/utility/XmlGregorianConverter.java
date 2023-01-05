@@ -7,11 +7,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.GregorianCalendar;
 
-/**
- * Converter for {@link XMLGregorianCalendar}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class XmlGregorianConverter {
 
 	static final DatatypeFactory DATATYPE_FACTORY;

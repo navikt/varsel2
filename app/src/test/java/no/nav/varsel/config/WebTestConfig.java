@@ -5,11 +5,6 @@ import no.nav.varsel.repo.config.RepoTestConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-/**
- * Test config for App
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @Import({JmsTestConfig.class, RepoTestConfig.class, Application.class})
 @Configuration
 public class WebTestConfig {

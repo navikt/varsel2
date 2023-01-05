@@ -4,11 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-/**
- * Itest for JMS context
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @SpringBootTest(classes = JmsTestConfig.class)
 @ActiveProfiles({"itest", "local"})
 public class JmsConfigTest {

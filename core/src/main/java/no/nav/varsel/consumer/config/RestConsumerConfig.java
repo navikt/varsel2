@@ -1,7 +1,5 @@
 package no.nav.varsel.consumer.config;
 
-import static java.util.Collections.singletonList;
-
 import no.nav.varsel.consumer.dokkat.support.VarselInfoMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,11 +10,8 @@ import org.springframework.http.client.InterceptingClientHttpRequestFactory;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.client.RestTemplate;
 
-/**
- * Spring config for Rest Consumers
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static java.util.Collections.singletonList;
+
 @Configuration
 public class RestConsumerConfig {
 

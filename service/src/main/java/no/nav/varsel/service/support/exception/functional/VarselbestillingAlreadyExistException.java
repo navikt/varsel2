@@ -2,11 +2,6 @@ package no.nav.varsel.service.support.exception.functional;
 
 import java.time.LocalDate;
 
-/**
- * Exception for varselbestilling that already exists
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class VarselbestillingAlreadyExistException extends FunctionalVarselException {
 
 	public VarselbestillingAlreadyExistException(String varselbestillingId) {

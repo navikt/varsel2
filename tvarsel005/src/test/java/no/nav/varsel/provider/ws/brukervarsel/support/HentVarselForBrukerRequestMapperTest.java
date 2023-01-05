@@ -5,7 +5,6 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Person;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,11 +17,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/**
- * Unit test for {@link HentVarselForBrukerRequestMapper}
- *
- * @author Lars Aune
- */
 public class HentVarselForBrukerRequestMapperTest {
 	public static final String AKTOER_ID = "AKTOER_ID";
 	public static final String FNR = "FNR";

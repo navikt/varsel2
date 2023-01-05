@@ -16,11 +16,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 
-/**
- * Javaconfig for XACML
- *
- * @author Roar Bjurstrom, Visma Consulting.
- */
 @Configuration
 @Import(value = {AccessControlInterceptorConfig.class})
 public class XacmlConfig {

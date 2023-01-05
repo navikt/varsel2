@@ -8,9 +8,6 @@ import org.springframework.retry.RetryContext;
 import org.springframework.retry.listener.RetryListenerSupport;
 import org.springframework.stereotype.Component;
 
-/**
- * @author Ugur Alpay Cenar, Visma Consulting.
- */
 @Component
 public class RetryLoggingInterceptor extends RetryListenerSupport {
 	private static final Logger LOG = LoggerFactory.getLogger(RetryLoggingInterceptor.class);

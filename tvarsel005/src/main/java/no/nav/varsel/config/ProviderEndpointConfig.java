@@ -15,11 +15,6 @@ import org.springframework.context.annotation.Configuration;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Config for Ws Endpoints
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @Configuration
 public class ProviderEndpointConfig {
 

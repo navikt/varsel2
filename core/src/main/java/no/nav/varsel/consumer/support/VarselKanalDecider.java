@@ -1,9 +1,5 @@
 package no.nav.varsel.consumer.support;
 
-import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
-import static no.nav.varsel.domain.code.KanalCode.EPOST;
-import static no.nav.varsel.domain.code.KanalCode.SMS;
-
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.domain.code.KanalCode;
 import org.springframework.stereotype.Component;
@@ -12,11 +8,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Decider for Varsel based on VarselInfo from dokkat and DigitalKontaktinformasjon from DKIF
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
+import static no.nav.varsel.domain.code.KanalCode.EPOST;
+import static no.nav.varsel.domain.code.KanalCode.SMS;
+
 @Component
 public class VarselKanalDecider {
 

@@ -6,11 +6,6 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Custom repository methods for Varselbestilling
- *
- * @author Lars Aune
- */
 public interface VarselbestillingRepoCustom {
 
 	/**

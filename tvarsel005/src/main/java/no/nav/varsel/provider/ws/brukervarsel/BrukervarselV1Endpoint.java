@@ -12,17 +12,11 @@ import no.nav.varsel.provider.ws.brukervarsel.support.BrukervarselV1Provider;
 import no.nav.varsel.provider.ws.brukervarsel.support.HentVarselForBrukerRequestValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import javax.jws.HandlerChain;
+
 import javax.jws.WebService;
 import javax.transaction.Transactional;
 
-/**
- * Endpoint for BrukervarselV1 TVARSEL005
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @WebService(
 		targetNamespace = "http://nav.no/tjeneste/virksomhet/brukervarsel/v1/",
 		serviceName = "Brukervarsel_v1",

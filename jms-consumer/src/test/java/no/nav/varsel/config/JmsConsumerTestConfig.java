@@ -1,8 +1,8 @@
 package no.nav.varsel.config;
 
+import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
-import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
@@ -13,11 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-/**
- * Test Config for JMS Consumer
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @Import({JmsTestConfig.class,
 		RepoTestConfig.class,
 		ServiceTestConfig.class,

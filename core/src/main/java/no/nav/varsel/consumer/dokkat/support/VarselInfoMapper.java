@@ -1,22 +1,17 @@
 package no.nav.varsel.consumer.dokkat.support;
 
-import static java.util.stream.Collectors.toSet;
-import static no.nav.varsel.consumer.dokkat.to.VarselInfoTo.VarselInfoToBuilder.aVarselInfoTo;
-
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
 import no.nav.dokkat.schemas.tkat021.VarselMalRestTo;
+import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.consumer.dokkat.to.VarselMalTo;
 import no.nav.varsel.domain.code.KanalCode;
-import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
 import org.springframework.util.Assert;
 
 import java.util.Set;
 
-/**
- * Mapper for VarselInfo
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static java.util.stream.Collectors.toSet;
+import static no.nav.varsel.consumer.dokkat.to.VarselInfoTo.VarselInfoToBuilder.aVarselInfoTo;
+
 public class VarselInfoMapper {
 
 	public VarselInfoTo map(VarselInfoRestTo varselInfo) {

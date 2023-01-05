@@ -8,11 +8,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-/**
- * To object for DigitalKontaktinformasjon
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @Slf4j
 public class KontaktregisterTo implements Serializable {
 

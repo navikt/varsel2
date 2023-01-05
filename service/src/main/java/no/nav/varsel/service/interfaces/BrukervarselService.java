@@ -3,11 +3,6 @@ package no.nav.varsel.service.interfaces;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo;
 
-/**
- * Interface for Tvarsel005 - HentVarselForBruker
- *
- * @author Roar Bjurstrom, Visma Consulting.
- */
 public interface BrukervarselService {
 
 	/**

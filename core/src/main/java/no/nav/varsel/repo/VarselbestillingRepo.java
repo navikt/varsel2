@@ -7,11 +7,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-/**
- * Spring Data JPA repository for {@link Varselbestilling}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public interface VarselbestillingRepo extends JpaRepository<Varselbestilling, Long>, VarselbestillingRepoCustom {
 
 	/**

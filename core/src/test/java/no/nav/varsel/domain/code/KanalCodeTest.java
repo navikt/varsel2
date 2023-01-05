@@ -1,16 +1,10 @@
 package no.nav.varsel.domain.code;
 
-import no.nav.varsel.domain.code.KanalCode;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-/**
- * Unit test for {@link KanalCode}
- *
- * @author Roar Bjurstrom, Visma Consulting.
- */
 public class KanalCodeTest {
 
 	@Test

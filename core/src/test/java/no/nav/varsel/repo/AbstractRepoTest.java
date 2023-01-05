@@ -1,7 +1,7 @@
 package no.nav.varsel.repo;
 
-import no.nav.varsel.repo.config.RepoTestConfig;
 import no.nav.varsel.domain.Constants;
+import no.nav.varsel.repo.config.RepoTestConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.MDC;
@@ -12,11 +12,6 @@ import org.springframework.test.context.ActiveProfiles;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-/**
- * Abstract class for repo tests
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @SpringBootTest(classes = RepoTestConfig.class)
 @ActiveProfiles({"itest", "local"})
 public abstract class AbstractRepoTest {

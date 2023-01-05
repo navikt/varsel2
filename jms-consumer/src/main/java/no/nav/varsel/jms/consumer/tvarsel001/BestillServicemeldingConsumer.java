@@ -2,7 +2,6 @@ package no.nav.varsel.jms.consumer.tvarsel001;
 
 
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
-import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapper;
@@ -22,11 +21,6 @@ import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_SERVI
 import static no.nav.varsel.util.MDCGenerate.clearCallId;
 import static no.nav.varsel.util.MDCGenerate.generateCallId;
 
-/**
- * Consumer for TVARSEL001 BestillServicemelding
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @Component
 public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 

@@ -1,14 +1,10 @@
 package no.nav.varsel.consumer.dokkat;
 
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
-import no.nav.varsel.azure.TokenConsumer;
-import no.nav.varsel.azure.TokenResponse;
-import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.consumer.dokkat.support.VarselInfoMapper;
 import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
 import no.nav.varsel.domain.code.KanalCode;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -29,11 +24,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpMethod.GET;
 
-/**
- * Unit test for {@link VarselInfoConsumer}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @SpringBootTest(classes = {VarselInfoConsumer.class})
 @ActiveProfiles({"itest"})
 public class VarselInfoConsumerTest {

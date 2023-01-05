@@ -1,10 +1,5 @@
 package no.nav.varsel.service.support.exception.functional;
 
-/**
- * Exception for varselbestilling that does not exist
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class VarselbestillingNotExistException extends FunctionalVarselException {
 
 	public VarselbestillingNotExistException(String varselbestillingId) {

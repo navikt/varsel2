@@ -1,9 +1,8 @@
 package no.nav.varsel.consumer.support;
 
 import com.google.common.collect.Sets;
-import no.nav.varsel.consumer.support.VarselKanalDecider;
-import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
+import no.nav.varsel.domain.code.KanalCode;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
@@ -13,11 +12,6 @@ import static no.nav.varsel.consumer.dkif.to.KontaktregisterTo.KontaktregisterTo
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
-/**
- * Unit test for {@link VarselKanalDecider}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class VarselKanalDeciderTest {
 
 	private static final String EPOST = "epost@epost.no";

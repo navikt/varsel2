@@ -4,11 +4,11 @@ import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.Queues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.config.JmsListenerEndpointRegistry;
 import org.springframework.jms.listener.MessageListenerContainer;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
@@ -16,11 +16,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Manages queue consumers
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class JmsConsumerManager {
 
 	public static final Logger LOG = LoggerFactory.getLogger(JmsConsumerManager.class);

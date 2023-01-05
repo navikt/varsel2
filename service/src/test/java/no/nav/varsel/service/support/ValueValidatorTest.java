@@ -6,13 +6,7 @@ import org.junit.jupiter.api.function.Executable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Unit test for {@link ValueValidator}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class ValueValidatorTest {
-
 
 	@Test
 	public void notNullOK() throws Exception {

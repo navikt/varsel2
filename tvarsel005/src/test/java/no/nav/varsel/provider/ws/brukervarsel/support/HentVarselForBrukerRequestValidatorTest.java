@@ -16,11 +16,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-/**
- * Unit test for HentVarselForBrukerRequestValidator
- *
- * @author Lars Aune
- */
 public class HentVarselForBrukerRequestValidatorTest {
 
 	private static final String UGYLDIG_BRUK_AV_DATO_FOM_OG_DATO_TOM_MESSAGE = "Ugyldig bruk av DatoFom og DatoTom";

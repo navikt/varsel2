@@ -2,9 +2,9 @@ package no.nav.varsel.consumer.dkif;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
-import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
@@ -36,11 +36,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Unit test for {@link HentDigitalKontaktinformasjonConsumer}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @SpringBootTest(classes = {HentDigitalKontaktinformasjonConsumerTest.Config.class, HentDigitalKontaktinformasjonConsumer.class, AzureProperties.class})
 public class HentDigitalKontaktinformasjonConsumerTest {
 

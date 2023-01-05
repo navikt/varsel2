@@ -28,6 +28,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
+import static no.nav.varsel.domain.Constants.USER_ID;
 import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo.Builder.aHentVarselForBrukerResponseTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -37,14 +38,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
-import static no.nav.varsel.domain.Constants.USER_ID;
-
-
-/**
- * Unit test for BrukervarselV1Provider
- *
- * @author Lars Aune
- */
 @ExtendWith(MockitoExtension.class)
 public class BrukervarselV1ProviderTest {
 	public static final String AKTOER_ID = "AKTOER_ID";

@@ -6,11 +6,6 @@ import org.junit.jupiter.api.function.Executable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Unit test for validation of Tvarsel003 BestillVarsel input
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class BestillVarselToTvarsel003Test {
 
 	@Test

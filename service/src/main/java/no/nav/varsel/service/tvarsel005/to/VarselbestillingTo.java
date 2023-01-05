@@ -1,7 +1,5 @@
 package no.nav.varsel.service.tvarsel005.to;
 
-import static java.util.Comparator.naturalOrder;
-
 import com.google.common.collect.Lists;
 
 import java.time.LocalDateTime;
@@ -9,12 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Transfer object for HentVarselForBruker
- *
- * @author Lars Aune
- * @author Andreas Skomedal, Visma Consulting
- */
+import static java.util.Comparator.naturalOrder;
+
 public class VarselbestillingTo {
 	private List<VarselTo> varsler = new ArrayList<>();
 	private String varseltypeId;

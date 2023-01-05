@@ -6,15 +6,10 @@ import no.nav.varsel.service.interfaces.BrukervarselService;
 import no.nav.varsel.service.tvarsel005.support.BrukervarselMapper;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo;
-
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.List;
 
-/**
- * Service For HentVarselForBruker Tvarsel005
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class BrukervarselV1Service implements BrukervarselService {
 
 	@Autowired

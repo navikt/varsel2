@@ -9,8 +9,8 @@ import no.nav.varsel.provider.AbstractWsProviderITest;
 import no.nav.varsel.provider.ws.brukervarsel.AuthorizationException;
 import no.nav.varsel.provider.ws.brukervarsel.BrukervarselV1Endpoint;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.time.LocalDateTime;
 
 import static no.nav.modig.core.domain.IdentType.Prosess;
@@ -21,11 +21,6 @@ import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianC
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/**
- * Tests the XACML-logic in BrukervarselV1 TVARSEL005
- *
- * @author Roar Bjurstrom, Visma Consulting.
- */
 public class BrukervarselV1AuthenticationTest extends AbstractWsProviderITest {
 
 	@Autowired

@@ -6,11 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-/**
- * Spring configuration for Web Service Provider.
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @Configuration
 @Import({CxfConfig.class, ProviderEndpointConfig.class, Tvarsel005Config.class, ServiceConfig.class, XacmlConfig.class})
 public class ProviderWsConfig {

@@ -2,15 +2,10 @@ package no.nav.varsel.web.metrics;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlets.MetricsServlet;
-
 import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.servlet.annotation.WebListener;
 
-/**
- * Listener for å eksponere Metrics
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @WebListener
 public class MetricsServletContextListener extends MetricsServlet.ContextListener {
 

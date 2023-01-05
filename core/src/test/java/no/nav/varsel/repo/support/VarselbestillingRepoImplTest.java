@@ -3,7 +3,6 @@ package no.nav.varsel.repo.support;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.repo.support.VarselbestillingRepoImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,9 +26,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Lars Aune
- */
 @ExtendWith({MockitoExtension.class})
 public class VarselbestillingRepoImplTest {
 	private static final LocalDateTime FOM_DATE = LocalDateTime.of(2016, Month.JUNE, 1, 13, 0);

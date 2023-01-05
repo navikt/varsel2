@@ -1,7 +1,6 @@
 package no.nav.varsel.jms.consumer.tvarsel006;
 
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
-import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapper;
@@ -21,11 +20,6 @@ import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_SERVI
 import static no.nav.varsel.util.MDCGenerate.clearCallId;
 import static no.nav.varsel.util.MDCGenerate.generateCallId;
 
-/**
- * Consumer for TVARSEL006 ServiceMeldingMedKontaktInfo
- *
- * @author Roar Bjurstrom, Visma Consulting.
- */
 @Component
 public class BestillServicemeldingMedKontaktInfoConsumer extends AbstractJmsConsumer<ServicemeldingMedKontaktinformasjon> {
 

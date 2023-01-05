@@ -16,16 +16,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
 
-/**
- * Domain object for Varsel
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @Entity
 @Table(name = "VARSEL", uniqueConstraints = @UniqueConstraint(columnNames = "varsel_id"))
 public class Varsel extends AbstractDomainObject {

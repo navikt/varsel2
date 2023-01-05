@@ -10,12 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.util.Assert;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -25,11 +25,6 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.StringReader;
 
-/**
- * Helper class for JMS consumers
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 
 	public static final String JMS_NOBACKOUTLOG = "no.nav.varsel.jms.nobackoutlog";

@@ -1,11 +1,5 @@
 package no.nav.varsel.service;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.google.common.collect.Maps;
 import no.nav.varsel.service.support.exception.functional.FletteparameterMissingException;
 import no.nav.varsel.service.support.exception.functional.InvalidDateTimeFormatException;
@@ -13,17 +7,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import org.junit.jupiter.api.parallel.Execution;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Unit test for VarselFletter
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class VarselFletterTest {
 
 	private static final String NAVN = "Even Lagsdel";

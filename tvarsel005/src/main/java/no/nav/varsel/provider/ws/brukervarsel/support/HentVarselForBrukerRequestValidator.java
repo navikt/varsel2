@@ -11,11 +11,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
 import java.util.GregorianCalendar;
 
-/**
- * Validator for Tvarsel005 HentVarselForBruker
- *
- * @author Lars Aune
- */
 public class HentVarselForBrukerRequestValidator {
 
 	private static final String PAAKREVD_INPUTPARAMETER_ER_IKKE_SATT_FEILMELDING = "Påkrevd inputparameter er ikke satt";

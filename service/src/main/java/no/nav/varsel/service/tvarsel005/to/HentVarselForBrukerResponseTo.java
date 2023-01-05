@@ -5,11 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Transferobject for HentVarselForBrukerResponse
- *
- * @author Lars Aune
- */
 public class HentVarselForBrukerResponseTo {
 	private List<VarselbestillingTo> varselbestillingTos = new ArrayList<>();
 

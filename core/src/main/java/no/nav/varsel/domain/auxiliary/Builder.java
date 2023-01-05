@@ -6,12 +6,6 @@ import org.slf4j.MDC;
 import javax.persistence.EntityManager;
 
 
-/**
- * Base class for builders.
- *
- * @param <T> The type to build.
- * @author Thomas Eugen Bjørge, Visma Consulting
- */
 public abstract class Builder<T extends AbstractDomainObject> {
 
 	protected abstract T build();

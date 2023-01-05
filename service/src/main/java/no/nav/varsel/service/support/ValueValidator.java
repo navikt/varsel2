@@ -2,11 +2,6 @@ package no.nav.varsel.service.support;
 
 import org.springframework.util.Assert;
 
-/**
- * Validators
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class ValueValidator {
 
 	public static void notNull(Object field, String fieldName) {

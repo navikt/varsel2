@@ -2,11 +2,6 @@ package no.nav.varsel.service.support.exception.functional;
 
 import no.nav.varsel.domain.exception.NoJmsBackoutException;
 
-/**
- * Superclass for functional exceptions
- *
- * @author Roar Bjurstrom, Visma Consulting.
- */
 public abstract class FunctionalVarselException extends NoJmsBackoutException {
 
 	public FunctionalVarselException(String message) {

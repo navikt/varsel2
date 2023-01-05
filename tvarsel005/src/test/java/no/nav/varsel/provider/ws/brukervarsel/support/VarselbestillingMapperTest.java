@@ -22,11 +22,6 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/**
- * Unit test for {@link VarselbestillingMapperTest}
- *
- * @author Lars Aune
- */
 @ExtendWith(MockitoExtension.class)
 public class VarselbestillingMapperTest {
 	public static final String AKTOER_ID = "AKTOER_ID";

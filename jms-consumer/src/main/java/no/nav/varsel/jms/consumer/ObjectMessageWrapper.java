@@ -4,11 +4,6 @@ import org.springframework.util.Assert;
 
 import javax.jms.Message;
 
-/**
- * Wrapper that holds the message and the unmarshalled object of the message
- *
- * @author Lars Aune
- */
 public class ObjectMessageWrapper<T> {
 
 	private T object;

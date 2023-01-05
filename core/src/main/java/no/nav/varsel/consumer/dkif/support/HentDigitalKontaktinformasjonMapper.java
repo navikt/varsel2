@@ -6,12 +6,6 @@ import org.springframework.stereotype.Component;
 
 import static no.nav.varsel.consumer.dkif.to.KontaktregisterTo.KontaktregisterToBuilder.aKontaktregisterTo;
 
-
-/**
- * Map response from HentDigitalKontaktinformasjon
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @Component
 public class HentDigitalKontaktinformasjonMapper {
 

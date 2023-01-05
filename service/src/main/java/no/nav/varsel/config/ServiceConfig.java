@@ -20,11 +20,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-/**
- * Spring config for Service
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @Configuration
 @Import({RepoConfig.class,
 		WsConsumerConfig.class,

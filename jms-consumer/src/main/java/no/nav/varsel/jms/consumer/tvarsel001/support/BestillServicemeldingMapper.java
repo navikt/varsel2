@@ -1,14 +1,11 @@
 package no.nav.varsel.jms.consumer.tvarsel001.support;
 
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
-
 import no.nav.melding.virksomhet.varsel.v1.varsel.Aktoer;
 import no.nav.melding.virksomhet.varsel.v1.varsel.AktoerId;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Parameter;
 import no.nav.melding.virksomhet.varsel.v1.varsel.PersonIdent;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
-import no.nav.varsel.jms.consumer.tvarsel001.BestillServicemeldingConsumer;
 import no.nav.varsel.service.to.BestillVarselTo;
 import org.springframework.util.Assert;
 
@@ -17,11 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Mapper for {@link BestillServicemeldingConsumer}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
+
 public class BestillServicemeldingMapper {
 	public BestillVarselTo map(ObjectMessageWrapper<Varsel> varselWithMessage) {
 		Assert.notNull(varselWithMessage, "varselWithMessage er null");

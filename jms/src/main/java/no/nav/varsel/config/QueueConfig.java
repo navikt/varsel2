@@ -8,11 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import javax.jms.JMSException;
 import javax.jms.Queue;
 
-/**
- * Spring config for queues
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @Configuration
 public class QueueConfig {
 

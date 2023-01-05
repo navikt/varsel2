@@ -31,11 +31,6 @@ import java.util.UUID;
 import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
 
-/**
- * Test Config for JMS
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class})
 @Import({JmsConfig.class})
 @Configuration

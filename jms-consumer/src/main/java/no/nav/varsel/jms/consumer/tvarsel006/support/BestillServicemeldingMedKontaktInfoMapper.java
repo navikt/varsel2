@@ -17,11 +17,6 @@ import java.util.Map;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
 import static no.nav.varsel.domain.code.KanalCode.SMS;
 
-/**
- * Maps {@link ServicemeldingMedKontaktinformasjon} to {@link BestillVarselTo}
- *
- * @author Roar Bjurstrom, Visma Consulting.
- */
 public class BestillServicemeldingMedKontaktInfoMapper {
 
 	public BestillVarselTo map(ServicemeldingMedKontaktinformasjon from) {

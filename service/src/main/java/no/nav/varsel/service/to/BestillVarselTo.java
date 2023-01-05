@@ -1,9 +1,6 @@
 package no.nav.varsel.service.to;
 
 
-import static no.nav.varsel.service.support.ValueValidator.hasText;
-import static no.nav.varsel.service.support.ValueValidator.notNull;
-
 import lombok.ToString;
 import no.nav.varsel.domain.exception.NoJmsBackoutException;
 
@@ -11,11 +8,9 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * To for BestillVarsel
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static no.nav.varsel.service.support.ValueValidator.hasText;
+import static no.nav.varsel.service.support.ValueValidator.notNull;
+
 @ToString
 public class BestillVarselTo extends AktoerBestillingTo {
 

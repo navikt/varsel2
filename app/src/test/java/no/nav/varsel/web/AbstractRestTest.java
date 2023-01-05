@@ -1,8 +1,8 @@
 package no.nav.varsel.web;
 
 import no.nav.varsel.config.JmsTestConfig;
-import no.nav.varsel.repo.config.RepoTestConfig;
 import no.nav.varsel.repo.VarselbestillingRepo;
+import no.nav.varsel.repo.config.RepoTestConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,11 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-/**
- * Abstract Test for Rest Itests
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
 @AutoConfigureWireMock(port = 0)

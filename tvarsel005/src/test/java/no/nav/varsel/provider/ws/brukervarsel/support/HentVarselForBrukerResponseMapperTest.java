@@ -19,11 +19,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/**
- * Unit test for {@link VarselbestillingMapper}
- *
- * @author Lars Aune
- */
 @ExtendWith(MockitoExtension.class)
 public class HentVarselForBrukerResponseMapperTest {
 	private static final String VARSELTYPE_ID = "VARSELTYPE_ID";

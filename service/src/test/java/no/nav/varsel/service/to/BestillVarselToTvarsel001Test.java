@@ -7,11 +7,6 @@ import org.junit.jupiter.api.function.Executable;
 import static no.nav.varsel.service.to.BestillVarselToTest.createTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Unit test for Tvarsel001 validator
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class BestillVarselToTvarsel001Test {
 
 	@Test

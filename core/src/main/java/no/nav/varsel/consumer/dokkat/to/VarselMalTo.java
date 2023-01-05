@@ -2,11 +2,6 @@ package no.nav.varsel.consumer.dokkat.to;
 
 import no.nav.varsel.domain.code.KanalCode;
 
-/**
- * To for VarselMal
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class VarselMalTo {
 	private KanalCode kanal;
 	private String tittel;

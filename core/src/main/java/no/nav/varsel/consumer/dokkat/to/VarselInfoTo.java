@@ -6,11 +6,6 @@ import no.nav.varsel.domain.code.KanalCode;
 
 import java.util.Set;
 
-/**
- * To For VarselInfo
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @ToString
 public class VarselInfoTo {
 	private Set<KanalCode> preferertKanal = Sets.newHashSet();

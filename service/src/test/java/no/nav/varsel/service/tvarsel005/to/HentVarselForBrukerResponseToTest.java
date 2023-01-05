@@ -2,18 +2,13 @@ package no.nav.varsel.service.tvarsel005.to;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo.Builder.aHentVarselForBrukerResponseTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Unit test for HentVarselForBrukerResponseTo
- *
- * @author Lars Aune
- */
 public class HentVarselForBrukerResponseToTest {
 
 	@Test

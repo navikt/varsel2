@@ -13,11 +13,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Builder for {@link Varselbestilling}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public final class VarselbestillingBuilder extends Builder<Varselbestilling> {
 
 	private Long id;

@@ -1,17 +1,12 @@
 package no.nav.varsel.service.to;
 
+import no.nav.varsel.domain.to.AktoerTo;
+import no.nav.varsel.domain.to.MottakerType;
+
 import static no.nav.varsel.domain.to.AktoerTo.newAktoerId;
 import static no.nav.varsel.domain.to.AktoerTo.newPersonIdent;
 import static no.nav.varsel.service.support.ValueValidator.hasText;
 
-import no.nav.varsel.domain.to.AktoerTo;
-import no.nav.varsel.domain.to.MottakerType;
-
-/**
- * Common object for Bestilling With Aktoer
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class AktoerBestillingTo {
 	protected String personIdent;
 	protected String aktoerId;

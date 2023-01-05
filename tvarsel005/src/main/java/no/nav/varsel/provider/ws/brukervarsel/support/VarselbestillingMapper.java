@@ -1,20 +1,14 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
-
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.AktoerId;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Person;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varselbestilling;
 import no.nav.varsel.service.tvarsel005.to.VarselbestillingTo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 
-/**
- * Response mapper for Tvarsel005 HentVarselForBruker
- *
- * @author Lars Aune
- */
 public class VarselbestillingMapper {
 
 	@Autowired

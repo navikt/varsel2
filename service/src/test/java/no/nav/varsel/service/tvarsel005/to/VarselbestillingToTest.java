@@ -2,20 +2,15 @@ package no.nav.varsel.service.tvarsel005.to;
 
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.Is.is;
-
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Unit test for VarselbestillingTo
- *
- * @author Lars Aune
- */
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
+
 public class VarselbestillingToTest {
 
 	public static final String VARSELTYPE_ID = "VARSELTYPE_ID";

@@ -1,8 +1,5 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
-import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo.Builder.aHentVarselForBrukerTo;
-
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.AktoerId;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Person;
@@ -10,11 +7,9 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerR
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo;
 import org.springframework.util.Assert;
 
-/**
- * Request mapper for Tvarsel005 HentVarselForBruker
- *
- * @author Lars Aune
- */
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
+import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo.Builder.aHentVarselForBrukerTo;
+
 public class HentVarselForBrukerRequestMapper {
 	public HentVarselForBrukerTo map(HentVarselForBrukerRequest request) {
 		Assert.notNull(request, "The parameter request can't be null");

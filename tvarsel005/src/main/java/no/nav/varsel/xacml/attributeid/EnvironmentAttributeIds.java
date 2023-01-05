@@ -1,8 +1,8 @@
 package no.nav.varsel.xacml.attributeid;
 
-import static no.nav.varsel.xacml.attributeid.VarselAttributeIds.VARSEL_XACML_URN_ROOT;
-
 import no.nav.modig.security.tilgangskontroll.URN;
+
+import static no.nav.varsel.xacml.attributeid.VarselAttributeIds.VARSEL_XACML_URN_ROOT;
 
 /**
  * XACML Environment attributes
@@ -11,8 +11,6 @@ import no.nav.modig.security.tilgangskontroll.URN;
  * (Se http://jira.adeo.no/browse/PKFEIL-15603)
  * Feilen gjør at ingen environment-attributter blir satt på XACML-requesten ved evaluering.
  * Denne feilen ligger i no.nav.modig.security.tilgangskontroll.policy.pdp.picketlink.RequestTypeFactory
- *
- * @author Roar Bjurstrom, Visma Consulting.
  */
 public final class EnvironmentAttributeIds {
 

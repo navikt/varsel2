@@ -2,18 +2,13 @@ package no.nav.varsel.service.tvarsel005.to;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+
 import static no.nav.varsel.service.tvarsel005.to.VarselTo.Builder.aVarselTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-import java.time.LocalDateTime;
-import java.time.Month;
-
-/**
- * Unit test for VarsellTo
- *
- * @author Lars Aune
- */
 public class VarselToTest {
 
 	public static final String KANAL = "KANAL";

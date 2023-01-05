@@ -7,11 +7,6 @@ import org.slf4j.MDC;
 
 import java.io.Serializable;
 
-/**
- * Interceptor that handles domain objects' changestamp.
- *
- * @author Thomas Eugen Bjørge, Visma Consulting
- */
 public class ChangeStampInterceptor extends EmptyInterceptor {
 
 	private static final long serialVersionUID = 973776995128953194L;

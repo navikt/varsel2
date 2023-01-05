@@ -2,11 +2,6 @@ package no.nav.varsel.service.tvarsel005.to;
 
 import java.time.LocalDateTime;
 
-/**
- * Transfer object for HentVarselForBruker
- *
- * @author Lars Aune
- */
 public class VarselTo {
 	private String kanal;
 	private LocalDateTime sendtTidspunkt;

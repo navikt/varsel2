@@ -8,11 +8,6 @@ import no.nav.varsel.domain.object.Varselbestilling;
 
 import java.time.LocalDateTime;
 
-/**
- * Builder for Varsel
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public final class VarselBuilder extends Builder<Varsel> {
 
 	private Long id;

@@ -15,11 +15,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Unit test for {@link HentDigitalKontaktinformasjonMapper}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class HentDigitalKontaktinformasjonMapperTest {
 
 	public static final String ID = "id";

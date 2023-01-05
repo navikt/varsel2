@@ -4,16 +4,11 @@ import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.message.Message;
-
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.net.URL;
 import java.util.HashMap;
 
-/**
- * Abstract helper class for Cxf Endpoints, retries are handled by JMS retries
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public abstract class AbstractCxfEndpointConfig {
 
 	public static final int DEFAULT_TIMEOUT = 30_000;

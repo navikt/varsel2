@@ -1,10 +1,5 @@
 package no.nav.varsel.domain.auxiliary;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.Mockito.when;
-
 import no.nav.varsel.domain.Constants;
 import no.nav.varsel.domain.object.Varselbestilling;
 import org.hibernate.type.Type;
@@ -15,11 +10,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.MDC;
 
-/**
- * Tests of ChangeStampInterceptor.
- *
- * @author Thomas Eugen Bjørge, Visma Consulting
- */
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 public class ChangeStampInterceptorTest {
 

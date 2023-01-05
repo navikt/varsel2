@@ -6,11 +6,6 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 import java.io.Serializable;
 
-/**
- * Base class for no.nav.varsel.domain objects.
- *
- * @author Andreas Skomedal, Visma Consulting
- */
 @MappedSuperclass
 @SuppressWarnings("serial")
 public abstract class AbstractDomainObject implements Serializable {

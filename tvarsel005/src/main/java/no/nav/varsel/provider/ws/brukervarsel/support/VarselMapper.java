@@ -5,11 +5,6 @@ import no.nav.varsel.domain.utility.XmlGregorianConverter;
 import no.nav.varsel.service.tvarsel005.to.VarselTo;
 import org.springframework.util.Assert;
 
-/**
- * Response mapper for Tvarsel005 HentVarselForBruker
- *
- * @author Lars Aune
- */
 public class VarselMapper {
 
 	public Varsel map(VarselTo varselTo) {

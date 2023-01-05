@@ -3,11 +3,6 @@ package no.nav.varsel.jms.consumer;
 import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_SERVICEMELDING_KONTAKTINFO_NAME;
 import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_SERVICEMELDING_NAME;
 
-/**
- * Available JMS Consumers
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public enum JmsConsumer {
 	BESTILL_SERVICEMELDING(BESTILL_SERVICEMELDING_NAME, "tvarsel001"),
 	BESTILL_SERVICEMELDING_KONTAKTINFO(BESTILL_SERVICEMELDING_KONTAKTINFO_NAME, "tvarsel006");

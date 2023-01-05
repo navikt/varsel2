@@ -6,11 +6,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/**
- * Test data utility class
- *
- * @author Lars Aune.
- */
 public class TestdataUtil {
 	public static DatatypeFactory DATATYPE_FACTORY;
 

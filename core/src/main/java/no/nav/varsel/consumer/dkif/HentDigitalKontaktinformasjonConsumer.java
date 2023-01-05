@@ -1,8 +1,8 @@
 package no.nav.varsel.consumer.dkif;
 
+import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
-import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dkif.support.PostPersonerRequest;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
@@ -32,11 +32,6 @@ import java.util.Set;
 import static no.nav.varsel.consumer.pdl.helper.DomainConstants.APP_NAME;
 import static no.nav.varsel.util.MDCGenerate.CALL_ID;
 
-/**
- * HentDigitalKontaktinformasjon Stub
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @Component
 public class HentDigitalKontaktinformasjonConsumer {
 

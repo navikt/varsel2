@@ -3,15 +3,9 @@ package no.nav.varsel.provider.ws.brukervarsel.support;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Brukervarsel;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-/**
- * Response Mapper for Tvarsel005 HentVarselForBruker
- *
- * @author Lars Aune
- */
 public class HentVarselForBrukerResponseMapper {
 	@Autowired
 	private VarselbestillingMapper varselbestillingMapper;

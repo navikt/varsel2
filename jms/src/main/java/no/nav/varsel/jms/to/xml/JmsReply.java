@@ -7,11 +7,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Reply object for when a listener receives a replyto request
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @XmlRootElement
 @XmlType(name = "JmsReply")
 public class JmsReply implements Serializable {

@@ -1,19 +1,14 @@
 package no.nav.varsel.service.to;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.domain.to.MottakerType;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-/**
- * Unit test for {@link BestillVarselTo}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 public class BestillVarselToTest {
 
 	private static final MottakerType MOTTAKER_TYPE = MottakerType.AKTOER;

@@ -39,11 +39,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-/**
- * Itest for {@link no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.BrukervarselV1}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class BrukervarselV1ITest extends AbstractWsProviderITest {
 
 	private static final LocalDateTime FOM = BESTILLING_TIDSPUNKT.minusHours(1);

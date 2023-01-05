@@ -5,6 +5,11 @@ import no.nav.brukernotifikasjon.schemas.input.BeskjedInput;
 import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
 import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.doknotifikasjon.schemas.NotifikasjonMedkontaktInfo;
+import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
+import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
+import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
+import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.consumer.support.VarselKanalDecider;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.TestdataUtil;
@@ -20,11 +25,6 @@ import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedKontaktinfoMapper
 import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
 import no.nav.varsel.tvarsel001.NotifikasjonPublisher;
 import no.nav.varsel.tvarsel006.NotifikasjonMedKontaktinfoPublisher;
-import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
-import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
-import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.consumer.support.VarselKanalDecider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,12 +64,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
-/**
- * Unit test for {@link ServicemeldingService}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @ExtendWith({MockitoExtension.class})
 public class ServicemeldingServiceTest {
 

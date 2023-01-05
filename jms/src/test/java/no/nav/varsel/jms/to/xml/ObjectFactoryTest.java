@@ -3,20 +3,15 @@ package no.nav.varsel.jms.to.xml;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.annotation.XmlElementDecl;
+import javax.xml.bind.annotation.XmlRegistry;
+
 import static no.nav.varsel.jms.to.xml.ObjectFactory.JMS_REPLY_QNAME;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlElementDecl;
-import javax.xml.bind.annotation.XmlRegistry;
-
-/**
- * Unit test for {@link ObjectFactory}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class ObjectFactoryTest {
 
 	private final ObjectFactory objectFactory = new ObjectFactory();

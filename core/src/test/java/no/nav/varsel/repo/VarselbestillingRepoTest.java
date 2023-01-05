@@ -1,20 +1,15 @@
 package no.nav.varsel.repo;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-
 import no.nav.varsel.domain.object.Varselbestilling;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-/**
- * Itest for {@link VarselbestillingRepo}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+
 public class VarselbestillingRepoTest extends AbstractRepoTest {
 
 	@Test

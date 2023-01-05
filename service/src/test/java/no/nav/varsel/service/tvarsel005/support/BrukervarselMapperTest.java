@@ -1,5 +1,14 @@
 package no.nav.varsel.service.tvarsel005.support;
 
+import com.google.common.collect.Lists;
+import no.nav.varsel.domain.code.StatusCode;
+import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
+import no.nav.varsel.service.tvarsel005.to.VarselTo;
+import no.nav.varsel.service.tvarsel005.to.VarselbestillingTo;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+
 import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
 import static no.nav.varsel.repo.TestdataUtil.BESTILLING_TIDSPUNKT;
 import static no.nav.varsel.repo.TestdataUtil.DISTRIBUSJON_TIDSPUNKT;
@@ -20,20 +29,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.google.common.collect.Lists;
-import no.nav.varsel.domain.code.StatusCode;
-import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
-import no.nav.varsel.service.tvarsel005.to.VarselTo;
-import no.nav.varsel.service.tvarsel005.to.VarselbestillingTo;
-import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-
-/**
- * Unit test for {@link BrukervarselMapper}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class BrukervarselMapperTest {
 
 	private static final LocalDateTime DISTRIBUSJON_TIDSPUNKT_NEWEST = DISTRIBUSJON_TIDSPUNKT.plusDays(1);

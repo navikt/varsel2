@@ -1,12 +1,9 @@
 package no.nav.varsel.service.support;
 
-import static java.util.stream.Collectors.toMap;
-
-import static no.nav.varsel.domain.builder.VarselBuilder.aVarsel;
-import static no.nav.varsel.domain.builder.VarselbestillingBuilder.aVarselbestilling;
-
 import com.google.common.collect.Maps;
-
+import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
+import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.consumer.dokkat.to.VarselMalTo;
 import no.nav.varsel.domain.builder.VarselbestillingBuilder;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
@@ -15,10 +12,7 @@ import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.VarselFletter;
 import no.nav.varsel.service.support.exception.functional.VarselTekstMissingException;
 import no.nav.varsel.service.to.BestillVarselTo;
-import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.consumer.dokkat.to.VarselMalTo;
-
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
@@ -26,13 +20,10 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
+import static java.util.stream.Collectors.toMap;
+import static no.nav.varsel.domain.builder.VarselBuilder.aVarsel;
+import static no.nav.varsel.domain.builder.VarselbestillingBuilder.aVarselbestilling;
 
-/**
- * Mapper for TVARSEL001, TVARSEL003 and TVARSEL006
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 public class VarselBestillingDomainMapper {
 
 	@Autowired

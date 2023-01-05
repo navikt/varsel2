@@ -4,8 +4,8 @@ import no.nav.varsel.domain.builder.VarselbestillingBuilder;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.repo.TestdataUtil;
 import no.nav.varsel.repo.AbstractRepoTest;
+import no.nav.varsel.repo.TestdataUtil;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,15 +21,8 @@ import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Unit-test for VarselbestillingRepoImpl FindFerdigbehandletVarselbestillingerTest
- *
- * @author Lars Aune
- * @author Andreas Skomedal, Visma Consulting
- */
 public class FindFerdigbehandletVarselbestillingerTest extends AbstractRepoTest {
 
 	public static final int NUMBER_OF_DAYS_STANDARD_OFFSET = 10;

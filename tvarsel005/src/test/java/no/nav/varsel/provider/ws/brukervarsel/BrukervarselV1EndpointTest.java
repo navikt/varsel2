@@ -21,11 +21,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Unit test for {@link BrukervarselV1Endpoint}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @ExtendWith(MockitoExtension.class)
 public class BrukervarselV1EndpointTest {
 

@@ -11,11 +11,6 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Unit test for Tvarsel006 validator
- *
- * @author Roar Bjurstrom, Visma Consulting.
- */
 public class BestillVarselToTvarsel006Test {
 
 	private static final String ORG_NR = "orgnr";

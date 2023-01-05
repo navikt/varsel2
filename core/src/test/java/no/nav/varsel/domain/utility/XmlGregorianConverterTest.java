@@ -1,13 +1,5 @@
 package no.nav.varsel.domain.utility;
 
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.DATATYPE_FACTORY;
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.nullValue;
-
-
-import no.nav.varsel.domain.utility.XmlGregorianConverter;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
@@ -15,11 +7,12 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-/**
- * Unit test for {@link XmlGregorianConverter}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.DATATYPE_FACTORY;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.nullValue;
+
 public class XmlGregorianConverterTest {
 
 	private static final String TIME_TEXT = "2016-05-04T21:21:42";

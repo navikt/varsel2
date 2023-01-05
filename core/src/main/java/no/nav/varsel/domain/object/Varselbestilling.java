@@ -17,7 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.time.LocalDate;
@@ -27,11 +26,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Domain object for Varselbestilling
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @Entity
 @Table(name = "VARSELBESTILLING", uniqueConstraints = @UniqueConstraint(columnNames = "varselbestilling_id"))
 public class Varselbestilling extends AbstractDomainObject {

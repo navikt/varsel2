@@ -5,11 +5,6 @@ import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
-/**
- * Object factory for {@link JmsReply}
- *
- * @author Andreas Skomedal, Visma Consulting.
- */
 @XmlRegistry
 public class ObjectFactory {
 
