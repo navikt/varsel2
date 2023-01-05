@@ -6,8 +6,9 @@ Du finn meir informasjon om det funksjonelle på [Confluence-sidene for varsel-2
 
 ## Funksjonalitet
 - tvarsel001: handtering av bestilte servicemeldingar
+- tvarsel005: hent varsel for brukar
 - tvarsel006: handtering av bestilte servicemeldingar med kontaktinformasjon
 - kvarsel001: mottak av statusmelding frå doknotifikasjon-2 og oppdatering av status på varslar i varsel-db
 
 ## Førespurnadar
-Spørsmål om koda eller prosjektet kan stillast på [Slack-kanalen for \#Team Dokumentløsninger](https://nav-it.slack.com/archives/C6W9E5GPJ)
+Spørsmål om koda eller prosjektet kan stillast på [Slack-kanalen for \#Team  Dokumentløsninger](https://nav-it.slack.com/archives/C6W9E5GPJ)
