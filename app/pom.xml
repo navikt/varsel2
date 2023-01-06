@@ -9,7 +9,6 @@
 	</parent>
 
 	<artifactId>app</artifactId>
-	<packaging>jar</packaging>
 
 	<dependencies>
 		<dependency>
