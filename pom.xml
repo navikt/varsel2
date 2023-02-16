@@ -55,6 +55,7 @@
 		</nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>
 		<nav-brukervarsel-v1-tjenestespesifikasjon.version>1.0.4</nav-brukervarsel-v1-tjenestespesifikasjon.version>
 		<dokkat-schemas.version>6.0.3</dokkat-schemas.version>
+		<snakeyaml.version>1.33</snakeyaml.version>
 
 		<!-- test -->
 		<spring-cloud-contract-wiremock.version>3.1.5</spring-cloud-contract-wiremock.version>
@@ -181,11 +182,6 @@
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
 				<version>${guava.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.ryantenney.metrics</groupId>
-				<artifactId>metrics-spring</artifactId>
-				<version>${metrics-spring.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.ibm.mq</groupId>
@@ -352,6 +348,11 @@
 				<groupId>com.sun.activation</groupId>
 				<artifactId>javax.activation</artifactId>
 				<version>${javax.activation.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.yaml</groupId>
+				<artifactId>snakeyaml</artifactId>
+				<version>${snakeyaml.version}</version>
 			</dependency>
 
 			<!-- test -->

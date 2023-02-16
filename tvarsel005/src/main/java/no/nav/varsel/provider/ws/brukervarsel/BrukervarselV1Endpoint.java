@@ -1,8 +1,5 @@
 package no.nav.varsel.provider.ws.brukervarsel;
 
-import com.codahale.metrics.annotation.Counted;
-import com.codahale.metrics.annotation.ExceptionMetered;
-import com.codahale.metrics.annotation.Timed;
 import no.nav.modig.core.context.SubjectHandler;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.BrukervarselV1;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.binding.HentVarselForBrukerUgyldigInput;
@@ -39,17 +36,11 @@ public class BrukervarselV1Endpoint implements BrukervarselV1 {
 	private HentVarselForBrukerRequestValidator hentVarselForBrukerRequestValidator;
 
 	@Override
-	@Counted(name = BRUKERVARSEL_V1_PING + ".count", absolute = true, monotonic = true)
-	@Timed(name = BRUKERVARSEL_V1_PING, absolute = true)
-	@ExceptionMetered(name = BRUKERVARSEL_V1_PING + ".exceptions", absolute = true)
 	public void ping() {
 		brukervarselV1Provider.ping();
 	}
 
 	@Override
-	@Counted(name = BRUKERVARSEL_V1_HENT_VARSEL_FOR_BRUKER + ".count", absolute = true, monotonic = true)
-	@Timed(name = BRUKERVARSEL_V1_HENT_VARSEL_FOR_BRUKER, absolute = true)
-	@ExceptionMetered(name = BRUKERVARSEL_V1_HENT_VARSEL_FOR_BRUKER + ".exceptions", absolute = true)
 	public HentVarselForBrukerResponse hentVarselForBruker(HentVarselForBrukerRequest hentVarselForBrukerRequest) throws HentVarselForBrukerUgyldigInput {
 		hentVarselForBrukerRequestValidator.validate(hentVarselForBrukerRequest);
 		try {

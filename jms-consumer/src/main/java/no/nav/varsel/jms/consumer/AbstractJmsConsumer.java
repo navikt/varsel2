@@ -1,8 +1,5 @@
 package no.nav.varsel.jms.consumer;
 
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
 import no.nav.varsel.domain.Constants;
 import no.nav.varsel.domain.exception.NoJmsBackoutException;
 import no.nav.varsel.jms.to.xml.JmsReply;
@@ -38,11 +35,6 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 	private Jaxb2Marshaller marshaller;
 	private JmsConsumerManager jmsConsumerManager;
 
-	private MetricRegistry metricRegistry;
-	private Timer timer;
-	private Meter exceptionMeter;
-	private Meter noBackoutExceptionMeter;
-
 	public AbstractJmsConsumer(JmsConsumer jmsConsumer, JmsTemplate jmsSend, Class<T> inputType) {
 		this.jmsConsumer = jmsConsumer;
 		this.jmsSend = jmsSend;
@@ -51,14 +43,8 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		String metricBase = String.format("varsel.%s.%s", jmsConsumer.getServiceName(), jmsConsumer.getConsumerName());
-		timer = metricRegistry.timer(metricBase + ".timer");
-		exceptionMeter = metricRegistry.meter(metricBase + ".excpetionMeter");
-		noBackoutExceptionMeter = metricRegistry.meter(metricBase + ".noBackoutExceptionMeter");
-
 		Assert.notNull(marshaller, "marshaller cannot be null");
 		Assert.notNull(jmsConsumerManager, "jmsConsumerManager cannot be null");
-		Assert.notNull(metricRegistry, "metricRegistry cannot be null");
 	}
 
 	/**
@@ -84,7 +70,7 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 	protected JmsReply doListen(TextMessage message) {
 		MDC.put(Constants.USER_ID, jmsConsumer.getServiceName());
 		try {
-			timer.time(() -> unmarshalAndHandle(message));
+			unmarshalAndHandle(message);
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {
@@ -102,7 +88,6 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 		} catch (NoJmsBackoutException e) {
 			handleNoJmsBackout(e, message);
 		} catch (Exception e) {
-			exceptionMeter.mark();
 			jmsConsumerManager.registerError(jmsConsumer);
 			throw new RuntimeException("Error in service=" + jmsConsumer.getServiceName(), e);
 		}
@@ -110,7 +95,6 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 	}
 
 	private void handleNoJmsBackout(NoJmsBackoutException originalError, TextMessage message) {
-		noBackoutExceptionMeter.mark();
 		NO_BACKOUTLOG.warn("Nonbackout Error in service={}. Writing to functional error queue", jmsConsumer.getServiceName(), originalError);
 		try {
 			performWriteToFunctionalErrorQueue(message);
@@ -164,10 +148,5 @@ public abstract class AbstractJmsConsumer<T> implements InitializingBean {
 	@Autowired
 	public void setJmsConsumerManager(JmsConsumerManager jmsConsumerManager) {
 		this.jmsConsumerManager = jmsConsumerManager;
-	}
-
-	@Autowired
-	public void setMetricRegistry(MetricRegistry metricRegistry) {
-		this.metricRegistry = metricRegistry;
 	}
 }
