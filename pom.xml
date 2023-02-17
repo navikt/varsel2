@@ -55,13 +55,13 @@
 		</nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>
 		<nav-brukervarsel-v1-tjenestespesifikasjon.version>1.0.4</nav-brukervarsel-v1-tjenestespesifikasjon.version>
 		<dokkat-schemas.version>6.0.3</dokkat-schemas.version>
+		<!-- snakeyaml version override kan fjernes etter oppdatering til spring boot 3.n+ -->
 		<snakeyaml.version>1.33</snakeyaml.version>
 
 		<!-- test -->
 		<spring-cloud-contract-wiremock.version>3.1.5</spring-cloud-contract-wiremock.version>
 		<!-- Spring Boot 2.7.x drar inn versjon 2.1.x av h2 som gir problem for testene -->
 		<h2.version>1.4.200</h2.version>
-		<activemq-core.version>5.7.0</activemq-core.version>
 
 		<!-- Plugins -->
 		<maven-toolchains-plugin.version>3.1.0</maven-toolchains-plugin.version>
@@ -187,11 +187,6 @@
 				<groupId>com.ibm.mq</groupId>
 				<artifactId>com.ibm.mq.allclient</artifactId>
 				<version>${wmq.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.activemq</groupId>
-				<artifactId>activemq-core</artifactId>
-				<version>${activemq-core.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.spotify</groupId>
