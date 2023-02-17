@@ -19,16 +19,10 @@
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>jms-consumer</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>io.dropwizard.metrics</groupId>
-			<artifactId>metrics-servlets</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
@@ -51,7 +45,6 @@
 			<groupId>no.nav.modig</groupId>
 			<artifactId>modig-security-core</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>no.nav.security</groupId>
 			<artifactId>token-validation-spring</artifactId>
@@ -79,7 +72,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-core</artifactId>
+			<artifactId>activemq-broker</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
