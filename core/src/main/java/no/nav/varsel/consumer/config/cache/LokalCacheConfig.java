@@ -29,7 +29,7 @@ public class LokalCacheConfig {
 		SimpleCacheManager manager = new SimpleCacheManager();
 		manager.setCaches(Arrays.asList(
 				new CaffeineCache(VARSELINFO_CACHE, Caffeine.newBuilder()
-						.expireAfterWrite(55, TimeUnit.MINUTES).build()),
+						.expireAfterWrite(24, TimeUnit.HOURS).build()),
 				new CaffeineCache(STS_CACHE, Caffeine.newBuilder()
 						.expireAfterWrite(55, TimeUnit.MINUTES).build()),
 				new CaffeineCache(AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE, Caffeine.newBuilder()
