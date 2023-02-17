@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.VARSELINFO_CACHE;
 import static no.nav.varsel.consumer.pdl.helper.DomainConstants.APP_NAME;
 import static no.nav.varsel.util.MDCGenerate.CALL_ID;
 import static no.nav.varsel.util.MDCGenerate.NAV_CONSUMER_ID;
@@ -33,7 +34,7 @@ public class VarselInfoConsumer {
 		this.varselInfoMapper = varselInfoMapper;
 	}
 
-	@Cacheable("varselinfos")
+	@Cacheable(VARSELINFO_CACHE)
 	public VarselInfoTo hentVarselInfo(String varseltypeId) {
 		VarselInfoRestTo varselInfo;
 		HttpHeaders headers = createHeaders();

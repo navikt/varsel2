@@ -20,12 +20,16 @@ public class LokalCacheConfig {
 	public static final String STS_CACHE = "stsCache";
 	public static final String AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE = "DIGDIRKRRAZUREAD";
 
+	public static final String VARSELINFO_CACHE = "varselinfos";
+
 	@Bean
 	@Primary
 	@Profile({"nais", "itest"})
 	CacheManager cacheManager() {
 		SimpleCacheManager manager = new SimpleCacheManager();
 		manager.setCaches(Arrays.asList(
+				new CaffeineCache(VARSELINFO_CACHE, Caffeine.newBuilder()
+						.expireAfterWrite(55, TimeUnit.MINUTES).build()),
 				new CaffeineCache(STS_CACHE, Caffeine.newBuilder()
 						.expireAfterWrite(55, TimeUnit.MINUTES).build()),
 				new CaffeineCache(AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE, Caffeine.newBuilder()

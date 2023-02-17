@@ -7,7 +7,6 @@ import no.nav.varsel.kafka.CustomKafkaTemplate;
 import no.nav.varsel.kvarsel001.NotifikasjonStatusConsumer;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -15,7 +14,6 @@ import org.springframework.context.annotation.Import;
  * Spring configuration for the application
  */
 @Configuration
-@EnableCaching
 @EnableConfigurationProperties({
 		MqGatewayProperties.class,
 		ListenerProperties.class,
