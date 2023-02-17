@@ -6,6 +6,7 @@ import no.nav.varsel.consumer.dokkat.support.VarselInfoMapper;
 import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,7 @@ public class VarselInfoConsumer {
 		this.varselInfoMapper = varselInfoMapper;
 	}
 
+	@Cacheable("varselinfos")
 	public VarselInfoTo hentVarselInfo(String varseltypeId) {
 		VarselInfoRestTo varselInfo;
 		HttpHeaders headers = createHeaders();
