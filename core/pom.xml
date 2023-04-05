@@ -129,8 +129,8 @@
 			<artifactId>javax.activation</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>no.nav.dokkat</groupId>
-			<artifactId>dokkat-schemas</artifactId>
+			<groupId>no.nav.dokmet</groupId>
+			<artifactId>api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.github.ben-manes.caffeine</groupId>
