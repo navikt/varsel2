@@ -55,7 +55,7 @@
 		</nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>
 		<nav-brukervarsel-v1-tjenestespesifikasjon.version>1.0.4</nav-brukervarsel-v1-tjenestespesifikasjon.version>
 		<!-- snakeyaml version override kan fjernes etter oppdatering til spring boot 3.n+ -->
-		<dokmet.api.version>13-5459a4f</dokmet.api.version>
+		<dokmet-api.version>13-5459a4f</dokmet-api.version>
 		<snakeyaml.version>1.33</snakeyaml.version>
 
 		<!-- test -->
@@ -159,7 +159,7 @@
 			<dependency>
 				<groupId>no.nav.dokmet</groupId>
 				<artifactId>api</artifactId>
-				<version>${dokmet.api.version}</version>
+				<version>${dokmet-api.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.tjenester</groupId>
