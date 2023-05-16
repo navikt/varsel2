@@ -22,11 +22,6 @@ public class QueueConfig {
 	}
 
 	@Bean
-	public Queue varselutsendingQueue(@Value("${varselutsending.queuename}") String varselutsendingQueueName) throws JMSException {
-		return new MQQueue(varselutsendingQueueName);
-	}
-
-	@Bean
 	public Queue bestillServicemeldingKontaktInfoQueue(@Value("${bestillservicemeldingkontaktinfo.queuename}") String bestillServicemeldingKontaktInfoQueueName) throws JMSException {
 		return new MQQueue(bestillServicemeldingKontaktInfoQueueName);
 	}
