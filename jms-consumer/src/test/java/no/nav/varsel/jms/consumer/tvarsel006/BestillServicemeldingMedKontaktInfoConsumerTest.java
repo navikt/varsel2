@@ -2,7 +2,6 @@ package no.nav.varsel.jms.consumer.tvarsel006;
 
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ObjectFactory;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.WSServicemeldingMedKontaktinformasjon;
-import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
@@ -24,7 +23,6 @@ import static no.nav.varsel.Utils.formatDateTime;
 import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
 import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static no.nav.varsel.domain.code.StatusCode.SENDT;
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static no.nav.varsel.jms.consumer.AbstractJmsConsumer.JMS_NOBACKOUTLOG;
 import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING_KONTAKTINFO;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.AKTOER_ID;
@@ -52,9 +50,6 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 
 	@Autowired
 	private Queue bestillServicemeldingKontaktInfoQueue;
-
-	@Autowired
-	private Queue varselutsendingQueue;
 
 	@Autowired
 	private Queue bestillServicemeldingKontaktInfoFunksjonellFeilQueue;
@@ -124,8 +119,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 		});
 
 		String varselTekst = FOERSTE_GANG_TEKST.replace("{mottaker}", VAL);
-		String varselId = assertDb(varselTekst).getVarselId();
-		assertVarselutsendingQueue(varselTekst, varselId);
+		assertDb(varselTekst).getVarselId();
 	}
 
 	private Varsel assertDb(String varselTekst) {
@@ -163,18 +157,4 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 		return varsel;
 	}
 
-	private void assertVarselutsendingQueue(String varselTekst, String varselId) {
-		Varselutsending varselutsending = findLastMessage(varselutsendingQueue);
-
-		assertThat(varselutsending.getVarselId(), is(varselId));
-		assertThat(((no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Person)
-				varselutsending.getMottaker()).getIdent(), is(PERSON_IDENT));
-		assertThat(varselutsending.getUtloepstidspunkt(), equalTo(toXmlGregorianCalendar(UTLOEPS_TIDSPUNKT)));
-		assertThat(varselutsending.getDistribusjon().getKanal().getValue(), is(KanalCode.EPOST.getKommunikasjonskanal()));
-		assertThat(varselutsending.getDistribusjon().getKontaktinformasjon(), is(EPOST));
-		assertThat(varselutsending.getVarseltypeId(), is(VARSELTYPE_ID));
-		assertThat(varselutsending.getVarselTittel(), is(VARSEL_TITTEL));
-		assertThat(varselutsending.getVarselTekst(), is(varselTekst));
-		assertThat(varselutsending.getVarselURL(), nullValue());
-	}
 }

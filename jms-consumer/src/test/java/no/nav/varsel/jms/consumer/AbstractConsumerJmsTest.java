@@ -1,6 +1,5 @@
 package no.nav.varsel.jms.consumer;
 
-import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
 import no.nav.varsel.config.JmsConsumerTestConfig;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.repo.VarselRepo;
@@ -134,16 +133,6 @@ public abstract class AbstractConsumerJmsTest {
 	protected void isOk(Message response) {
 		assertThat(response, notNullValue());
 	}
-
-	protected Varselutsending findLastMessage(Queue varselutsendingQueue) {
-		Varselutsending varselutsending = null;
-		Varselutsending lastMessage = null;
-		while((varselutsending = receive(varselutsendingQueue))!=null){
-			lastMessage = varselutsending;
-		}
-		return lastMessage;
-	}
-
 
 	public void stubVarselInfoV1() {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varseltypeId")
