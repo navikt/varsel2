@@ -1,13 +1,13 @@
 package no.nav.varsel.jms.consumer.tvarsel006.support;
 
-import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.Aktoer;
-import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.AktoerId;
-import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.Kommunikasjonskanaler;
-import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.Kontaktinformasjon;
-import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.Organisasjon;
-import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.Parameter;
-import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.Person;
-import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
+import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.WSAktoer;
+import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.WSAktoerId;
+import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.WSKommunikasjonskanaler;
+import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.WSKontaktinformasjon;
+import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.WSOrganisasjon;
+import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.WSParameter;
+import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.WSPerson;
+import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.WSServicemeldingMedKontaktinformasjon;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.service.to.BestillVarselTo;
 import org.hamcrest.Matchers;
@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
 import static no.nav.varsel.Utils.formatDateTime;
+import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -54,7 +55,7 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 
 	@Test
 	public void shouldHandleNullOnOptional() {
-		ServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
+		WSServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
 		varsel.getParameterListe().clear();
 		varsel.setUtloepstidspunkt(null);
 
@@ -66,7 +67,7 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 
 	@Test
 	public void shouldMapPersonIdent() {
-		ServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
+		WSServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
 		varsel.setMottaker(createPerson());
 
 		BestillVarselTo to = mapper.map(varsel);
@@ -77,7 +78,7 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 
 	@Test
 	public void shouldHandleOrganisasjonNull() {
-		ServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
+		WSServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
 		varsel.setTilhoerendeOrganisasjon(null);
 
 		BestillVarselTo to = mapper.map(varsel);
@@ -87,10 +88,10 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 
 	@Test
 	public void shouldThrowIfKontaktInfoKanalIsDittNav() {
-		ServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
+		WSServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
 
-		Kontaktinformasjon kontaktinformasjon = new Kontaktinformasjon();
-		kontaktinformasjon.setKanal(createKommunkasjonskanaler(KanalCode.DITT_NAV));
+		WSKontaktinformasjon kontaktinformasjon = new WSKontaktinformasjon();
+		kontaktinformasjon.setKanal(createKommunkasjonskanaler(DITT_NAV));
 		varsel.getKontaktinformasjonListe().add(kontaktinformasjon);
 
 		Exception e = assertThrows(IllegalArgumentException.class, () -> mapper.map(varsel));
@@ -99,9 +100,9 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 
 	@Test
 	public void shouldThrowIllegalArgumentIfInfoKanalNull() {
-		ServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
+		WSServicemeldingMedKontaktinformasjon varsel = createServicemeldingMedKontaktinformasjon();
 
-		Kontaktinformasjon kontaktinformasjon = new Kontaktinformasjon();
+		WSKontaktinformasjon kontaktinformasjon = new WSKontaktinformasjon();
 		kontaktinformasjon.setKanal(null);
 		varsel.getKontaktinformasjonListe().add(kontaktinformasjon);
 
@@ -109,8 +110,8 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 		assertEquals("Ugyldig kommunikasjonskanal=null", e.getMessage());
 	}
 
-	public static ServicemeldingMedKontaktinformasjon createServicemeldingMedKontaktinformasjon() {
-		ServicemeldingMedKontaktinformasjon varsel = new ServicemeldingMedKontaktinformasjon();
+	public static WSServicemeldingMedKontaktinformasjon createServicemeldingMedKontaktinformasjon() {
+		WSServicemeldingMedKontaktinformasjon varsel = new WSServicemeldingMedKontaktinformasjon();
 		varsel.setMottaker(createAktoerId());
 		varsel.setTilhoerendeOrganisasjon(createOrganisasjon());
 		varsel.setVarseltypeId(VARSELTYPE_ID);
@@ -118,51 +119,59 @@ public class BestillServicemeldingMedKontaktInfoMapperTest {
 		varsel.setUtloepstidspunkt(toXmlGregorianCalendar(UTLOEPS_TIDSPUNKT));
 		varsel.getKontaktinformasjonListe().add(createKontaktInfoSms());
 		varsel.getKontaktinformasjonListe().add(createKontaktInfoEpost());
+
 		return varsel;
 	}
 
-	private static Organisasjon createOrganisasjon() {
-		Organisasjon organisasjon = new Organisasjon();
+	private static WSOrganisasjon createOrganisasjon() {
+		WSOrganisasjon organisasjon = new WSOrganisasjon();
 		organisasjon.setOrgnummer(ORGNUMMER);
+
 		return organisasjon;
 	}
 
-	private static Parameter createParameter() {
-		Parameter parameter = new Parameter();
+	private static WSParameter createParameter() {
+		WSParameter parameter = new WSParameter();
 		parameter.setKey(KEY);
 		parameter.setValue(VAL);
+
 		return parameter;
 	}
 
-	private static Kontaktinformasjon createKontaktInfoSms() {
-		Kontaktinformasjon kontaktinformasjon = new Kontaktinformasjon();
+	private static WSKontaktinformasjon createKontaktInfoSms() {
+		WSKontaktinformasjon kontaktinformasjon = new WSKontaktinformasjon();
 		kontaktinformasjon.setKontaktinformasjon(TLF);
 		kontaktinformasjon.setKanal(createKommunkasjonskanaler(KanalCode.SMS));
+
 		return kontaktinformasjon;
 	}
 
-	private static Kontaktinformasjon createKontaktInfoEpost() {
-		Kontaktinformasjon kontaktinformasjon = new Kontaktinformasjon();
+	private static WSKontaktinformasjon createKontaktInfoEpost() {
+		WSKontaktinformasjon kontaktinformasjon = new WSKontaktinformasjon();
 		kontaktinformasjon.setKontaktinformasjon(EPOST);
 		kontaktinformasjon.setKanal(createKommunkasjonskanaler(KanalCode.EPOST));
+
 		return kontaktinformasjon;
 	}
 
-	private static Kommunikasjonskanaler createKommunkasjonskanaler(KanalCode kanalCode) {
-		Kommunikasjonskanaler kommunikasjonskanaler = new Kommunikasjonskanaler();
+	private static WSKommunikasjonskanaler createKommunkasjonskanaler(KanalCode kanalCode) {
+		WSKommunikasjonskanaler kommunikasjonskanaler = new WSKommunikasjonskanaler();
 		kommunikasjonskanaler.setValue(kanalCode.name());
+
 		return kommunikasjonskanaler;
 	}
 
-	private static Aktoer createAktoerId() {
-		AktoerId aktoerId = new AktoerId();
+	private static WSAktoer createAktoerId() {
+		WSAktoerId aktoerId = new WSAktoerId();
 		aktoerId.setAktoerId(AKTOER_ID);
+
 		return aktoerId;
 	}
 
-	private static Aktoer createPerson() {
-		Person person = new Person();
+	private static WSAktoer createPerson() {
+		WSPerson person = new WSPerson();
 		person.setIdent(PERSON_IDENT);
+
 		return person;
 	}
 }

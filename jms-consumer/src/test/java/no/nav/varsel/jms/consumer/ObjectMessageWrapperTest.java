@@ -11,6 +11,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ObjectMessageWrapperTest {
+
 	private final Message messageMock = Mockito.mock(Message.class);
 	private final Varsel varsel = new Varsel();
 
