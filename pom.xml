@@ -55,8 +55,9 @@
 		</nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>
 		<tjenestespesifikasjoner.version>2616.df1f47c</tjenestespesifikasjoner.version>
 		<dokmet-api.version>13-5459a4f</dokmet-api.version>
+
 		<!-- snakeyaml version override kan fjernes etter oppdatering til spring boot 3.n+ -->
-		<snakeyaml.version>1.33</snakeyaml.version>
+		<snakeyaml.version>2.0</snakeyaml.version>
 
 		<!-- test -->
 		<spring-cloud-contract-wiremock.version>3.1.5</spring-cloud-contract-wiremock.version>
