@@ -4,7 +4,6 @@ import com.ibm.mq.jms.MQConnectionFactory;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.WSServicemeldingMedKontaktinformasjon;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
-import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
 import no.nav.varsel.config.alias.ListenerProperties;
 import no.nav.varsel.config.alias.MqGatewayProperties;
@@ -115,7 +114,6 @@ public class JmsConfig {
 		marshaller.setPackagesToScan(
 				Varsel.class.getPackage().getName(),
 				Varselutsending.class.getPackage().getName(),
-				VarselMedHandling.class.getPackage().getName(),
 				WSServicemeldingMedKontaktinformasjon.class.getPackage().getName(),
 				JmsReply.class.getPackage().getName()
 		);
