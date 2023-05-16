@@ -1,6 +1,5 @@
 package no.nav.varsel.service.tvarsel005.support;
 
-import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
@@ -8,8 +7,10 @@ import no.nav.varsel.service.tvarsel005.to.VarselTo;
 import no.nav.varsel.service.tvarsel005.to.VarselbestillingTo;
 
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
+import static no.nav.varsel.domain.code.StatusCode.FERDIGBEHANDLET;
 import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo.Builder.aHentVarselForBrukerResponseTo;
 import static no.nav.varsel.service.tvarsel005.to.VarselTo.Builder.aVarselTo;
 import static no.nav.varsel.service.tvarsel005.to.VarselbestillingTo.Builder.aVarselbestillingTo;
@@ -26,7 +27,7 @@ public class BrukervarselMapper {
 	private VarselbestillingTo mapVarselbestilling(Varselbestilling varselbestilling) {
 		return aVarselbestillingTo()
 				.varseltypeId(varselbestilling.getVarseltypeId())
-				.varsler(varselbestilling.getVarsels().stream().map(this::mapVarsel).filter(v -> v != null).collect(toList()))
+				.varsler(varselbestilling.getVarsels().stream().map(this::mapVarsel).filter(Objects::nonNull).collect(toList()))
 				.fnr(varselbestilling.getFnr())
 				.aktoerId(varselbestilling.getAktorId())
 				.bestillingstidspunkt(varselbestilling.getBestillingTidspunkt())
@@ -35,9 +36,10 @@ public class BrukervarselMapper {
 	}
 
 	private VarselTo mapVarsel(Varsel varsel) {
-		if (varsel.getStatus() != StatusCode.FERDIGBEHANDLET) {
+		if (varsel.getStatus() != FERDIGBEHANDLET) {
 			return null;
 		}
+
 		return aVarselTo()
 				.kanal(varsel.getKanal().toString())
 				.sendtTidspunkt(varsel.getSendtTidspunkt())

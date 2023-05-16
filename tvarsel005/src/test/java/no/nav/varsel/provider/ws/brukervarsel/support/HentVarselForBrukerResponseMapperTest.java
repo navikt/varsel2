@@ -1,8 +1,8 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Brukervarsel;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varselbestilling;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSBrukervarsel;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSVarselbestilling;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerResponse;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +11,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static no.nav.varsel.provider.ws.brukervarsel.support.VarselMapperTest.DISTRIBUSJON_TIDSPUNKT;
+import static no.nav.varsel.provider.ws.brukervarsel.support.VarselMapperTest.SENDT_TIDSPUNKT;
+import static no.nav.varsel.provider.ws.brukervarsel.support.VarselbestillingMapperTest.AKTOER_ID;
+import static no.nav.varsel.provider.ws.brukervarsel.support.VarselbestillingMapperTest.BESTILLINGSTIDSPUNKT;
+import static no.nav.varsel.provider.ws.brukervarsel.support.VarselbestillingMapperTest.FNR;
+import static no.nav.varsel.provider.ws.brukervarsel.support.VarselbestillingMapperTest.SISTE_VARSEL_UTSENDELSE;
 import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo.Builder.aHentVarselForBrukerResponseTo;
 import static no.nav.varsel.service.tvarsel005.to.VarselTo.Builder.aVarselTo;
 import static no.nav.varsel.service.tvarsel005.to.VarselbestillingTo.Builder.aVarselbestillingTo;
@@ -21,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class HentVarselForBrukerResponseMapperTest {
+
 	private static final String VARSELTYPE_ID = "VARSELTYPE_ID";
 	private static final Integer REVARSLINGSINTERVALL = 5;
 	private static final String KANAL = "KANAL";
@@ -52,14 +59,14 @@ public class HentVarselForBrukerResponseMapperTest {
 
 	@Test
 	public void shouldMapAktoerId() {
-		HentVarselForBrukerResponseTo responseTo = createResponseTo(null, VarselbestillingMapperTest.AKTOER_ID);
-		HentVarselForBrukerResponse response = mapper.map(responseTo);
+		HentVarselForBrukerResponseTo responseTo = createResponseTo(null, AKTOER_ID);
+		WSHentVarselForBrukerResponse response = mapper.map(responseTo);
 
 		//assert response
 		assertThat(response.getBrukervarsel(), notNullValue());
-		Brukervarsel brukervarsel = response.getBrukervarsel();
+		WSBrukervarsel brukervarsel = response.getBrukervarsel();
 		assertThat(brukervarsel.getVarselbestillingListe(), hasSize(1));
-		Varselbestilling varselbestilling = brukervarsel.getVarselbestillingListe().get(0);
+		WSVarselbestilling varselbestilling = brukervarsel.getVarselbestillingListe().get(0);
 
 		//assert Varselbestiling
 		VarselbestillingMapperTest.assertAktoerHasValue(varselbestilling);
@@ -70,14 +77,14 @@ public class HentVarselForBrukerResponseMapperTest {
 
 	@Test
 	public void shouldMapPerson() {
-		HentVarselForBrukerResponseTo responseTo = createResponseTo(VarselbestillingMapperTest.FNR, null);
-		HentVarselForBrukerResponse response = mapper.map(responseTo);
+		HentVarselForBrukerResponseTo responseTo = createResponseTo(FNR, null);
+		WSHentVarselForBrukerResponse response = mapper.map(responseTo);
 
 		//assert response
 		assertThat(response.getBrukervarsel(), notNullValue());
-		Brukervarsel brukervarsel = response.getBrukervarsel();
+		WSBrukervarsel brukervarsel = response.getBrukervarsel();
 		assertThat(brukervarsel.getVarselbestillingListe(), hasSize(1));
-		Varselbestilling varselbestilling = brukervarsel.getVarselbestillingListe().get(0);
+		WSVarselbestilling varselbestilling = brukervarsel.getVarselbestillingListe().get(0);
 
 		//assert Varselbestiling
 		VarselbestillingMapperTest.assertAktoerHasNullValue(varselbestilling);
@@ -88,23 +95,23 @@ public class HentVarselForBrukerResponseMapperTest {
 
 	private HentVarselForBrukerResponseTo createResponseTo(String fnr, String aktoer) {
 		return aHentVarselForBrukerResponseTo().
-				varselbestillingTos(aVarselbestillingTo().
-						varseltypeId(VARSELTYPE_ID).
-						fnr(fnr).
-						aktoerId(aktoer).
-						bestillingstidspunkt(VarselbestillingMapperTest.BESTILLINGSTIDSPUNKT).
-						revarslingIntervall(REVARSLINGSINTERVALL).
-						sisteVarselUtsendelse(VarselbestillingMapperTest.SISTE_VARSEL_UTSENDELSE).
-						varsler(aVarselTo().
-								kanal(KANAL).
-								sendtTidspunkt(VarselMapperTest.SENDT_TIDSPUNKT).
-								distribusjonTidspunkt(VarselMapperTest.DISTRIBUSJON_TIDSPUNKT).
-								kontaktInfo(KONTAKT_INFO).
-								varselTittel(VARSEL_TITTEL).
-								varselTekst(VARSEL_TEKST).
-								varselURL(VARSEL_URL).
-								revarsel(IS_REVARSEL).
-								build()).
+				varselbestillingTos(aVarselbestillingTo()
+						.varseltypeId(VARSELTYPE_ID)
+						.fnr(fnr)
+						.aktoerId(aktoer)
+						.bestillingstidspunkt(BESTILLINGSTIDSPUNKT)
+						.revarslingIntervall(REVARSLINGSINTERVALL)
+						.sisteVarselUtsendelse(SISTE_VARSEL_UTSENDELSE)
+						.varsler(aVarselTo()
+								.kanal(KANAL)
+								.sendtTidspunkt(SENDT_TIDSPUNKT)
+								.distribusjonTidspunkt(DISTRIBUSJON_TIDSPUNKT)
+								.kontaktInfo(KONTAKT_INFO)
+								.varselTittel(VARSEL_TITTEL)
+								.varselTekst(VARSEL_TEKST)
+								.varselURL(VARSEL_URL)
+								.revarsel(IS_REVARSEL)
+								.build()).
 						build()).
 				build();
 	}

@@ -1,6 +1,6 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varsel;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSVarsel;
 import no.nav.varsel.service.tvarsel005.to.VarselTo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -41,12 +41,12 @@ public class VarselMapperTest {
 	public void shouldMap() {
 		VarselTo varselTo = buildVarselTo();
 
-		Varsel varsel = MAPPER.map(varselTo);
+		WSVarsel varsel = MAPPER.map(varselTo);
 
 		assertVarsel(varsel);
 	}
 
-	public static void assertVarsel(Varsel varsel) {
+	public static void assertVarsel(WSVarsel varsel) {
 		assertThat(varsel.getKanal(), is(KANAL));
 		assertThat(varsel.getSendt(), is(SENDT));
 		assertThat(varsel.getDistribuert(), is(DISTRIBUERT));
@@ -58,17 +58,15 @@ public class VarselMapperTest {
 	}
 
 	public static VarselTo buildVarselTo() {
-		VarselTo.Builder builder = new VarselTo.Builder();
-		builder.
-				kanal(KANAL).
-				sendtTidspunkt(SENDT_TIDSPUNKT).
-				distribusjonTidspunkt(DISTRIBUSJON_TIDSPUNKT).
-				kontaktInfo(KONTAKT_INFO).
-				varselTittel(VARSEL_TITTEL).
-				varselTekst(VARSEL_TEKST).
-				varselURL(VARSEL_URL).
-				revarsel(REVARSEL);
-
-		return builder.build();
+		return new VarselTo.Builder()
+				.kanal(KANAL)
+				.sendtTidspunkt(SENDT_TIDSPUNKT)
+				.distribusjonTidspunkt(DISTRIBUSJON_TIDSPUNKT)
+				.kontaktInfo(KONTAKT_INFO)
+				.varselTittel(VARSEL_TITTEL)
+				.varselTekst(VARSEL_TEKST)
+				.varselURL(VARSEL_URL)
+				.revarsel(REVARSEL)
+				.build();
 	}
 }
