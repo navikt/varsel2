@@ -44,10 +44,14 @@ public class BrukervarselV1Endpoint implements BrukervarselV1 {
 
 	@Override
 	public WSHentVarselForBrukerResponse hentVarselForBruker(WSHentVarselForBrukerRequest hentVarselForBrukerRequest) throws HentVarselForBrukerUgyldigInput {
+		log.info("tvarsel005 har mottatt kall om å hente varsel for bruker");
 		hentVarselForBrukerRequestValidator.validate(hentVarselForBrukerRequest);
 
 		try {
-			return brukervarselV1Provider.hentVarselForBruker(hentVarselForBrukerRequest);
+			var response = brukervarselV1Provider.hentVarselForBruker(hentVarselForBrukerRequest);
+			log.info("tvarsel005 har hentet varsel for bruker");
+
+			return response;
 		} catch (RuntimeException e) {
 			// Hvorfor gjør vi dette?
 			// Biblioteket vi er avhengig av modig-security-authorization kaster access denied feil som RuntimeException.
