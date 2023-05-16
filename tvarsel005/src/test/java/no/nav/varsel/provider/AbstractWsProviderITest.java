@@ -8,17 +8,14 @@ import no.nav.varsel.repo.VarselbestillingRepo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static no.nav.varsel.domain.Constants.USER_ID;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = WsProviderTestConfig.class)
 @ActiveProfiles({"itest", "local"})
 @AutoConfigureWireMock(port = 0)

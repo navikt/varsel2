@@ -2,9 +2,9 @@ package no.nav.varsel.provider.ws.brukervarsel.itest;
 
 import no.nav.modig.core.context.SubjectHandlerUtils;
 import no.nav.modig.core.domain.IdentType;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Person;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSPeriode;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSPerson;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerRequest;
 import no.nav.varsel.provider.AbstractWsProviderITest;
 import no.nav.varsel.provider.ws.brukervarsel.AuthorizationException;
 import no.nav.varsel.provider.ws.brukervarsel.BrukervarselV1Endpoint;
@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
+import static no.nav.modig.core.context.SubjectHandlerUtils.setEksternBruker;
+import static no.nav.modig.core.context.SubjectHandlerUtils.setInternBruker;
+import static no.nav.modig.core.context.SubjectHandlerUtils.setSystemressurs;
 import static no.nav.modig.core.domain.IdentType.Prosess;
 import static no.nav.modig.core.domain.IdentType.Samhandler;
 import static no.nav.modig.core.domain.IdentType.Sikkerhet;
@@ -28,21 +31,21 @@ public class BrukervarselV1AuthenticationTest extends AbstractWsProviderITest {
 
 	@Test
 	public void shouldAllowAccessToInternbruker() throws Exception {
-		SubjectHandlerUtils.setInternBruker(USER_ID);
+		setInternBruker(USER_ID);
 
 		brukervarselV1.hentVarselForBruker(createHentVarselForBrukerRequest());
 	}
 
 	@Test
 	public void shouldDenyAccessToEksternbruker() {
-		SubjectHandlerUtils.setEksternBruker(USER_ID, 4, "");
+		setEksternBruker(USER_ID, 4, "");
 
 		expectAuthException();
 	}
 
 	@Test
 	public void shouldDenyAccessToSystemRessurs() {
-		SubjectHandlerUtils.setSystemressurs(USER_ID);
+		setSystemressurs(USER_ID);
 
 		expectAuthException();
 	}
@@ -68,13 +71,13 @@ public class BrukervarselV1AuthenticationTest extends AbstractWsProviderITest {
 		expectAuthException();
 	}
 
-	private HentVarselForBrukerRequest createHentVarselForBrukerRequest() {
-		HentVarselForBrukerRequest request = new HentVarselForBrukerRequest();
+	private WSHentVarselForBrukerRequest createHentVarselForBrukerRequest() {
+		WSHentVarselForBrukerRequest request = new WSHentVarselForBrukerRequest();
 
-		request.setBruker(new Person());
-		((Person) request.getBruker()).setIdent(USER_ID);
+		request.setBruker(new WSPerson());
+		((WSPerson) request.getBruker()).setIdent(USER_ID);
 
-		request.setPeriode(new Periode());
+		request.setPeriode(new WSPeriode());
 		request.getPeriode().setFom(toXmlGregorianCalendar(LocalDateTime.now()));
 		request.getPeriode().setTom(toXmlGregorianCalendar(LocalDateTime.now()));
 		return request;

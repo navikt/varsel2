@@ -53,9 +53,9 @@
 		<nav-virksomhet-varselMedHandling-v1.version>1.0.0</nav-virksomhet-varselMedHandling-v1.version>
 		<nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>1.0.0
 		</nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>
-		<nav-brukervarsel-v1-tjenestespesifikasjon.version>1.0.4</nav-brukervarsel-v1-tjenestespesifikasjon.version>
-		<!-- snakeyaml version override kan fjernes etter oppdatering til spring boot 3.n+ -->
+		<tjenestespesifikasjoner.version>2616.df1f47c</tjenestespesifikasjoner.version>
 		<dokmet-api.version>13-5459a4f</dokmet-api.version>
+		<!-- snakeyaml version override kan fjernes etter oppdatering til spring boot 3.n+ -->
 		<snakeyaml.version>1.33</snakeyaml.version>
 
 		<!-- test -->
@@ -162,10 +162,9 @@
 				<version>${dokmet-api.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>no.nav.tjenester</groupId>
-				<artifactId>nav-brukervarsel-v1-tjenestespesifikasjon</artifactId>
-				<version>${nav-brukervarsel-v1-tjenestespesifikasjon.version}</version>
-				<classifier>jaxws</classifier>
+				<groupId>no.nav.tjenestespesifikasjoner</groupId>
+				<artifactId>brukervarsel-v1-tjenestespesifikasjon</artifactId>
+				<version>${tjenestespesifikasjoner.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.google.guava</groupId>
