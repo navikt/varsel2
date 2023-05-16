@@ -85,11 +85,7 @@ public class Tvarsel006ITest {
 	}
 
 	private void publishMessage(NotifikasjonMedkontaktInfo notifikasjonMedkontaktInfo) {
-		kafkaEventProducer.publish(
-				TOPIC,
-				"key",
-				notifikasjonMedkontaktInfo
-		);
+		kafkaEventProducer.publish(TOPIC, "key", notifikasjonMedkontaktInfo);
 	}
 
 	private NotifikasjonMedkontaktInfo notifikasjonMedkontaktInfo() {

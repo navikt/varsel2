@@ -51,8 +51,6 @@
 		<nav-varsel-v1.version>1.1.1</nav-varsel-v1.version>
 		<nav-virksomhet-varselutsending-v2.version>2.0.3</nav-virksomhet-varselutsending-v2.version>
 		<nav-virksomhet-varselMedHandling-v1.version>1.0.0</nav-virksomhet-varselMedHandling-v1.version>
-		<nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>1.0.0
-		</nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version>
 		<tjenestespesifikasjoner.version>2616.df1f47c</tjenestespesifikasjoner.version>
 		<dokmet-api.version>13-5459a4f</dokmet-api.version>
 
@@ -152,10 +150,9 @@
 				<classifier>jaxb</classifier>
 			</dependency>
 			<dependency>
-				<groupId>no.nav.meldinger.virksomhet</groupId>
-				<artifactId>nav-virksomhet-servicemeldingMedKontaktinformasjon-v1-meldingsdefinisjon</artifactId>
-				<version>${nav-virksomhet-servicemeldingMedKontaktinformasjon-v1.version}</version>
-				<classifier>jaxb</classifier>
+				<groupId>no.nav.tjenestespesifikasjoner</groupId>
+				<artifactId>servicemeldingmedkontaktinformasjon-v1-tjenestespesifikasjon</artifactId>
+				<version>${tjenestespesifikasjoner.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.dokmet</groupId>

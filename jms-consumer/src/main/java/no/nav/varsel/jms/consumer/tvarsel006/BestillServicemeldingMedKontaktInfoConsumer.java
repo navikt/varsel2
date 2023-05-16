@@ -1,6 +1,6 @@
 package no.nav.varsel.jms.consumer.tvarsel006;
 
-import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
+import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.WSServicemeldingMedKontaktinformasjon;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapper;
@@ -21,7 +21,7 @@ import static no.nav.varsel.util.MDCGenerate.clearCallId;
 import static no.nav.varsel.util.MDCGenerate.generateCallId;
 
 @Component
-public class BestillServicemeldingMedKontaktInfoConsumer extends AbstractJmsConsumer<ServicemeldingMedKontaktinformasjon> {
+public class BestillServicemeldingMedKontaktInfoConsumer extends AbstractJmsConsumer<WSServicemeldingMedKontaktinformasjon> {
 
 	private static final Logger log = LoggerFactory.getLogger(BestillServicemeldingMedKontaktInfoConsumer.class);
 
@@ -32,16 +32,17 @@ public class BestillServicemeldingMedKontaktInfoConsumer extends AbstractJmsCons
 	private final ServicemeldingService servicemeldingService;
 
 	public BestillServicemeldingMedKontaktInfoConsumer(BestillServicemeldingMedKontaktInfoMapper bestillServicemeldingMedKontaktInfoMapper, ServicemeldingService servicemeldingService, JmsTemplate funksjonellFeilSendJmsTemplate) {
-		super(BESTILL_SERVICEMELDING_KONTAKTINFO, funksjonellFeilSendJmsTemplate, ServicemeldingMedKontaktinformasjon.class);
+		super(BESTILL_SERVICEMELDING_KONTAKTINFO, funksjonellFeilSendJmsTemplate, WSServicemeldingMedKontaktinformasjon.class);
 		this.servicemeldingService = servicemeldingService;
 		this.mapper = bestillServicemeldingMedKontaktInfoMapper;
 	}
 
 	@Override
-	protected void handleMessage(ObjectMessageWrapper<ServicemeldingMedKontaktinformasjon> objectMessageWrapper) {
+	protected void handleMessage(ObjectMessageWrapper<WSServicemeldingMedKontaktinformasjon> objectMessageWrapper) {
 		generateCallId();
 		BestillVarselTo to = mapper.map(objectMessageWrapper.getObject());
 		log.info("bestillServiceMeldingMedKontaktInfo mottatt med varselTypeId={}", to.getVarseltypeId());
+
 		to.validateTvarsel006Input();
 
 		servicemeldingService.bestillServicemelding(to);

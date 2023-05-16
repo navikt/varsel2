@@ -1,9 +1,8 @@
 package no.nav.varsel.config;
 
 import com.ibm.mq.jms.MQConnectionFactory;
-import com.ibm.msg.client.wmq.WMQConstants;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
+import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.WSServicemeldingMedKontaktinformasjon;
 import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
 import no.nav.melding.virksomhet.varselmedhandling.v1.varselmedhandling.VarselMedHandling;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
@@ -37,7 +36,9 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 import javax.net.ssl.SSLSocketFactory;
-import java.util.concurrent.TimeUnit;
+
+import static com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CM_CLIENT;
+import static java.util.concurrent.TimeUnit.HOURS;
 
 /**
  * Spring config for JMS
@@ -115,7 +116,7 @@ public class JmsConfig {
 				Varsel.class.getPackage().getName(),
 				Varselutsending.class.getPackage().getName(),
 				VarselMedHandling.class.getPackage().getName(),
-				ServicemeldingMedKontaktinformasjon.class.getPackage().getName(),
+				WSServicemeldingMedKontaktinformasjon.class.getPackage().getName(),
 				JmsReply.class.getPackage().getName()
 		);
 		return marshaller;
@@ -127,7 +128,7 @@ public class JmsConfig {
 		connectionFactory.setHostName(mqGatewayAlias.getHostname());
 		connectionFactory.setPort(mqGatewayAlias.getPort());
 		connectionFactory.setQueueManager(mqGatewayAlias.getName());
-		connectionFactory.setTransportType(WMQConstants.WMQ_CM_CLIENT);
+		connectionFactory.setTransportType(WMQ_CM_CLIENT);
 
 		if (mqGatewayAlias.getChannel().isEnabletls()) {
 			connectionFactory.setSSLCipherSuite(ANY_TLS13_OR_HIGHER);
@@ -147,7 +148,7 @@ public class JmsConfig {
 		pooledFactory.setMaxConnections(10);
 		pooledFactory.setMaximumActiveSessionPerConnection(10);
 		pooledFactory.setReconnectOnException(true);
-		pooledFactory.setExpiryTimeout(TimeUnit.HOURS.toMillis(24));
+		pooledFactory.setExpiryTimeout(HOURS.toMillis(24));
 		return pooledFactory;
 	}
 

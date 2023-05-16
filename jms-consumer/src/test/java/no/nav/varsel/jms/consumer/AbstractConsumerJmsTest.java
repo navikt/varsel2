@@ -7,13 +7,11 @@ import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -35,8 +33,6 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 
-
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = JmsConsumerTestConfig.class)
 @ActiveProfiles({"itest", "local"})
 @AutoConfigureWireMock(port = 0)
@@ -151,69 +147,79 @@ public abstract class AbstractConsumerJmsTest {
 
 	public void stubVarselInfoV1() {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varseltypeId")
-				.willReturn(aResponse().withStatus(OK.value())
+				.willReturn(aResponse()
+						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
 						.withBodyFile("varselInfoV1/varselInfoV1-happy.json")));
 	}
 
 	public void stubVarselInfoV1VarselFeil() {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_test_feil")
-				.willReturn(aResponse().withStatus(OK.value())
+				.willReturn(aResponse()
+						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
 						.withBodyFile("varselInfoV1/varsel-test-feil.json")));
 	}
 
 	public void stubVarselInfoV1VarselURL() {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_varselUrl")
-				.willReturn(aResponse().withStatus(OK.value())
+				.willReturn(aResponse()
+						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
 						.withBodyFile("varselInfoV1/varsel-varsel-url.json")));
 	}
 
 	public void stubVarselInfoV1VarselMissing() {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_missing")
-				.willReturn(aResponse().withStatus(OK.value())
+				.willReturn(aResponse()
+						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
 						.withBodyFile("varselInfoV1/varsel-missing.json")));
 	}
 
 	public void stubStsConsumer() {
 		stubFor(get("/securitytoken?grant_type=client_credentials&scope=openid")
-				.willReturn(aResponse().withStatus(OK.value())
+				.willReturn(aResponse()
+						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
 						.withBodyFile("sts/stsResponse-happy.json")));
 	}
 
 	public void stubPdlConsumer() {
 		stubFor(post("/pdl")
-				.willReturn(aResponse().withStatus(OK.value())
+				.willReturn(aResponse()
+						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
 						.withBodyFile("pdl/pdl-aktoerid-happy.json")));
 	}
 
 	public void stubPdlConsumerNotFound() {
 		stubFor(post("/pdl")
-				.willReturn(aResponse().withStatus(OK.value())
+				.willReturn(aResponse()
+						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
 						.withBodyFile("pdl/pdl-ident-notfound.json")));
 	}
 
 	public void stubPdlConsumerServerError() {
 		stubFor(post("/pdl")
-				.willReturn(aResponse().withStatus(OK.value())
+				.willReturn(aResponse()
+						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
 						.withBodyFile("pdl/pdl-ident-server-error.json")));
 	}
 
 	public void stubPdlConsumerTechnicalErrorWithInternalServerError() {
 		stubFor(post("/pdl")
-				.willReturn(aResponse().withStatus(INTERNAL_SERVER_ERROR.value())
+				.willReturn(aResponse()
+						.withStatus(INTERNAL_SERVER_ERROR.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())));
 	}
 
 	public void stubPdlConsumerFunctionalErrorWithInternalServerError() {
 		stubFor(post("/pdl")
-				.willReturn(aResponse().withStatus(BAD_REQUEST.value())
+				.willReturn(aResponse()
+						.withStatus(BAD_REQUEST.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())));
 	}
 }

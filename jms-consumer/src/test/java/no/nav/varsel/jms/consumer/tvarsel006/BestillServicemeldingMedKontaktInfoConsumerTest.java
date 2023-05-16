@@ -1,14 +1,12 @@
 package no.nav.varsel.jms.consumer.tvarsel006;
 
-import no.nav.varsel.domain.object.Varsel;
 import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ObjectFactory;
-import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.ServicemeldingMedKontaktinformasjon;
+import no.nav.melding.virksomhet.servicemeldingmedkontaktinformasjon.v1.servicemeldingmedkontaktinformasjon.WSServicemeldingMedKontaktinformasjon;
 import no.nav.melding.virksomhet.varselutsending.v2.varselutsending.Varselutsending;
 import no.nav.varsel.domain.code.KanalCode;
-import no.nav.varsel.domain.code.StatusCode;
+import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
-import no.nav.varsel.jms.consumer.JmsConsumer;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.test.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +21,12 @@ import java.util.UUID;
 
 import static java.time.Duration.ofSeconds;
 import static no.nav.varsel.Utils.formatDateTime;
+import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
+import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
+import static no.nav.varsel.domain.code.StatusCode.SENDT;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static no.nav.varsel.jms.consumer.AbstractJmsConsumer.JMS_NOBACKOUTLOG;
+import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING_KONTAKTINFO;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.AKTOER_ID;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.EPOST;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.ORGNUMMER;
@@ -34,8 +36,6 @@ import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldin
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.VARSELTYPE_ID;
 import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.createServicemeldingMedKontaktinformasjon;
 import static no.nav.varsel.test.TestUtils.aboutNow;
-import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
-import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -66,7 +66,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 
 	@Test
 	public void shouldNotPutInvalidInputOnBackout() {
-		ServicemeldingMedKontaktinformasjon varselBestilling = createServicemeldingMedKontaktinformasjon();
+		WSServicemeldingMedKontaktinformasjon varselBestilling = createServicemeldingMedKontaktinformasjon();
 		varselBestilling.setVarseltypeId(null);
 		JmsReply response = sendMessage(bestillServicemeldingKontaktInfoQueue, new ObjectFactory().createServicemelding(varselBestilling));
 
@@ -77,7 +77,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 
 	@Test
 	public void shouldNotPutOnBackoutIfFailedWsFunksjonell() {
-		JAXBElement<ServicemeldingMedKontaktinformasjon> servicemelding = new ObjectFactory().createServicemelding(createServicemeldingMedKontaktinformasjon());
+		JAXBElement<WSServicemeldingMedKontaktinformasjon> servicemelding = new ObjectFactory().createServicemelding(createServicemeldingMedKontaktinformasjon());
 		stubPdlConsumerNotFound();
 
 		JmsReply response = sendMessage(bestillServicemeldingKontaktInfoQueue, servicemelding);
@@ -86,7 +86,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 
 		loggerMock.verify("Nonbackout Error in service=tvarsel006");
 
-		ServicemeldingMedKontaktinformasjon functionalFail = receive(bestillServicemeldingKontaktInfoFunksjonellFeilQueue);
+		WSServicemeldingMedKontaktinformasjon functionalFail = receive(bestillServicemeldingKontaktInfoFunksjonellFeilQueue);
 		assertNotNull(functionalFail);
 		assertAll(
 				() -> assertThat(servicemelding.getValue().getMottaker(), is(samePropertyValuesAs(functionalFail.getMottaker()))),
@@ -96,7 +96,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 
 	@Test
 	public void shouldPutOnBackoutIfFailedWs() {
-		JAXBElement<ServicemeldingMedKontaktinformasjon> servicemelding = new ObjectFactory().createServicemelding(createServicemeldingMedKontaktinformasjon());
+		JAXBElement<WSServicemeldingMedKontaktinformasjon> servicemelding = new ObjectFactory().createServicemelding(createServicemeldingMedKontaktinformasjon());
 		stubPdlConsumerTechnicalErrorWithInternalServerError();
 		Message response = sendMessageListenBoq(bestillServicemeldingKontaktInfoQueue, servicemelding);
 
@@ -105,7 +105,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 
 	@Test
 	public void shouldPutOnBackoutAndRollbackIfFailedAfterDbSave() {
-		JAXBElement<ServicemeldingMedKontaktinformasjon> servicemelding = new ObjectFactory().createServicemelding(createServicemeldingMedKontaktinformasjon());
+		JAXBElement<WSServicemeldingMedKontaktinformasjon> servicemelding = new ObjectFactory().createServicemelding(createServicemeldingMedKontaktinformasjon());
 		servicemelding.getValue().setVarseltypeId(FEIL_MQ_UT);
 		Message response = sendMessageListenBoq(bestillServicemeldingKontaktInfoQueue, servicemelding);
 
@@ -141,7 +141,7 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 		assertThat(varselbestilling.getRevarslingIntervall(), nullValue());
 		assertThat(varselbestilling.getAntallRevarslinger(), nullValue());
 		assertThat(varselbestilling.getNesteVarslingDato(), nullValue());
-		assertThat(varselbestilling.getChangeStamp().getOpprettetAv(), is(JmsConsumer.BESTILL_SERVICEMELDING_KONTAKTINFO.getServiceName()));
+		assertThat(varselbestilling.getChangeStamp().getOpprettetAv(), is(BESTILL_SERVICEMELDING_KONTAKTINFO.getServiceName()));
 		assertThat(varselbestilling.getChangeStamp().getOpprettetDato(), aboutNow());
 
 		assertThat(varselbestilling.getVarsels(), hasSize(1));
@@ -152,13 +152,13 @@ public class BestillServicemeldingMedKontaktInfoConsumerTest extends AbstractCon
 		assertThat(varsel.getSendtTidspunkt(), aboutNow());
 		assertThat(varsel.getDistribusjonTidspunkt(), nullValue());
 		assertThat(varsel.getKontaktInfo(), is(EPOST));
-		assertThat(varsel.getStatus(), is(StatusCode.SENDT));
+		assertThat(varsel.getStatus(), is(SENDT));
 		assertThat(varsel.getFeilbeskrivelse(), nullValue());
 		assertThat(varsel.getVarselTittel(), is(VARSEL_TITTEL));
 		assertThat(varsel.getVarselTekst(), is(varselTekst));
 		assertThat(varsel.getVarselUrl(), nullValue());
 		assertThat(varsel.getErRevarsel(), is(false));
-		assertThat(varsel.getChangeStamp().getOpprettetAv(), is(JmsConsumer.BESTILL_SERVICEMELDING_KONTAKTINFO.getServiceName()));
+		assertThat(varsel.getChangeStamp().getOpprettetAv(), is(BESTILL_SERVICEMELDING_KONTAKTINFO.getServiceName()));
 		assertThat(varsel.getChangeStamp().getOpprettetDato(), aboutNow());
 		return varsel;
 	}
