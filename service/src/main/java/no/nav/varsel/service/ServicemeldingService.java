@@ -15,10 +15,8 @@ import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloep
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.BrukernotifikasjonMapper;
 import no.nav.varsel.service.tvarsel001.support.NotifikasjonMapper;
-import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedKontaktinfoMapper;
 import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
 import no.nav.varsel.tvarsel001.NotifikasjonPublisher;
-import no.nav.varsel.tvarsel006.NotifikasjonMedKontaktinfoPublisher;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
@@ -68,12 +66,6 @@ public class ServicemeldingService {
 	private VarselbestillingRepo varselbestillingRepo;
 
 	@Autowired
-	private NotifikasjonMedKontaktinfoPublisher notifikasjonMedKontaktinfoPublisher;
-
-	@Autowired
-	private NotifikasjonMedKontaktinfoMapper notifikasjonMedKontaktinfoMapper;
-
-	@Autowired
 	private NotifikasjonPublisher notifikasjonPublisher;
 
 	@Autowired
@@ -116,11 +108,9 @@ public class ServicemeldingService {
 		List<Varselutsending> varselutsendingList = varselutsendingMapper.map(varselbestilling);
 
 		try {
-			if (hasKontaktInfo(bestilling)) { //TVARSEL006
-				sendNotifikasjonMedKontaktinfo(bestilling, varselbestilling, varselutsendingList);
-			} else { //TVARSEL001
-				sendNotifikasjon(varselInfoTo, varselbestilling, varselutsendingList);
-			}
+			//TVARSEL001
+			sendNotifikasjon(varselInfoTo, varselbestilling, varselutsendingList);
+
 		} catch (ServicemeldingMappingException e) {
 			log.error("Feil ved mapping av data til servicemelding med BestillingId={}. Feilmelding={}", bestilling.getVarselBestillingId(), e.getMessage());
 		} catch (Exception e) {
@@ -168,14 +158,6 @@ public class ServicemeldingService {
 		if (beskjed != null && nokkel != null) {
 			brukernotifikasjonBeskjedPublisher.sendNotifikasjon(beskjed, nokkel);
 		}
-	}
-
-	private void sendNotifikasjonMedKontaktinfo(BestillVarselTo bestilling, Varselbestilling varselbestilling, List<Varselutsending> varselutsendingList) {
-		notifikasjonMedKontaktinfoPublisher.sendVarsel(notifikasjonMedKontaktinfoMapper.mapNotifikasjonMedKontaktinfo(
-				varselutsendingList,
-				varselbestilling,
-				bestilling
-		));
 	}
 
 	private KontaktregisterTo hentKontaktregisterTo(BestillVarselTo bestilling, VarselInfoTo varselInfoTo) {

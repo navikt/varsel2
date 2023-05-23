@@ -16,7 +16,6 @@
 		<module>jms-consumer</module>
 		<module>tvarsel001</module>
 		<module>tvarsel005</module>
-		<module>tvarsel006</module>
 		<module>kvarsel001</module>
 	</modules>
 
@@ -99,11 +98,6 @@
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
 				<artifactId>tvarsel005</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
-				<artifactId>tvarsel006</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

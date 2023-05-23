@@ -9,7 +9,6 @@ import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
 import no.nav.varsel.kafka.CustomKafkaTemplate;
 import no.nav.varsel.repo.config.RepoTestConfig;
-import no.nav.varsel.tvarsel006.NotifikasjonMedKontaktinfoPublisher;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +19,6 @@ import org.springframework.context.annotation.Import;
 		JmsTestConfig.class,
 		RepoTestConfig.class,
 		ProviderWsConfig.class,
-		NotifikasjonMedKontaktinfoPublisher.class,
 		CustomKafkaTemplate.class,
 		HentDigitalKontaktinformasjonConsumer.class,
 		VarselKanalDecider.class,

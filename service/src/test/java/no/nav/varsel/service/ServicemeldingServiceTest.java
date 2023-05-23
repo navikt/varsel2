@@ -21,10 +21,8 @@ import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloep
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.BrukernotifikasjonMapper;
 import no.nav.varsel.service.tvarsel001.support.NotifikasjonMapper;
-import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedKontaktinfoMapper;
 import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
 import no.nav.varsel.tvarsel001.NotifikasjonPublisher;
-import no.nav.varsel.tvarsel006.NotifikasjonMedKontaktinfoPublisher;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,12 +83,6 @@ public class ServicemeldingServiceTest {
 	private VarselKanalDecider varselKanalDecider;
 	@Mock
 	private VarselbestillingRepo varselbestillingRepo;
-
-	@Mock
-	private NotifikasjonMedKontaktinfoPublisher notifikasjonMedKontaktinfoPublisher;
-
-	@Mock
-	private NotifikasjonMedKontaktinfoMapper notifikasjonMedkontaktInfoMapper;
 
 	@Mock
 	private NotifikasjonPublisher notifikasjonPublisher;
@@ -207,6 +199,7 @@ public class ServicemeldingServiceTest {
 	public void shouldBestillServicemeldingMedKontaktinfo() {
 		bestilling.setAktoerId(AKTOR_ID);
 		bestilling.setEpost("test@epost.no");
+		bestilling.setPersonIdent("11112222333");
 
 		var varselutsendingEpost = createVarselutsendingWithKanal(KanalCode.EPOST);
 		var varselutsendingSms = createVarselutsendingWithKanal(KanalCode.SMS);
@@ -217,7 +210,6 @@ public class ServicemeldingServiceTest {
 		when(varselKanalDecider.decideKanaler(any(KontaktregisterTo.class), eq(PREFERERT_KANAL))).thenReturn(TestdataUtil.PREFERERT_KANAL);
 		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(eq(bestilling), eq(varselInfoTo), any(KontaktregisterTo.class))).thenReturn(varselbestilling);
 		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
-		when(notifikasjonMedkontaktInfoMapper.mapNotifikasjonMedKontaktinfo(varselutsendingList, varselbestilling, bestilling)).thenReturn(notifikasjonMedkontaktInfo);
 
 		servicemeldingService.bestillServicemelding(bestilling);
 
@@ -360,7 +352,6 @@ public class ServicemeldingServiceTest {
 	}
 
 	private void assertOkMedKontaktinfo() {
-		verify(notifikasjonMedKontaktinfoPublisher, times(1)).sendVarsel(any(NotifikasjonMedkontaktInfo.class));
 		verify(brukernotifikasjonBeskjedPublisher, never()).sendNotifikasjon(any(BeskjedInput.class), any(NokkelInput.class));
 	}
 }

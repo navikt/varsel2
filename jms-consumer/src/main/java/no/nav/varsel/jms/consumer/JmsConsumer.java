@@ -1,11 +1,9 @@
 package no.nav.varsel.jms.consumer;
 
-import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_SERVICEMELDING_KONTAKTINFO_NAME;
 import static no.nav.varsel.jms.consumer.JmsConsumer.ConsumerNames.BESTILL_SERVICEMELDING_NAME;
 
 public enum JmsConsumer {
-	BESTILL_SERVICEMELDING(BESTILL_SERVICEMELDING_NAME, "tvarsel001"),
-	BESTILL_SERVICEMELDING_KONTAKTINFO(BESTILL_SERVICEMELDING_KONTAKTINFO_NAME, "tvarsel006");
+	BESTILL_SERVICEMELDING(BESTILL_SERVICEMELDING_NAME, "tvarsel001");
 
 	private final String consumerName;
 	private final String serviceName;
@@ -25,7 +23,6 @@ public enum JmsConsumer {
 
 	public static class ConsumerNames {
 		public static final String BESTILL_SERVICEMELDING_NAME = "bestillServicemeldingConsumer";
-		public static final String BESTILL_SERVICEMELDING_KONTAKTINFO_NAME = "ServiceMeldingMedKontaktInfoConsumer";
 	}
 
 	@Override

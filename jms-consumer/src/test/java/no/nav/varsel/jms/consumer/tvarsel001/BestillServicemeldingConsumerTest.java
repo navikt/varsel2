@@ -24,7 +24,6 @@ import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldin
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.UTLOEPSTIDSPUNKT_LDT;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VAL;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VARSELTYPE_ID;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.PERSON_IDENT;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
 import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
@@ -115,7 +114,6 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 				.toString(), is(varselbestilling.getVarselbestillingId()));
 		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(formatDateTime(varselbestilling.getUtlopTidspunkt()), is(equalTo(formatDateTime(UTLOEPSTIDSPUNKT_LDT))));
-		assertThat(varselbestilling.getFnr(), is(PERSON_IDENT));
 		assertThat(varselbestilling.getAktorId(), is(MOTTAKER));
 		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
 		assertThat(varselbestilling.getRevarslingIntervall(), nullValue());
