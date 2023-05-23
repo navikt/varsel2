@@ -6,7 +6,7 @@ import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSPerson;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerRequest;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo;
 
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTimeFromGregorian;
 import static no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo.Builder.aHentVarselForBrukerTo;
 import static org.springframework.util.Assert.notNull;
 
@@ -20,8 +20,8 @@ public class HentVarselForBrukerRequestMapper {
 
 		return builder.aktoerId(request.getBruker() instanceof WSAktoerId ? ((WSAktoerId) request.getBruker()).getAktoerId() : null)
 				.fnr(request.getBruker() instanceof WSPerson ? ((WSPerson) request.getBruker()).getIdent() : null)
-				.datoFom(toLocalDateTime(periode.getFom()))
-				.datoTom(toLocalDateTime(periode.getTom()))
+				.datoFom(toLocalDateTimeFromGregorian(periode.getFom()))
+				.datoTom(toLocalDateTimeFromGregorian(periode.getTom()))
 				.build();
 	}
 }

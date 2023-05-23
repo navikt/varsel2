@@ -1,9 +1,9 @@
 package no.nav.varsel.jms.consumer.tvarsel001;
 
-import no.nav.melding.virksomhet.varsel.v1.varsel.ObjectFactory;
-import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
+import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
+import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.JmsConsumer;
@@ -16,18 +16,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.Message;
 import javax.jms.Queue;
 import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
 import java.util.UUID;
 
 import static java.time.Duration.ofSeconds;
 import static no.nav.varsel.Utils.formatDateTime;
+import static no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
+import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
+import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.MOTTAKER;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.UTLOEPSTIDSPUNKT_LDT;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VAL;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VARSELTYPE_ID;
 import static no.nav.varsel.test.TestUtils.aboutNow;
-import static no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
-import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
-import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.VARSEL_TITTEL;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -66,7 +67,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	@Test
 	public void shouldPutOnBackoutIfFailedWs() {
-		JAXBElement<Varsel> varsel = createVarsel();
+		JAXBElement<XMLVarsel> varsel = createVarsel();
 		stubPdlConsumerTechnicalErrorWithInternalServerError();
 
 		Message response = sendMessageListenBoq(bestillServicemeldingQueue, varsel);
@@ -76,7 +77,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	@Test
 	public void shouldNotPutOnBackoutButOnTheOtherOneIfFailedWsFunksjonell() {
-		JAXBElement<Varsel> varsel = createVarsel();
+		JAXBElement<XMLVarsel> varsel = createVarsel();
 		stubPdlConsumerFunctionalErrorWithInternalServerError();
 		JmsReply response = sendMessage(bestillServicemeldingQueue, varsel);
 		isOk(response);
@@ -84,7 +85,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		Object backout = receive(backoutQueue);
 		assertNull(backout);
 
-		Varsel functionalFail = receive(bestillServicemeldingFunksjonellFeilQueue);
+		XMLVarsel functionalFail = receive(bestillServicemeldingFunksjonellFeilQueue);
 		assertNotNull(functionalFail);
 		assertAll(
 				() -> assertThat(varsel.getValue().getVarslingstype(), is(samePropertyValuesAs(functionalFail.getVarslingstype()))),
@@ -97,7 +98,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	public void shouldPutOnBackoutAndRollbackIfFailedAfterDbSave() {
 		stubVarselInfoV1();
 		stubPdlConsumer();
-		JAXBElement<Varsel> varsel = createVarsel();
+		JAXBElement<XMLVarsel> varsel = createVarsel();
 		varsel.getValue().getVarslingstype().setValue(FEIL_MQ_UT);
 		Message response = sendMessageListenBoq(bestillServicemeldingQueue, varsel);
 
@@ -105,11 +106,13 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varselbestillingRepo.count(), is(0L));
 	}
 
-	public static JAXBElement<Varsel> createVarsel() {
-		return new ObjectFactory().createVarsel(BestillServicemeldingMapperTest.createVarsel());
+	public static JAXBElement<XMLVarsel> createVarsel() {
+		XMLVarsel varsel = BestillServicemeldingMapperTest.createVarsel();
+
+		return new JAXBElement<>(new QName("http://nav.no/melding/virksomhet/varsel/v1/varsel", "Varsel"), XMLVarsel.class, null, varsel);
 	}
 
-	private no.nav.varsel.domain.object.Varsel assertDb(String varselTekst) {
+	private Varsel assertDb(String varselTekst) {
 		Varselbestilling varselbestilling = varselbestillingRepo.findAllEager().get(0);
 		assertThat(UUID.fromString(varselbestilling.getVarselbestillingId())
 				.toString(), is(varselbestilling.getVarselbestillingId()));
