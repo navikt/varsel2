@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
+import static no.nav.varsel.domain.utility.DateTimeConverter.toLocalDateTime;
 
 public class BestillServicemeldingMapper {
 

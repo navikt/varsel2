@@ -17,7 +17,7 @@ import javax.xml.datatype.DatatypeFactory;
 import java.time.LocalDateTime;
 
 import static no.nav.varsel.Utils.formatDateTime;
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toJodaDateTime;
+import static no.nav.varsel.domain.utility.DateTimeConverter.toJodaDateTime;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
