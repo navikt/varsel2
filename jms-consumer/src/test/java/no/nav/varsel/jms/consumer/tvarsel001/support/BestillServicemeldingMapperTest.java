@@ -27,7 +27,6 @@ public class BestillServicemeldingMapperTest {
 
 	public static final LocalDateTime UTLOEPSTIDSPUNKT_LDT = LocalDateTime.now().plusHours(1);
 	public static final String MOTTAKER = "mottakeren";
-	public static final String PERSON_IDENT = "1234567890123";
 	public static final String KEY = "mottaker";
 	public static final String VAL = "val";
 	private static final DatatypeFactory datatypeFactory;
