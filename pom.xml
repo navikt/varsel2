@@ -16,7 +16,6 @@
 		<module>jms-consumer</module>
 		<module>tvarsel001</module>
 		<module>tvarsel005</module>
-		<module>tvarsel006</module>
 		<module>kvarsel001</module>
 	</modules>
 
@@ -103,11 +102,6 @@
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>tvarsel006</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
 				<artifactId>kvarsel001</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -139,11 +133,6 @@
 				<artifactId>nav-virksomhet-varsel-v1-meldingsdefinisjon</artifactId>
 				<version>${nav-varsel-v1.version}</version>
 				<classifier>jaxb</classifier>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.tjenestespesifikasjoner</groupId>
-				<artifactId>servicemeldingmedkontaktinformasjon-v1-tjenestespesifikasjon</artifactId>
-				<version>${tjenestespesifikasjoner.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.tjenestespesifikasjoner</groupId>

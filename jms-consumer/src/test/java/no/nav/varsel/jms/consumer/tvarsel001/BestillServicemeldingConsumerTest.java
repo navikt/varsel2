@@ -24,7 +24,6 @@ import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldin
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.UTLOEPSTIDSPUNKT_LDT;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VAL;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VARSELTYPE_ID;
-import static no.nav.varsel.jms.consumer.tvarsel006.support.BestillServicemeldingMedKontaktInfoMapperTest.PERSON_IDENT;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
 import static no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest.FOERSTE_GANG_TEKST;
@@ -48,6 +47,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	@Autowired
 	private Queue bestillServicemeldingFunksjonellFeilQueue;
+	public static final String PERSON_IDENT = "1234567890123";
 
 	@Test
 	@Disabled("Testen feiler på oppsett av Kafka. Vil i utgangspunktet stoppe testen før den kommer dit.")

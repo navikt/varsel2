@@ -97,18 +97,6 @@ public class BestillVarselTo extends AktoerBestillingTo {
 		});
 	}
 
-	public LocalDateTime getUtsendelsesTidspunkt() {
-		return utsendelsesTidspunkt;
-	}
-
-	public void setUtsendelsesTidspunkt(LocalDateTime utsendelsesTidspunkt) {
-		this.utsendelsesTidspunkt = utsendelsesTidspunkt;
-	}
-
-	public Boolean isRevarsling() {
-		return revarsling;
-	}
-
 	public void setRevarsling(Boolean revarsling) {
 		this.revarsling = revarsling;
 	}
@@ -124,26 +112,6 @@ public class BestillVarselTo extends AktoerBestillingTo {
 	public void validateTvarsel001Input() {
 		try {
 			validate();
-		} catch (Exception e) {
-			throw new NoJmsBackoutException(VALIDATION_FAILED_FOR_INPUT + e.getMessage(), e);
-		}
-	}
-
-	public void validateTvarsel003Input() {
-		try {
-			validate();
-			hasText(varselBestillingId, "varselBestillingId");
-			notNull(revarsling, "revarsling");
-		} catch (Exception e) {
-			throw new NoJmsBackoutException(VALIDATION_FAILED_FOR_INPUT + e.getMessage(), e);
-		}
-	}
-
-	public void validateTvarsel006Input() {
-		try {
-			validate();
-			hasText(orgNr, "organisasjonsnummer");
-			hasText(epost == null ? mobiltelefonnummer : epost, "kontaktinformasjon");
 		} catch (Exception e) {
 			throw new NoJmsBackoutException(VALIDATION_FAILED_FOR_INPUT + e.getMessage(), e);
 		}

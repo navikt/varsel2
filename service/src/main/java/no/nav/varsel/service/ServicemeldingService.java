@@ -15,10 +15,8 @@ import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloep
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.BrukernotifikasjonMapper;
 import no.nav.varsel.service.tvarsel001.support.NotifikasjonMapper;
-import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedKontaktinfoMapper;
 import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
 import no.nav.varsel.tvarsel001.NotifikasjonPublisher;
-import no.nav.varsel.tvarsel006.NotifikasjonMedKontaktinfoPublisher;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
@@ -68,12 +66,6 @@ public class ServicemeldingService {
 	private VarselbestillingRepo varselbestillingRepo;
 
 	@Autowired
-	private NotifikasjonMedKontaktinfoPublisher notifikasjonMedKontaktinfoPublisher;
-
-	@Autowired
-	private NotifikasjonMedKontaktinfoMapper notifikasjonMedKontaktinfoMapper;
-
-	@Autowired
 	private NotifikasjonPublisher notifikasjonPublisher;
 
 	@Autowired
@@ -100,7 +92,7 @@ public class ServicemeldingService {
 
 		overridePreferertKanalForTestmelding(bestilling, varselInfoTo);
 
-		KontaktregisterTo kontaktregisterTo = hentKontaktregisterTo(bestilling, varselInfoTo);
+		KontaktregisterTo kontaktregisterTo = hentKontaktregisterTo(bestilling);
 
 		//4.Bestem varslingskanal
 		Collection<KanalCode> kanalCodes = varselKanalDecider.decideKanaler(kontaktregisterTo, varselInfoTo.getPreferertKanal());
@@ -116,11 +108,8 @@ public class ServicemeldingService {
 		List<Varselutsending> varselutsendingList = varselutsendingMapper.map(varselbestilling);
 
 		try {
-			if (hasKontaktInfo(bestilling)) { //TVARSEL006
-				sendNotifikasjonMedKontaktinfo(bestilling, varselbestilling, varselutsendingList);
-			} else { //TVARSEL001
-				sendNotifikasjon(varselInfoTo, varselbestilling, varselutsendingList);
-			}
+			sendNotifikasjon(varselInfoTo, varselbestilling, varselutsendingList);
+
 		} catch (ServicemeldingMappingException e) {
 			log.error("Feil ved mapping av data til servicemelding med BestillingId={}. Feilmelding={}", bestilling.getVarselBestillingId(), e.getMessage());
 		} catch (Exception e) {
@@ -128,8 +117,7 @@ public class ServicemeldingService {
 			throw e;
 		}
 
-		log.info("Sender {} med BestillingId={}, VarseltypeId={} til kanal(er)={}",
-				hasKontaktInfo(bestilling) ? "ServicemeldingMedKontaktInfo" : "Servicemelding",
+		log.info("Sender Servicemelding med BestillingId={}, VarseltypeId={} til kanal(er)={}",
 				bestilling.getVarselBestillingId(),
 				bestilling.getVarseltypeId(),
 				varselutsendingList.stream().map(it -> it.getKanal().name()).toList());
@@ -170,36 +158,13 @@ public class ServicemeldingService {
 		}
 	}
 
-	private void sendNotifikasjonMedKontaktinfo(BestillVarselTo bestilling, Varselbestilling varselbestilling, List<Varselutsending> varselutsendingList) {
-		notifikasjonMedKontaktinfoPublisher.sendVarsel(notifikasjonMedKontaktinfoMapper.mapNotifikasjonMedKontaktinfo(
-				varselutsendingList,
-				varselbestilling,
-				bestilling
-		));
-	}
-
-	private KontaktregisterTo hentKontaktregisterTo(BestillVarselTo bestilling, VarselInfoTo varselInfoTo) {
-		KontaktregisterTo kontaktregisterTo;
-		if (hasKontaktInfo(bestilling)) {
-			//TVARSEL006 Path
-			varselInfoTo.getPreferertKanal().remove(DITT_NAV);
-			kontaktregisterTo = new KontaktregisterTo();
-			kontaktregisterTo.setMobiltelefonnummer(bestilling.getMobiltelefonnummer() != null ? bestilling.getMobiltelefonnummer().trim() : null);
-			kontaktregisterTo.setEpostadresse(bestilling.getEpost() != null ? bestilling.getEpost().trim() : null);
-		} else {
-			//3.5.Hent digital kontaktinformasjon
-			//TVARSEL001 Path
-			kontaktregisterTo = dkifConsumer.hentDigitalKontaktinformasjon(bestilling.getPersonIdent());
-		}
-		return kontaktregisterTo;
+	private KontaktregisterTo hentKontaktregisterTo(BestillVarselTo bestilling) {
+		//3.5.Hent digital kontaktinformasjon
+		return dkifConsumer.hentDigitalKontaktinformasjon(bestilling.getPersonIdent());
 	}
 
 	private boolean harUtsendingTilEpostEllerSms(List<Varselutsending> varselutsendingList) {
 		return varselutsendingList.stream().anyMatch(it -> SMS_OG_EPOST.contains(it.getKanal()));
-	}
-
-	private boolean hasKontaktInfo(BestillVarselTo bestilling) {
-		return hasText(bestilling.getMobiltelefonnummer()) || hasText(bestilling.getEpost());
 	}
 
 	private void validateVarselInfoForBestilling(BestillVarselTo to, VarselInfoTo varselInfoTo) {

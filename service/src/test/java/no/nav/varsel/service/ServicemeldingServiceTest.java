@@ -1,10 +1,8 @@
 package no.nav.varsel.service;
 
-import com.google.common.collect.Sets;
 import no.nav.brukernotifikasjon.schemas.input.BeskjedInput;
 import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
 import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
-import no.nav.doknotifikasjon.schemas.NotifikasjonMedkontaktInfo;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
@@ -21,16 +19,13 @@ import no.nav.varsel.service.support.exception.functional.VarselbestillingUtloep
 import no.nav.varsel.service.to.BestillVarselTo;
 import no.nav.varsel.service.tvarsel001.support.BrukernotifikasjonMapper;
 import no.nav.varsel.service.tvarsel001.support.NotifikasjonMapper;
-import no.nav.varsel.service.tvarsel006.support.NotifikasjonMedKontaktinfoMapper;
 import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
 import no.nav.varsel.tvarsel001.NotifikasjonPublisher;
-import no.nav.varsel.tvarsel006.NotifikasjonMedKontaktinfoPublisher;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -41,23 +36,18 @@ import java.util.List;
 import static java.util.Collections.singletonList;
 import static no.nav.varsel.domain.to.AktoerTo.newPersonIdent;
 import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
-import static no.nav.varsel.repo.TestdataUtil.EPOST;
 import static no.nav.varsel.repo.TestdataUtil.FNR;
 import static no.nav.varsel.repo.TestdataUtil.OVERSTYRT_PREFERERT_KANAL;
 import static no.nav.varsel.repo.TestdataUtil.PREFERERT_KANAL;
-import static no.nav.varsel.repo.TestdataUtil.TLF;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static no.nav.varsel.service.support.ServicemeldingTestUtils.createDittNavMalUtenFoerstegangstekst;
 import static no.nav.varsel.service.support.ServicemeldingTestUtils.createDoknotifikasjonWithKanalAndBestillingsId;
 import static no.nav.varsel.service.support.ServicemeldingTestUtils.createMaler;
 import static no.nav.varsel.service.support.ServicemeldingTestUtils.createNokkelInputWithBestillingsId;
 import static no.nav.varsel.service.support.ServicemeldingTestUtils.createVarselutsendingWithKanal;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -87,12 +77,6 @@ public class ServicemeldingServiceTest {
 	private VarselbestillingRepo varselbestillingRepo;
 
 	@Mock
-	private NotifikasjonMedKontaktinfoPublisher notifikasjonMedKontaktinfoPublisher;
-
-	@Mock
-	private NotifikasjonMedKontaktinfoMapper notifikasjonMedkontaktInfoMapper;
-
-	@Mock
 	private NotifikasjonPublisher notifikasjonPublisher;
 
 	@Mock
@@ -113,7 +97,6 @@ public class ServicemeldingServiceTest {
 	private final VarselInfoTo varselInfoTo = new VarselInfoTo();
 	private final Doknotifikasjon doknotifikasjon = new Doknotifikasjon();
 	private final BeskjedInput beskjedInput = new BeskjedInput();
-	private final NotifikasjonMedkontaktInfo notifikasjonMedkontaktInfo = new NotifikasjonMedkontaktInfo();
 
 	@BeforeEach
 	public void setUp() {
@@ -204,27 +187,6 @@ public class ServicemeldingServiceTest {
 	}
 
 	@Test
-	public void shouldBestillServicemeldingMedKontaktinfo() {
-		bestilling.setAktoerId(AKTOR_ID);
-		bestilling.setEpost("test@epost.no");
-
-		var varselutsendingEpost = createVarselutsendingWithKanal(KanalCode.EPOST);
-		var varselutsendingSms = createVarselutsendingWithKanal(KanalCode.SMS);
-		var varselutsendingList = List.of(varselutsendingEpost, varselutsendingSms);
-
-		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
-		when(varselKanalDecider.decideKanaler(any(KontaktregisterTo.class), eq(PREFERERT_KANAL))).thenReturn(TestdataUtil.PREFERERT_KANAL);
-		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(eq(bestilling), eq(varselInfoTo), any(KontaktregisterTo.class))).thenReturn(varselbestilling);
-		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
-		when(notifikasjonMedkontaktInfoMapper.mapNotifikasjonMedKontaktinfo(varselutsendingList, varselbestilling, bestilling)).thenReturn(notifikasjonMedkontaktInfo);
-
-		servicemeldingService.bestillServicemelding(bestilling);
-
-		assertOkMedKontaktinfo();
-	}
-
-	@Test
 	public void shouldThrowTekniskForTekniskFeilDkif() {
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
 		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
@@ -290,41 +252,6 @@ public class ServicemeldingServiceTest {
 	}
 
 	@Test
-	public void shouldNotCallDkiWhenEpostAndTlfIsSet() {
-		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
-		setKontaktInfo();
-		servicemeldingService.bestillServicemelding(bestilling);
-
-		verify(digitalKontaktinformasjonConsumer, never()).hentDigitalKontaktinformasjon(anyString());
-	}
-
-	@Test
-	public void shouldNotSendDittNavToDecider() {
-		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
-		setKontaktInfo();
-		varselInfoTo.setPreferertKanal(Sets.newHashSet(KanalCode.EPOST, KanalCode.SMS, KanalCode.DITT_NAV));
-
-		servicemeldingService.bestillServicemelding(bestilling);
-
-		verify(varselKanalDecider).decideKanaler(any(KontaktregisterTo.class), eq(Sets.newHashSet(KanalCode.EPOST, KanalCode.SMS)));
-	}
-
-	@Test
-	public void shouldSendTelefonnummerAndEpostToDecider() {
-		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
-		setKontaktInfo();
-
-		servicemeldingService.bestillServicemelding(bestilling);
-
-		ArgumentCaptor<KontaktregisterTo> captor = ArgumentCaptor.forClass(KontaktregisterTo.class);
-		verify(varselKanalDecider).decideKanaler(captor.capture(), eq(PREFERERT_KANAL));
-		KontaktregisterTo value = captor.getValue();
-
-		assertThat(value.getEpostadresse(), is(EPOST));
-		assertThat(value.getMobiltelefonnummer(), is(TLF));
-	}
-
-	@Test
 	public void shouldThrowFunctionalForVarselbestilling_VarselbestillingUtloept() {
 		LocalDateTime pastTime = LocalDateTime.now().minusDays(1);
 
@@ -332,13 +259,6 @@ public class ServicemeldingServiceTest {
 		Executable executable = () -> servicemeldingService.bestillServicemelding(bestilling);
 		Exception exception = Assertions.assertThrows(VarselbestillingUtloeptException.class, executable);
 		assertTrue(exception.getMessage().contains("Varselbestilling has utloepstidspunkt=" + pastTime));
-	}
-
-	private void setKontaktInfo() {
-		bestilling.setVarseltypeId(VARSELTYPE_ID);
-		bestilling.setEpost(EPOST);
-		bestilling.setMobiltelefonnummer(TLF);
-		bestilling.setOrgNr(TestdataUtil.ORG_NR);
 	}
 
 	private void assertOK() {
@@ -357,10 +277,5 @@ public class ServicemeldingServiceTest {
 		verify(brukernotifikasjonBeskjedPublisher, times(0)).sendNotifikasjon(
 				any(BeskjedInput.class),
 				eq(createNokkelInputWithBestillingsId(doknotifikasjonEpost.getBestillingsId())));
-	}
-
-	private void assertOkMedKontaktinfo() {
-		verify(notifikasjonMedKontaktinfoPublisher, times(1)).sendVarsel(any(NotifikasjonMedkontaktInfo.class));
-		verify(brukernotifikasjonBeskjedPublisher, never()).sendNotifikasjon(any(BeskjedInput.class), any(NokkelInput.class));
 	}
 }
