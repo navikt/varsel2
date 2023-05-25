@@ -28,7 +28,7 @@ public class XmlGregorianConverter {
 		return DATATYPE_FACTORY.newXMLGregorianCalendar(calendar);
 	}
 
-	public static LocalDateTime toLocalDateTimeFromGregorian(XMLGregorianCalendar xmlGregorianCalendar) {
+	public static LocalDateTime toLocalDateTime(XMLGregorianCalendar xmlGregorianCalendar) {
 		return xmlGregorianCalendar == null ? null :
 				xmlGregorianCalendar.toGregorianCalendar().toZonedDateTime().toLocalDateTime();
 	}

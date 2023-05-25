@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.DATATYPE_FACTORY;
-import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTimeFromGregorian;
+import static no.nav.varsel.domain.utility.XmlGregorianConverter.toLocalDateTime;
 import static no.nav.varsel.domain.utility.XmlGregorianConverter.toXmlGregorianCalendar;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.nullValue;
@@ -32,13 +32,13 @@ public class XmlGregorianConverterTest {
 
 	@Test
 	public void shouldConvertToLocalDateTime() {
-		LocalDateTime localDateTime = toLocalDateTimeFromGregorian(DATATYPE_FACTORY.newXMLGregorianCalendar(TIME_TEXT));
+		LocalDateTime localDateTime = toLocalDateTime(DATATYPE_FACTORY.newXMLGregorianCalendar(TIME_TEXT));
 		assertThat(localDateTime.toString(), Matchers.is(TIME_TEXT));
 	}
 
 	@Test
 	public void shouldConvertToLocalDateTimeFromNull() {
-		assertThat(toLocalDateTimeFromGregorian(null), nullValue());
+		assertThat(toLocalDateTime(null), nullValue());
 	}
 
 }
