@@ -34,9 +34,8 @@
 
 		<!--Tjenestespesifikasjoner-->
 		<dependency>
-			<groupId>no.nav.meldinger.virksomhet</groupId>
-			<artifactId>nav-virksomhet-varsel-v1-meldingsdefinisjon</artifactId>
-			<classifier>jaxb</classifier>
+			<groupId>no.nav.tjenestespesifikasjoner</groupId>
+			<artifactId>varsel-inn</artifactId>
 		</dependency>
 
 		<dependency>
