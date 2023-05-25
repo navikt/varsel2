@@ -17,7 +17,7 @@
   "MQGATEWAY01_CHANNEL_SECURENAME": "Q2_VARSEL_SECURE",
   "MQGATEWAY01_CHANNEL_ENABLETLS": "true",
   "VARSEL_SIGSUBJECTCERTCONSTRAINTS": ".*DC=test.*DC=local,.*test.local.*,.*DC=preprod.*DC=local,.*preprod.local.*",
-  "DIGDIR_KRR_PROXY_URL": "https://digdir-krr-proxy.dev.intern.nav.no",
+  "DIGDIR_KRR_PROXY_URL": "https://digdir-krr-proxy.intern.dev.nav.no",
   "SECURITYTOKENSERVICE_URL": "https://sts-q2.preprod.local/SecurityTokenServiceProvider/",
   "SECURITY_TOKEN_REST_SERVICE_URL": "https://security-token-service.nais.preprod.local/rest/v1/sts/token",
   "DOKMET_VARSELINFO_URL": "https://dokmet.dev.intern.nav.no/rest/varselinfo",
