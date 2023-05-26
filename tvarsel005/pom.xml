@@ -49,9 +49,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>no.nav.modig</groupId>
-			<artifactId>modig-security-core</artifactId>
-			<classifier>tests</classifier>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>modig</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
