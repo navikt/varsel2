@@ -249,6 +249,10 @@
 						<groupId>commons-logging</groupId>
 						<artifactId>commons-logging</artifactId>
 					</exclusion>
+					<exclusion>
+						<groupId>org.apache.santuario</groupId>
+						<artifactId>xmlsec</artifactId>
+					</exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>
@@ -282,6 +286,12 @@
 				<groupId>org.opensaml</groupId>
 				<artifactId>opensaml-saml-api</artifactId>
 				<version>${opensaml.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.apache.santuario</groupId>
+						<artifactId>xmlsec</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.json</groupId>
