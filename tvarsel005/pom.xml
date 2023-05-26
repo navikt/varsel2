@@ -19,27 +19,9 @@
 			<groupId>no.nav.varsel</groupId>
 			<artifactId>core</artifactId>
 		</dependency>
-
-		<!-- modig -->
 		<dependency>
-			<groupId>no.nav.modig</groupId>
-			<artifactId>modig-log-filter</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.modig</groupId>
-			<artifactId>modig-log-jaxws</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.modig</groupId>
-			<artifactId>modig-security-ws</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.modig</groupId>
-			<artifactId>modig-security-loginmodule</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.modig</groupId>
-			<artifactId>modig-security-authorization</artifactId>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>modig</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>no.nav.tjenestespesifikasjoner</groupId>

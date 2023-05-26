@@ -17,6 +17,7 @@
 		<module>tvarsel001</module>
 		<module>tvarsel005</module>
 		<module>kvarsel001</module>
+		<module>modig</module>
 	</modules>
 
 	<parent>
@@ -53,6 +54,19 @@
 
 		<!-- snakeyaml version override kan fjernes etter oppdatering til spring boot 3.n+ -->
 		<snakeyaml.version>2.0</snakeyaml.version>
+
+		<!-- Modig -->
+		<ibm.container.version>9.0.0</ibm.container.version>
+		<weblogic.version>10.3.6.0</weblogic.version>
+		<picketbox.version>4.0.14.Final-redhat-2</picketbox.version>
+		<collections-generic.version>4.01</collections-generic.version>
+		<jbossxacml.version>2.0.9.Final</jbossxacml.version>
+		<aspectj.version>1.9.5</aspectj.version>
+		<wss4j.version>2.2.2</wss4j.version>
+		<commons-io.version>2.11.0</commons-io.version>
+		<joda-time.version>2.9.7</joda-time.version>
+		<opensaml.version>3.4.6</opensaml.version>
+		<org-json.version>20230227</org-json.version>
 
 		<!-- test -->
 		<spring-cloud-contract-wiremock.version>3.1.5</spring-cloud-contract-wiremock.version>
@@ -105,6 +119,12 @@
 				<artifactId>kvarsel001</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>no.nav.varsel</groupId>
+				<artifactId>modig</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
 
 			<dependency>
 				<groupId>io.confluent</groupId>
@@ -139,6 +159,12 @@
 				<artifactId>brukervarsel-v1-tjenestespesifikasjon</artifactId>
 				<version>${tjenestespesifikasjoner.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>no.nav.tjenestespesifikasjoner</groupId>
+				<artifactId>nav-pip-diskresjonskode-tjenestespesifikasjon</artifactId>
+				<version>${tjenestespesifikasjoner.version}</version>
+			</dependency>
+
 
 			<dependency>
 				<groupId>com.google.guava</groupId>
@@ -167,115 +193,102 @@
 			</dependency>
 
 			<!-- modig -->
+			<!-- IBM container dependencies -->
 			<dependency>
-				<groupId>no.nav.modig</groupId>
-				<artifactId>modig-log-filter</artifactId>
-				<version>${modig-log-filter.version}</version>
+				<groupId>websphere</groupId>
+				<artifactId>com.ibm.jaxws.thinclient</artifactId>
+				<version>${ibm.container.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>no.nav.modig</groupId>
-				<artifactId>modig-log-jaxws</artifactId>
-				<version>${modig-log.version}</version>
+				<groupId>websphere</groupId>
+				<artifactId>com.ibm.ws.runtime</artifactId>
+				<version>${ibm.container.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>no.nav.modig</groupId>
-				<artifactId>modig-security-filter</artifactId>
-				<version>${modig-security.version}</version>
+				<groupId>websphere</groupId>
+				<artifactId>com.ibm.ws.admin.client</artifactId>
+				<version>${ibm.container.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>no.nav.modig</groupId>
-				<artifactId>modig-security-ws</artifactId>
-				<version>${modig-security.version}</version>
+				<groupId>weblogic</groupId>
+				<artifactId>wls-api</artifactId>
+				<version>${weblogic.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.picketbox</groupId>
+				<artifactId>picketbox</artifactId>
+				<version>${picketbox.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sourceforge.collections</groupId>
+				<artifactId>collections-generic</artifactId>
+				<version>${collections-generic.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.security</groupId>
+				<artifactId>jbossxacml</artifactId>
+				<version>${jbossxacml.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjrt</artifactId>
+				<version>${aspectj.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.tjenestespesifikasjoner</groupId>
+				<artifactId>nav-pip-diskresjonskode-tjenestespesifikasjon</artifactId>
+				<version>${tjenestespesifikasjoner.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wss4j</groupId>
+				<artifactId>wss4j-ws-security-common</artifactId>
+				<version>${wss4j.version}</version>
 				<exclusions>
-					<!-- Pulls in cxf 3.2.1 as of modig-security 3.0.6 -->
 					<exclusion>
-						<groupId>org.apache.cxf</groupId>
-						<artifactId>cxf-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.cxf</groupId>
-						<artifactId>cxf-rt-ws-security</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.cxf</groupId>
-						<artifactId>cxf-rt-bindings-soap</artifactId>
-					</exclusion>
-					<!-- Pulls in opensaml 3.1.1 as of modig-security 3.0.6 -->
-					<exclusion>
-						<groupId>org.opensaml</groupId>
-						<artifactId>opensaml-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.opensaml</groupId>
-						<artifactId>opensaml-saml-api</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.opensaml</groupId>
-						<artifactId>opensaml-api</artifactId>
-					</exclusion>
-					<!-- Pulls in wss4j-ws-security-common 2.2.0 as of modig-security 3.0.6 -->
-					<exclusion>
-						<groupId>org.apache.wss4j</groupId>
-						<artifactId>wss4j-ws-security-dom</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.wss4j</groupId>
-						<artifactId>wss4j-ws-security-common</artifactId>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>no.nav.modig</groupId>
-				<artifactId>modig-security-loginmodule</artifactId>
-				<version>${modig-security.version}</version>
+				<groupId>org.apache.wss4j</groupId>
+				<artifactId>wss4j-ws-security-dom</artifactId>
+				<version>${wss4j.version}</version>
 				<exclusions>
-					<!-- Pulls in cxf 3.2.1 as of modig-security 3.0.6 -->
 					<exclusion>
-						<groupId>org.apache.cxf</groupId>
-						<artifactId>cxf-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.cxf</groupId>
-						<artifactId>cxf-rt-ws-security</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.cxf</groupId>
-						<artifactId>cxf-rt-bindings-soap</artifactId>
-					</exclusion>
-					<!-- Pulls in opensaml 3.1.1 as of modig-security 3.0.6 -->
-					<exclusion>
-						<groupId>org.opensaml</groupId>
-						<artifactId>opensaml-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.opensaml</groupId>
-						<artifactId>opensaml-saml-api</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.opensaml</groupId>
-						<artifactId>opensaml-api</artifactId>
-					</exclusion>
-					<!-- Pulls in wss4j-ws-security-common 2.2.0 as of modig-security 3.0.6 -->
-					<exclusion>
-						<groupId>org.apache.wss4j</groupId>
-						<artifactId>wss4j-ws-security-dom</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.wss4j</groupId>
-						<artifactId>wss4j-ws-security-common</artifactId>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>no.nav.modig</groupId>
-				<artifactId>modig-security-core</artifactId>
-				<version>${modig-security.version}</version>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons-io.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>no.nav.modig</groupId>
-				<artifactId>modig-security-authorization</artifactId>
-				<version>${modig-security.version}</version>
+				<groupId>joda-time</groupId>
+				<artifactId>joda-time</artifactId>
+				<version>${joda-time.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.opensaml</groupId>
+				<artifactId>opensaml-core</artifactId>
+				<version>${opensaml.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.opensaml</groupId>
+				<artifactId>opensaml-saml-api</artifactId>
+				<version>${opensaml.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.json</groupId>
+				<artifactId>json</artifactId>
+				<version>${org-json.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>com.sun.xml.ws</groupId>
 				<artifactId>jaxws-ri</artifactId>
