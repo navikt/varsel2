@@ -15,7 +15,6 @@ import java.util.Set;
 public abstract class SubjectHandler {
     public static final String SUBJECTHANDLER_KEY = "no.nav.modig.core.context.subjectHandlerImplementationClass";
     private static final Logger logger = LoggerFactory.getLogger(SubjectHandler.class);
-    public static final String WLS_PROPERTY_KEY = "wls.home";
     public static final String WAS_PROPERTY_KEY = "was.install.root";
     public static final String JBOSS_PROPERTY_KEY = "jboss.home.dir";
 
@@ -26,9 +25,6 @@ public abstract class SubjectHandler {
         if (runningOnJboss()) {
             subjectHandlerImplementationClass = JbossSubjectHandler.class.getName();
             logger.debug("Detected running on JBoss Application Server. Using: " + subjectHandlerImplementationClass);
-        } else if (runningOnWls()) {
-            subjectHandlerImplementationClass = WlsSubjectHandler.class.getName();
-            logger.debug("Detected running on Weblogic Application Server. Using: " + subjectHandlerImplementationClass);
         } else if (runningOnWas()) {
             subjectHandlerImplementationClass = WasSubjectHandler.class.getName();
             logger.debug("Detected running on Websphere Application Server. Using: " + subjectHandlerImplementationClass);
@@ -37,7 +33,7 @@ public abstract class SubjectHandler {
         }
 
         if (subjectHandlerImplementationClass == null) {
-            throw new RuntimeException("Du kjører på noe annet enn JBoss, WAS eller WLS. Om du kjører i jetty og test " +
+            throw new RuntimeException("Du kjører på noe annet enn JBoss eller WAS. Om du kjører i jetty og test " +
                     "må du konfigurere opp en System property med key no.nav.modig.core.context.subjectHandlerImplementationClass. " +
                     "Dette kan gjøres på følgende måte: " +
                     "System.setProperty(\"no.nav.modig.core.context.subjectHandlerImplementationClass\", ThreadLocalSubjectHandler.class.getName());");
@@ -195,10 +191,6 @@ public abstract class SubjectHandler {
             logger.debug("Setting " + key + "={} from System.properties", value);
         }
         return value;
-    }
-
-    private static boolean runningOnWls() {
-        return existsInProperties(WLS_PROPERTY_KEY);
     }
 
     private static boolean runningOnWas() {

@@ -92,13 +92,6 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- WLS Security -->
-		<dependency>
-			<groupId>weblogic</groupId>
-			<artifactId>wls-api</artifactId>
-			<optional>true</optional>
-		</dependency>
-
 		<!-- EhCache -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
