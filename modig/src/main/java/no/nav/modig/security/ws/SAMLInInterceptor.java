@@ -30,16 +30,6 @@ import java.util.Properties;
 public class SAMLInInterceptor extends WSS4JInInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(SAMLInInterceptor.class);
 
-    public SAMLInInterceptor() {
-        super();
-        setProperty(WSHandlerConstants.ACTION, WSHandlerConstants.SAML_TOKEN_SIGNED);
-    }
-
-    public SAMLInInterceptor(boolean ignore) {
-        super(ignore);
-        setProperty(WSHandlerConstants.ACTION, WSHandlerConstants.SAML_TOKEN_SIGNED);
-    }
-
     public SAMLInInterceptor(Map<String, Object> properties) {
         super(properties);
         setProperty(WSHandlerConstants.ACTION, WSHandlerConstants.SAML_TOKEN_SIGNED);

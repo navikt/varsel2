@@ -29,11 +29,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ValidateSamlInInterceptor extends WSS4JInInterceptor {
 
-	public ValidateSamlInInterceptor() {
-		super();
-		setProperty(WSHandlerConstants.ACTION, WSHandlerConstants.SAML_TOKEN_SIGNED);
-	}
-
 	public ValidateSamlInInterceptor(Map<String, Object> properties) {
 		super(properties);
 		setProperty(WSHandlerConstants.ACTION, WSHandlerConstants.SAML_TOKEN_SIGNED);
