@@ -28,44 +28,12 @@ public final class AttributeUtils {
     }
 
     // ***************** Resource attributes **************************************
-    public static ResourceAttribute personFodselsnummer(String fodselsnummer) {
-        return new ResourceAttribute(AttributeIds.FODSELS_NUMMER, new StringValue(fodselsnummer));
-    }
-
-    public static ResourceAttribute ownerId(String ownerId) {
-        return new ResourceAttribute(AttributeIds.OWNER_ID, new StringValue(ownerId));
-    }
-
-    public static ResourceAttribute ownerId(AttributeValueResolver<String> resolver) {
-        return new ResourceAttribute(AttributeIds.OWNER_ID, new StringValue(resolver));
-    }
-
     public static ResourceAttribute resourceId(String resourceId) {
         return new ResourceAttribute(AttributeIds.RESOURCE_ID, new StringValue(resourceId));
     }
 
     public static ResourceAttribute resourceId(AttributeValueResolver<String> resourceId) {
         return new ResourceAttribute(AttributeIds.RESOURCE_ID, new StringValue(resourceId));
-    }
-
-    public static ResourceAttribute resourceType(String resourceType) {
-        return new ResourceAttribute(AttributeIds.RESOURCE_TYPE, new StringValue(resourceType));
-    }
-
-    public static ResourceAttribute componentActionName(String name) {
-        return new ResourceAttribute(AttributeIds.COMPONENT_ACTION_NAME, new StringValue(name));
-    }
-
-    public static ResourceAttribute componentId(String id) {
-        return new ResourceAttribute(AttributeIds.COMPONENT_ID, new StringValue(id));
-    }
-
-    public static ResourceAttribute componentType(String type) {
-        return new ResourceAttribute(AttributeIds.COMPONENT_TYPE, new StringValue(type));
-    }
-
-    public static ResourceAttribute pageType(String type) {
-        return new ResourceAttribute(AttributeIds.PAGE_TYPE, new StringValue(type));
     }
 
     // ***************** Subject attributes **************************************

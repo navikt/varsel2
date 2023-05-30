@@ -18,7 +18,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
  */
 public class SubjectAttribute extends PolicyAttribute {
     public static final URN ACCESS_SUBJECT = new URN("urn:oasis:names:tc:xacml:1.0:subject-category:access-subject");
-    public static final URN CODEBASE = new URN("urn:oasis:names:tc:xacml:1.0:subject-category:codebase");
     public static final URN CONSUMER = new URN("urn:nav:ikt:tilgangskontroll:xacml:subject-category:consumer-subject");
 
     private final URN subjectCategory;

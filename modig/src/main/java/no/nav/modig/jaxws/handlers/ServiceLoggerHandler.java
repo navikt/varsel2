@@ -15,15 +15,6 @@ import java.util.Set;
 public class ServiceLoggerHandler implements SOAPHandler<SOAPMessageContext> {
     public Logger log;
 
-    public ServiceLoggerHandler() {
-        super();
-        log = LoggerFactory.getLogger(ServiceLoggerHandler.class);
-    }
-
-    protected ServiceLoggerHandler(Logger log) {
-        this.log = log;
-    }
-
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
         return true;

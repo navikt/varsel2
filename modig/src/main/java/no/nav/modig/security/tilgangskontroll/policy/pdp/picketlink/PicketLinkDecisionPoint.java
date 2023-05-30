@@ -32,38 +32,6 @@ public class PicketLinkDecisionPoint implements DecisionPoint {
 
     }
 
-    /**
-     * Resolves JBOSS issue https://issues.jboss.org/browse/SECURITY-742 by setting pdp lock strategy to "lockfree"
-     */
-    public PicketLinkDecisionPoint(PolicyDecisionPoint pdp) {
-        setLockfree(true);
-        this.pdp = pdp;
-
-    }
-
-    /**
-     *
-     * Use this constructor of you want locking strategy for non threadsafe occurences
-     * @param lockfree true for strategy "lockfree", false for locking.
-     */
-    public PicketLinkDecisionPoint(URL configUrl, boolean lockfree) {
-        setLockfree(lockfree);
-        this.pdp = new JBossPDP(configUrl);
-    }
-
-
-    /**
-     *
-     * Use this constructor of you want locking strategy for non threadsafe occurences
-     * @param lockfree true for strategy "lockfree", false for locking.
-     */
-    public PicketLinkDecisionPoint(PolicyDecisionPoint pdp, boolean lockfree) {
-        setLockfree(lockfree);
-        this.pdp = pdp;
-    }
-
-
-
      private void setLockfree(boolean lockfree){
          if (lockfree){
              System.setProperty("picketbox.xacml.pdp.lockstrategy", "lockfree");

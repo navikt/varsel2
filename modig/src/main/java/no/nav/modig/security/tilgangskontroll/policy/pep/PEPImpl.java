@@ -15,8 +15,6 @@ import java.util.Iterator;
 
 public class PEPImpl implements EnforcementPoint {
 
-
-
     public enum Bias {
         Permit, Deny
     }
@@ -39,7 +37,6 @@ public class PEPImpl implements EnforcementPoint {
     @Override
     public final void assertAccess(PolicyRequest request) {
         if (!hasAccess(request)) {
-//			throw new AuthorizationException("Access denied. "  + request.toLogString() + "." );
 			throw new RuntimeException("Access denied. "  + request.toLogString() + "." );
         }
     }
@@ -72,11 +69,6 @@ public class PEPImpl implements EnforcementPoint {
 
     public void setRequestEnrichers(Collection<? extends PolicyRequestEnricher> requestEnrichers) {
         this.requestEnrichers = new ArrayList<>(requestEnrichers);
-    }
-
-    public void setBias(Bias bias) {
-        Validate.notNull(bias, "Bias can not be null");
-        this.bias = bias;
     }
 
 }
