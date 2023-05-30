@@ -41,8 +41,8 @@ public class SubjectHandlerUtils {
     }
 
     public static class SubjectBuilder {
-        private String userId;
-        private IdentType identType;
+        private final String userId;
+        private final IdentType identType;
         private int authLevel;
         private String openAmToken;
 

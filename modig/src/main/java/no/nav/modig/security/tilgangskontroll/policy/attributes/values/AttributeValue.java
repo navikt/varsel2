@@ -77,11 +77,9 @@ public abstract class AttributeValue<T> implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof AttributeValue)) {
+        if (!(o instanceof AttributeValue that)) {
             return false;
         }
-
-        AttributeValue that = (AttributeValue) o;
 
         return new EqualsBuilder()
                 .append(this.type, that.type)

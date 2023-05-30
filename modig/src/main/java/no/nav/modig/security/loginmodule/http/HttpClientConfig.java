@@ -31,7 +31,7 @@ import java.security.UnrecoverableKeyException;
 
 public class HttpClientConfig {
 
-    private URI endpointURL;
+    private final URI endpointURL;
     private boolean ssl;
     private KeyStore trustStore;
 

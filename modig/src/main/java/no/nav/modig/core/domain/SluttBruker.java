@@ -7,7 +7,7 @@ import java.security.Principal;
 public final class SluttBruker implements Principal, Destroyable {
 
 	private String uid;
-	private IdentType identType;
+	private final IdentType identType;
 	private boolean destroyed;
 
     public SluttBruker(String uid, IdentType identType) {
@@ -51,10 +51,10 @@ public final class SluttBruker implements Principal, Destroyable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(getClass().getSimpleName()).append("[")
-                .append("identType=").append(identType).append(", ")
-                .append("uid=").append(destroyed ? "destroyed" : uid)
-                .append("]");
-        return sb.toString();
+		String sb = getClass().getSimpleName() + "[" +
+					"identType=" + identType + ", " +
+					"uid=" + (destroyed ? "destroyed" : uid) +
+					"]";
+        return sb;
     }
 }

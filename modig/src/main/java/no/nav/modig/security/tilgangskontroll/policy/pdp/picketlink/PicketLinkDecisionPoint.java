@@ -80,7 +80,7 @@ public class PicketLinkDecisionPoint implements DecisionPoint {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             try {
                 xacmlRequest.marshall(os);
-                LOG.trace("XACML REQUEST: {},", os.toString());
+                LOG.trace("XACML REQUEST: {},", os);
             } catch (IOException e) {
                 LOG.warn("Failed to marshal xacml request.", e);
             }
@@ -92,7 +92,7 @@ public class PicketLinkDecisionPoint implements DecisionPoint {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             try {
                 decision.marshall(os);
-                LOG.trace("XACML RESPONSES: {},", os.toString());
+                LOG.trace("XACML RESPONSES: {},", os);
             } catch (IOException e) {
                 LOG.warn("Failed to marshal xacml response.", e);
             }

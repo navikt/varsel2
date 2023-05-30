@@ -12,7 +12,7 @@ public enum Decision {
 
     NotApplicable(XACMLConstants.DECISION_NOT_APPLICABLE);
 
-    private int decisionCode;
+    private final int decisionCode;
 
     Decision(int decisionValue) {
         this.decisionCode = decisionValue;

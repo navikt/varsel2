@@ -63,8 +63,7 @@ public class AccessControlInterceptor {
     }
 
     private void extractAttributesFromAnnotation(List<PolicyAttribute> policyAttributes, Annotation annotation, String attrValue) {
-        if (annotation instanceof AccessControlAttribute) {
-            AccessControlAttribute attr = (AccessControlAttribute) annotation;
+        if (annotation instanceof AccessControlAttribute attr) {
             policyAttributes.add(createPolicyAttribute(attr.name(), attrValue, attr.type()));
         }
     }

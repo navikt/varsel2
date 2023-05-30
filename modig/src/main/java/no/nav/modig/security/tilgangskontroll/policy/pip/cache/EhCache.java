@@ -61,7 +61,7 @@ public class EhCache<T, U> implements Cache<T, U> {
     @ManagedAttribute(description = "Get the size value from all the caches")
     @Override
     public int getSize() {
-        calculateAllCacheSize(PredicateUtils.<String> truePredicate());
+        calculateAllCacheSize(PredicateUtils.truePredicate());
         return cachesSize;
     }
 
@@ -97,7 +97,7 @@ public class EhCache<T, U> implements Cache<T, U> {
     @ManagedOperation(description = "Purge all the caches")
     @Override
     public void purge() {
-        clear(PredicateUtils.<String> truePredicate());
+        clear(PredicateUtils.truePredicate());
     }
 
     @ManagedOperation(description = "Purge the cache")

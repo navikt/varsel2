@@ -30,9 +30,9 @@ public class OpenAmTokenCredential implements Destroyable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(getClass().getSimpleName()).append("[")
-                .append(destroyed ? "destroyed" : openAmToken)
-                .append("]");
-        return sb.toString();
+        String sb = getClass().getSimpleName() + "[" +
+                    (destroyed ? "destroyed" : openAmToken) +
+                    "]";
+        return sb;
     }
 }

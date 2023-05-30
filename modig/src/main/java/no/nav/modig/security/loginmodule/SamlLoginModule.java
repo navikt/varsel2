@@ -42,7 +42,7 @@ public class SamlLoginModule implements LoginModule {
     private SAMLAssertionCredential samlAssertionCredential;
     private ConsumerId consumerId;
 
-    private static Logger logger = LoggerFactory.getLogger(SamlLoginModule.class);
+    private static final Logger logger = LoggerFactory.getLogger(SamlLoginModule.class);
 
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {

@@ -30,7 +30,7 @@ public class SAMLCallbackHandler implements CallbackHandler {
     private final int secondsToLive;
 
     public SAMLCallbackHandler(SAMLAttributes samlAttributes) {
-        this(samlAttributes, 1 * 60 * 60); // one hour measured in seconds
+        this(samlAttributes, 60 * 60); // one hour measured in seconds
     }
 
     public SAMLCallbackHandler(SAMLAttributes samlAttributes, int secondsToLive) {

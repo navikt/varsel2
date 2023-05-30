@@ -46,9 +46,9 @@ public final class ConsumerId implements Principal, Destroyable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(getClass().getSimpleName()).append("[")
-                        .append(destroyed ? "destroyed" : consumerIdString)
-                        .append("]");
-        return sb.toString();
+        String sb = getClass().getSimpleName() + "[" +
+                    (destroyed ? "destroyed" : consumerIdString) +
+                    "]";
+        return sb;
     }
 }

@@ -16,7 +16,7 @@ import javax.security.auth.Subject;
  */
 public class ThreadLocalSubjectHandler extends TestSubjectHandler {
 
-    private static ThreadLocal<Subject> subjectHolder = new ThreadLocal<Subject>();
+    private static final ThreadLocal<Subject> subjectHolder = new ThreadLocal<Subject>();
 
     @Override
     public Subject getSubject() {

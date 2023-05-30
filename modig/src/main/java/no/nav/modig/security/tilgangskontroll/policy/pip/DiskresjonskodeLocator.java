@@ -29,7 +29,7 @@ public class DiskresjonskodeLocator extends StorageAttributeLocator {
     private String wsUrl;
 
     protected DiskresjonskodeService diskresjonskodeService = new DiskresjonskodeServiceImpl();
-    private LocatorDelegate delegate = new LocatorDelegate();
+    private final LocatorDelegate delegate = new LocatorDelegate();
 
     @Override
     public EvaluationResult findAttribute(URI attributeType, URI attributeId,

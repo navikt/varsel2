@@ -30,9 +30,9 @@ public class AuthenticationLevelCredential implements Destroyable{
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(getClass().getSimpleName()).append("[")
-                .append(destroyed ? "destroyed" : authenticationLevel)
-                .append("]");
-        return sb.toString();
+        String sb = getClass().getSimpleName() + "[" +
+                    (destroyed ? "destroyed" : authenticationLevel) +
+                    "]";
+        return sb;
     }
 }

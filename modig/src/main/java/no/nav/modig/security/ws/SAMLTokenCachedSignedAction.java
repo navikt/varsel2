@@ -31,7 +31,7 @@ import static java.util.Optional.ofNullable;
 
 public class SAMLTokenCachedSignedAction extends SAMLTokenSignedAction {
 
-    private static Logger logger = LoggerFactory.getLogger(SAMLTokenCachedSignedAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(SAMLTokenCachedSignedAction.class);
 
     private int futureSecondsMargin = 60;
     private boolean cacheAssertion = true;

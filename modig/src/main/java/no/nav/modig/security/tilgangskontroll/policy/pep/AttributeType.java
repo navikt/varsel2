@@ -4,5 +4,5 @@ public enum AttributeType {
     SUBJECT,
     RESOURCE,
     ACTION,
-    ENVIRONMENT;
+    ENVIRONMENT
 }

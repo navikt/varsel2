@@ -6,10 +6,10 @@ package no.nav.modig.core.context;
 public final class WlsPrincipal implements Attribute {
     private static final long serialVersionUID = 1L;
 
-    private String userId;
-    private String identType;
-    private String authenticationLevel;
-    private String consumerId;
+    private final String userId;
+    private final String identType;
+    private final String authenticationLevel;
+    private final String consumerId;
 
     private WlsPrincipal(Builder builder) {
         this.userId = builder.userId;

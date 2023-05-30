@@ -64,18 +64,12 @@ public class URN implements Serializable, Comparable<URN> {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof URN)) {
+        if (!(obj instanceof URN other)) {
             return false;
         }
-        URN other = (URN) obj;
         if (uniformResourceName == null) {
-            if (other.uniformResourceName != null) {
-                return false;
-            }
-        } else if (!uniformResourceName.equals(other.uniformResourceName)) {
-            return false;
-        }
-        return true;
+            return other.uniformResourceName == null;
+        } else return uniformResourceName.equals(other.uniformResourceName);
     }
 
     @Override

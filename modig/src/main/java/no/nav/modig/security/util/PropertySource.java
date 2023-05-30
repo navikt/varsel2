@@ -17,7 +17,7 @@ import java.util.Properties;
 public class PropertySource {
     private static final Logger logger = LoggerFactory.getLogger(PropertySource.class);
 
-    private Properties properties;
+    private final Properties properties;
 
     public PropertySource(String fileName) {
         Properties props = new Properties();

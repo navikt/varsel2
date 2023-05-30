@@ -10,7 +10,7 @@ import java.security.SecureRandom;
  * Utility-klasse for kommunikasjon med MDC.
  */
 public final class MDCOperations {
-    protected static final Logger log = LoggerFactory.getLogger(MDCOperations.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(MDCOperations.class.getName());
 
     public static final String MDC_CALL_ID = "callId";
     public static final String MDC_USER_ID = "userId";
@@ -25,13 +25,12 @@ public final class MDCOperations {
         int randomNr = getRandomNumber();
         long systemTime = getSystemTime();
 
-        StringBuilder callId = new StringBuilder();
-        callId.append("CallId_");
-        callId.append(systemTime);
-        callId.append("_");
-        callId.append(randomNr);
+		String callId = "CallId_" +
+						systemTime +
+						"_" +
+						randomNr;
 
-        return callId.toString();
+        return callId;
     }
 
     public static String getFromMDC(String key) {

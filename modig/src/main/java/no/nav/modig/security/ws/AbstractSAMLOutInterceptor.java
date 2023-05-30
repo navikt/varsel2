@@ -34,7 +34,7 @@ public abstract class AbstractSAMLOutInterceptor extends WSS4JOutInterceptor {
     public static final String SAML_ISSUER_NAME = "org.apache.ws.security.saml.issuer";
     public static final String SAML_SEND_KEY_VALUE = "org.apache.ws.security.saml.issuer.sendKeyValue";
 
-    private PropertySource securityOutInterceptorProperties = new PropertySource("securityOutInterceptor.properties");
+    private final PropertySource securityOutInterceptorProperties = new PropertySource("securityOutInterceptor.properties");
 
     static final String DEFAULTSENDKEYVALUE = "false";
     static final String DEFAULTMUSTUNDERSTAND = "false";

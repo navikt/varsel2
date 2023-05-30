@@ -36,7 +36,7 @@ public class PicketLinkAttributeCacheLocator extends StorageAttributeLocator {
     private static final String STRING_TYPE_IDENTIFIER = "http://www.w3.org/2001/XMLSchema#string";
     private static final URI STRING_TYPE_URI = URI.create(STRING_TYPE_IDENTIFIER);
 
-    private LocatorDelegate delegate = new LocatorDelegate();
+    private final LocatorDelegate delegate = new LocatorDelegate();
     private AttributeLocator locator;
 
     @Autowired
@@ -124,7 +124,7 @@ public class PicketLinkAttributeCacheLocator extends StorageAttributeLocator {
         if (pipCacheName != null && !pipCacheName.isEmpty()) {
             return pipCacheName;
         }
-        String cacheName = (String) processOption(ATTRIBUTE_CACHE_NAME);
+        String cacheName = processOption(ATTRIBUTE_CACHE_NAME);
         pipCacheName = (cacheName == null || cacheName.isEmpty()) ? DEFAULT_PIP_CACHE_NAME : cacheName;
 
         return pipCacheName;

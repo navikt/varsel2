@@ -49,7 +49,7 @@ final class RequestTypeFactory {
     }
 
     public static class RequestTypeBuilder {
-        private PolicyRequest policyRequest;
+        private final PolicyRequest policyRequest;
 
         public RequestTypeBuilder(PolicyRequest policyRequest) {
             this.policyRequest = policyRequest;

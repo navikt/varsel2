@@ -68,11 +68,7 @@ public abstract class SubjectHandler {
         }
 
         String userId = getUidFromSAMLToken();
-        if (userId != null) {
-            return userId;
-        }
-
-        return null;
+        return userId;
     }
 
     public IdentType getIdentType() {
@@ -86,11 +82,7 @@ public abstract class SubjectHandler {
         }
 
         IdentType identType = getIdentTypeFromSAMLToken();
-        if (identType != null) {
-            return identType;
-        }
-
-        return null;
+        return identType;
     }
 
     public Integer getAuthenticationLevel() {
@@ -104,11 +96,7 @@ public abstract class SubjectHandler {
         }
 
         Integer authenticationLevel = getAuthenticationLevelFromSAMLToken();
-        if (authenticationLevel != null) {
-            return authenticationLevel;
-        }
-
-        return null;
+        return authenticationLevel;
     }
 
     public String getConsumerId() {
@@ -122,11 +110,7 @@ public abstract class SubjectHandler {
         }
 
         String consumerIdString = getConsumerIdFromSAMLToken();
-        if (consumerIdString != null) {
-            return consumerIdString;
-        }
-
-        return null;
+        return consumerIdString;
     }
 
     public String getEksternSsoToken() {

@@ -76,7 +76,7 @@ public class LDAPRoleAttributeLocator extends LDAPAttributeLocator {
     private static final String ATTRIBUTE_SUPPORTED_ID_OPTION = "attributeSupportedId";
     private static final String SUBSTITUTE_VALUE_OPTION = "substituteValue";
 
-    private LocatorDelegate delegate = new LocatorDelegate();
+    private final LocatorDelegate delegate = new LocatorDelegate();
 
     public LDAPRoleAttributeLocator() {
         super();
