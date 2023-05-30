@@ -62,7 +62,7 @@
 		<collections-generic.version>4.01</collections-generic.version>
 		<jbossxacml.version>2.0.9.Final</jbossxacml.version>
 		<aspectj.version>1.9.5</aspectj.version>
-		<wss4j.version>2.2.2</wss4j.version>
+		<wss4j.version>2.4.1</wss4j.version>
 		<commons-io.version>2.11.0</commons-io.version>
 		<joda-time.version>2.9.7</joda-time.version>
 		<opensaml.version>3.4.6</opensaml.version>
