@@ -23,6 +23,7 @@ public class XmlGregorianConverter {
 		if (localDateTime == null) {
 			return null;
 		}
+
 		GregorianCalendar calendar = GregorianCalendar.from(localDateTime.atZone(ZoneId.systemDefault()));
 		return DATATYPE_FACTORY.newXMLGregorianCalendar(calendar);
 	}
@@ -31,4 +32,5 @@ public class XmlGregorianConverter {
 		return xmlGregorianCalendar == null ? null :
 				xmlGregorianCalendar.toGregorianCalendar().toZonedDateTime().toLocalDateTime();
 	}
+
 }

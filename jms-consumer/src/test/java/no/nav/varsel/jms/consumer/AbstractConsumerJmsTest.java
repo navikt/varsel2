@@ -1,5 +1,6 @@
 package no.nav.varsel.jms.consumer;
 
+import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
 import no.nav.varsel.config.JmsConsumerTestConfig;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.repo.VarselRepo;
@@ -100,10 +101,10 @@ public abstract class AbstractConsumerJmsTest {
 		Object response = transactionTemplate.execute(transactionStatus -> jmsTemplate.receiveAndConvert(queue));
 		if (response instanceof JAXBElement) {
 			response = ((JAXBElement) response).getValue();
-		} else if(response instanceof JmsReply) {
+		} else if (response instanceof JmsReply || response instanceof XMLVarsel) {
 			return (T) response;
 		} else {
-			if(response == null) {
+			if (response == null) {
 				return null;
 			} else {
 				throw new UnsupportedOperationException("receive: response er ikke en håndterbar type. type=" + response.getClass());

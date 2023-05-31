@@ -1,6 +1,6 @@
 package no.nav.varsel.jms.consumer;
 
-import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
+import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -13,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ObjectMessageWrapperTest {
 
 	private final Message messageMock = Mockito.mock(Message.class);
-	private final Varsel varsel = new Varsel();
+	private final XMLVarsel varsel = new XMLVarsel();
 
 	@Test
 	public void constructorRequiresUnmarshalObject() {
-		assertThrows(IllegalArgumentException.class, () -> new ObjectMessageWrapper<Varsel>(null, messageMock));
+		assertThrows(IllegalArgumentException.class, () -> new ObjectMessageWrapper<XMLVarsel>(null, messageMock));
 	}
 
 	@Test
@@ -27,13 +27,13 @@ public class ObjectMessageWrapperTest {
 
 	@Test
 	public void holdsObject() {
-		ObjectMessageWrapper<Varsel> wrappedWithMessage = new ObjectMessageWrapper<>(varsel, messageMock);
+		ObjectMessageWrapper<XMLVarsel> wrappedWithMessage = new ObjectMessageWrapper<>(varsel, messageMock);
 		assertThat(wrappedWithMessage.getObject(), is(varsel));
 	}
 
 	@Test
 	public void holdsMessage() {
-		ObjectMessageWrapper<Varsel> wrappedWithMessage = new ObjectMessageWrapper<>(varsel, messageMock);
+		ObjectMessageWrapper<XMLVarsel> wrappedWithMessage = new ObjectMessageWrapper<>(varsel, messageMock);
 		assertThat(wrappedWithMessage.getMessage(), is(messageMock));
 	}
 }

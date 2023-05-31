@@ -1,10 +1,10 @@
 package no.nav.varsel.jms.consumer.tvarsel001.support;
 
-import no.nav.melding.virksomhet.varsel.v1.varsel.AktoerId;
-import no.nav.melding.virksomhet.varsel.v1.varsel.Parameter;
-import no.nav.melding.virksomhet.varsel.v1.varsel.PersonIdent;
-import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
-import no.nav.melding.virksomhet.varsel.v1.varsel.Varslingstyper;
+import no.nav.melding.virksomhet.varsel.v1.varsel.XMLAktoerId;
+import no.nav.melding.virksomhet.varsel.v1.varsel.XMLParameter;
+import no.nav.melding.virksomhet.varsel.v1.varsel.XMLPersonIdent;
+import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
+import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarslingstyper;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.service.to.BestillVarselTo;
 import org.apache.activemq.command.ActiveMQMessage;
@@ -17,6 +17,7 @@ import javax.xml.datatype.DatatypeFactory;
 import java.time.LocalDateTime;
 
 import static no.nav.varsel.Utils.formatDateTime;
+import static no.nav.varsel.domain.utility.DateTimeConverter.toJodaDateTime;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -59,8 +60,8 @@ public class BestillServicemeldingMapperTest {
 
 	@Test
 	public void shouldMapPerson() {
-		ObjectMessageWrapper<Varsel> varsel = createVarsel(defaultMessage);
-		PersonIdent personIdent = new PersonIdent();
+		ObjectMessageWrapper<XMLVarsel> varsel = createVarsel(defaultMessage);
+		XMLPersonIdent personIdent = new XMLPersonIdent();
 		personIdent.setPersonIdent(MOTTAKER);
 		varsel.getObject().setMottaker(personIdent);
 		BestillVarselTo to = mapper.map(varsel);
@@ -71,7 +72,7 @@ public class BestillServicemeldingMapperTest {
 
 	@Test
 	public void shouldMapNullMottaker() {
-		ObjectMessageWrapper<Varsel> varsel = createVarsel(defaultMessage);
+		ObjectMessageWrapper<XMLVarsel> varsel = createVarsel(defaultMessage);
 		varsel.getObject().setMottaker(null);
 		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getPersonIdent(), nullValue());
@@ -80,7 +81,7 @@ public class BestillServicemeldingMapperTest {
 
 	@Test
 	public void shouldMapNullVarseltype() {
-		ObjectMessageWrapper<Varsel> varsel = createVarsel(defaultMessage);
+		ObjectMessageWrapper<XMLVarsel> varsel = createVarsel(defaultMessage);
 		varsel.getObject().setVarslingstype(null);
 		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getVarseltypeId(), nullValue());
@@ -88,7 +89,7 @@ public class BestillServicemeldingMapperTest {
 
 	@Test
 	public void shouldMapNullUtlop() {
-		ObjectMessageWrapper<Varsel> varsel = createVarsel(defaultMessage);
+		ObjectMessageWrapper<XMLVarsel> varsel = createVarsel(defaultMessage);
 		varsel.getObject().setUtloepstidspunkt(null);
 		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getUtloepstidspunkt(), nullValue());
@@ -96,8 +97,8 @@ public class BestillServicemeldingMapperTest {
 
 	@Test
 	public void shouldMapEmptyParameter() {
-		ObjectMessageWrapper<Varsel> varsel = createVarsel(defaultMessage);
-		varsel.getObject().getParameterListe().clear();
+		ObjectMessageWrapper<XMLVarsel> varsel = createVarsel(defaultMessage);
+		varsel.getObject().getParameterListes().clear();
 		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getParameters().keySet(), hasSize(0));
 	}
@@ -118,23 +119,23 @@ public class BestillServicemeldingMapperTest {
 		assertThat(to.isTestvarsel(), is(false));
 	}
 
-	public static ObjectMessageWrapper<Varsel> createVarsel(Message message) {
+	public static ObjectMessageWrapper<XMLVarsel> createVarsel(Message message) {
 		return new ObjectMessageWrapper<>(createVarsel(), message);
 	}
 
-	public static Varsel createVarsel() {
-		Varsel varsel = new Varsel();
-		Varslingstyper varslingstype = new Varslingstyper();
+	public static XMLVarsel createVarsel() {
+		XMLVarsel varsel = new XMLVarsel();
+		XMLVarslingstyper varslingstype = new XMLVarslingstyper();
 		varslingstype.setValue(VARSELTYPE_ID);
 		varsel.setVarslingstype(varslingstype);
-		AktoerId aktoerId = new AktoerId();
+		XMLAktoerId aktoerId = new XMLAktoerId();
 		aktoerId.setAktoerId(MOTTAKER);
 		varsel.setMottaker(aktoerId);
-		varsel.setUtloepstidspunkt(datatypeFactory.newXMLGregorianCalendar(UTLOEPSTIDSPUNKT_LDT.toString()));
-		Parameter parameter = new Parameter();
+		varsel.setUtloepstidspunkt(toJodaDateTime(UTLOEPSTIDSPUNKT_LDT));
+		XMLParameter parameter = new XMLParameter();
 		parameter.setKey(KEY);
 		parameter.setValue(VAL);
-		varsel.getParameterListe().add(parameter);
+		varsel.getParameterListes().add(parameter);
 		return varsel;
 	}
 }

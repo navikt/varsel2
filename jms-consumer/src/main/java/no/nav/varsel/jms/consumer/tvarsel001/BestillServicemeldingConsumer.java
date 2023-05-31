@@ -1,7 +1,6 @@
 package no.nav.varsel.jms.consumer.tvarsel001;
 
-
-import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
+import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
 import no.nav.varsel.jms.consumer.AbstractJmsConsumer;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapper;
@@ -22,7 +21,7 @@ import static no.nav.varsel.util.MDCGenerate.clearCallId;
 import static no.nav.varsel.util.MDCGenerate.generateCallId;
 
 @Component
-public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
+public class BestillServicemeldingConsumer extends AbstractJmsConsumer<XMLVarsel> {
 
 	private static final Logger log = LoggerFactory.getLogger(BestillServicemeldingConsumer.class);
 
@@ -33,7 +32,7 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 	private final ServicemeldingService servicemeldingService;
 
 	public BestillServicemeldingConsumer(BestillServicemeldingMapper bestillServicemeldingMapper, ServicemeldingService servicemeldingService, JmsTemplate funksjonellFeilSendJmsTemplate) {
-		super(BESTILL_SERVICEMELDING, funksjonellFeilSendJmsTemplate, Varsel.class);
+		super(BESTILL_SERVICEMELDING, funksjonellFeilSendJmsTemplate, XMLVarsel.class);
 		this.bestillServicemeldingMapper = bestillServicemeldingMapper;
 		this.servicemeldingService = servicemeldingService;
 	}
@@ -45,7 +44,7 @@ public class BestillServicemeldingConsumer extends AbstractJmsConsumer<Varsel> {
 	}
 
 	@Override
-	protected void handleMessage(ObjectMessageWrapper<Varsel> varsel) {
+	protected void handleMessage(ObjectMessageWrapper<XMLVarsel> varsel) {
 		generateCallId();
 		BestillVarselTo to = bestillServicemeldingMapper.map(varsel);
 		log.info("bestillServicemelding mottatt med varselTypeId={}", to.getVarseltypeId());

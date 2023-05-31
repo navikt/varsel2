@@ -142,10 +142,9 @@
 				<version>${dokmet-api.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>no.nav.meldinger.virksomhet</groupId>
-				<artifactId>nav-virksomhet-varsel-v1-meldingsdefinisjon</artifactId>
-				<version>${nav-varsel-v1.version}</version>
-				<classifier>jaxb</classifier>
+				<groupId>no.nav.tjenestespesifikasjoner</groupId>
+				<artifactId>varsel-inn</artifactId>
+				<version>${tjenestespesifikasjoner.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.tjenestespesifikasjoner</groupId>

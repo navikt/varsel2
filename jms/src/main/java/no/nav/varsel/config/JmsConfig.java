@@ -2,7 +2,7 @@ package no.nav.varsel.config;
 
 import com.ibm.mq.jms.MQConnectionFactory;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.melding.virksomhet.varsel.v1.varsel.Varsel;
+import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
 import no.nav.varsel.config.alias.ListenerProperties;
 import no.nav.varsel.config.alias.MqGatewayProperties;
 import no.nav.varsel.jms.to.xml.JmsReply;
@@ -110,7 +110,7 @@ public class JmsConfig {
 	public Jaxb2Marshaller marshaller() {
 		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
 		marshaller.setPackagesToScan(
-				Varsel.class.getPackage().getName(),
+				XMLVarsel.class.getPackage().getName(),
 				JmsReply.class.getPackage().getName()
 		);
 		return marshaller;
