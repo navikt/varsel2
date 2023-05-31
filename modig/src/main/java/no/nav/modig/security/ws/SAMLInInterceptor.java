@@ -42,11 +42,7 @@ public class SAMLInInterceptor extends WSS4JInInterceptor {
         signatureProperties.setProperty("org.apache.wss4j.crypto.merlin.truststore.file", System.getProperty("javax.net.ssl.trustStore"));
         signatureProperties.setProperty("org.apache.wss4j.crypto.merlin.truststore.password", System.getProperty("javax.net.ssl.trustStorePassword"));
 
-        Crypto crypto = CryptoFactory.getInstance(signatureProperties);
-        // TODO: Antakelig unødvendig siden Crypto instansen man returnerer er den som blir brukt
-//        cryptos.put(WSHandlerConstants.SIG_PROP_REF_ID, crypto);
-
-        return crypto;
+        return CryptoFactory.getInstance(signatureProperties);
     }
 
     @Override

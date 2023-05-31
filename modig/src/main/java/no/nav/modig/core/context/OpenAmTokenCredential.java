@@ -7,7 +7,6 @@ public class OpenAmTokenCredential implements Destroyable {
     private String openAmToken;
     private boolean destroyed;
 
-
     public OpenAmTokenCredential(String openAmToken) {
         this.openAmToken = openAmToken;
     }

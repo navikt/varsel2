@@ -5,48 +5,31 @@ import no.nav.modig.core.domain.IdentType;
 import no.nav.modig.core.domain.SluttBruker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Element;
 
 import javax.security.auth.Subject;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 public abstract class SubjectHandler {
     public static final String SUBJECTHANDLER_KEY = "no.nav.modig.core.context.subjectHandlerImplementationClass";
     private static final Logger logger = LoggerFactory.getLogger(SubjectHandler.class);
-    public static final String WAS_PROPERTY_KEY = "was.install.root";
-    public static final String JBOSS_PROPERTY_KEY = "jboss.home.dir";
 
     public static SubjectHandler getSubjectHandler() {
 
-        String subjectHandlerImplementationClass;
-
-        if (runningOnJboss()) {
-            subjectHandlerImplementationClass = JbossSubjectHandler.class.getName();
-            logger.debug("Detected running on JBoss Application Server. Using: " + subjectHandlerImplementationClass);
-        } else if (runningOnWas()) {
-            subjectHandlerImplementationClass = WasSubjectHandler.class.getName();
-            logger.debug("Detected running on Websphere Application Server. Using: " + subjectHandlerImplementationClass);
-        } else {
-            subjectHandlerImplementationClass = resolveProperty(SUBJECTHANDLER_KEY);
-        }
+        String subjectHandlerImplementationClass = resolveProperty(SUBJECTHANDLER_KEY);
 
         if (subjectHandlerImplementationClass == null) {
-            throw new RuntimeException("Du kjører på noe annet enn JBoss eller WAS. Om du kjører i jetty og test " +
-                    "må du konfigurere opp en System property med key no.nav.modig.core.context.subjectHandlerImplementationClass. " +
-                    "Dette kan gjøres på følgende måte: " +
-                    "System.setProperty(\"no.nav.modig.core.context.subjectHandlerImplementationClass\", ThreadLocalSubjectHandler.class.getName());");
+            throw new RuntimeException("""
+                    Kunne ikke sette subjectHandlerImplementationClass. Om du kjører i jetty og test
+                    må du konfigurere opp en System property med key no.nav.modig.core.context.subjectHandlerImplementationClass.
+                    Dette kan gjøres på følgende måte:
+                    System.setProperty("no.nav.modig.core.context.subjectHandlerImplementationClass", ThreadLocalSubjectHandler.class.getName());
+                    """);
         }
 
         try {
             Class<?> clazz = Class.forName(subjectHandlerImplementationClass);
             return (SubjectHandler) clazz.newInstance();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Could not configure platform dependent subject handler", e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException("Could not configure platform dependent subject handler", e);
-        } catch (IllegalAccessException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException("Could not configure platform dependent subject handler", e);
         }
     }
@@ -63,8 +46,7 @@ public abstract class SubjectHandler {
             return sluttBruker.getName();
         }
 
-        String userId = getUidFromSAMLToken();
-        return userId;
+        return getUidFromSAMLToken();
     }
 
     public IdentType getIdentType() {
@@ -77,8 +59,7 @@ public abstract class SubjectHandler {
             return sluttBruker.getIdentType();
         }
 
-        IdentType identType = getIdentTypeFromSAMLToken();
-        return identType;
+        return getIdentTypeFromSAMLToken();
     }
 
     public Integer getAuthenticationLevel() {
@@ -91,8 +72,7 @@ public abstract class SubjectHandler {
             return authenticationLevelCredential.getAuthenticationLevel();
         }
 
-        Integer authenticationLevel = getAuthenticationLevelFromSAMLToken();
-        return authenticationLevel;
+        return getAuthenticationLevelFromSAMLToken();
     }
 
     public String getConsumerId() {
@@ -105,51 +85,7 @@ public abstract class SubjectHandler {
             return consumerId.getConsumerId();
         }
 
-        String consumerIdString = getConsumerIdFromSAMLToken();
-        return consumerIdString;
-    }
-
-    public String getEksternSsoToken() {
-        if (!hasSubject()) {
-            return null;
-        }
-        OpenAmTokenCredential tokenCredential = getTheOnlyOneInSet(getSubject().getPublicCredentials(OpenAmTokenCredential.class));
-        return tokenCredential != null ? tokenCredential.getOpenAmToken() : null;
-    }
-
-    public Element getSAMLAssertion() {
-        if (!hasSubject()) {
-            return null;
-        }
-
-        if (getSubject() != null) {
-            SAMLAssertionCredential credential = getTheOnlyOneInSet(getSubject().getPublicCredentials(SAMLAssertionCredential.class));
-            if (credential != null) {
-                return credential.getElement();
-            }
-        }
-        return null;
-    }
-
-    public List<Element> getAllSAMLAssertions() {
-        List<Element> list = new ArrayList<Element>();
-
-        for (SAMLAssertionCredential credential : getSubject().getPublicCredentials(SAMLAssertionCredential.class)) {
-            list.add(credential.getElement());
-        }
-        return list;
-    }
-
-    /**
-     * Todo: Denne skal fjernes når vi slutter å self-signe sertifikater.
-     */
-    public void setSAMLAssertion(Element element) {
-        if (!hasSubject()) {
-            return;
-        }
-        //fjerne gamle SAMLAssertionCredentials (som er utløpt)
-        getSubject().getPublicCredentials().removeAll(getSubject().getPublicCredentials(SAMLAssertionCredential.class));
-        getSubject().getPublicCredentials().add(new SAMLAssertionCredential(element));
+        return getConsumerIdFromSAMLToken();
     }
 
     protected IdentType getIdentTypeFromSAMLToken() {
@@ -191,29 +127,6 @@ public abstract class SubjectHandler {
             logger.debug("Setting " + key + "={} from System.properties", value);
         }
         return value;
-    }
-
-    private static boolean runningOnWas() {
-
-        boolean hasWasHome = existsInProperties(WAS_PROPERTY_KEY);
-
-        if (hasWasHome) {
-            try {
-                Class.forName("com.ibm.websphere.security.auth.WSSubject");
-            } catch (ClassNotFoundException e) {
-                return false;
-            }
-        }
-
-        return hasWasHome;
-    }
-
-    private static boolean runningOnJboss() {
-        return existsInProperties(JBOSS_PROPERTY_KEY);
-    }
-
-    private static boolean existsInProperties(String key) {
-        return System.getProperties().containsKey(key);
     }
 
     private Boolean hasSubject() {

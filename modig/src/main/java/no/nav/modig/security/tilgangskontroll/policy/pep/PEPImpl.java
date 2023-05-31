@@ -21,7 +21,7 @@ public class PEPImpl implements EnforcementPoint {
 
 	private static final Logger logger = LoggerFactory.getLogger(PEPImpl.class);
     private final DecisionPoint pdp;
-    private Bias bias = Bias.Deny;
+    private final Bias bias = Bias.Deny;
     private Collection<PolicyRequestEnricher> requestEnrichers = new ArrayList<>();
 
     public PEPImpl(DecisionPoint pdp) {

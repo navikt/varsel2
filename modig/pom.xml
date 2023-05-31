@@ -18,12 +18,8 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-logging</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.picketbox</groupId>
@@ -59,18 +55,6 @@
 			<artifactId>collections-generic</artifactId>
 		</dependency>
 
-		<!-- WebSphere WSSubject -->
-		<dependency>
-			<groupId>websphere</groupId>
-			<artifactId>com.ibm.ws.admin.client</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>websphere</groupId>
-			<artifactId>com.ibm.jaxws.thinclient</artifactId>
-			<optional>true</optional>
-		</dependency>
-
 		<!-- EhCache -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
@@ -80,10 +64,6 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpcore</artifactId>
 		</dependency>
 
 		<dependency>
@@ -115,28 +95,12 @@
 		</dependency>
 
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-saml-api</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
 		</dependency>
 
 		<dependency>
