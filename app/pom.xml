@@ -17,6 +17,10 @@
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
+			<artifactId>modig</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
 			<artifactId>jms-consumer</artifactId>
 		</dependency>
 		<dependency>
@@ -30,24 +34,6 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
-		</dependency>
-
-		<!--modig-->
-		<dependency>
-			<groupId>no.nav.modig</groupId>
-			<artifactId>modig-log-filter</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.modig</groupId>
-			<artifactId>modig-security-filter</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.modig</groupId>
-			<artifactId>modig-security-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.security</groupId>
-			<artifactId>token-validation-spring</artifactId>
 		</dependency>
 
 		<!-- test -->
