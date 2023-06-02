@@ -29,7 +29,6 @@
 		<dependency>
 			<groupId>no.nav.tjenestespesifikasjoner</groupId>
 			<artifactId>nav-pip-diskresjonskode-tjenestespesifikasjon</artifactId>
-			<version>${tjenestespesifikasjoner.version}</version>
 		</dependency>
 
 		<!-- AspectJ -->
