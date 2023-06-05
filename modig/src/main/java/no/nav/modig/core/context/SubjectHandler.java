@@ -62,19 +62,6 @@ public abstract class SubjectHandler {
         return getIdentTypeFromSAMLToken();
     }
 
-    public Integer getAuthenticationLevel() {
-        if (!hasSubject()) {
-            return null;
-        }
-
-        AuthenticationLevelCredential authenticationLevelCredential = getTheOnlyOneInSet(getSubject().getPublicCredentials(AuthenticationLevelCredential.class));
-        if (authenticationLevelCredential != null) {
-            return authenticationLevelCredential.getAuthenticationLevel();
-        }
-
-        return getAuthenticationLevelFromSAMLToken();
-    }
-
     public String getConsumerId() {
         if (!hasSubject()) {
             return null;
@@ -89,10 +76,6 @@ public abstract class SubjectHandler {
     }
 
     protected IdentType getIdentTypeFromSAMLToken() {
-        return null;
-    }
-
-    protected Integer getAuthenticationLevelFromSAMLToken() {
         return null;
     }
 

@@ -69,9 +69,6 @@ public class SubjectHandlerUtils {
             subject.getPrincipals().add(new SluttBruker(userId, identType));
             subject.getPublicCredentials().add(new AuthenticationLevelCredential(authLevel));
             subject.getPrincipals().add(new ConsumerId());
-            if (IdentType.EksternBruker.equals(identType)) {
-                subject.getPublicCredentials().add(new OpenAmTokenCredential(openAmToken == null ? userId + "-" + authLevel : openAmToken));
-            }
             return subject;
         }
     }
