@@ -39,12 +39,6 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- Security - JBossXACML -->
-		<dependency>
-			<groupId>org.jboss.security</groupId>
-			<artifactId>jbossxacml</artifactId>
-		</dependency>
-
 		<!-- COMMON LANG -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>

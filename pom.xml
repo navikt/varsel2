@@ -53,9 +53,8 @@
 		<snakeyaml.version>2.0</snakeyaml.version>
 
 		<!-- Modig -->
-		<picketbox.version>4.0.14.Final-redhat-2</picketbox.version>
+		<picketbox.version>4.0.14.Final</picketbox.version>
 		<collections-generic.version>4.01</collections-generic.version>
-		<jbossxacml.version>2.0.9.Final</jbossxacml.version>
 		<aspectj.version>1.9.5</aspectj.version>
 		<wss4j.version>2.4.1</wss4j.version>
 		<opensaml.version>3.4.6</opensaml.version>
@@ -194,11 +193,6 @@
 				<groupId>net.sourceforge.collections</groupId>
 				<artifactId>collections-generic</artifactId>
 				<version>${collections-generic.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.jboss.security</groupId>
-				<artifactId>jbossxacml</artifactId>
-				<version>${jbossxacml.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.aspectj</groupId>
