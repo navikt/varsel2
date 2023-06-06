@@ -25,5 +25,8 @@
 	<logger name="mf.logger.translog" level="INFO" additivity="false">
 		<appender-ref ref="applikasjonslogg"/>
 	</logger>
+	<logger name="no.nav.modig" level="INFO" additivity="false">
+		<appender-ref ref="applikasjonslogg"/>
+	</logger>
 
 </configuration>
