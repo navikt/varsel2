@@ -1,6 +1,7 @@
 package no.nav.varsel.domain.utility;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -35,7 +36,7 @@ class DateTimeConverterTest {
 
 		DateTime actual = toJodaDateTime(localDateTime);
 
-		DateTime expected = new DateTime("2023-05-24T10:11:12.123");
+		DateTime expected = new DateTime("2023-05-24T10:11:12.123", DateTimeZone.forID("Europe/Oslo"));
 
 		assertThat(expected).isEqualTo(actual);
 	}
