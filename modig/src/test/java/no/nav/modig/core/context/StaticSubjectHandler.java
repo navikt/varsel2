@@ -24,7 +24,6 @@ public class StaticSubjectHandler extends TestSubjectHandler {
         DEFAULT_SUBJECT = new Subject();
         DEFAULT_SUBJECT.getPrincipals().add(SluttBruker.eksternBruker("01015245464"));
         DEFAULT_SUBJECT.getPrincipals().add(new ConsumerId("StaticSubjectHandlerConsumerId"));
-        DEFAULT_SUBJECT.getPublicCredentials().add(new OpenAmTokenCredential("01015245464-4"));
         DEFAULT_SUBJECT.getPublicCredentials().add(new AuthenticationLevelCredential(4));
     }
     private static Subject subject = DEFAULT_SUBJECT;

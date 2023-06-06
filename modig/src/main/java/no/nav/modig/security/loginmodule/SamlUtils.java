@@ -1,6 +1,5 @@
 package no.nav.modig.security.loginmodule;
 
-import no.nav.modig.core.util.LdapUtils;
 import org.apache.wss4j.common.saml.SamlAssertionWrapper;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
@@ -8,13 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import javax.security.auth.login.LoginException;
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-
 
 /**
  * A collection of utilities used to deserialize SAML token.
@@ -26,9 +26,9 @@ class SamlUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(SamlUtils.class);
 
-    public static SamlInfo getSamlInfo(Assertion samlToken) throws LoginException {
+    public static SamlInfo getSamlInfo(Assertion samlToken) {
         String uid = samlToken.getSubject().getNameID().getValue();
-        uid = LdapUtils.filterDNtoCNvalue(uid);
+        uid = filterDNtoCNvalue(uid);
         String identType = null;
         String authLevel = null;
         String consumerId = null;
@@ -64,7 +64,7 @@ class SamlUtils {
         return new SamlInfo(uid, identType, iAuthLevel, consumerId);
     }
 
-    public static Assertion toSamlAssertion(String assertion) throws LoginException {
+    public static Assertion toSamlAssertion(String assertion) {
         try {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
@@ -78,5 +78,25 @@ class SamlUtils {
         }
 
     }
-    
+
+    public static String filterDNtoCNvalue(String userid) {
+        LdapName ldapname;
+        try {
+            ldapname = new LdapName(userid);
+            String cn = null;
+            for(Rdn rdn: ldapname.getRdns()){
+                if(rdn.getType().equalsIgnoreCase("CN")) {
+                    cn=rdn.getValue().toString();
+                    logger.debug("uid on DN form. Filtered from {} to {}", userid, cn);
+                    break;
+                }
+            }
+            return cn;
+        } catch(InvalidNameException e) {
+            logger.debug("uid not on DN form. Skipping filter. {}", e.toString());
+            return userid;
+        }
+    }
+
+
 }

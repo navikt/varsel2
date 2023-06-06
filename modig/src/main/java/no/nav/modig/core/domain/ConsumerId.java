@@ -1,12 +1,12 @@
 package no.nav.modig.core.domain;
 
-import no.nav.modig.core.context.ModigSecurityConstants;
-
 import javax.security.auth.DestroyFailedException;
 import javax.security.auth.Destroyable;
 import java.security.Principal;
 
 public final class ConsumerId implements Principal, Destroyable {
+
+    public static final String SYSTEMUSER_USERNAME = "no.nav.modig.security.systemuser.username";
 
     private String consumerIdString;
     private boolean destroyed;
@@ -16,11 +16,11 @@ public final class ConsumerId implements Principal, Destroyable {
     }
 
     public ConsumerId() {
-        consumerIdString = System.getProperty(ModigSecurityConstants.SYSTEMUSER_USERNAME);
+        consumerIdString = System.getProperty(SYSTEMUSER_USERNAME);
 
         if(consumerIdString == null){
             throw new IllegalStateException(
-                    ModigSecurityConstants.SYSTEMUSER_USERNAME + " is not set, failed to set "+ ConsumerId.class.getName());
+                    SYSTEMUSER_USERNAME + " is not set, failed to set "+ ConsumerId.class.getName());
         }
     }
 

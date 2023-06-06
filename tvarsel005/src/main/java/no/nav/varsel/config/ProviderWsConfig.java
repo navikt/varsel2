@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({CxfConfig.class, ProviderEndpointConfig.class, Tvarsel005Config.class, ServiceConfig.class, XacmlConfig.class})
+@Import({CxfConfig.class, ProviderEndpointConfig.class, Tvarsel005Config.class, ServiceConfig.class})
 public class ProviderWsConfig {
 
 	@Bean
