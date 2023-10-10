@@ -1,7 +1,7 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSBrukervarsel;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerResponse;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Brukervarsel;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,17 +12,17 @@ public class HentVarselForBrukerResponseMapper {
 	@Autowired
 	private VarselbestillingMapper varselbestillingMapper;
 
-	public WSHentVarselForBrukerResponse map(HentVarselForBrukerResponseTo hentVarselForBrukerResponseTo) {
+	public HentVarselForBrukerResponse map(HentVarselForBrukerResponseTo hentVarselForBrukerResponseTo) {
 		notNull(hentVarselForBrukerResponseTo, "The parameter hentVarselForBrukerResponseTo can't be null.");
 
-		WSHentVarselForBrukerResponse result = new WSHentVarselForBrukerResponse();
+		HentVarselForBrukerResponse result = new HentVarselForBrukerResponse();
 		result.setBrukervarsel(createBrukerVarsel(hentVarselForBrukerResponseTo));
 
 		return result;
 	}
 
-	private WSBrukervarsel createBrukerVarsel(HentVarselForBrukerResponseTo hentVarselForBrukerResponseTo) {
-		WSBrukervarsel result = new WSBrukervarsel();
+	private Brukervarsel createBrukerVarsel(HentVarselForBrukerResponseTo hentVarselForBrukerResponseTo) {
+		Brukervarsel result = new Brukervarsel();
 		hentVarselForBrukerResponseTo.getVarselbestillingTos().forEach(varselbestillingTo -> result.getVarselbestillingListe().add(varselbestillingMapper.map(varselbestillingTo)));
 
 		return result;

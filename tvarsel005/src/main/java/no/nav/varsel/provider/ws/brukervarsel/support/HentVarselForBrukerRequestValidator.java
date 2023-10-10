@@ -1,10 +1,10 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.HentVarselForBrukerUgyldigInput;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.feil.WSUgydigInput;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSAktoer;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSPeriode;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerRequest;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.feil.UgydigInput;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Aktoer;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ public class HentVarselForBrukerRequestValidator {
 	private static final String PERIODENS_TOM_KAN_IKKE_VAERE_SENERE_ENN_DAGENS_DATO_FEILAARSAK = "Periodens DatoTom kan ikke være senere enn dagens dato";
 	private static final String PERIODENS_DATO_FOM_KAN_IKKE_VAERE_SENERE_ENN_PERIODENS_DATO_TOM_FEILAARSAK = "Periodens DatoFom kan ikke være senere enn periodens DatoTom";
 
-	public void validate(WSHentVarselForBrukerRequest request) throws HentVarselForBrukerUgyldigInput {
+	public void validate(HentVarselForBrukerRequest request) throws HentVarselForBrukerUgyldigInput {
 		validateBruker(request.getBruker());
 
 		if (request.getPeriode() != null) {
@@ -28,12 +28,12 @@ public class HentVarselForBrukerRequestValidator {
 		}
 	}
 
-	private void validatePeriode(WSPeriode periode) throws HentVarselForBrukerUgyldigInput {
+	private void validatePeriode(Periode periode) throws HentVarselForBrukerUgyldigInput {
 		validateTomDatoMustBeAtLeastFomDato(periode);
 		valdiateTomDatoCantBeInTheFuture(periode);
 	}
 
-	private void validateTomDatoMustBeAtLeastFomDato(WSPeriode periode) throws HentVarselForBrukerUgyldigInput {
+	private void validateTomDatoMustBeAtLeastFomDato(Periode periode) throws HentVarselForBrukerUgyldigInput {
 		if (periode.getFom() != null && periode.getTom() != null &&
 				periode.getFom().toGregorianCalendar().after(periode.getTom().toGregorianCalendar())) {
 			throwValidationException(UGYLDIG_BRUK_AV_DATO_FOM_OG_DATO_TOM_FEILMELDING,
@@ -44,7 +44,7 @@ public class HentVarselForBrukerRequestValidator {
 	}
 
 
-	private void valdiateTomDatoCantBeInTheFuture(WSPeriode periode) throws HentVarselForBrukerUgyldigInput {
+	private void valdiateTomDatoCantBeInTheFuture(Periode periode) throws HentVarselForBrukerUgyldigInput {
 		if (periode.getFom() != null && periode.getTom() != null &&
 				periode.getTom().toGregorianCalendar().after(GregorianCalendar.getInstance())) {
 			throwValidationException(UGYLDIG_BRUK_AV_DATO_FOM_OG_DATO_TOM_FEILMELDING,
@@ -54,7 +54,7 @@ public class HentVarselForBrukerRequestValidator {
 		}
 	}
 
-	private void validateBruker(WSAktoer bruker) throws HentVarselForBrukerUgyldigInput {
+	private void validateBruker(Aktoer bruker) throws HentVarselForBrukerUgyldigInput {
 		if (bruker == null) {
 			throwValidationException(PAAKREVD_INPUTPARAMETER_ER_IKKE_SATT_FEILMELDING,
 					PAAKREVD_INPUTPARAMETER_ER_IKKE_SATT_FEILMELDING,
@@ -64,7 +64,7 @@ public class HentVarselForBrukerRequestValidator {
 	}
 
 	private void throwValidationException(String message, String feilmelding, String feilaarsak, XMLGregorianCalendar tidspunkt) throws HentVarselForBrukerUgyldigInput {
-		WSUgydigInput faultInfo = new WSUgydigInput();
+		UgydigInput faultInfo = new UgydigInput();
 		faultInfo.setFeilmelding(feilmelding);
 		faultInfo.setFeilaarsak(feilaarsak);
 		faultInfo.setTidspunkt(tidspunkt);

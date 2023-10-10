@@ -25,6 +25,8 @@ public class RepoTestConfig {
 		return Mockito.spy(exponentialBackoffErrorhandler);
 	}
 
+	/*
+	//TODO: Tryner på circle reference om denne er med. Ser ikke ut til å savnes om man fjerner den?
 	@Bean
 	public <K, V> ContainerCustomizer<K, V, KafkaMessageListenerContainer<K, V>> defaultKafkaMessageListenerCustomizer(
 			ConcurrentKafkaListenerContainerFactory<?, ?> listenerContainerFactory,
@@ -41,6 +43,6 @@ public class RepoTestConfig {
 				);
 
 		return customizer;
-	}
+	}*/
 
 }

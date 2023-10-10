@@ -1,6 +1,6 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSVarsel;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varsel;
 import no.nav.varsel.service.tvarsel005.to.VarselTo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -41,12 +41,12 @@ public class VarselMapperTest {
 	public void shouldMap() {
 		VarselTo varselTo = buildVarselTo();
 
-		WSVarsel varsel = MAPPER.map(varselTo);
+		Varsel varsel = MAPPER.map(varselTo);
 
 		assertVarsel(varsel);
 	}
 
-	public static void assertVarsel(WSVarsel varsel) {
+	public static void assertVarsel(Varsel varsel) {
 		assertThat(varsel.getKanal(), is(KANAL));
 		assertThat(varsel.getSendt(), is(SENDT));
 		assertThat(varsel.getDistribuert(), is(DISTRIBUERT));

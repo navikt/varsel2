@@ -1,9 +1,9 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSAktoerId;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSPeriode;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSPerson;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerRequest;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.AktoerId;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Person;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerTo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ public class HentVarselForBrukerRequestMapperTest {
 
 	@Test
 	public void shouldMapAktoerId() {
-		WSHentVarselForBrukerRequest request = createRequestWithAktoerId();
+		HentVarselForBrukerRequest request = createRequestWithAktoerId();
 		assignEmptyPeriode(request);
 
 		HentVarselForBrukerTo hentVarselForBrukerTo = mapper.map(request);
@@ -51,13 +51,13 @@ public class HentVarselForBrukerRequestMapperTest {
 		assertThat(hentVarselForBrukerTo.getFnr(), nullValue());
 	}
 
-	private void assignEmptyPeriode(WSHentVarselForBrukerRequest request) {
+	private void assignEmptyPeriode(HentVarselForBrukerRequest request) {
 		request.setPeriode(createPeriode(null, null));
 	}
 
 	@Test
 	public void shouldMapFnr() {
-		WSHentVarselForBrukerRequest request = createRequestWithFnr();
+		HentVarselForBrukerRequest request = createRequestWithFnr();
 		assignEmptyPeriode(request);
 
 		HentVarselForBrukerTo hentVarselForBrukerTo = mapper.map(request);
@@ -68,7 +68,7 @@ public class HentVarselForBrukerRequestMapperTest {
 
 	@Test
 	public void shouldMapFom() {
-		WSHentVarselForBrukerRequest request = createRequestWithFnr();
+		HentVarselForBrukerRequest request = createRequestWithFnr();
 		request.setPeriode(createPeriode(this.firstOfJune2016, null));
 
 		HentVarselForBrukerTo hentVarselForBrukerTo = mapper.map(request);
@@ -79,7 +79,7 @@ public class HentVarselForBrukerRequestMapperTest {
 
 	@Test
 	public void shouldMapTom() {
-		WSHentVarselForBrukerRequest request = createRequestWithFnr();
+		HentVarselForBrukerRequest request = createRequestWithFnr();
 		request.setPeriode(createPeriode(null, this.twentiethOfJune2016));
 
 		HentVarselForBrukerTo hentVarselForBrukerTo = mapper.map(request);
@@ -90,7 +90,7 @@ public class HentVarselForBrukerRequestMapperTest {
 
 	@Test
 	public void shouldMapFomANdTom() {
-		WSHentVarselForBrukerRequest request = createRequestWithFnr();
+		HentVarselForBrukerRequest request = createRequestWithFnr();
 		request.setPeriode(createPeriode(this.firstOfJune2016, this.twentiethOfJune2016));
 
 		HentVarselForBrukerTo hentVarselForBrukerTo = mapper.map(request);
@@ -101,33 +101,33 @@ public class HentVarselForBrukerRequestMapperTest {
 
 	@Test
 	public void shouldHandleNullPeriode() {
-		WSHentVarselForBrukerRequest request = createRequestWithFnr();
+		HentVarselForBrukerRequest request = createRequestWithFnr();
 		request.setPeriode(null);
 
 		HentVarselForBrukerTo hentVarselForBrukerTo = mapper.map(request);
 		assertThat(hentVarselForBrukerTo.getFnr(), is(FNR));
 	}
 
-	private WSHentVarselForBrukerRequest createRequestWithAktoerId() {
-		WSHentVarselForBrukerRequest request = new WSHentVarselForBrukerRequest();
-		WSAktoerId bruker = new WSAktoerId();
+	private HentVarselForBrukerRequest createRequestWithAktoerId() {
+		HentVarselForBrukerRequest request = new HentVarselForBrukerRequest();
+		AktoerId bruker = new AktoerId();
 		bruker.setAktoerId(AKTOER_ID);
 		request.setBruker(bruker);
 
 		return request;
 	}
 
-	private WSHentVarselForBrukerRequest createRequestWithFnr() {
-		WSHentVarselForBrukerRequest request = new WSHentVarselForBrukerRequest();
-		WSPerson bruker = new WSPerson();
+	private HentVarselForBrukerRequest createRequestWithFnr() {
+		HentVarselForBrukerRequest request = new HentVarselForBrukerRequest();
+		Person bruker = new Person();
 		bruker.setIdent(FNR);
 		request.setBruker(bruker);
 
 		return request;
 	}
 
-	private WSPeriode createPeriode(XMLGregorianCalendar fom, XMLGregorianCalendar tom) {
-		WSPeriode periode = new WSPeriode();
+	private Periode createPeriode(XMLGregorianCalendar fom, XMLGregorianCalendar tom) {
+		Periode periode = new Periode();
 		periode.setFom(fom);
 		periode.setTom(tom);
 

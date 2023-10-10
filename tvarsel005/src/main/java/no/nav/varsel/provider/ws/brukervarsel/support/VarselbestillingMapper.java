@@ -1,8 +1,8 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSAktoerId;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSPerson;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSVarselbestilling;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.AktoerId;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Person;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varselbestilling;
 import no.nav.varsel.service.tvarsel005.to.VarselbestillingTo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,10 +14,10 @@ public class VarselbestillingMapper {
 	@Autowired
 	private VarselMapper varselMapper;
 
-	public WSVarselbestilling map(VarselbestillingTo varselbestillingTo) {
+	public Varselbestilling map(VarselbestillingTo varselbestillingTo) {
 		notNull(varselbestillingTo, "The parameter varselbestillingTo can't be null.");
 
-		WSVarselbestilling result = new WSVarselbestilling();
+		Varselbestilling result = new Varselbestilling();
 		result.setVarseltypeId(varselbestillingTo.getVarseltypeId());
 		result.setPerson(getPerson(varselbestillingTo));
 		result.setAktoerId(getAktoerId(varselbestillingTo));
@@ -28,22 +28,22 @@ public class VarselbestillingMapper {
 		return result;
 	}
 
-	private WSAktoerId getAktoerId(VarselbestillingTo varselbestillingTo) {
-		WSAktoerId result = null;
+	private AktoerId getAktoerId(VarselbestillingTo varselbestillingTo) {
+		AktoerId result = null;
 
 		if (varselbestillingTo.getAktoerId() != null) {
-			result = new WSAktoerId();
+			result = new AktoerId();
 			result.setAktoerId(varselbestillingTo.getAktoerId());
 		}
 
 		return result;
 	}
 
-	private WSPerson getPerson(VarselbestillingTo varselbestillingTo) {
-		WSPerson result = null;
+	private Person getPerson(VarselbestillingTo varselbestillingTo) {
+		Person result = null;
 
 		if (varselbestillingTo.getFnr() != null) {
-			result = new WSPerson();
+			result = new Person();
 			result.setIdent(varselbestillingTo.getFnr());
 		}
 
