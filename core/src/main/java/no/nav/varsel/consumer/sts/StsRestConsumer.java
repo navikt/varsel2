@@ -43,7 +43,7 @@ public class StsRestConsumer {
 				.build();
 	}
 
-	@Retryable(include = TechnicalVarselException.class, backoff = @Backoff(delay = DELAY, multiplier = MULTIPLIER))
+	@Retryable(retryFor = TechnicalVarselException.class, backoff = @Backoff(delay = DELAY, multiplier = MULTIPLIER))
 	@Cacheable(STS_CACHE)
 	public String getOidcToken() {
 		try {

@@ -13,9 +13,9 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.jms.Message;
-import javax.jms.Queue;
-import javax.xml.bind.JAXBElement;
+import jakarta.jms.Message;
+import jakarta.jms.Queue;
+import jakarta.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import java.util.UUID;
 

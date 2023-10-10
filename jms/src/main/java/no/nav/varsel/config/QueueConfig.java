@@ -1,12 +1,12 @@
 package no.nav.varsel.config;
 
-import com.ibm.mq.jms.MQQueue;
+import com.ibm.mq.jakarta.jms.MQQueue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.jms.JMSException;
-import javax.jms.Queue;
+import jakarta.jms.JMSException;
+import jakarta.jms.Queue;
 
 @Configuration
 public class QueueConfig {

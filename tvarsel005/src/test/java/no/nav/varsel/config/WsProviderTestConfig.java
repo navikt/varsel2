@@ -3,6 +3,7 @@ package no.nav.varsel.config;
 import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
+import no.nav.varsel.config.alias.MqGatewayProperties;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
@@ -16,7 +17,6 @@ import org.springframework.context.annotation.Import;
 
 @EnableAutoConfiguration
 @Import({
-		JmsTestConfig.class,
 		RepoTestConfig.class,
 		ProviderWsConfig.class,
 		CustomKafkaTemplate.class,

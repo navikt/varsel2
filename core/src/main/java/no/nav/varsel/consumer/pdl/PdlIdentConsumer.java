@@ -24,7 +24,7 @@ import java.time.Duration;
 import java.util.HashMap;
 
 import static java.util.Objects.requireNonNull;
-import static org.apache.http.util.TextUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -58,7 +58,7 @@ public class PdlIdentConsumer {
 	}
 
 	@Retryable(
-			include = HttpServerErrorException.class,
+			retryFor = HttpServerErrorException.class,
 			backoff = @Backoff(delay = DELAY, multiplier = MULTIPLIER)
 	)
 	public String hentAktoerId(final String folkeregisterIdent) throws PersonIkkeFunnetException {

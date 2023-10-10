@@ -28,7 +28,7 @@ public class KafkaEventProducer {
 		this.routingKafkaTemplate = routingKafkaTemplate;
 	}
 
-	@Retryable(include = KafkaTechnicalException.class, backoff = @Backoff(delay = 2000))
+	@Retryable(retryFor = KafkaTechnicalException.class, backoff = @Backoff(delay = 2000))
 	public void publish(String topic, Object key, Object event) {
 		ProducerRecord<Object, Object> producerRecord = new ProducerRecord<>(
 				topic,

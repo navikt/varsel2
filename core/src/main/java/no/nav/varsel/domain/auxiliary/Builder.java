@@ -3,7 +3,7 @@ package no.nav.varsel.domain.auxiliary;
 import no.nav.varsel.domain.Constants;
 import org.slf4j.MDC;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 
 public abstract class Builder<T extends AbstractDomainObject> {

@@ -9,7 +9,7 @@ import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.service.to.BestillVarselTo;
 import org.springframework.util.Assert;
 
-import javax.jms.JMSException;
+import jakarta.jms.JMSException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

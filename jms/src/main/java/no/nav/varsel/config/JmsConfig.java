@@ -1,12 +1,16 @@
 package no.nav.varsel.config;
 
-import com.ibm.mq.jms.MQConnectionFactory;
+import com.ibm.mq.jakarta.jms.MQConnectionFactory;
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.Session;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
 import no.nav.varsel.config.alias.ListenerProperties;
 import no.nav.varsel.config.alias.MqGatewayProperties;
 import no.nav.varsel.jms.to.xml.JmsReply;
-import org.apache.activemq.jms.pool.PooledConnectionFactory;
+import org.messaginghub.pooled.jms.JmsPoolConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
@@ -28,14 +32,9 @@ import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
 import javax.net.ssl.SSLSocketFactory;
 
-import static com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CM_CLIENT;
-import static java.util.concurrent.TimeUnit.HOURS;
+import static com.ibm.msg.client.jakarta.wmq.common.CommonConstants.WMQ_CM_CLIENT;
 
 /**
  * Spring config for JMS
@@ -88,7 +87,7 @@ public class JmsConfig {
 		factory.setTransactionManager(transactionManager);
 		factory.setConcurrency(String.format("%d-%d", minimumConsumers, maximumConsumers));
 		factory.setAutoStartup(listenerProperties.isAutoStartup());
-		log.info("Listener autostart: "+listenerProperties.isAutoStartup());
+		log.info("Listener autostart: " + listenerProperties.isAutoStartup());
 		factory.setErrorHandler(t -> {
 			Throwable throwable = t;
 			if (t instanceof ListenerExecutionFailedException) {
@@ -137,12 +136,10 @@ public class JmsConfig {
 		adapter.setTargetConnectionFactory(connectionFactory);
 		adapter.setUsername(srvVarselUsername);
 		adapter.setPassword(srvVarselPassword);
-		PooledConnectionFactory pooledFactory = new PooledConnectionFactory();
+		JmsPoolConnectionFactory pooledFactory = new JmsPoolConnectionFactory();
 		pooledFactory.setConnectionFactory(adapter);
 		pooledFactory.setMaxConnections(10);
-		pooledFactory.setMaximumActiveSessionPerConnection(10);
-		pooledFactory.setReconnectOnException(true);
-		pooledFactory.setExpiryTimeout(HOURS.toMillis(24));
+		pooledFactory.setMaxSessionsPerConnection(10);
 		return pooledFactory;
 	}
 

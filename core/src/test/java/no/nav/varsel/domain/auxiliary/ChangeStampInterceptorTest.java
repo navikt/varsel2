@@ -13,6 +13,7 @@ import org.slf4j.MDC;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +30,7 @@ public class ChangeStampInterceptorTest {
 
 	@BeforeEach
 	public void setUp() {
-		when(changeStampType.getReturnedClass()).thenReturn(ChangeStamp.class);
+		when(changeStampType.getReturnedClass()).thenAnswer(invocationOnMock -> ChangeStamp.class);
 		MDC.put(Constants.USER_ID, USER);
 	}
 

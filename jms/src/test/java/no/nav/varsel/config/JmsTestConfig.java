@@ -1,41 +1,31 @@
 package no.nav.varsel.config;
 
-import com.atomikos.jms.AtomikosConnectionFactoryBean;
-import com.ibm.mq.jms.MQQueue;
+import com.ibm.mq.jakarta.jms.MQQueue;
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.JMSException;
+import jakarta.jms.Queue;
 import no.nav.varsel.config.alias.ListenerProperties;
-import org.apache.activemq.ActiveMQXAConnectionFactory;
-import org.apache.activemq.RedeliveryPolicy;
-import org.apache.activemq.broker.BrokerService;
-import org.apache.activemq.broker.region.policy.PolicyEntry;
-import org.apache.activemq.broker.region.policy.PolicyMap;
-import org.apache.activemq.broker.region.policy.SharedDeadLetterStrategy;
-import org.apache.activemq.command.ActiveMQQueue;
+import no.nav.varsel.config.alias.MqGatewayProperties;
+import org.apache.activemq.artemis.core.server.embedded.EmbeddedActiveMQ;
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
+import org.apache.activemq.artemis.jms.client.ActiveMQQueue;
 import org.junit.jupiter.api.BeforeEach;
+import org.messaginghub.pooled.jms.JmsPoolConnectionFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
-import javax.jms.Queue;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.UUID;
-
-import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
 
 @EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class})
 @Import({JmsConfig.class})
 @Configuration
 @EnableConfigurationProperties({
-		ListenerProperties.class
+		ListenerProperties.class,
+		MqGatewayProperties.class
 })
 public class JmsTestConfig {
 
@@ -47,61 +37,21 @@ public class JmsTestConfig {
 		setProperty("varsel.serviceuser.password", "passord");
 	}
 
-	/**
-	 * Using the same username/password-wrapper as in production to ensure it delegates down to XAConnectionFactory
-	 */
-	@Bean
-	public ConnectionFactory connectionFactory(ConnectionFactory atomikosConnectionFactoryBean) throws JMSException {
-		UserCredentialsConnectionFactoryAdapter adapter = new UserCredentialsConnectionFactoryAdapter();
-		adapter.setTargetConnectionFactory(atomikosConnectionFactoryBean);
-		adapter.setUsername(getProperty("varsel.serviceuser.username"));
-		adapter.setPassword(getProperty("varsel.serviceuser.password"));
-		return adapter;
-	}
-
-	/**
-	 * Atomikos wrapper for XAConnectionFactory
-	 */
-	@Bean(initMethod = "init", destroyMethod = "close")
-	public ConnectionFactory atomikosConnectionFactoryBean(BrokerService brokerService) {
-		AtomikosConnectionFactoryBean atomikosConnectionFactoryBean = new AtomikosConnectionFactoryBean();
-		atomikosConnectionFactoryBean.setUniqueResourceName(UUID.randomUUID().toString());
-		atomikosConnectionFactoryBean.setXaConnectionFactory(activeMQXAConnectionFactory());
-		atomikosConnectionFactoryBean.setPoolSize(10);
-		return atomikosConnectionFactoryBean;
-	}
-
-	/**
-	 * XA ConnectionFactory for ActiveMQ
-	 */
-	public static ActiveMQXAConnectionFactory activeMQXAConnectionFactory() {
-		ActiveMQXAConnectionFactory factory = new ActiveMQXAConnectionFactory();
-		factory.setBrokerURL(VM_LOCALHOST + "?create=false");
-		RedeliveryPolicy redeliveryPolicy = new RedeliveryPolicy();
-		redeliveryPolicy.setMaximumRedeliveries(0);
-		factory.setRedeliveryPolicy(redeliveryPolicy);
-		return factory;
-	}
-
-	@Bean
-	public TransactionTemplate transactionTemplate(PlatformTransactionManager platformTransactionManager) {
-		return new TransactionTemplate(platformTransactionManager);
-	}
-
 	@Bean(initMethod = "start", destroyMethod = "stop")
-	public BrokerService broker(ActiveMQQueue backoutQueue) throws URISyntaxException {
-		BrokerService broker = new BrokerService();
-		broker.setVmConnectorURI(new URI(VM_LOCALHOST));
-		SharedDeadLetterStrategy deadLetterStrategy = new SharedDeadLetterStrategy();
-		deadLetterStrategy.setDeadLetterQueue(backoutQueue);
-		PolicyMap policyMap = new PolicyMap();
-		PolicyEntry defaultEntry = new PolicyEntry();
-		defaultEntry.setDeadLetterStrategy(deadLetterStrategy);
-		policyMap.setDefaultEntry(defaultEntry);
-		broker.setDestinationPolicy(policyMap);
-		broker.setUseJmx(false);
-		broker.setPersistent(false);
-		return broker;
+	public EmbeddedActiveMQ activeMQServer() {
+		EmbeddedActiveMQ embeddedActiveMQ = new EmbeddedActiveMQ();
+		embeddedActiveMQ.setConfigResourcePath("artemis-server.xml");
+		return embeddedActiveMQ;
+	}
+
+	// avhengig av EmbeddedActiveMQ slik at server er startet før klient forsøker lage koblinger
+	@Bean
+	public ConnectionFactory activemqConnectionFactory(EmbeddedActiveMQ embeddedActiveMQ) {
+		ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory("vm://0");
+		JmsPoolConnectionFactory pooledFactory = new JmsPoolConnectionFactory();
+		pooledFactory.setConnectionFactory(activeMQConnectionFactory);
+		pooledFactory.setMaxConnections(1);
+		return pooledFactory;
 	}
 
 	@Bean
@@ -110,7 +60,7 @@ public class JmsTestConfig {
 	}
 
 	@Bean
-	public ActiveMQQueue backoutQueue() {
+	public Queue backoutQueue() {
 		return new ActiveMQQueue("backout_queue");
 	}
 

@@ -11,7 +11,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 import static no.nav.varsel.domain.Constants.USER_ID;
@@ -23,9 +25,12 @@ public abstract class AbstractWsProviderITest {
 
 	@Autowired
 	protected VarselbestillingRepo varselbestillingRepo;
-	
+
 	@Autowired
 	protected VarselRepo varselRepo;
+
+	@MockBean
+	protected JmsTemplate jmsTemplate;
 
 
 	@BeforeAll

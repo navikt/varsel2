@@ -2,7 +2,7 @@ package no.nav.varsel.jms.consumer;
 
 import org.springframework.util.Assert;
 
-import javax.jms.Message;
+import jakarta.jms.Message;
 
 public class ObjectMessageWrapper<T> {
 

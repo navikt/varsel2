@@ -18,14 +18,16 @@ import java.util.regex.Pattern;
 public class CustomKafkaTemplate {
 
 	@Bean
-	public RoutingKafkaTemplate routingTemplate(GenericApplicationContext context,
+	public RoutingKafkaTemplate routingTemplate(//GenericApplicationContext context,
 												ProducerFactory<Object, Object> defaultProducerFactory) {
 
 		// Clone the PF with a different Serializer, register with Spring for shutdown
 		Map<String, Object> configs = new HashMap<>(defaultProducerFactory.getConfigurationProperties());
 		configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
 		DefaultKafkaProducerFactory<Object, Object> dittNavProducerFactory = new DefaultKafkaProducerFactory<>(configs);
-		context.registerBean(DefaultKafkaProducerFactory.class, "dittNavProducerFactory", dittNavProducerFactory);
+		//TODO: Contexten tryner om denne er definert. Testene er OK uten.
+		//TODO: Trenger vi den?
+		//context.registerBean(DefaultKafkaProducerFactory.class, "dittNavProducerFactory", dittNavProducerFactory);
 
 		Map<Pattern, ProducerFactory<Object, Object>> map = new LinkedHashMap<>();
 		map.put(Pattern.compile("min-side.*"), dittNavProducerFactory);

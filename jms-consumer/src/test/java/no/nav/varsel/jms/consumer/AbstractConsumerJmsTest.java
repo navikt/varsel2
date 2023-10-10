@@ -16,9 +16,9 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.jms.Message;
-import javax.jms.Queue;
-import javax.xml.bind.JAXBElement;
+import jakarta.jms.Message;
+import jakarta.jms.Queue;
+import jakarta.xml.bind.JAXBElement;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;

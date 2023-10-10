@@ -14,7 +14,7 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -39,8 +39,8 @@ public class SAMLInInterceptor extends WSS4JInInterceptor {
     public Crypto loadSignatureCrypto(RequestData requestData) throws WSSecurityException {
 
         Properties signatureProperties = new Properties();
-        signatureProperties.setProperty("org.apache.wss4j.crypto.merlin.truststore.file", System.getProperty("javax.net.ssl.trustStore"));
-        signatureProperties.setProperty("org.apache.wss4j.crypto.merlin.truststore.password", System.getProperty("javax.net.ssl.trustStorePassword"));
+        signatureProperties.setProperty("org.apache.wss4j.crypto.merlin.truststore.file", System.getProperty("jakarta.net.ssl.trustStore"));
+        signatureProperties.setProperty("org.apache.wss4j.crypto.merlin.truststore.password", System.getProperty("jakarta.net.ssl.trustStorePassword"));
 
         return CryptoFactory.getInstance(signatureProperties);
     }

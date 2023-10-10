@@ -38,7 +38,7 @@ public final class SluttBruker implements Principal, Destroyable {
 
 
 	@Override
-	public void destroy() throws DestroyFailedException {
+	public void destroy()  throws DestroyFailedException {
 		uid = null;
 		destroyed = true;
 
