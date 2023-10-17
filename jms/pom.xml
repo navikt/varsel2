@@ -31,7 +31,7 @@
 		<!--Tjenestespesifikasjoner-->
 		<dependency>
 			<groupId>no.nav.tjenestespesifikasjoner</groupId>
-			<artifactId>varsel-inn</artifactId>
+			<artifactId>nav-varsel-inn</artifactId>
 		</dependency>
 
 		<dependency>
