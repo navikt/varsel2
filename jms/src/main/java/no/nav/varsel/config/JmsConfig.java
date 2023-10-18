@@ -34,7 +34,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import static com.ibm.msg.client.jakarta.jms.JmsConstants.JMS_IBM_CHARACTER_SET;
+import static com.ibm.msg.client.jakarta.jms.JmsConstants.JMS_IBM_ENCODING;
 import static com.ibm.msg.client.jakarta.wmq.common.CommonConstants.WMQ_CM_CLIENT;
+import static com.ibm.msg.client.jakarta.wmq.compat.base.internal.MQC.MQENC_NATIVE;
 
 /**
  * Spring config for JMS
@@ -57,6 +60,7 @@ public class JmsConfig {
 
 	private static final Logger LOG = LoggerFactory.getLogger(JmsConfig.class);
 	private static final String ANY_TLS13_OR_HIGHER = "*TLS13ORHIGHER";
+	private static final int UTF_8_WITH_PUA = 1208;
 
 
 	@Bean
@@ -121,21 +125,21 @@ public class JmsConfig {
 		connectionFactory.setHostName(mqGatewayAlias.getHostname());
 		connectionFactory.setPort(mqGatewayAlias.getPort());
 		connectionFactory.setQueueManager(mqGatewayAlias.getName());
+		connectionFactory.setChannel(mqGatewayAlias.getChannel().getSecurename());
 		connectionFactory.setTransportType(WMQ_CM_CLIENT);
+		connectionFactory.setCCSID(UTF_8_WITH_PUA);
+		connectionFactory.setIntProperty(JMS_IBM_ENCODING, MQENC_NATIVE);
+		connectionFactory.setIntProperty(JMS_IBM_CHARACTER_SET, UTF_8_WITH_PUA);
 
-		if (mqGatewayAlias.getChannel().isEnabletls()) {
-			connectionFactory.setSSLCipherSuite(ANY_TLS13_OR_HIGHER);
-			SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-			connectionFactory.setSSLSocketFactory(factory);
-			connectionFactory.setChannel(mqGatewayAlias.getChannel().getSecurename());
-		} else {
-			connectionFactory.setChannel(mqGatewayAlias.getChannel().getName());
-		}
+		connectionFactory.setSSLCipherSuite(ANY_TLS13_OR_HIGHER);
+		SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+		connectionFactory.setSSLSocketFactory(factory);
 
 		UserCredentialsConnectionFactoryAdapter adapter = new UserCredentialsConnectionFactoryAdapter();
 		adapter.setTargetConnectionFactory(connectionFactory);
 		adapter.setUsername(srvVarselUsername);
 		adapter.setPassword(srvVarselPassword);
+
 		JmsPoolConnectionFactory pooledFactory = new JmsPoolConnectionFactory();
 		pooledFactory.setConnectionFactory(adapter);
 		pooledFactory.setMaxConnections(10);
