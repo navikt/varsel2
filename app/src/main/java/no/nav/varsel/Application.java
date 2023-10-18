@@ -22,7 +22,7 @@ import static java.lang.System.setProperty;
 public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
-		setProperty("jakarta.net.ssl.keyStorePassword", getenv("VARSEL_CERT_KEYSTORE_PASSWORD"));
+		setProperty("javax.net.ssl.keyStorePassword", getenv("VARSEL_CERT_KEYSTORE_PASSWORD"));
 		SpringApplication.run(Application.class, args);
 	}
 
