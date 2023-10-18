@@ -50,7 +50,7 @@
 		<teamdokumenthandtering-avro-schemas.version>3aec620a</teamdokumenthandtering-avro-schemas.version>
 		<brukernotifikasjon.version>v2.5.2</brukernotifikasjon.version>
 		<na-varsel-inn>28-eb306fa</na-varsel-inn>
-		<brukervarse.version>26-1762dee</brukervarse.version>
+		<brukervarsel>26-1762dee</brukervarsel>
 		<dokmet-api.version>13-5459a4f</dokmet-api.version>
 
 		<!-- Modig -->
@@ -145,7 +145,7 @@
 			<dependency>
 				<groupId>no.nav.tjenestespesifikasjoner</groupId>
 				<artifactId>nav-brukervarsel-v1-tjenestespesifikasjon</artifactId>
-				<version>${brukervarse.version}</version>
+				<version>${brukervarsel}</version>
 			</dependency>
 
 			<dependency>
