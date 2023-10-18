@@ -39,8 +39,8 @@ public class SAMLInInterceptor extends WSS4JInInterceptor {
     public Crypto loadSignatureCrypto(RequestData requestData) throws WSSecurityException {
 
         Properties signatureProperties = new Properties();
-        signatureProperties.setProperty("org.apache.wss4j.crypto.merlin.truststore.file", System.getProperty("jakarta.net.ssl.trustStore"));
-        signatureProperties.setProperty("org.apache.wss4j.crypto.merlin.truststore.password", System.getProperty("jakarta.net.ssl.trustStorePassword"));
+        signatureProperties.setProperty("org.apache.wss4j.crypto.merlin.truststore.file", System.getProperty("javax.net.ssl.trustStore"));
+        signatureProperties.setProperty("org.apache.wss4j.crypto.merlin.truststore.password", System.getProperty("javax.net.ssl.trustStorePassword"));
 
         return CryptoFactory.getInstance(signatureProperties);
     }
