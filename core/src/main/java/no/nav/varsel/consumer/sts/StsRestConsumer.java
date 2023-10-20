@@ -38,7 +38,6 @@ public class StsRestConsumer {
 		this.stsUrl = stsUrl;
 		this.restTemplate = restTemplate
 				.setConnectTimeout(Duration.ofSeconds(5))
-				.setReadTimeout(Duration.ofSeconds(20))
 				.basicAuthentication(serviceuserUsername, serviceuserPassword)
 				.build();
 	}

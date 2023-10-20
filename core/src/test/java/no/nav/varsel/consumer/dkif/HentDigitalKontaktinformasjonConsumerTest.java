@@ -80,7 +80,6 @@ public class HentDigitalKontaktinformasjonConsumerTest {
 		public RestTemplateBuilder restTemplateBuilder() {
 			RestTemplateBuilder rtb = mock(RestTemplateBuilder.class);
 			RestTemplate restTemplate = mock(RestTemplate.class);
-			when(rtb.setReadTimeout(any())).thenReturn(rtb);
 			when(rtb.setConnectTimeout(any())).thenReturn(rtb);
 			when(rtb.build()).thenReturn(restTemplate);
 			return rtb;

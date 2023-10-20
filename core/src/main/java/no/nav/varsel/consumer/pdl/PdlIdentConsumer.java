@@ -51,7 +51,6 @@ public class PdlIdentConsumer {
 	) {
 		this.restTemplate = restTemplateBuilder
 				.setConnectTimeout(Duration.ofSeconds(5))
-				.setReadTimeout(Duration.ofSeconds(20))
 				.build();
 		this.stsRestConsumer = stsRestConsumer;
 		this.pdlUri = UriComponentsBuilder.fromHttpUrl(pdlUrl).build().toUri();

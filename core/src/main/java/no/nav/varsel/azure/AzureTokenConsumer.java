@@ -32,7 +32,6 @@ public class AzureTokenConsumer implements TokenConsumer {
 							  RestTemplateBuilder restTemplateBuilder) {
 		this.restTemplate = restTemplateBuilder
 				.setConnectTimeout(Duration.ofSeconds(3))
-				.setReadTimeout(Duration.ofSeconds(20))
 				.build();
 		this.azureProperties = azureProperties;
 	}
