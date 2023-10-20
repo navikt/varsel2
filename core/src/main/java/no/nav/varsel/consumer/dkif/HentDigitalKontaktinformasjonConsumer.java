@@ -56,7 +56,6 @@ public class HentDigitalKontaktinformasjonConsumer {
 		this.tokenConsumer = tokenConsumer;
 		this.restTemplate = restTemplateBuilder
 				.setConnectTimeout(Duration.ofSeconds(5))
-				.setReadTimeout(Duration.ofSeconds(20))
 				.build();
 		this.azureProperties = azureProperties;
 	}
