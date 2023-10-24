@@ -7,6 +7,7 @@ import no.nav.melding.virksomhet.varsel.v1.varsel.XMLPersonIdent;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.service.to.BestillVarselTo;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import jakarta.jms.JMSException;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 import static no.nav.varsel.domain.utility.DateTimeConverter.toLocalDateTime;
 
+@Component
 public class BestillServicemeldingMapper {
 
 	public BestillVarselTo map(ObjectMessageWrapper<XMLVarsel> varselWithMessage) {

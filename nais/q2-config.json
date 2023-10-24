@@ -16,7 +16,6 @@
   "MQGATEWAY01_CHANNEL_SECURENAME": "Q2_VARSEL_SECURE",
   "VARSEL_SIGSUBJECTCERTCONSTRAINTS": ".*DC=test.*DC=local,.*test.local.*,.*DC=preprod.*DC=local,.*preprod.local.*",
   "DIGDIR_KRR_PROXY_URL": "https://digdir-krr-proxy.intern.dev.nav.no",
-  "SECURITYTOKENSERVICE_URL": "https://sts-q2.preprod.local/SecurityTokenServiceProvider/",
   "SECURITY_TOKEN_REST_SERVICE_URL": "https://security-token-service.nais.preprod.local/rest/v1/sts/token",
   "DOKMET_VARSELINFO_URL": "https://dokmet.dev.intern.nav.no/rest/varselinfo",
   "PDL_URL": "https://pdl-api.nais.preprod.local/graphql",
@@ -29,7 +28,5 @@
   "SERVICEUSER_VAULT_PATH": "/serviceuser/data/dev/srvvarsel",
   "VARSEL_CERT": "/kv/preprod/fss/varsel2/certificate",
   "LISTENER_AUTO_STARTUP": "true",
-  "VARSEL_PROXY_HOST": "webproxy.nais",
-  "VARSEL_PROXY_PORT": "8088",
   "AZURE_APP_SCOPE_DIGDIR_KRR": "api://dev-gcp.team-rocket.digdir-krr-proxy/.default"
 }

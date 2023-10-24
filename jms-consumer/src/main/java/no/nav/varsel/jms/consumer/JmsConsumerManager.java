@@ -4,10 +4,10 @@ import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.Queues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.config.JmsListenerEndpointRegistry;
 import org.springframework.jms.listener.MessageListenerContainer;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Component
 public class JmsConsumerManager {
 
 	public static final Logger LOG = LoggerFactory.getLogger(JmsConsumerManager.class);
@@ -29,8 +30,11 @@ public class JmsConsumerManager {
 
 	private Map<JmsConsumer, Queue<LocalDateTime>> recentErrors = new ConcurrentHashMap<>();
 
-	@Autowired
 	private JmsListenerEndpointRegistry endpointRegistry;
+
+	public JmsConsumerManager(JmsListenerEndpointRegistry endpointRegistry) {
+		this.endpointRegistry = endpointRegistry;
+	}
 
 	public Queue<LocalDateTime> getErrorsFor(JmsConsumer jmsConsumer) {
 		if (!recentErrors.containsKey(jmsConsumer)) {

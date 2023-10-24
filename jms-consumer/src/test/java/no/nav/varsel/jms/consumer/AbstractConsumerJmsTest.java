@@ -1,5 +1,8 @@
 package no.nav.varsel.jms.consumer;
 
+import jakarta.jms.Message;
+import jakarta.jms.Queue;
+import jakarta.xml.bind.JAXBElement;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
 import no.nav.varsel.config.JmsConsumerTestConfig;
 import no.nav.varsel.jms.to.xml.JmsReply;
@@ -10,15 +13,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
-
-import jakarta.jms.Message;
-import jakarta.jms.Queue;
-import jakarta.xml.bind.JAXBElement;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -35,6 +35,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @SpringBootTest(classes = JmsConsumerTestConfig.class)
 @ActiveProfiles({"itest", "local"})
+@ComponentScan
 @AutoConfigureWireMock(port = 0)
 public abstract class AbstractConsumerJmsTest {
 
@@ -44,7 +45,7 @@ public abstract class AbstractConsumerJmsTest {
 	protected JmsTemplate jmsTemplate;
 
 	@Autowired
-	protected Queue replyQueue;
+	protected Queue bestillServicemeldingQueue;
 
 	@Autowired
 	protected Queue backoutQueue;
@@ -79,12 +80,12 @@ public abstract class AbstractConsumerJmsTest {
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
 				jmsTemplate.convertAndSend(queue, message, message1 -> {
-					message1.setJMSReplyTo(replyQueue);
+					message1.setJMSReplyTo(bestillServicemeldingQueue);
 					return message1;
 				});
 			}
 		});
-		return transactionTemplate.execute(transactionStatus -> receive(replyQueue));
+		return transactionTemplate.execute(transactionStatus -> receive(bestillServicemeldingQueue));
 	}
 
 	protected void sendMessageNoReply(Queue queue, JAXBElement<?> message) {
