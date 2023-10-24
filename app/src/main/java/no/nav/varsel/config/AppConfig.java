@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Import;
 @EnableConfigurationProperties({
 		MqGatewayProperties.class,
 		ListenerProperties.class,
-		VarselProperties.class,
 		AzureProperties.class
 })
 @EnableAutoConfiguration

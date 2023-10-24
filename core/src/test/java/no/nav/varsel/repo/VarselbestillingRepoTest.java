@@ -13,21 +13,21 @@ import static org.hamcrest.Matchers.hasSize;
 public class VarselbestillingRepoTest extends AbstractRepoTest {
 
 	@Test
-	public void shouldSave() throws Exception {
+	public void shouldSave() {
 		varselbestillingRepo.save(TestdataUtil.createVarselbestilling());
 
 		MatcherAssert.assertThat(varselbestillingRepo.findAll(), hasSize(1));
 	}
 
 	@Test
-	public void shouldFindyByVarselbestillingId() throws Exception {
+	public void shouldFindyByVarselbestillingId() {
 		varselbestillingRepo.saveAndFlush(TestdataUtil.createVarselbestilling());
 
 		MatcherAssert.assertThat(varselbestillingRepo.findByVarselbestillingId(TestdataUtil.VARSELBESTILLING_ID), notNullValue());
 	}
 
 	@Test
-	public void shouldFindyByVarselbestillingIdWhenNoVarsel() throws Exception {
+	public void shouldFindyByVarselbestillingIdWhenNoVarsel() {
 		Varselbestilling varselbestilling = TestdataUtil.createVarselbestilling();
 		varselbestilling.getVarsels().clear();
 		varselbestillingRepo.saveAndFlush(varselbestilling);
@@ -36,7 +36,7 @@ public class VarselbestillingRepoTest extends AbstractRepoTest {
 	}
 
 	@Test
-	public void shouldFindOneEager() throws Exception {
+	public void shouldFindOneEager() {
 		varselbestillingRepo.saveAndFlush(TestdataUtil.createVarselbestilling());
 
 		Varselbestilling varselbestilling = varselbestillingRepo.findByVarselbestillingIdEager(TestdataUtil.VARSELBESTILLING_ID);
@@ -45,7 +45,7 @@ public class VarselbestillingRepoTest extends AbstractRepoTest {
 	}
 
 	@Test
-	public void shouldFindOneEagerWhenNoVarsel() throws Exception {
+	public void shouldFindOneEagerWhenNoVarsel() {
 		Varselbestilling varselbestilling = TestdataUtil.createVarselbestilling();
 		varselbestilling.getVarsels().clear();
 		varselbestillingRepo.saveAndFlush(varselbestilling);
@@ -56,7 +56,7 @@ public class VarselbestillingRepoTest extends AbstractRepoTest {
 	}
 
 	@Test
-	public void shouldFindAllEager() throws Exception {
+	public void shouldFindAllEager() {
 		varselbestillingRepo.saveAndFlush(TestdataUtil.createVarselbestilling());
 
 		List<Varselbestilling> allEager = varselbestillingRepo.findAllEager();
@@ -67,7 +67,7 @@ public class VarselbestillingRepoTest extends AbstractRepoTest {
 	}
 
 	@Test
-	public void shouldFindAllEagerWhenNoVarsel() throws Exception {
+	public void shouldFindAllEagerWhenNoVarsel() {
 		Varselbestilling varselbestilling = TestdataUtil.createVarselbestilling();
 		varselbestilling.getVarsels().clear();
 		varselbestillingRepo.saveAndFlush(varselbestilling);
