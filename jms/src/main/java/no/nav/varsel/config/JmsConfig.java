@@ -91,7 +91,7 @@ public class JmsConfig {
 		factory.setTransactionManager(transactionManager);
 		factory.setConcurrency(String.format("%d-%d", minimumConsumers, maximumConsumers));
 		factory.setAutoStartup(listenerProperties.isAutoStartup());
-		log.info("Listener autostart: " + listenerProperties.isAutoStartup());
+		log.info("Listener autostart={}" + listenerProperties.isAutoStartup());
 		factory.setErrorHandler(t -> {
 			Throwable throwable = t;
 			if (t instanceof ListenerExecutionFailedException) {

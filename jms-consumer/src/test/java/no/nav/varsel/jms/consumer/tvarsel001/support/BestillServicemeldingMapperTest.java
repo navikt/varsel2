@@ -9,9 +9,9 @@ import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarslingstyper;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.service.to.BestillVarselTo;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -27,7 +27,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BestillServicemeldingMapperTest {
 
 	@Mock
@@ -53,7 +52,7 @@ public class BestillServicemeldingMapperTest {
 	}
 
 	@Test
-	public void shouldMap(){
+	public void shouldMap() {
 		BestillVarselTo to = mapper.map(createVarsel(mockActiveMqMessageTestvarselFalse));
 
 		assertThat(to.getAktoerId(), is(MOTTAKER));
@@ -111,15 +110,13 @@ public class BestillServicemeldingMapperTest {
 	}
 
 	@Test
-	public void mapsTestvarselToTrue() {
-		BestillVarselTo to = mapper.map(createVarsel(mockActiveMqMessageTestvarselTrue));
-		assertThat(to.isTestvarsel(), is(true));
+	public void messageWithTestvarselTrue() {
+		Assertions.assertThat(mapper.map(createVarsel(mockActiveMqMessageTestvarselTrue)).isTestvarsel()).isTrue();
 	}
 
 	@Test
-	public void mapsTestvarselToFalse() {
-		BestillVarselTo to = mapper.map(createVarsel(mockActiveMqMessageTestvarselFalse));
-		assertThat(to.isTestvarsel(), is(false));
+	public void messageWithTestvarselFalse() {
+		Assertions.assertThat(mapper.map(createVarsel(mockActiveMqMessageTestvarselFalse)).isTestvarsel()).isFalse();
 	}
 
 	public static ObjectMessageWrapper<XMLVarsel> createVarsel(Message message) {
