@@ -11,6 +11,7 @@ import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.apache.activemq.artemis.jms.client.ActiveMQQueue;
 import org.junit.jupiter.api.BeforeEach;
 import org.messaginghub.pooled.jms.JmsPoolConnectionFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -29,13 +30,27 @@ import static java.lang.System.setProperty;
 })
 public class JmsTestConfig {
 
-	private static final String VM_LOCALHOST = "vm://localhost";
-
 	@BeforeEach
 	public void setUp() {
 		setProperty("varsel.serviceuser.username", "srvvarsel");
 		setProperty("varsel.serviceuser.password", "passord");
 	}
+	@Bean
+	public Queue bestillServicemeldingQueue(@Value("${bestillservicemelding.queuename}") String bestillServicemeldingQueueName) {
+		return new ActiveMQQueue(bestillServicemeldingQueueName);
+	}
+
+	@Bean
+	public Queue bestillServicemeldingFunksjonellFeilQueue(@Value("${bestillservicemelding.funkfeil.queuename}") String bestillServicemeldingFunksjonellFeilQueueName) throws JMSException {
+		return new MQQueue(bestillServicemeldingFunksjonellFeilQueueName);
+	}
+
+	@Bean
+	public Queue backoutQueue() {
+		return new ActiveMQQueue("backout_queue");
+	}
+
+
 
 	@Bean(initMethod = "start", destroyMethod = "stop")
 	public EmbeddedActiveMQ activeMQServer() {
@@ -44,7 +59,6 @@ public class JmsTestConfig {
 		return embeddedActiveMQ;
 	}
 
-	// avhengig av EmbeddedActiveMQ slik at server er startet før klient forsøker lage koblinger
 	@Bean
 	public ConnectionFactory activemqConnectionFactory(EmbeddedActiveMQ embeddedActiveMQ) {
 		ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory("vm://0");
@@ -52,16 +66,6 @@ public class JmsTestConfig {
 		pooledFactory.setConnectionFactory(activeMQConnectionFactory);
 		pooledFactory.setMaxConnections(1);
 		return pooledFactory;
-	}
-
-	@Bean
-	public Queue replyQueue() throws JMSException {
-		return new MQQueue("reply_queue");
-	}
-
-	@Bean
-	public Queue backoutQueue() {
-		return new ActiveMQQueue("backout_queue");
 	}
 
 }

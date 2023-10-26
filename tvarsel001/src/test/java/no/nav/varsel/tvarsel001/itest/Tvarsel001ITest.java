@@ -49,7 +49,7 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 				"transaction.state.log.min.isr=1"
 		}
 )
-@SpringBootTest(classes = {Tvarsel001ITest.class})
+@SpringBootTest(classes = {Tvarsel001ITest.class, CustomKafkaTemplateTest.class})
 @EnableAutoConfiguration
 @TestInstance(PER_CLASS)
 public class Tvarsel001ITest {

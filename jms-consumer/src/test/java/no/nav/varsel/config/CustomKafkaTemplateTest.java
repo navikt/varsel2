@@ -1,11 +1,11 @@
-package no.nav.varsel.kafka;
+package no.nav.varsel.config;
+
 
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.core.RoutingKafkaTemplate;
@@ -16,23 +16,21 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 @Configuration
-@Profile({"nais", "local"})
-public class CustomKafkaTemplate {
+@Profile("itest")
+public class CustomKafkaTemplateTest {
 
 	@Bean
-	public RoutingKafkaTemplate routingTemplate(GenericApplicationContext context,
-												ProducerFactory<Object, Object> defaultProducerFactory) {
-
-		// Clone the PF with a different Serializer, register with Spring for shutdown
+	public RoutingKafkaTemplate routingTemplate(ProducerFactory<Object, Object> defaultProducerFactory) {
 		Map<String, Object> configs = new HashMap<>(defaultProducerFactory.getConfigurationProperties());
 		configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
 		DefaultKafkaProducerFactory<Object, Object> dittNavProducerFactory = new DefaultKafkaProducerFactory<>(configs);
-
-		context.registerBean(DefaultKafkaProducerFactory.class, "dittNavProducerFactory", dittNavProducerFactory);
 
 		Map<Pattern, ProducerFactory<Object, Object>> map = new LinkedHashMap<>();
 		map.put(Pattern.compile("min-side.*"), dittNavProducerFactory);
 		map.put(Pattern.compile("teamdokumenthandtering.*"), defaultProducerFactory);
 		return new RoutingKafkaTemplate(map);
 	}
+
 }
+
+

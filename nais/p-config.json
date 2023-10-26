@@ -16,7 +16,6 @@
   "MQGATEWAY01_CHANNEL_SECURENAME": "P_VARSEL_SECURE",
   "VARSEL_SIGSUBJECTCERTCONSTRAINTS": ".*DC=adeo.*DC=no,.*adeo.no.*",
   "DIGDIR_KRR_PROXY_URL": "https://digdir-krr-proxy.intern.nav.no",
-  "SECURITYTOKENSERVICE_URL": "https://sts.adeo.no/SecurityTokenServiceProvider/",
   "SECURITY_TOKEN_REST_SERVICE_URL": "https://security-token-service.nais.adeo.no/rest/v1/sts/token",
   "DOKMET_VARSELINFO_URL": "https://dokmet.intern.nav.no/rest/varselinfo",
   "PDL_URL": "https://pdl-api.nais.adeo.no/graphql",

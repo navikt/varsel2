@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @EnableConfigurationProperties(DataSourceProperties.class)
 @EnableAutoConfiguration
-@Import(RepoConfig.class)
+@Import({RepoConfig.class, CustomKafkaTemplateTest.class})
 public class RepoTestConfig {
 
 }
