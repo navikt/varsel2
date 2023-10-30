@@ -8,7 +8,6 @@ import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.varsel.kafka.CustomKafkaTemplate;
 import no.nav.varsel.kafka.KafkaEventProducer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,10 +21,9 @@ import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
-import static no.nav.doknotifikasjon.schemas.PrefererteKanal.SMS;
 import static no.nav.doknotifikasjon.schemas.PrefererteKanal.EPOST;
+import static no.nav.doknotifikasjon.schemas.PrefererteKanal.SMS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 @ActiveProfiles("itest")
 @Import({
@@ -49,9 +47,8 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 				"transaction.state.log.min.isr=1"
 		}
 )
-@SpringBootTest(classes = {Tvarsel001ITest.class, CustomKafkaTemplateTest.class})
+@SpringBootTest(classes = {Tvarsel001ITest.class})
 @EnableAutoConfiguration
-@TestInstance(PER_CLASS)
 public class Tvarsel001ITest {
 
 	private static final String FNR = "12345678910";

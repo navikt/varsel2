@@ -4,7 +4,6 @@ import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.ProducerFactory;
@@ -16,7 +15,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 @Configuration
-@Profile({"nais", "local"})
 public class CustomKafkaTemplate {
 
 	@Bean
@@ -28,11 +26,9 @@ public class CustomKafkaTemplate {
 		configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
 		DefaultKafkaProducerFactory<Object, Object> dittNavProducerFactory = new DefaultKafkaProducerFactory<>(configs);
 
-		context.registerBean(DefaultKafkaProducerFactory.class, "dittNavProducerFactory", dittNavProducerFactory);
-
 		Map<Pattern, ProducerFactory<Object, Object>> map = new LinkedHashMap<>();
 		map.put(Pattern.compile("min-side.*"), dittNavProducerFactory);
-		map.put(Pattern.compile("teamdokumenthandtering.*"), defaultProducerFactory);
+		map.put(Pattern.compile("teamdokumenthandtering.*"), new DefaultKafkaProducerFactory<>(defaultProducerFactory.getConfigurationProperties()));
 		return new RoutingKafkaTemplate(map);
 	}
 }

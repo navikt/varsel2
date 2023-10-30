@@ -35,6 +35,7 @@ public class JmsTestConfig {
 		setProperty("varsel.serviceuser.username", "srvvarsel");
 		setProperty("varsel.serviceuser.password", "passord");
 	}
+
 	@Bean
 	public Queue bestillServicemeldingQueue(@Value("${bestillservicemelding.queuename}") String bestillServicemeldingQueueName) {
 		return new ActiveMQQueue(bestillServicemeldingQueueName);
@@ -49,7 +50,6 @@ public class JmsTestConfig {
 	public Queue backoutQueue() {
 		return new ActiveMQQueue("backout_queue");
 	}
-
 
 
 	@Bean(initMethod = "start", destroyMethod = "stop")
