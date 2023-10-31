@@ -18,8 +18,7 @@ import java.util.regex.Pattern;
 public class CustomKafkaTemplate {
 
 	@Bean
-	public RoutingKafkaTemplate routingTemplate(GenericApplicationContext context,
-												ProducerFactory<Object, Object> defaultProducerFactory) {
+	public RoutingKafkaTemplate routingTemplate(ProducerFactory<Object, Object> defaultProducerFactory) {
 
 		// Clone the PF with a different Serializer, register with Spring for shutdown
 		Map<String, Object> configs = new HashMap<>(defaultProducerFactory.getConfigurationProperties());
@@ -28,7 +27,7 @@ public class CustomKafkaTemplate {
 
 		Map<Pattern, ProducerFactory<Object, Object>> map = new LinkedHashMap<>();
 		map.put(Pattern.compile("min-side.*"), dittNavProducerFactory);
-		map.put(Pattern.compile("teamdokumenthandtering.*"), new DefaultKafkaProducerFactory<>(defaultProducerFactory.getConfigurationProperties()));
+		map.put(Pattern.compile("teamdokumenthandtering.*"), defaultProducerFactory);
 		return new RoutingKafkaTemplate(map);
 	}
 }
