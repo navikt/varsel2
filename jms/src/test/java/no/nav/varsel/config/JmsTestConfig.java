@@ -51,7 +51,6 @@ public class JmsTestConfig {
 		return new ActiveMQQueue("backout_queue");
 	}
 
-
 	@Bean(initMethod = "start", destroyMethod = "stop")
 	public EmbeddedActiveMQ activeMQServer() {
 		EmbeddedActiveMQ embeddedActiveMQ = new EmbeddedActiveMQ();
@@ -60,7 +59,7 @@ public class JmsTestConfig {
 	}
 
 	@Bean
-	public ConnectionFactory activemqConnectionFactory(EmbeddedActiveMQ embeddedActiveMQ) {
+	public ConnectionFactory connectionFactory(EmbeddedActiveMQ embeddedActiveMQ) {
 		ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory("vm://0");
 		JmsPoolConnectionFactory pooledFactory = new JmsPoolConnectionFactory();
 		pooledFactory.setConnectionFactory(activeMQConnectionFactory);

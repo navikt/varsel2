@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 
+import static java.time.Duration.ofSeconds;
 import static no.nav.varsel.consumer.pdl.helper.DomainConstants.APP_NAME;
 import static no.nav.varsel.util.MDCGenerate.CALL_ID;
 
@@ -45,21 +46,20 @@ public class HentDigitalKontaktinformasjonConsumer {
 	private final AzureProperties azureProperties;
 
 	@Autowired
-	public HentDigitalKontaktinformasjonConsumer(VarselKanalDecider varselKanalDecider,
-												 HentDigitalKontaktinformasjonMapper mapper,
-												 @Value("${digdir_krr_proxy_url}") String dkiUrl,
+	public HentDigitalKontaktinformasjonConsumer(@Value("${digdir_krr_proxy_url}") String dkiUrl,
 												 TokenConsumer tokenConsumer,
-												 RestTemplateBuilder restTemplateBuilder, AzureProperties azureProperties) {
-		this.mapper = mapper;
-		this.varselKanalDecider = varselKanalDecider;
+												 RestTemplateBuilder restTemplateBuilder,
+												 AzureProperties azureProperties) {
+		this.mapper = new HentDigitalKontaktinformasjonMapper();
+		this.varselKanalDecider = new VarselKanalDecider();
 		this.dkiUrl = dkiUrl;
 		this.tokenConsumer = tokenConsumer;
 		this.restTemplate = restTemplateBuilder
-				.setConnectTimeout(Duration.ofSeconds(5))
+				.setConnectTimeout(ofSeconds(5))
+				.setReadTimeout(Duration.ofSeconds(20))
 				.build();
 		this.azureProperties = azureProperties;
 	}
-
 
 	@Retryable(maxAttempts = 5, backoff = @Backoff(delay = 1000L, multiplier = 2))
 	public KontaktregisterTo hentDigitalKontaktinformasjonAndDecideKanal(String personIdent, Set<KanalCode> preferertKanal) {

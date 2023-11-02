@@ -1,5 +1,6 @@
 package no.nav.varsel.jms.consumer;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import jakarta.jms.Message;
 import jakarta.jms.Queue;
 import jakarta.xml.bind.JAXBElement;
@@ -25,13 +26,13 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
-import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest(classes = JmsConsumerTestConfig.class)
 @ActiveProfiles({"itest", "local"})
@@ -72,6 +73,8 @@ public abstract class AbstractConsumerJmsTest {
 
 	@AfterEach
 	public void tearDownAbstract() {
+		WireMock.removeAllMappings();
+		WireMock.resetAllRequests();
 		varselbestillingRepo.deleteAll();
 	}
 
@@ -140,7 +143,7 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varseltypeId")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 						.withBodyFile("varselInfoV1/varselInfoV1-happy.json")));
 	}
 
@@ -148,7 +151,7 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_test_feil")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 						.withBodyFile("varselInfoV1/varsel-test-feil.json")));
 	}
 
@@ -156,7 +159,7 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_varselUrl")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 						.withBodyFile("varselInfoV1/varsel-varsel-url.json")));
 	}
 
@@ -164,7 +167,7 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_missing")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 						.withBodyFile("varselInfoV1/varsel-missing.json")));
 	}
 
@@ -172,7 +175,7 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(get("/securitytoken?grant_type=client_credentials&scope=openid")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 						.withBodyFile("sts/stsResponse-happy.json")));
 	}
 
@@ -180,15 +183,15 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(post("/pdl")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
-						.withBodyFile("pdl/pdl-aktoerid-happy.json")));
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+						.withBodyFile("__/files/pdl/pdl-aktoerid-happy.json")));
 	}
 
 	public void stubPdlConsumerNotFound() {
 		stubFor(post("/pdl")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 						.withBodyFile("pdl/pdl-ident-notfound.json")));
 	}
 
@@ -196,7 +199,7 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(post("/pdl")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 						.withBodyFile("pdl/pdl-ident-server-error.json")));
 	}
 
@@ -204,13 +207,13 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(post("/pdl")
 				.willReturn(aResponse()
 						.withStatus(INTERNAL_SERVER_ERROR.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())));
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
 	}
 
 	public void stubPdlConsumerFunctionalErrorWithInternalServerError() {
 		stubFor(post("/pdl")
 				.willReturn(aResponse()
 						.withStatus(BAD_REQUEST.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())));
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
 	}
 }

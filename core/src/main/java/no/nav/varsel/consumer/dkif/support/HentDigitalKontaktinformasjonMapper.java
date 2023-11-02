@@ -4,15 +4,13 @@ import no.nav.varsel.consumer.dkif.DigitalKontaktInfoResponse;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import org.springframework.stereotype.Component;
 
-import static no.nav.varsel.consumer.dkif.to.KontaktregisterTo.KontaktregisterToBuilder.aKontaktregisterTo;
-
 @Component
 public class HentDigitalKontaktinformasjonMapper {
 
 	public KontaktregisterTo map(DigitalKontaktInfoResponse.DigitalKontaktinfo dki) {
 
 
-		KontaktregisterTo.KontaktregisterToBuilder builder = aKontaktregisterTo()
+		KontaktregisterTo.KontaktregisterToBuilder builder = KontaktregisterTo.builder()
 				.reservasjon(dki.isReservert());
 
 		if (dki.getEpostadresse() != null) {
