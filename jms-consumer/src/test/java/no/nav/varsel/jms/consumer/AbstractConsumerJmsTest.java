@@ -63,12 +63,6 @@ public abstract class AbstractConsumerJmsTest {
 	@BeforeEach
 	public void setUpAbstract() {
 		this.stubStsConsumer();
-		this.stubPdlConsumer();
-		this.stubVarselInfoV1();
-		this.stubVarselInfoV1VarselFeil();
-		this.stubVarselInfoV1VarselURL();
-		this.stubVarselInfoV1VarselMissing();
-		varselbestillingRepo.deleteAll();
 	}
 
 	@AfterEach

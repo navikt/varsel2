@@ -49,6 +49,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	@Test
 	@Disabled("Testen feiler på oppsett av Kafka. Vil i utgangspunktet stoppe testen før den kommer dit.")
 	public void shouldReceieveJms() {
+		stubPdlConsumer();
 		JmsReply response = sendMessage(bestillServicemeldingQueue, createVarsel());
 
 		isOk(response);
@@ -64,6 +65,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	@Test
 	public void shouldPutOnBackoutIfFailedWs() {
 		JAXBElement<XMLVarsel> varsel = createVarsel();
+		stubVarselInfoV1();
 		stubPdlConsumerTechnicalErrorWithInternalServerError();
 
 		Message response = sendMessageListenBoq(bestillServicemeldingQueue, varsel);
