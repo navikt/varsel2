@@ -24,7 +24,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Duration;
 import java.util.Arrays;
 
 import static java.time.Duration.ofSeconds;
@@ -55,7 +54,6 @@ public class HentDigitalKontaktinformasjonConsumer {
 		this.tokenConsumer = tokenConsumer;
 		this.restTemplate = restTemplateBuilder
 				.setConnectTimeout(ofSeconds(5))
-				.setReadTimeout(Duration.ofSeconds(20))
 				.requestFactory(() -> clientHttpRequestFactory)
 				.build();
 		this.azureProperties = azureProperties;
