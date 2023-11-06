@@ -11,6 +11,8 @@ import no.nav.varsel.repo.config.RepoTestConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 @Import({JmsTestConfig.class,
 		RepoTestConfig.class,
@@ -38,6 +40,11 @@ public class JmsConsumerTestConfig {
 		azureproperties.setAppClientSecret("secret");
 		azureproperties.setOpenidConfigTokenEndpoint("url");
 		return azureproperties;
+	}
+
+	@Bean
+	public ClientHttpRequestFactory requestFactory() {
+		return new SimpleClientHttpRequestFactory();
 	}
 
 }

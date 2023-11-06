@@ -13,6 +13,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 @EnableAutoConfiguration
 @Import({
@@ -42,4 +44,8 @@ public class WsProviderTestConfig {
 		return azureproperties;
 	}
 
+	@Bean
+	public ClientHttpRequestFactory requestFactory() {
+		return new SimpleClientHttpRequestFactory();
+	}
 }
