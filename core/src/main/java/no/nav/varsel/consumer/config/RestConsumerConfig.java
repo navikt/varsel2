@@ -22,7 +22,6 @@ import java.time.Duration;
 public class RestConsumerConfig {
 
 	public static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(5);
-	public static final Duration READ_TIMEOUT = Duration.ofSeconds(20);
 
 
 	@Value("${varsel.serviceuser.username}")
@@ -43,34 +42,6 @@ public class RestConsumerConfig {
 	@Bean
 	public ClientHttpRequestFactory requestFactory(HttpClient httpClient) {
 		return new HttpComponentsClientHttpRequestFactory(httpClient);
-	}
-
-	@Bean
-	public HttpClient httpClient(SocketConfig socketConfig) {
-		PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
-				.setMaxConnPerRoute(100)
-				.setMaxConnTotal(400)
-				.setDefaultSocketConfig(socketConfig)
-				.build();
-		return HttpClients.custom()
-				.setConnectionManager(connectionManager)
-				.build();
-	}
-
-	@Bean
-	HttpClientConnectionManager httpClientConnectionManager(SocketConfig socketConfig) {
-		return PoolingHttpClientConnectionManagerBuilder.create()
-				.setDefaultSocketConfig(socketConfig)
-				.setMaxConnPerRoute(100)
-				.setMaxConnTotal(400)
-				.build();
-	}
-
-	@Bean
-	public SocketConfig socketConfig() {
-		return SocketConfig.custom()
-				.setSoTimeout(Timeout.of(READ_TIMEOUT))
-				.build();
 	}
 
 	@Bean
