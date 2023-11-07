@@ -46,8 +46,8 @@
 		<token-support.version>3.1.7</token-support.version>
 		<teamdokumenthandtering-avro-schemas.version>3aec620a</teamdokumenthandtering-avro-schemas.version>
 		<brukernotifikasjon.version>v2.5.2</brukernotifikasjon.version>
-		<nav-varsel-inn>28-eb306fa</nav-varsel-inn>
-		<brukervarsel>26-1762dee</brukervarsel>
+		<nav-varsel-inn.version>28-eb306fa</nav-varsel-inn.version>
+		<nav-brukervarsel-v1-tjenestespesifikasjon.version>26-1762dee</nav-brukervarsel-v1-tjenestespesifikasjon.version>
 		<dokmet-api.version>13-5459a4f</dokmet-api.version>
 
 		<!-- Modig -->
@@ -136,12 +136,12 @@
 			<dependency>
 				<groupId>no.nav.tjenestespesifikasjoner</groupId>
 				<artifactId>nav-varsel-inn</artifactId>
-				<version>${nav-varsel-inn}</version>
+				<version>${nav-varsel-inn.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.tjenestespesifikasjoner</groupId>
 				<artifactId>nav-brukervarsel-v1-tjenestespesifikasjon</artifactId>
-				<version>${brukervarsel}</version>
+				<version>${nav-brukervarsel-v1-tjenestespesifikasjon.version}</version>
 			</dependency>
 
 			<dependency>

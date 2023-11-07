@@ -7,6 +7,7 @@ import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
+import no.nav.varsel.kafka.CustomKafkaTemplate;
 import no.nav.varsel.repo.config.RepoTestConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +19,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 		RepoTestConfig.class,
 		ServiceTestConfig.class,
 		JmsConsumerConfig.class,
-		CustomKafkaTemplateTest.class,
+		CustomKafkaTemplate.class,
 		HentDigitalKontaktinformasjonConsumer.class,
 		VarselKanalDecider.class,
 		HentDigitalKontaktinformasjonMapper.class,
