@@ -3,9 +3,9 @@ package no.nav.varsel.jms.to.xml;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlElementDecl;
-import javax.xml.bind.annotation.XmlRegistry;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.annotation.XmlElementDecl;
+import jakarta.xml.bind.annotation.XmlRegistry;
 
 import static no.nav.varsel.jms.to.xml.ObjectFactory.JMS_REPLY_QNAME;
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -1,12 +1,12 @@
 package no.nav.varsel.provider.ws.brukervarsel.itest;
 
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSAktoerId;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSPeriode;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSPerson;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSVarsel;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSVarselbestilling;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerRequest;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerResponse;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.AktoerId;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Person;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varsel;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varselbestilling;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
 import no.nav.varsel.provider.AbstractWsProviderITest;
 import no.nav.varsel.provider.ws.brukervarsel.BrukervarselV1Endpoint;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,7 +61,7 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 
 	@Test
 	public void shouldGetAllBrukervarselForBrukerFnr() throws Exception {
-		WSHentVarselForBrukerResponse response = brukervarselV1
+		HentVarselForBrukerResponse response = brukervarselV1
 				.hentVarselForBruker(createRequest(FNR, null, FOM, TOM));
 
 		assertResponse(response);
@@ -69,7 +69,7 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 
 	@Test
 	public void shouldGetAllBrukervarselForBrukerAktoerId() throws Exception {
-		WSHentVarselForBrukerResponse response = brukervarselV1
+		HentVarselForBrukerResponse response = brukervarselV1
 				.hentVarselForBruker(createRequest(null, AKTOR_ID, FOM, TOM));
 
 		assertResponse(response);
@@ -77,7 +77,7 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 
 	@Test
 	public void shouldNotGetForOtherUser() throws Exception {
-		WSHentVarselForBrukerResponse response = brukervarselV1
+		HentVarselForBrukerResponse response = brukervarselV1
 				.hentVarselForBruker(createRequest("other", null, FOM, TOM));
 
 		assertThat(response.getBrukervarsel(), notNullValue());
@@ -86,7 +86,7 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 
 	@Test
 	public void shouldGetAllBrukervarselForBrukerFOMIsNull() throws Exception {
-		WSHentVarselForBrukerResponse response = brukervarselV1
+		HentVarselForBrukerResponse response = brukervarselV1
 				.hentVarselForBruker(createRequest(FNR, null, null, TOM));
 
 		assertResponse(response);
@@ -94,7 +94,7 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 
 	@Test
 	public void shouldGetAllBrukervarselForBrukerTOMIsNull() throws Exception {
-		WSHentVarselForBrukerResponse response = brukervarselV1
+		HentVarselForBrukerResponse response = brukervarselV1
 				.hentVarselForBruker(createRequest(FNR, null, FOM, null));
 
 		assertResponse(response);
@@ -102,7 +102,7 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 
 	@Test
 	public void shouldGetAllBrukervarselForBrukerPeriodeIsNull() throws Exception {
-		WSHentVarselForBrukerResponse response = brukervarselV1
+		HentVarselForBrukerResponse response = brukervarselV1
 				.hentVarselForBruker(createRequest(FNR, null, null, null));
 
 		assertResponse(response);
@@ -116,7 +116,7 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 		varselbestillingRepo.save(createVarselbestillingBuilder()
 				.varsels(createVarselUnique(), createVarselUnique(), createVarselUnique()).build());
 
-		WSHentVarselForBrukerResponse response = brukervarselV1
+		HentVarselForBrukerResponse response = brukervarselV1
 				.hentVarselForBruker(createRequest(FNR, null, FOM, TOM));
 		assertThat(response.getBrukervarsel().getVarselbestillingListe().size(), is(2));
 		response.getBrukervarsel().getVarselbestillingListe().forEach(vb -> assertThat(vb.getVarselListe(), hasSize(3)));
@@ -136,7 +136,7 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 				.varsels(createVarselUnique())
 				.bestillingTidspunkt(FOM.minusDays(1)).build());
 
-		WSHentVarselForBrukerResponse response = brukervarselV1
+		HentVarselForBrukerResponse response = brukervarselV1
 				.hentVarselForBruker(createRequest(FNR, null, FOM, TOM));
 		assertResponse(response);
 
@@ -145,12 +145,12 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 		assertThat(varselRepo.findAll(), hasSize(5));
 	}
 
-	private void assertResponse(WSHentVarselForBrukerResponse response) {
+	private void assertResponse(HentVarselForBrukerResponse response) {
 		assertThat(response.getBrukervarsel(), notNullValue());
 		assertThat(response.getBrukervarsel().getVarselbestillingListe(), notNullValue());
 		assertThat(response.getBrukervarsel().getVarselbestillingListe().size(), is(1));
 
-		WSVarselbestilling varselbestilling = response.getBrukervarsel().getVarselbestillingListe().get(0);
+		Varselbestilling varselbestilling = response.getBrukervarsel().getVarselbestillingListe().get(0);
 		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(varselbestilling.getPerson().getIdent(), is(FNR));
 		assertThat(varselbestilling.getAktoerId().getAktoerId(), is(AKTOR_ID));
@@ -159,7 +159,7 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 		assertThat(varselbestilling.getSisteVarselutsendelse(), is(toXmlGregorianCalendar(DISTRIBUSJON_TIDSPUNKT)));
 		assertThat(varselbestilling.getVarselListe(), hasSize(1));
 
-		WSVarsel varsel = varselbestilling.getVarselListe().get(0);
+		Varsel varsel = varselbestilling.getVarselListe().get(0);
 		assertThat(varsel.getKanal(), is(KANAL_CODE.toString()));
 		assertThat(varsel.getSendt(), is(toXmlGregorianCalendar(SENDT_TIDSPUNKT)));
 		assertThat(varsel.getDistribuert(), is(toXmlGregorianCalendar(DISTRIBUSJON_TIDSPUNKT)));
@@ -170,18 +170,18 @@ public class BrukervarselV1ITest extends AbstractWsProviderITest {
 		assertThat(varsel.isReVarsel(), is(ER_REVARSEL));
 	}
 
-	private WSHentVarselForBrukerRequest createRequest(String fnr, String aktoerId, LocalDateTime fom, LocalDateTime tom) {
-		WSHentVarselForBrukerRequest request = new WSHentVarselForBrukerRequest();
+	private HentVarselForBrukerRequest createRequest(String fnr, String aktoerId, LocalDateTime fom, LocalDateTime tom) {
+		HentVarselForBrukerRequest request = new HentVarselForBrukerRequest();
 
 		if (fnr != null) {
-			request.setBruker(new WSPerson());
-			((WSPerson) request.getBruker()).setIdent(fnr);
+			request.setBruker(new Person());
+			((Person) request.getBruker()).setIdent(fnr);
 		} else {
-			request.setBruker(new WSAktoerId());
-			((WSAktoerId) request.getBruker()).setAktoerId(aktoerId);
+			request.setBruker(new AktoerId());
+			((AktoerId) request.getBruker()).setAktoerId(aktoerId);
 		}
 
-		request.setPeriode(new WSPeriode());
+		request.setPeriode(new Periode());
 		request.getPeriode().setFom(toXmlGregorianCalendar(fom));
 		request.getPeriode().setTom(toXmlGregorianCalendar(tom));
 

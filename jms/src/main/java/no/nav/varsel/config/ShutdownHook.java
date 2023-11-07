@@ -1,13 +1,12 @@
 package no.nav.varsel.config;
 
+import jakarta.annotation.PreDestroy;
+import jakarta.jms.ConnectionFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.activemq.jms.pool.PooledConnectionFactory;
+import org.messaginghub.pooled.jms.JmsPoolConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PreDestroy;
-import javax.jms.ConnectionFactory;
 
 /**
  * Rydder opp ressurser som Spring ikke gjør selv.
@@ -23,6 +22,6 @@ public class ShutdownHook {
 	@PreDestroy
 	public void destroy() {
 		log.info("Graceful shutdown - Lukker koblinger til ConnectionFactory pool");
-		((PooledConnectionFactory) connectionFactory).clear();
+		((JmsPoolConnectionFactory) connectionFactory).clear();
 	}
 }

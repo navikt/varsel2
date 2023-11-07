@@ -1,45 +1,47 @@
 package no.nav.varsel.consumer.config;
 
 import no.nav.varsel.consumer.dokkat.support.VarselInfoMapper;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.core5.http.io.SocketConfig;
+import org.apache.hc.core5.util.Timeout;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.client.InterceptingClientHttpRequestFactory;
-import org.springframework.util.Base64Utils;
 import org.springframework.web.client.RestTemplate;
 
-import static java.util.Collections.singletonList;
+import java.time.Duration;
 
 @Configuration
 public class RestConsumerConfig {
 
-	public static final int TIMEOUT = 30_000;
+	public static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(5);
+
 
 	@Value("${varsel.serviceuser.username}")
 	private String srvVarselUsername;
 	@Value("${varsel.serviceuser.password}")
 	private String srvVarselPassword;
 
+
 	@Bean
-	public RestTemplate restTemplate() {
-		return new RestTemplate(requestFactory());
+	public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder,
+									 ClientHttpRequestFactory clientHttpRequestFactory) {
+		return restTemplateBuilder
+				.requestFactory(() -> clientHttpRequestFactory)
+				.setConnectTimeout(CONNECT_TIMEOUT)
+				.basicAuthentication(srvVarselUsername, srvVarselPassword).build();
 	}
 
-	protected InterceptingClientHttpRequestFactory requestFactory() {
-		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-		requestFactory.setReadTimeout(TIMEOUT);
-		requestFactory.setConnectTimeout(TIMEOUT);
-		return new InterceptingClientHttpRequestFactory(requestFactory, singletonList(basicAuthInterceptor()));
-	}
-
-	protected ClientHttpRequestInterceptor basicAuthInterceptor() {
-		return (request, body, execution) -> {
-			String token = Base64Utils.encodeToString((srvVarselUsername + ":" + srvVarselPassword).getBytes());
-			request.getHeaders().add("Authorization", "Basic " + token);
-			return execution.execute(request, body);
-		};
+	@Bean
+	public ClientHttpRequestFactory requestFactory(HttpClient httpClient) {
+		return new HttpComponentsClientHttpRequestFactory(httpClient);
 	}
 
 	@Bean

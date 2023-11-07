@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Import;
 @EnableConfigurationProperties({
 		MqGatewayProperties.class,
 		ListenerProperties.class,
-		VarselProperties.class,
 		AzureProperties.class
 })
 @EnableAutoConfiguration
@@ -27,7 +26,6 @@ import org.springframework.context.annotation.Import;
 		ProviderWsConfig.class,
 		RetryLoggingInterceptor.class,
 		CustomKafkaTemplate.class,
-		ExponentialBackoffErrorHandlers.class,
 		NotifikasjonStatusConsumer.class
 })
 public class AppConfig {

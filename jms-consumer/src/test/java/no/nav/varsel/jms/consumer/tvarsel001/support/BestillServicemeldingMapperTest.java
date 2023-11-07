@@ -1,5 +1,7 @@
 package no.nav.varsel.jms.consumer.tvarsel001.support;
 
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLAktoerId;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLParameter;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLPersonIdent;
@@ -7,17 +9,18 @@ import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarslingstyper;
 import no.nav.varsel.jms.consumer.ObjectMessageWrapper;
 import no.nav.varsel.service.to.BestillVarselTo;
-import org.apache.activemq.command.ActiveMQMessage;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import java.time.LocalDateTime;
 
 import static no.nav.varsel.Utils.formatDateTime;
 import static no.nav.varsel.domain.utility.DateTimeConverter.toJodaDateTime;
+import static no.nav.varsel.service.to.BestillVarselTo.TESTVARSEL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -26,28 +29,31 @@ import static org.hamcrest.Matchers.nullValue;
 
 public class BestillServicemeldingMapperTest {
 
+	@Mock
+	private Message mockActiveMqMessageTestvarselFalse;
+	@Mock
+	private Message mockActiveMqMessageTestvarselTrue;
+
 	public static final LocalDateTime UTLOEPSTIDSPUNKT_LDT = LocalDateTime.now().plusHours(1);
 	public static final String MOTTAKER = "mottakeren";
 	public static final String KEY = "mottaker";
 	public static final String VAL = "val";
-	private static final DatatypeFactory datatypeFactory;
 
 	private final BestillServicemeldingMapper mapper = new BestillServicemeldingMapper();
-	private final Message defaultMessage = new ActiveMQMessage();
 
 	public static final String VARSELTYPE_ID = "varseltypeId";
 
-	static {
-		try {
-			datatypeFactory = DatatypeFactory.newInstance();
-		} catch (DatatypeConfigurationException e) {
-			throw new RuntimeException(e);
-		}
+
+	@BeforeEach
+	public void setTestvarsel() throws JMSException {
+		MockitoAnnotations.openMocks(this);
+		Mockito.doReturn(false).when(mockActiveMqMessageTestvarselFalse).getBooleanProperty(TESTVARSEL);
+		Mockito.doReturn(true).when(mockActiveMqMessageTestvarselTrue).getBooleanProperty(TESTVARSEL);
 	}
 
 	@Test
 	public void shouldMap() {
-		BestillVarselTo to = mapper.map(createVarsel(defaultMessage));
+		BestillVarselTo to = mapper.map(createVarsel(mockActiveMqMessageTestvarselFalse));
 
 		assertThat(to.getAktoerId(), is(MOTTAKER));
 		assertThat(to.getPersonIdent(), nullValue());
@@ -60,7 +66,7 @@ public class BestillServicemeldingMapperTest {
 
 	@Test
 	public void shouldMapPerson() {
-		ObjectMessageWrapper<XMLVarsel> varsel = createVarsel(defaultMessage);
+		ObjectMessageWrapper<XMLVarsel> varsel = createVarsel(mockActiveMqMessageTestvarselFalse);
 		XMLPersonIdent personIdent = new XMLPersonIdent();
 		personIdent.setPersonIdent(MOTTAKER);
 		varsel.getObject().setMottaker(personIdent);
@@ -72,7 +78,7 @@ public class BestillServicemeldingMapperTest {
 
 	@Test
 	public void shouldMapNullMottaker() {
-		ObjectMessageWrapper<XMLVarsel> varsel = createVarsel(defaultMessage);
+		ObjectMessageWrapper<XMLVarsel> varsel = createVarsel(mockActiveMqMessageTestvarselFalse);
 		varsel.getObject().setMottaker(null);
 		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getPersonIdent(), nullValue());
@@ -81,7 +87,7 @@ public class BestillServicemeldingMapperTest {
 
 	@Test
 	public void shouldMapNullVarseltype() {
-		ObjectMessageWrapper<XMLVarsel> varsel = createVarsel(defaultMessage);
+		ObjectMessageWrapper<XMLVarsel> varsel = createVarsel(mockActiveMqMessageTestvarselFalse);
 		varsel.getObject().setVarslingstype(null);
 		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getVarseltypeId(), nullValue());
@@ -89,7 +95,7 @@ public class BestillServicemeldingMapperTest {
 
 	@Test
 	public void shouldMapNullUtlop() {
-		ObjectMessageWrapper<XMLVarsel> varsel = createVarsel(defaultMessage);
+		ObjectMessageWrapper<XMLVarsel> varsel = createVarsel(mockActiveMqMessageTestvarselFalse);
 		varsel.getObject().setUtloepstidspunkt(null);
 		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getUtloepstidspunkt(), nullValue());
@@ -97,26 +103,20 @@ public class BestillServicemeldingMapperTest {
 
 	@Test
 	public void shouldMapEmptyParameter() {
-		ObjectMessageWrapper<XMLVarsel> varsel = createVarsel(defaultMessage);
+		ObjectMessageWrapper<XMLVarsel> varsel = createVarsel(mockActiveMqMessageTestvarselFalse);
 		varsel.getObject().getParameterListes().clear();
 		BestillVarselTo to = mapper.map(varsel);
 		assertThat(to.getParameters().keySet(), hasSize(0));
 	}
 
 	@Test
-	public void mapsTestvarselToTrue() throws JMSException {
-		Message messageWithTestvarselTrue = new ActiveMQMessage();
-		messageWithTestvarselTrue.setBooleanProperty(BestillVarselTo.TESTVARSEL, true);
-		BestillVarselTo to = mapper.map(createVarsel(messageWithTestvarselTrue));
-		assertThat(to.isTestvarsel(), is(true));
+	public void messageWithTestvarselTrue() {
+		Assertions.assertThat(mapper.map(createVarsel(mockActiveMqMessageTestvarselTrue)).isTestvarsel()).isTrue();
 	}
 
 	@Test
-	public void mapsTestvarselToFalse() throws JMSException {
-		Message messageWithTestvarselTrue = new ActiveMQMessage();
-		messageWithTestvarselTrue.setBooleanProperty(BestillVarselTo.TESTVARSEL, false);
-		BestillVarselTo to = mapper.map(createVarsel(messageWithTestvarselTrue));
-		assertThat(to.isTestvarsel(), is(false));
+	public void messageWithTestvarselFalse() {
+		Assertions.assertThat(mapper.map(createVarsel(mockActiveMqMessageTestvarselFalse)).isTestvarsel()).isFalse();
 	}
 
 	public static ObjectMessageWrapper<XMLVarsel> createVarsel(Message message) {

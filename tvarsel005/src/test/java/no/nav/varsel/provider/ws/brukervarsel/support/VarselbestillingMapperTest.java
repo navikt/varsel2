@@ -1,6 +1,6 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSVarselbestilling;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varselbestilling;
 import no.nav.varsel.service.tvarsel005.to.VarselTo;
 import no.nav.varsel.service.tvarsel005.to.VarselbestillingTo;
 import org.junit.jupiter.api.Test;
@@ -57,7 +57,7 @@ public class VarselbestillingMapperTest {
 				varsler(varsler);
 		VarselbestillingTo varselBestillingTo = varselbestillingToBuilder.build();
 
-		WSVarselbestilling varselbestilling = mapper.map(varselBestillingTo);
+		Varselbestilling varselbestilling = mapper.map(varselBestillingTo);
 
 		assertPersonHasNullValue(varselbestilling);
 		assertAktoerHasValue(varselbestilling);
@@ -78,36 +78,36 @@ public class VarselbestillingMapperTest {
 				varsler(varsler);
 		VarselbestillingTo varselBestillingTo = varselbestillingToBuilder.build();
 
-		WSVarselbestilling varselbestilling = mapper.map(varselBestillingTo);
+		Varselbestilling varselbestilling = mapper.map(varselBestillingTo);
 
 		assertPersonHasValue(varselbestilling);
 		assertAktoerHasNullValue(varselbestilling);
 		assertRestOfCoreVarselbestilling(varselbestilling);
 	}
 
-	public static void assertRestOfCoreVarselbestilling(WSVarselbestilling varselbestilling) {
+	public static void assertRestOfCoreVarselbestilling(Varselbestilling varselbestilling) {
 		assertThat(varselbestilling.getBestilt(), is(BESTILT));
 		assertThat(varselbestilling.getReVarselingsintervall(), is(REVARSLING_INTERVALL));
 		assertThat(varselbestilling.getSisteVarselutsendelse(), is(SISTE_VARSEL_UTSENDELSE_XML_GREGORIAN_CALENDAR));
 	}
 
-	public static void assertAktoerHasNullValue(WSVarselbestilling varselbestilling) {
+	public static void assertAktoerHasNullValue(Varselbestilling varselbestilling) {
 		assertThat(varselbestilling.getAktoerId(), nullValue());
 	}
 
-	public static void assertPersonHasValue(WSVarselbestilling varselbestilling) {
+	public static void assertPersonHasValue(Varselbestilling varselbestilling) {
 		assertThat(varselbestilling.getPerson().getIdent(), is(FNR));
 	}
 
-	public static void assertAktoerHasValue(WSVarselbestilling varselbestilling) {
+	public static void assertAktoerHasValue(Varselbestilling varselbestilling) {
 		assertThat(varselbestilling.getAktoerId().getAktoerId(), is(AKTOER_ID));
 	}
 
-	public static void assertPersonHasNullValue(WSVarselbestilling varselbestilling) {
+	public static void assertPersonHasNullValue(Varselbestilling varselbestilling) {
 		assertThat(varselbestilling.getPerson(), nullValue());
 	}
 
-	public static void assertVarsel(WSVarselbestilling varselbestilling) {
+	public static void assertVarsel(Varselbestilling varselbestilling) {
 		assertThat(varselbestilling.getVarselListe(), hasSize(1));
 		VarselMapperTest.assertVarsel(varselbestilling.getVarselListe().get(0));
 	}

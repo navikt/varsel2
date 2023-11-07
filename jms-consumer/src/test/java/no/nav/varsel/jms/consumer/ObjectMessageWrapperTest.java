@@ -4,7 +4,7 @@ import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import javax.jms.Message;
+import jakarta.jms.Message;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;

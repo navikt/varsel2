@@ -1,8 +1,8 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSBrukervarsel;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSVarselbestilling;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerResponse;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Brukervarsel;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varselbestilling;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,13 +60,13 @@ public class HentVarselForBrukerResponseMapperTest {
 	@Test
 	public void shouldMapAktoerId() {
 		HentVarselForBrukerResponseTo responseTo = createResponseTo(null, AKTOER_ID);
-		WSHentVarselForBrukerResponse response = mapper.map(responseTo);
+		HentVarselForBrukerResponse response = mapper.map(responseTo);
 
 		//assert response
 		assertThat(response.getBrukervarsel(), notNullValue());
-		WSBrukervarsel brukervarsel = response.getBrukervarsel();
+		Brukervarsel brukervarsel = response.getBrukervarsel();
 		assertThat(brukervarsel.getVarselbestillingListe(), hasSize(1));
-		WSVarselbestilling varselbestilling = brukervarsel.getVarselbestillingListe().get(0);
+		Varselbestilling varselbestilling = brukervarsel.getVarselbestillingListe().get(0);
 
 		//assert Varselbestiling
 		VarselbestillingMapperTest.assertAktoerHasValue(varselbestilling);
@@ -78,13 +78,13 @@ public class HentVarselForBrukerResponseMapperTest {
 	@Test
 	public void shouldMapPerson() {
 		HentVarselForBrukerResponseTo responseTo = createResponseTo(FNR, null);
-		WSHentVarselForBrukerResponse response = mapper.map(responseTo);
+		HentVarselForBrukerResponse response = mapper.map(responseTo);
 
 		//assert response
 		assertThat(response.getBrukervarsel(), notNullValue());
-		WSBrukervarsel brukervarsel = response.getBrukervarsel();
+		Brukervarsel brukervarsel = response.getBrukervarsel();
 		assertThat(brukervarsel.getVarselbestillingListe(), hasSize(1));
-		WSVarselbestilling varselbestilling = brukervarsel.getVarselbestillingListe().get(0);
+		Varselbestilling varselbestilling = brukervarsel.getVarselbestillingListe().get(0);
 
 		//assert Varselbestiling
 		VarselbestillingMapperTest.assertAktoerHasNullValue(varselbestilling);

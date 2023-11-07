@@ -1,8 +1,8 @@
 package no.nav.varsel.provider.ws.brukervarsel;
 
 import no.nav.modig.core.context.ThreadLocalSubjectHandler;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerRequest;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerResponse;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
 import no.nav.varsel.provider.ws.brukervarsel.support.BrukervarselV1Provider;
 import no.nav.varsel.provider.ws.brukervarsel.support.HentVarselForBrukerRequestValidator;
 import org.junit.jupiter.api.BeforeAll;
@@ -40,11 +40,11 @@ public class BrukervarselV1EndpointTest {
 
 	@Test
 	public void shouldCallValidatorAndProvider_hentVarselForBruker() throws Exception {
-		WSHentVarselForBrukerRequest request = new WSHentVarselForBrukerRequest();
-		WSHentVarselForBrukerResponse response = new WSHentVarselForBrukerResponse();
+		HentVarselForBrukerRequest request = new HentVarselForBrukerRequest();
+		HentVarselForBrukerResponse response = new HentVarselForBrukerResponse();
 		when(brukervarselV1ProviderMock.hentVarselForBruker(request)).thenReturn(response);
 
-		WSHentVarselForBrukerResponse responseFromEndpoint = brukervarselV1Endpoint.hentVarselForBruker(request);
+		HentVarselForBrukerResponse responseFromEndpoint = brukervarselV1Endpoint.hentVarselForBruker(request);
 
 		assertThat(responseFromEndpoint, is(response));
 		verify(validatorMock).validate(request);
@@ -52,10 +52,10 @@ public class BrukervarselV1EndpointTest {
 
 	@Test
 	public void shouldGiveUndetailedExceptionWhenAccessDenied() {
-		when(brukervarselV1ProviderMock.hentVarselForBruker(any(WSHentVarselForBrukerRequest.class)))
+		when(brukervarselV1ProviderMock.hentVarselForBruker(any(HentVarselForBrukerRequest.class)))
 				.thenThrow(new AuthorizationException(ACCESS_DENIED));
 
-		Exception e = assertThrows(AuthorizationException.class, () -> brukervarselV1Endpoint.hentVarselForBruker(new WSHentVarselForBrukerRequest()));
+		Exception e = assertThrows(AuthorizationException.class, () -> brukervarselV1Endpoint.hentVarselForBruker(new HentVarselForBrukerRequest()));
 		assertEquals(ACCESS_DENIED, e.getMessage());
 	}
 

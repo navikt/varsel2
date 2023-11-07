@@ -24,18 +24,14 @@
 			<artifactId>spring-oxm</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-jms-pool</artifactId>
+			<groupId>org.messaginghub</groupId>
+			<artifactId>pooled-jms</artifactId>
 		</dependency>
 
 		<!--Tjenestespesifikasjoner-->
 		<dependency>
 			<groupId>no.nav.tjenestespesifikasjoner</groupId>
-			<artifactId>varsel-inn</artifactId>
+			<artifactId>nav-varsel-inn</artifactId>
 		</dependency>
 
 		<dependency>
@@ -44,7 +40,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.ibm.mq</groupId>
-			<artifactId>com.ibm.mq.allclient</artifactId>
+			<artifactId>com.ibm.mq.jakarta.client</artifactId>
 		</dependency>
 
 		<!-- test -->
@@ -57,12 +53,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-broker</artifactId>
+			<artifactId>artemis-jakarta-server</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jta-atomikos</artifactId>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>artemis-jakarta-client</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

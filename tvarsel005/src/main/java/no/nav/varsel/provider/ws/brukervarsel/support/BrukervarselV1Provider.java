@@ -1,8 +1,8 @@
 package no.nav.varsel.provider.ws.brukervarsel.support;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerRequest;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerResponse;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
 import no.nav.varsel.provider.ws.brukervarsel.AuthorizationException;
 import no.nav.varsel.service.interfaces.BrukervarselService;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
@@ -27,7 +27,7 @@ public class BrukervarselV1Provider {
 		//ping
 	}
 
-	public WSHentVarselForBrukerResponse hentVarselForBruker(WSHentVarselForBrukerRequest hentVarselForBrukerRequest) {
+	public HentVarselForBrukerResponse hentVarselForBruker(HentVarselForBrukerRequest hentVarselForBrukerRequest) {
 
 		if (getSubjectHandler().getIdentType() != InternBruker) {
 			throw new AuthorizationException("Access denied");

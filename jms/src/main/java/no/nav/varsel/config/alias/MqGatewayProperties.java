@@ -1,15 +1,13 @@
 package no.nav.varsel.config.alias;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
@@ -28,10 +26,7 @@ public class MqGatewayProperties {
 	@Data
 	@Validated
 	public static class MqChannel {
-		@NotEmpty
-		private String name;
 		@NotBlank
 		private String securename;
-		private boolean enabletls;
 	}
 }

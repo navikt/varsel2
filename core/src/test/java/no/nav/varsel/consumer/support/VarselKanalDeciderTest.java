@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Collection;
 import java.util.HashSet;
 
-import static no.nav.varsel.consumer.dkif.to.KontaktregisterTo.KontaktregisterToBuilder.aKontaktregisterTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
@@ -129,7 +128,7 @@ public class VarselKanalDeciderTest {
 	}
 
 	private static KontaktregisterTo createKontaktTo(String epost, String mobil) {
-		return aKontaktregisterTo()
+		return KontaktregisterTo.builder()
 				.epostadresse(epost)
 				.mobiltelefonnummer(mobil)
 				.build();

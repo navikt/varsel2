@@ -3,16 +3,16 @@ package no.nav.varsel.provider.ws.brukervarsel;
 import no.nav.modig.core.context.SubjectHandler;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.BrukervarselV1;
 import no.nav.tjeneste.virksomhet.brukervarsel.v1.HentVarselForBrukerUgyldigInput;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerRequest;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerResponse;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
 import no.nav.varsel.provider.ws.brukervarsel.support.BrukervarselV1Provider;
 import no.nav.varsel.provider.ws.brukervarsel.support.HentVarselForBrukerRequestValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.jws.WebService;
-import javax.transaction.Transactional;
+import jakarta.jws.WebService;
+import jakarta.transaction.Transactional;
 
 import static java.lang.String.format;
 import static no.nav.modig.core.context.SubjectHandler.getSubjectHandler;
@@ -43,7 +43,7 @@ public class BrukervarselV1Endpoint implements BrukervarselV1 {
 	}
 
 	@Override
-	public WSHentVarselForBrukerResponse hentVarselForBruker(WSHentVarselForBrukerRequest hentVarselForBrukerRequest) throws HentVarselForBrukerUgyldigInput {
+	public HentVarselForBrukerResponse hentVarselForBruker(HentVarselForBrukerRequest hentVarselForBrukerRequest) throws HentVarselForBrukerUgyldigInput {
 		log.info("tvarsel005 har mottatt kall om å hente varsel for bruker");
 		hentVarselForBrukerRequestValidator.validate(hentVarselForBrukerRequest);
 

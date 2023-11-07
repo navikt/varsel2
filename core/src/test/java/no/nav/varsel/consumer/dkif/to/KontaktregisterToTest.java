@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
 import static no.nav.varsel.consumer.dkif.to.KontaktregisterTo.DATE_VALID_MONTHS;
-import static no.nav.varsel.consumer.dkif.to.KontaktregisterTo.KontaktregisterToBuilder.aKontaktregisterTo;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class KontaktregisterToTest {
@@ -17,7 +16,7 @@ class KontaktregisterToTest {
 
 	@Test
 	void shouldReturnFalseWhenMobilnummerDateValid() {
-		KontaktregisterTo kontaktregisterTo = aKontaktregisterTo()
+		KontaktregisterTo kontaktregisterTo = KontaktregisterTo.builder()
 				.epostadresse(MOBILTELEFONNUMMER)
 				.mobiltelefonSistOppdatert(MOBILNUMMER_OLD)
 				.mobiltelefonSistVerifisert(LocalDateTime.now())
@@ -27,7 +26,7 @@ class KontaktregisterToTest {
 
 	@Test
 	void shouldReturnTrueWhenMobilnummerDateInvalid() {
-		KontaktregisterTo kontaktregisterTo = aKontaktregisterTo()
+		KontaktregisterTo kontaktregisterTo = KontaktregisterTo.builder()
 				.epostadresse(MOBILTELEFONNUMMER)
 				.mobiltelefonSistOppdatert(MOBILNUMMER_OLD)
 				.mobiltelefonSistVerifisert(MOBILNUMMER_OLD)
@@ -37,7 +36,7 @@ class KontaktregisterToTest {
 
 	@Test
 	void shouldReturnFalseWhenEpostadresseDateValid() {
-		KontaktregisterTo kontaktregisterTo = aKontaktregisterTo()
+		KontaktregisterTo kontaktregisterTo = KontaktregisterTo.builder()
 				.epostadresse(EPOSTADRESSE)
 				.epostSistOppdatert(EPOSTADRESSE_OLD)
 				.epostSistVerifisert(LocalDateTime.now())
@@ -47,7 +46,7 @@ class KontaktregisterToTest {
 
 	@Test
 	void shouldReturnTrueWhenEpostadresseDateInvalid() {
-		KontaktregisterTo kontaktregisterTo = aKontaktregisterTo()
+		KontaktregisterTo kontaktregisterTo = KontaktregisterTo.builder()
 				.epostadresse(EPOSTADRESSE)
 				.epostSistOppdatert(EPOSTADRESSE_OLD)
 				.epostSistVerifisert(EPOSTADRESSE_OLD)

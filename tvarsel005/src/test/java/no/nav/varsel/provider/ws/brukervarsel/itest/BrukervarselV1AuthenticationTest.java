@@ -2,9 +2,9 @@ package no.nav.varsel.provider.ws.brukervarsel.itest;
 
 import no.nav.modig.core.context.SubjectHandlerUtils;
 import no.nav.modig.core.domain.IdentType;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSPeriode;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSPerson;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerRequest;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Person;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
 import no.nav.varsel.provider.AbstractWsProviderITest;
 import no.nav.varsel.provider.ws.brukervarsel.AuthorizationException;
 import no.nav.varsel.provider.ws.brukervarsel.BrukervarselV1Endpoint;
@@ -71,13 +71,13 @@ public class BrukervarselV1AuthenticationTest extends AbstractWsProviderITest {
 		expectAuthException();
 	}
 
-	private WSHentVarselForBrukerRequest createHentVarselForBrukerRequest() {
-		WSHentVarselForBrukerRequest request = new WSHentVarselForBrukerRequest();
+	private HentVarselForBrukerRequest createHentVarselForBrukerRequest() {
+		HentVarselForBrukerRequest request = new HentVarselForBrukerRequest();
 
-		request.setBruker(new WSPerson());
-		((WSPerson) request.getBruker()).setIdent(USER_ID);
+		request.setBruker(new Person());
+		((Person) request.getBruker()).setIdent(USER_ID);
 
-		request.setPeriode(new WSPeriode());
+		request.setPeriode(new Periode());
 		request.getPeriode().setFom(toXmlGregorianCalendar(LocalDateTime.now()));
 		request.getPeriode().setTom(toXmlGregorianCalendar(LocalDateTime.now()));
 		return request;

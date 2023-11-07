@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.RequestEntity;
+import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ import java.time.Duration;
 import java.util.HashMap;
 
 import static java.util.Objects.requireNonNull;
-import static org.apache.http.util.TextUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -47,18 +48,19 @@ public class PdlIdentConsumer {
 	public PdlIdentConsumer(
 			@Value("${pdl.url}") String pdlUrl,
 			RestTemplateBuilder restTemplateBuilder,
-			StsRestConsumer stsRestConsumer
+			StsRestConsumer stsRestConsumer,
+			ClientHttpRequestFactory clientHttpRequestFactory
 	) {
 		this.restTemplate = restTemplateBuilder
 				.setConnectTimeout(Duration.ofSeconds(5))
-				.setReadTimeout(Duration.ofSeconds(20))
+				.requestFactory(() -> clientHttpRequestFactory)
 				.build();
 		this.stsRestConsumer = stsRestConsumer;
 		this.pdlUri = UriComponentsBuilder.fromHttpUrl(pdlUrl).build().toUri();
 	}
 
 	@Retryable(
-			include = HttpServerErrorException.class,
+			retryFor = HttpServerErrorException.class,
 			backoff = @Backoff(delay = DELAY, multiplier = MULTIPLIER)
 	)
 	public String hentAktoerId(final String folkeregisterIdent) throws PersonIkkeFunnetException {

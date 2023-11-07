@@ -11,10 +11,6 @@ spec:
   env:
     - name: AZURE_APP_SCOPE_DIGDIR_KRR
       value: {{AZURE_APP_SCOPE_DIGDIR_KRR}}
-    - name: VARSEL_PROXY_HOST
-      value: {{VARSEL_PROXY_HOST}}
-    - name: VARSEL_PROXY_PORT
-      value: "{{VARSEL_PROXY_PORT}}"
     - name: SPRING_DATASOURCE_URL
       value: {{ SPRING_DATASOURCE_URL }}
     - name: MQGATEWAY01_HOSTNAME
@@ -23,16 +19,10 @@ spec:
       value: "{{ MQGATEWAY01_PORT }}"
     - name: MQGATEWAY01_NAME
       value: {{ MQGATEWAY01_NAME }}
-    - name: MQGATEWAY01_CHANNEL_NAME
-      value: {{ MQGATEWAY01_CHANNEL_NAME }}
     - name: MQGATEWAY01_CHANNEL_SECURENAME
       value: {{ MQGATEWAY01_CHANNEL_SECURENAME }}
-    - name: MQGATEWAY01_CHANNEL_ENABLETLS
-      value: "{{ MQGATEWAY01_CHANNEL_ENABLETLS }}"
     - name: DIGDIR_KRR_PROXY_URL
       value: {{ DIGDIR_KRR_PROXY_URL }}
-    - name: SECURITYTOKENSERVICE_URL
-      value: {{ SECURITYTOKENSERVICE_URL }}
     - name: SECURITY_TOKEN_REST_SERVICE_URL
       value: {{ SECURITY_TOKEN_REST_SERVICE_URL }}
     - name: DOKMET_VARSELINFO_URL
@@ -96,3 +86,4 @@ spec:
   azure:
     application:
       enabled: true
+  webproxy: true

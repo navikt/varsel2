@@ -1,5 +1,9 @@
 package no.nav.varsel.jms.consumer;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
+import jakarta.jms.Message;
+import jakarta.jms.Queue;
+import jakarta.xml.bind.JAXBElement;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
 import no.nav.varsel.config.JmsConsumerTestConfig;
 import no.nav.varsel.jms.to.xml.JmsReply;
@@ -10,31 +14,29 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.jms.Message;
-import javax.jms.Queue;
-import javax.xml.bind.JAXBElement;
-
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
-import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest(classes = JmsConsumerTestConfig.class)
 @ActiveProfiles({"itest", "local"})
+@ComponentScan
 @AutoConfigureWireMock(port = 0)
 public abstract class AbstractConsumerJmsTest {
 
@@ -44,7 +46,7 @@ public abstract class AbstractConsumerJmsTest {
 	protected JmsTemplate jmsTemplate;
 
 	@Autowired
-	protected Queue replyQueue;
+	protected Queue bestillServicemeldingQueue;
 
 	@Autowired
 	protected Queue backoutQueue;
@@ -61,16 +63,12 @@ public abstract class AbstractConsumerJmsTest {
 	@BeforeEach
 	public void setUpAbstract() {
 		this.stubStsConsumer();
-		this.stubPdlConsumer();
-		this.stubVarselInfoV1();
-		this.stubVarselInfoV1VarselFeil();
-		this.stubVarselInfoV1VarselURL();
-		this.stubVarselInfoV1VarselMissing();
-		varselbestillingRepo.deleteAll();
 	}
 
 	@AfterEach
 	public void tearDownAbstract() {
+		WireMock.removeAllMappings();
+		WireMock.resetAllRequests();
 		varselbestillingRepo.deleteAll();
 	}
 
@@ -79,12 +77,12 @@ public abstract class AbstractConsumerJmsTest {
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
 				jmsTemplate.convertAndSend(queue, message, message1 -> {
-					message1.setJMSReplyTo(replyQueue);
+					message1.setJMSReplyTo(bestillServicemeldingQueue);
 					return message1;
 				});
 			}
 		});
-		return transactionTemplate.execute(transactionStatus -> receive(replyQueue));
+		return transactionTemplate.execute(transactionStatus -> receive(bestillServicemeldingQueue));
 	}
 
 	protected void sendMessageNoReply(Queue queue, JAXBElement<?> message) {
@@ -139,7 +137,7 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varseltypeId")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 						.withBodyFile("varselInfoV1/varselInfoV1-happy.json")));
 	}
 
@@ -147,7 +145,7 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_test_feil")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 						.withBodyFile("varselInfoV1/varsel-test-feil.json")));
 	}
 
@@ -155,7 +153,7 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_varselUrl")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 						.withBodyFile("varselInfoV1/varsel-varsel-url.json")));
 	}
 
@@ -163,7 +161,7 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_missing")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 						.withBodyFile("varselInfoV1/varsel-missing.json")));
 	}
 
@@ -171,7 +169,7 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(get("/securitytoken?grant_type=client_credentials&scope=openid")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 						.withBodyFile("sts/stsResponse-happy.json")));
 	}
 
@@ -179,15 +177,15 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(post("/pdl")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
-						.withBodyFile("pdl/pdl-aktoerid-happy.json")));
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+						.withBodyFile("__/files/pdl/pdl-aktoerid-happy.json")));
 	}
 
 	public void stubPdlConsumerNotFound() {
 		stubFor(post("/pdl")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 						.withBodyFile("pdl/pdl-ident-notfound.json")));
 	}
 
@@ -195,7 +193,7 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(post("/pdl")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 						.withBodyFile("pdl/pdl-ident-server-error.json")));
 	}
 
@@ -203,13 +201,13 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(post("/pdl")
 				.willReturn(aResponse()
 						.withStatus(INTERNAL_SERVER_ERROR.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())));
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
 	}
 
 	public void stubPdlConsumerFunctionalErrorWithInternalServerError() {
 		stubFor(post("/pdl")
 				.willReturn(aResponse()
 						.withStatus(BAD_REQUEST.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())));
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
 	}
 }

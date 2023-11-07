@@ -7,7 +7,6 @@ import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dkif.support.PostPersonerRequest;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
-import no.nav.varsel.domain.code.KanalCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -17,6 +16,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
@@ -24,11 +24,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Duration;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Set;
 
+import static java.time.Duration.ofSeconds;
 import static no.nav.varsel.consumer.pdl.helper.DomainConstants.APP_NAME;
 import static no.nav.varsel.util.MDCGenerate.CALL_ID;
 
@@ -45,30 +43,20 @@ public class HentDigitalKontaktinformasjonConsumer {
 	private final AzureProperties azureProperties;
 
 	@Autowired
-	public HentDigitalKontaktinformasjonConsumer(VarselKanalDecider varselKanalDecider,
-												 HentDigitalKontaktinformasjonMapper mapper,
-												 @Value("${digdir_krr_proxy_url}") String dkiUrl,
+	public HentDigitalKontaktinformasjonConsumer(@Value("${digdir_krr_proxy_url}") String dkiUrl,
 												 TokenConsumer tokenConsumer,
-												 RestTemplateBuilder restTemplateBuilder, AzureProperties azureProperties) {
-		this.mapper = mapper;
-		this.varselKanalDecider = varselKanalDecider;
+												 RestTemplateBuilder restTemplateBuilder,
+												 AzureProperties azureProperties,
+												 ClientHttpRequestFactory clientHttpRequestFactory) {
+		this.mapper = new HentDigitalKontaktinformasjonMapper();
+		this.varselKanalDecider = new VarselKanalDecider();
 		this.dkiUrl = dkiUrl;
 		this.tokenConsumer = tokenConsumer;
 		this.restTemplate = restTemplateBuilder
-				.setConnectTimeout(Duration.ofSeconds(5))
-				.setReadTimeout(Duration.ofSeconds(20))
+				.setConnectTimeout(ofSeconds(5))
+				.requestFactory(() -> clientHttpRequestFactory)
 				.build();
 		this.azureProperties = azureProperties;
-	}
-
-
-	@Retryable(maxAttempts = 5, backoff = @Backoff(delay = 1000L, multiplier = 2))
-	public KontaktregisterTo hentDigitalKontaktinformasjonAndDecideKanal(String personIdent, Set<KanalCode> preferertKanal) {
-		KontaktregisterTo kontaktregisterTo = hentDigitalKontaktinformasjon(personIdent);
-
-		Collection<KanalCode> kanaler = varselKanalDecider.decideKanaler(kontaktregisterTo, preferertKanal);
-		kontaktregisterTo.setKanaler(kanaler);
-		return kontaktregisterTo;
 	}
 
 	@Retryable(maxAttempts = 5, backoff = @Backoff(delay = 1000L, multiplier = 2))
@@ -111,7 +99,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 		TokenResponse clientCredentialToken = tokenConsumer.getClientCredentialToken(azureProperties.getAppScopeDigdirKrr());
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-headers.setBearerAuth(clientCredentialToken.getAccess_token());
+		headers.setBearerAuth(clientCredentialToken.getAccess_token());
 		headers.add(NAV_CONSUMER_ID, APP_NAME);
 		headers.add(CALL_ID, MDC.get(CALL_ID));
 		return headers;

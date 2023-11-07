@@ -2,12 +2,12 @@ package no.nav.varsel.provider.ws.brukervarsel.support;
 
 import no.nav.modig.core.context.SubjectHandlerUtils;
 import no.nav.modig.core.context.ThreadLocalSubjectHandler;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSAktoerId;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSPeriode;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSVarsel;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.WSVarselbestilling;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerRequest;
-import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.WSHentVarselForBrukerResponse;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.AktoerId;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Periode;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varsel;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.informasjon.Varselbestilling;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerRequest;
+import no.nav.tjeneste.virksomhet.brukervarsel.v1.meldinger.HentVarselForBrukerResponse;
 import no.nav.varsel.service.BrukervarselV1Service;
 import no.nav.varsel.service.tvarsel005.to.HentVarselForBrukerResponseTo;
 import no.nav.varsel.service.tvarsel005.to.VarselTo;
@@ -79,7 +79,7 @@ public class BrukervarselV1ProviderTest {
 
 	@InjectMocks
 	private BrukervarselV1Provider brukervarselV1Provider;
-	private WSAktoerId bruker;
+	private AktoerId bruker;
 
 	@BeforeEach
 	public void onSetup() {
@@ -90,7 +90,7 @@ public class BrukervarselV1ProviderTest {
 
 		varselbestillingMapper.setVarselMapper(varselMapper);
 		hentVarselForBrukerResponseMapper.setVarselbestillingMapper(varselbestillingMapper);
-		bruker = new WSAktoerId();
+		bruker = new AktoerId();
 		bruker.setAktoerId(AKTOER_ID);
 	}
 
@@ -102,9 +102,9 @@ public class BrukervarselV1ProviderTest {
 	@Test
 	public void shouldGiveResponse() {
 
-		WSHentVarselForBrukerRequest request = new WSHentVarselForBrukerRequest();
+		HentVarselForBrukerRequest request = new HentVarselForBrukerRequest();
 		request.setBruker(bruker);
-		WSPeriode periode = new WSPeriode();
+		Periode periode = new Periode();
 		periode.setFom(FIRST_OF_JUNE_2016);
 		periode.setTom(THIRD_OF_JULY_2016);
 		request.setPeriode(periode);
@@ -141,11 +141,11 @@ public class BrukervarselV1ProviderTest {
 
 		when(brukervarselV1Service.hentVarselForBruker(any())).thenReturn(hentVarselForBrukerResponseTo);
 
-		WSHentVarselForBrukerResponse response = brukervarselV1Provider.hentVarselForBruker(request);
+		HentVarselForBrukerResponse response = brukervarselV1Provider.hentVarselForBruker(request);
 
-		List<WSVarselbestilling> varselbestillingListe = response.getBrukervarsel().getVarselbestillingListe();
+		List<Varselbestilling> varselbestillingListe = response.getBrukervarsel().getVarselbestillingListe();
 		assertThat(varselbestillingListe, hasSize(1));
-		WSVarselbestilling varselbestilling = varselbestillingListe.get(0);
+		Varselbestilling varselbestilling = varselbestillingListe.get(0);
 		assertThat(varselbestilling.getAktoerId().getAktoerId(), is(bruker.getAktoerId()));
 		assertThat(varselbestilling.getPerson(), nullValue());
 		assertThat(varselbestilling.getBestilt(), is(BESTIL_XML_DATO));
@@ -153,7 +153,7 @@ public class BrukervarselV1ProviderTest {
 		assertThat(varselbestilling.getSisteVarselutsendelse(), is(SISTE_VARSEL_UTSENDELSE_XML_DATO));
 		assertThat(varselbestilling.getVarseltypeId(), is(VARSEL_TYPE_ID));
 		assertThat(varselbestilling.getVarselListe(), hasSize(1));
-		WSVarsel varsel = varselbestilling.getVarselListe().get(0);
+		Varsel varsel = varselbestilling.getVarselListe().get(0);
 		assertThat(varsel.getDistribuert(), is(DISTRIBUERT_XML_DATO));
 		assertThat(varsel.getKanal(), is(KANAL));
 		assertThat(varsel.getKontaktinfo(), is(KONTAKTINFO));

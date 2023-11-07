@@ -1,5 +1,7 @@
 package no.nav.varsel.repo;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import no.nav.varsel.domain.Constants;
 import no.nav.varsel.repo.config.RepoTestConfig;
 import org.junit.jupiter.api.AfterEach;
@@ -8,9 +10,6 @@ import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 @SpringBootTest(classes = RepoTestConfig.class)
 @ActiveProfiles({"itest", "local"})
