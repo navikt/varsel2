@@ -21,6 +21,10 @@
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
+			<artifactId>kvarsel001</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.varsel</groupId>
 			<artifactId>jms-consumer</artifactId>
 		</dependency>
 		<dependency>
@@ -61,18 +65,15 @@
 			<artifactId>activemq-broker</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>no.nav.varsel</groupId>
-			<artifactId>kvarsel001</artifactId>
-		</dependency>
 	</dependencies>
+
 	<build>
+		<finalName>app</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<finalName>app</finalName>
 					<mainClass>no.nav.varsel.Application</mainClass>
 				</configuration>
 			</plugin>
