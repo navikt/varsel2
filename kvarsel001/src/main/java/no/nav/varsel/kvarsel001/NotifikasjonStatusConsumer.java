@@ -54,7 +54,7 @@ public class NotifikasjonStatusConsumer {
 					doknotifikasjonStatus.getMelding(),
 					doknotifikasjonStatus.getDistribusjonId());
 
-			if(!validerStatusmelding(doknotifikasjonStatus)) return;
+			if (!validerStatusmelding(doknotifikasjonStatus)) return;
 
 			Varselbestilling varselbestilling = finnVarselbestilling(doknotifikasjonStatus);
 			oppdaterStatusForVarsler(doknotifikasjonStatus, varselbestilling);
