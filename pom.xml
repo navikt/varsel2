@@ -23,42 +23,36 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.4</version>
+		<version>3.2.5</version>
 	</parent>
 
 	<properties>
 		<java.version>21</java.version>
 
 		<cxf.version>4.0.4</cxf.version>
-		<jaxb-impl.version>4.0.5</jaxb-impl.version>
 		<jaxws-ri.version>4.0.2</jaxws-ri.version>
 		<guava.version>33.1.0-jre</guava.version>
-		<oracle.version>19.19.0.0</oracle.version>
-		<ibm.mq.client.version>9.3.3.1</ibm.mq.client.version>
-		<joda.version>2.12.5</joda.version>
+		<ibm.mq.client.version>9.3.5.0</ibm.mq.client.version>
+		<joda.version>2.12.7</joda.version>
 
 		<logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
-		<kafka-avro-serializer.version>7.5.1</kafka-avro-serializer.version>
+		<kafka-avro-serializer.version>7.6.0</kafka-avro-serializer.version>
 		<resilience4j.version>2.2.0</resilience4j.version>
 
 		<!-- NAV -->
-		<token-support.version>3.1.7</token-support.version>
-		<teamdokumenthandtering-avro-schemas.version>3aec620a</teamdokumenthandtering-avro-schemas.version>
+		<token-support.version>4.1.4</token-support.version>
+		<teamdokumenthandtering-avro-schemas.version>1.1.0</teamdokumenthandtering-avro-schemas.version>
 		<brukernotifikasjon.version>v2.5.2</brukernotifikasjon.version>
-		<nav-varsel-inn.version>28-eb306fa</nav-varsel-inn.version>
-		<nav-brukervarsel-v1-tjenestespesifikasjon.version>26-1762dee</nav-brukervarsel-v1-tjenestespesifikasjon.version>
-		<dokmet-api.version>13-5459a4f</dokmet-api.version>
-
-		<!-- Modig -->
-		<wss4j.version>3.0.1</wss4j.version>
+		<dok-legacy-tjenestespesifikasjoner.version>29-af3d66d</dok-legacy-tjenestespesifikasjoner.version>
+		<dokmet-api.version>2024.04.19-11.00-f9cf0b7</dokmet-api.version>
 
 		<!-- test -->
-		<spring-cloud-contract-wiremock.version>4.0.4</spring-cloud-contract-wiremock.version>
+		<spring-cloud-contract-wiremock.version>4.1.2</spring-cloud-contract-wiremock.version>
 		<!-- Spring Boot 3.0.x drar inn versjon 2.1.x av h2 som gir problem for testene -->
 		<h2.version>1.4.200</h2.version>
 
 		<!-- Plugins -->
-		<maven-toolchains-plugin.version>3.1.0</maven-toolchains-plugin.version>
+		<maven-toolchains-plugin.version>3.2.0</maven-toolchains-plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -108,6 +102,7 @@
 				<artifactId>modig</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+
 			<dependency>
 				<groupId>io.confluent</groupId>
 				<artifactId>kafka-avro-serializer</artifactId>
@@ -133,12 +128,12 @@
 			<dependency>
 				<groupId>no.nav.tjenestespesifikasjoner</groupId>
 				<artifactId>nav-varsel-inn</artifactId>
-				<version>${nav-varsel-inn.version}</version>
+				<version>${dok-legacy-tjenestespesifikasjoner.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.tjenestespesifikasjoner</groupId>
 				<artifactId>nav-brukervarsel-v1-tjenestespesifikasjon</artifactId>
-				<version>${nav-brukervarsel-v1-tjenestespesifikasjon.version}</version>
+				<version>${dok-legacy-tjenestespesifikasjoner.version}</version>
 			</dependency>
 
 			<dependency>
@@ -155,11 +150,6 @@
 				<groupId>net.logstash.logback</groupId>
 				<artifactId>logstash-logback-encoder</artifactId>
 				<version>${logstash-logback-encoder.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.oracle.database.jdbc</groupId>
-				<artifactId>ojdbc10</artifactId>
-				<version>${oracle.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.sun.xml.ws</groupId>
