@@ -3,13 +3,14 @@ package no.nav.varsel.kvarsel001;
 import no.nav.doknotifikasjon.schemas.DoknotifikasjonStatus;
 import no.nav.varsel.domain.builder.VarselBuilder;
 import no.nav.varsel.domain.builder.VarselbestillingBuilder;
-import no.nav.varsel.domain.code.KanalCode;
-import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import static no.nav.varsel.domain.code.KanalCode.EPOST;
+import static no.nav.varsel.domain.code.StatusCode.SENDT;
 
 public class TestUtils {
 
@@ -46,10 +47,10 @@ public class TestUtils {
 
 	public static Varsel createVarsel(Varselbestilling varselbestilling) {
 		return VarselBuilder.aVarsel()
-				.kanal(KanalCode.EPOST)
+				.kanal(EPOST)
 				.varselbestilling(varselbestilling)
 				.varselId("123")
-				.status(StatusCode.SENDT)
+				.status(SENDT)
 				.varselTekst("varseltekst")
 				.erRevarsel(false)
 				.build();

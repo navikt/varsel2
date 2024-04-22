@@ -39,7 +39,6 @@ import static org.mockito.ArgumentMatchers.any;
 		brokerProperties = {
 				"listeners=PLAINTEXT://127.0.0.1:9092"
 		}
-
 )
 @ActiveProfiles("itest")
 @EnableAutoConfiguration

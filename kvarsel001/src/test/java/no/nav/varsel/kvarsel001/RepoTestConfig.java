@@ -16,6 +16,7 @@ import org.springframework.util.backoff.ExponentialBackOff;
 @EnableAutoConfiguration
 @Import({NotifikasjonStatusConsumer.class, RepoConfig.class})
 public class RepoTestConfig {
+
 	@Bean
 	public DefaultErrorHandler spyableExponentialBackoffErrorhandler() {
 		var exponentialBackoffErrorhandler = new DefaultErrorHandler(new ExponentialBackOff(500, 1.5));

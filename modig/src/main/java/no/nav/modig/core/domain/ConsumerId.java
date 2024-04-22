@@ -6,49 +6,48 @@ import java.security.Principal;
 
 public final class ConsumerId implements Principal, Destroyable {
 
-    public static final String SYSTEMUSER_USERNAME = "no.nav.modig.security.systemuser.username";
+	public static final String SYSTEMUSER_USERNAME = "no.nav.modig.security.systemuser.username";
 
-    private String consumerIdString;
-    private boolean destroyed;
+	private String consumerIdString;
+	private boolean destroyed;
 
-    public ConsumerId(String consumerId) {
-        this.consumerIdString = consumerId;
-    }
+	public ConsumerId(String consumerId) {
+		this.consumerIdString = consumerId;
+	}
 
-    public ConsumerId() {
-        consumerIdString = System.getProperty(SYSTEMUSER_USERNAME);
+	public ConsumerId() {
+		consumerIdString = System.getProperty(SYSTEMUSER_USERNAME);
 
-        if(consumerIdString == null){
-            throw new IllegalStateException(
-                    SYSTEMUSER_USERNAME + " is not set, failed to set "+ ConsumerId.class.getName());
-        }
-    }
+		if (consumerIdString == null) {
+			throw new IllegalStateException(
+					SYSTEMUSER_USERNAME + " is not set, failed to set " + ConsumerId.class.getName());
+		}
+	}
 
-    @Override
-    public void destroy() throws DestroyFailedException {
-        consumerIdString = null;
-        destroyed = true;
-    }
+	@Override
+	public void destroy() throws DestroyFailedException {
+		consumerIdString = null;
+		destroyed = true;
+	}
 
-    @Override
-    public boolean isDestroyed() {
-        return destroyed;
-    }
+	@Override
+	public boolean isDestroyed() {
+		return destroyed;
+	}
 
-    @Override
-    public String getName() {
-        return consumerIdString;
-    }
+	@Override
+	public String getName() {
+		return consumerIdString;
+	}
 
-    public String getConsumerId() {
-        return consumerIdString;
-    }
+	public String getConsumerId() {
+		return consumerIdString;
+	}
 
-    @Override
-    public String toString() {
-        String sb = getClass().getSimpleName() + "[" +
-                    (destroyed ? "destroyed" : consumerIdString) +
-                    "]";
-        return sb;
-    }
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "[" +
+			   (destroyed ? "destroyed" : consumerIdString) +
+			   "]";
+	}
 }

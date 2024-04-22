@@ -1,5 +1,6 @@
 package no.nav.varsel.jms.consumer.tvarsel001.support;
 
+import jakarta.jms.JMSException;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLAktoer;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLAktoerId;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLParameter;
@@ -10,7 +11,6 @@ import no.nav.varsel.service.to.BestillVarselTo;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import jakarta.jms.JMSException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +45,7 @@ public class BestillServicemeldingMapper {
 
 	private Map<String, String> map(List<XMLParameter> parameterListe) {
 		HashMap<String, String> map = new HashMap<>();
-		parameterListe.stream().forEach(p -> map.put(p.getKey(), p.getValue()));
+		parameterListe.forEach(p -> map.put(p.getKey(), p.getValue()));
 		return map;
 	}
 

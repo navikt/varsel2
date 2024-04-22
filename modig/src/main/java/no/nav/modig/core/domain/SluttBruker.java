@@ -19,14 +19,6 @@ public final class SluttBruker implements Principal, Destroyable {
 		return new SluttBruker(uid, IdentType.EksternBruker);
 	}
 
-	public static SluttBruker internBruker(String uid) {
-		return new SluttBruker(uid, IdentType.InternBruker);
-	}
-
-	public String getUid() {
-		return uid;
-	}
-
 	public IdentType getIdentType() {
 		return identType;
 	}
@@ -41,7 +33,6 @@ public final class SluttBruker implements Principal, Destroyable {
 	public void destroy() throws DestroyFailedException {
 		uid = null;
 		destroyed = true;
-
 	}
 
 	@Override
@@ -51,10 +42,9 @@ public final class SluttBruker implements Principal, Destroyable {
 
 	@Override
 	public String toString() {
-		String sb = getClass().getSimpleName() + "[" +
-				"identType=" + identType + ", " +
-				"uid=" + (destroyed ? "destroyed" : uid) +
-				"]";
-		return sb;
+		return getClass().getSimpleName() + "[" +
+			   "identType=" + identType + ", " +
+			   "uid=" + (destroyed ? "destroyed" : uid) +
+			   "]";
 	}
 }
