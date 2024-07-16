@@ -35,7 +35,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest(classes = JmsConsumerTestConfig.class)
-@ActiveProfiles({"itest", "local"})
+@ActiveProfiles({"itest"})
 @ComponentScan
 @AutoConfigureWireMock(port = 0)
 public abstract class AbstractConsumerJmsTest {

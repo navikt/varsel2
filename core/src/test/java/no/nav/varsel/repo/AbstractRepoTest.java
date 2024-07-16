@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = RepoTestConfig.class)
-@ActiveProfiles({"itest", "local"})
+@ActiveProfiles({"itest"})
 public abstract class AbstractRepoTest {
 
 	@Autowired
