@@ -8,7 +8,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @AutoConfigureWireMock(port = 0)
 @ExtendWith(SpringExtension.class)
-@ActiveProfiles({"itest", "local"})
+@ActiveProfiles({"itest"})
 public class WsConsumerConfigTest {
 
 	@Test

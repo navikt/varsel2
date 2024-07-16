@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS;
 
-@DirtiesContext(classMode = AFTER_CLASS) // Denne testen manipulerer JmsTemplate og JmsConsumerManager for de ørvrige testene.
+@DirtiesContext(classMode = AFTER_CLASS) // Denne testen manipulerer JmsTemplate og JmsConsumerManager for de øvrige testene.
 public class JmsConsumerManagerTest extends AbstractConsumerJmsTest {
 
 	private static final int RESTART_TIME_SECONDS = 1;

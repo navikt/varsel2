@@ -23,7 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 		JmsTestConfig.class,
 		RepoTestConfig.class
 })
-@ActiveProfiles({"itest", "local"})
+@ActiveProfiles({"itest"})
 public abstract class AbstractRestTest {
 
 	@Autowired

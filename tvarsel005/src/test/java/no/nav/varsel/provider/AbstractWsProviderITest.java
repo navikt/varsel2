@@ -22,7 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 import static no.nav.varsel.domain.Constants.USER_ID;
 
 @SpringBootTest(classes = WsProviderTestConfig.class)
-@ActiveProfiles({"itest", "local"})
+@ActiveProfiles({"itest"})
 @EnableConfigurationProperties({ListenerProperties.class, MqGatewayProperties.class})
 @AutoConfigureWireMock(port = 0)
 public abstract class AbstractWsProviderITest {
