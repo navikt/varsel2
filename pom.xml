@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.5</version>
+		<version>3.2.7</version>
 	</parent>
 
 	<properties>
@@ -40,7 +40,6 @@
 		<resilience4j.version>2.2.0</resilience4j.version>
 
 		<!-- NAV -->
-		<token-support.version>4.1.4</token-support.version>
 		<teamdokumenthandtering-avro-schemas.version>1.1.0</teamdokumenthandtering-avro-schemas.version>
 		<brukernotifikasjon.version>v2.5.2</brukernotifikasjon.version>
 		<dok-legacy-tjenestespesifikasjoner.version>29-af3d66d</dok-legacy-tjenestespesifikasjoner.version>
