@@ -12,6 +12,7 @@ import no.nav.varsel.repo.VarselbestillingRepo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.context.annotation.ComponentScan;
@@ -37,6 +38,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @SpringBootTest(classes = JmsConsumerTestConfig.class)
 @ActiveProfiles({"itest"})
 @ComponentScan
+@AutoConfigureTestDatabase
 @AutoConfigureWireMock(port = 0)
 public abstract class AbstractConsumerJmsTest {
 

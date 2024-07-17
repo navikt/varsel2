@@ -11,8 +11,6 @@ spec:
   env:
     - name: AZURE_APP_SCOPE_DIGDIR_KRR
       value: {{AZURE_APP_SCOPE_DIGDIR_KRR}}
-    - name: SPRING_DATASOURCE_URL
-      value: {{ SPRING_DATASOURCE_URL }}
     - name: MQGATEWAY01_HOSTNAME
       value: {{ MQGATEWAY01_HOSTNAME }}
     - name: MQGATEWAY01_PORT
@@ -76,9 +74,11 @@ spec:
   vault:
     enabled: true
     paths:
-      - kvPath: {{ VARSEL_DS }}
-        mountPath: /var/run/secrets/nais.io/varselDS
-      - kvPath: {{SERVICEUSER_VAULT_PATH}}
+      - kvPath: {{ DB_CREDS }}
+        mountPath: "/var/run/secrets/nais.io/db_creds"
+      - kvPath: {{ DB_CONFIG }}
+        mountPath: "/var/run/secrets/nais.io/db_config"
+      - kvPath: {{ SERVICEUSER_VAULT_PATH }}
         mountPath: /secrets/serviceuser/srvvarsel
       - kvPath: {{ VARSEL_CERT }}
         mountPath: /var/run/secrets/nais.io/certificate

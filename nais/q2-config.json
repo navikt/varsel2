@@ -8,8 +8,8 @@
     "https://varsel2.dev.intern.nav.no",
     "https://app-q2.adeo.no/varsel"
   ],
-  "SPRING_DATASOURCE_URL": "jdbc:oracle:thin:@dmv09-scan.adeo.no:1521/varsel_q2_ha",
-  "VARSEL_DS": "/oracle/data/dev/creds/varsel_q2-user",
+  "DB_CREDS": "/oracle/data/dev/creds/varsel_q2-user",
+  "DB_CONFIG": "/oracle/data/dev/config/varsel_q2",
   "MQGATEWAY01_HOSTNAME": "mqls01.preprod.local",
   "MQGATEWAY01_PORT": "1413",
   "MQGATEWAY01_NAME": "MQLS01",
