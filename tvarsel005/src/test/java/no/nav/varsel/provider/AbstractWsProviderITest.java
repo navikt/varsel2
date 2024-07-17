@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
@@ -24,6 +25,7 @@ import static no.nav.varsel.domain.Constants.USER_ID;
 @SpringBootTest(classes = WsProviderTestConfig.class)
 @ActiveProfiles({"itest"})
 @EnableConfigurationProperties({ListenerProperties.class, MqGatewayProperties.class})
+@AutoConfigureTestDatabase
 @AutoConfigureWireMock(port = 0)
 public abstract class AbstractWsProviderITest {
 
