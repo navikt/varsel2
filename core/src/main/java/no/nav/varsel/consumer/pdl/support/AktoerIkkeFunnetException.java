@@ -8,7 +8,4 @@ public class AktoerIkkeFunnetException extends NoJmsBackoutException {
 		super(message);
 	}
 
-	public AktoerIkkeFunnetException(String message, Throwable cause) {
-		super(message, cause);
-	}
 }

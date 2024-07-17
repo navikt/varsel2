@@ -1,10 +1,6 @@
 package no.nav.varsel.domain.object;
 
 import com.google.common.base.MoreObjects;
-import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -19,6 +15,10 @@ import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -34,7 +34,6 @@ public class Varselbestilling extends AbstractDomainObject {
 
 	private static final String VARSELBESTILLING_SEQ = "VARSELBESTILLING_SEQ";
 
-	//TODO: Hvorfor er allocation-size 100?
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = VARSELBESTILLING_SEQ)
 	@GenericGenerator(name = VARSELBESTILLING_SEQ,
