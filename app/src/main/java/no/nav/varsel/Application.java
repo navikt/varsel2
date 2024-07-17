@@ -1,12 +1,9 @@
 package no.nav.varsel;
 
 import no.nav.varsel.config.AppConfig;
-import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.retry.annotation.EnableRetry;
 
@@ -25,16 +22,5 @@ public class Application extends SpringBootServletInitializer {
 		setProperty("javax.net.ssl.keyStorePassword", getenv("VARSEL_CERT_KEYSTORE_PASSWORD"));
 		SpringApplication.run(Application.class, args);
 	}
-
-	@Bean(name = "webServiceServlet")
-	public ServletRegistrationBean webServiceServlet() {
-		ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean();
-		servletRegistrationBean.setServlet(new CXFServlet());
-		servletRegistrationBean.setName("webServiceServlet");
-		servletRegistrationBean.addUrlMappings("/ws/*");
-		servletRegistrationBean.setLoadOnStartup(2);
-		return servletRegistrationBean;
-	}
-
 }
 
