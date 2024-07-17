@@ -15,7 +15,6 @@
 		<module>jms</module>
 		<module>jms-consumer</module>
 		<module>tvarsel001</module>
-		<module>tvarsel005</module>
 		<module>kvarsel001</module>
 		<module>modig</module>
 	</modules>
@@ -88,11 +87,6 @@
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>tvarsel005</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
 				<artifactId>kvarsel001</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -129,12 +123,6 @@
 				<artifactId>nav-varsel-inn</artifactId>
 				<version>${dok-legacy-tjenestespesifikasjoner.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>no.nav.tjenestespesifikasjoner</groupId>
-				<artifactId>nav-brukervarsel-v1-tjenestespesifikasjon</artifactId>
-				<version>${dok-legacy-tjenestespesifikasjoner.version}</version>
-			</dependency>
-
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>

@@ -24,7 +24,6 @@ import org.springframework.context.annotation.Import;
 @Import({
 		ServiceConfig.class,
 		JmsConsumerConfig.class,
-		ProviderWsConfig.class,
 		RetryLoggingInterceptor.class,
 		CustomKafkaTemplate.class,
 		NotifikasjonStatusConsumer.class

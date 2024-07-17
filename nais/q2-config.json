@@ -1,7 +1,6 @@
 {
   "KAFKA_POOL": "nav-dev",
   "APP_NAME": "varsel2",
-  "APPD_NAME": "varsel2",
   "MIN_REPLICAS": 1,
   "MAX_REPLICAS": 2,
   "INGRESSES": [
