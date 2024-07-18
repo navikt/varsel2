@@ -4,8 +4,7 @@
   "MIN_REPLICAS": 2,
   "MAX_REPLICAS": 4,
   "INGRESSES": [
-    "https://varsel2.intern.nav.no",
-    "https://app.adeo.no/varsel"
+    "https://varsel2.intern.nav.no"
   ],
   "DB_CREDS": "/oracle/data/prod/creds/varsel-user",
   "DB_CONFIG": "/oracle/data/prod/config/varsel",
