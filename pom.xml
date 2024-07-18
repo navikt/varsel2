@@ -15,9 +15,7 @@
 		<module>jms</module>
 		<module>jms-consumer</module>
 		<module>tvarsel001</module>
-		<module>tvarsel005</module>
 		<module>kvarsel001</module>
-		<module>modig</module>
 	</modules>
 
 	<parent>
@@ -29,8 +27,6 @@
 	<properties>
 		<java.version>21</java.version>
 
-		<cxf.version>4.0.4</cxf.version>
-		<jaxws-ri.version>4.0.2</jaxws-ri.version>
 		<guava.version>33.1.0-jre</guava.version>
 		<ibm.mq.client.version>9.3.5.0</ibm.mq.client.version>
 		<joda.version>2.12.7</joda.version>
@@ -88,20 +84,9 @@
 			</dependency>
 			<dependency>
 				<groupId>no.nav.varsel</groupId>
-				<artifactId>tvarsel005</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
 				<artifactId>kvarsel001</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>no.nav.varsel</groupId>
-				<artifactId>modig</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
 			<dependency>
 				<groupId>io.confluent</groupId>
 				<artifactId>kafka-avro-serializer</artifactId>
@@ -130,12 +115,6 @@
 				<version>${dok-legacy-tjenestespesifikasjoner.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>no.nav.tjenestespesifikasjoner</groupId>
-				<artifactId>nav-brukervarsel-v1-tjenestespesifikasjon</artifactId>
-				<version>${dok-legacy-tjenestespesifikasjoner.version}</version>
-			</dependency>
-
-			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
 				<version>${guava.version}</version>
@@ -151,26 +130,10 @@
 				<version>${logstash-logback-encoder.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.sun.xml.ws</groupId>
-				<artifactId>jaxws-ri</artifactId>
-				<version>${jaxws-ri.version}</version>
-				<type>pom</type>
-			</dependency>
-
-			<!-- cxf -->
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-bom</artifactId>
-				<version>${cxf.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
 				<groupId>joda-time</groupId>
 				<artifactId>joda-time</artifactId>
 				<version>${joda.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-contract-wiremock</artifactId>
@@ -210,11 +173,6 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-transports-http-jetty</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

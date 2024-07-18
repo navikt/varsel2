@@ -1,6 +1,5 @@
 package no.nav.varsel.consumer.pdl;
 
-import no.nav.varsel.consumer.pdl.helper.DomainConstants;
 import no.nav.varsel.consumer.pdl.support.PdlFunctionalException;
 import no.nav.varsel.consumer.pdl.support.PersonIkkeFunnetException;
 import no.nav.varsel.consumer.pdl.support.ServerErrorException;
@@ -25,6 +24,7 @@ import java.time.Duration;
 import java.util.HashMap;
 
 import static java.util.Objects.requireNonNull;
+import static no.nav.varsel.consumer.pdl.helper.DomainConstants.BEARER_PREFIX;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
@@ -33,7 +33,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Component
 public class PdlIdentConsumer {
-	private static final String HEADER_PDL_NAV_CONSUMER_TOKEN = "Nav-Consumer-Token";
 	private static final String PERSON_IKKE_FUNNET_CODE = "not_found";
 	private static final String SERVER_ERROR_CODE = "server_error";
 
@@ -120,10 +119,10 @@ public class PdlIdentConsumer {
 
 	private RequestEntity.BodyBuilder baseRequest() {
 		final String serviceuserToken = stsRestConsumer.getOidcToken();
+		// hentIdenter query krever ikke "behandlingsnummer" header
 		return RequestEntity.post(pdlUri)
 				.accept(APPLICATION_JSON)
 				.header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-				.header(AUTHORIZATION, DomainConstants.BEARER_PREFIX + serviceuserToken)
-				.header(HEADER_PDL_NAV_CONSUMER_TOKEN, DomainConstants.BEARER_PREFIX + serviceuserToken);
+				.header(AUTHORIZATION, BEARER_PREFIX + serviceuserToken);
 	}
 }

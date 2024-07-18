@@ -13,14 +13,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>tvarsel005</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.varsel</groupId>
-			<artifactId>modig</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.varsel</groupId>
 			<artifactId>kvarsel001</artifactId>
 		</dependency>
 		<dependency>
