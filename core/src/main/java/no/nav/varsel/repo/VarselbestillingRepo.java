@@ -18,6 +18,14 @@ public interface VarselbestillingRepo extends JpaRepository<Varselbestilling, Lo
 	Varselbestilling findByVarselbestillingId(String id);
 
 	/**
+	 * Check if {@link Varselbestilling} exists by varselbestillingId
+	 *
+	 * @param id the varselbestillingId
+	 * @return true if exists, false otherwise
+	 */
+	boolean existsByVarselbestillingId(String id);
+
+	/**
 	 * Find {@link Varselbestilling} by varselbestillingId and eagerly fetch varsels
 	 *
 	 * @param id the varselbestillingId

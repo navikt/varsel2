@@ -26,6 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -39,12 +40,14 @@ import static no.nav.varsel.repo.TestdataUtil.AKTOR_ID;
 import static no.nav.varsel.repo.TestdataUtil.FNR;
 import static no.nav.varsel.repo.TestdataUtil.OVERSTYRT_PREFERERT_KANAL;
 import static no.nav.varsel.repo.TestdataUtil.PREFERERT_KANAL;
+import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static no.nav.varsel.service.support.ServicemeldingTestUtils.createDittNavMalUtenFoerstegangstekst;
 import static no.nav.varsel.service.support.ServicemeldingTestUtils.createDoknotifikasjonWithKanalAndBestillingsId;
 import static no.nav.varsel.service.support.ServicemeldingTestUtils.createMaler;
 import static no.nav.varsel.service.support.ServicemeldingTestUtils.createNokkelInputWithBestillingsId;
 import static no.nav.varsel.service.support.ServicemeldingTestUtils.createVarselutsendingWithKanal;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
@@ -128,6 +131,57 @@ public class ServicemeldingServiceTest {
 		servicemeldingService.bestillServicemelding(bestilling);
 
 		assertOK();
+	}
+
+	@Test
+	public void shouldBestillServicemeldingForBestillingMedVarselbestillingId() {
+		bestilling.setAktoerId(AKTOR_ID);
+		bestilling.setVarselBestillingId(VARSELBESTILLING_ID);
+		var varselutsendingEpost = createVarselutsendingWithKanal(KanalCode.EPOST);
+		var varselutsendingSms = createVarselutsendingWithKanal(KanalCode.SMS);
+		var varselutsendingList = List.of(varselutsendingEpost, varselutsendingSms);
+
+		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
+		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
+		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
+		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
+		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
+
+		when(notifikasjonMapper.mapNotifikasjon(varselutsendingList, varselbestilling)).thenReturn(doknotifikasjon);
+
+		servicemeldingService.bestillServicemelding(bestilling);
+
+		ArgumentCaptor<BestillVarselTo> captor = ArgumentCaptor.forClass(BestillVarselTo.class);
+		verify(aktoerService, times(1)).findMissingAktoer(captor.capture());
+
+		BestillVarselTo captorValue = captor.getValue();
+		assertThat(captorValue.getVarselBestillingId()).isEqualTo(VARSELBESTILLING_ID);
+	}
+
+	@Test
+	public void shouldBestillServicemeldingForBestillingUtenVarselbestillingId() {
+		bestilling.setAktoerId(AKTOR_ID);
+		var varselutsendingEpost = createVarselutsendingWithKanal(KanalCode.EPOST);
+		var varselutsendingSms = createVarselutsendingWithKanal(KanalCode.SMS);
+		var varselutsendingList = List.of(varselutsendingEpost, varselutsendingSms);
+
+		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
+		when(varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
+		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
+		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
+		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
+
+		when(notifikasjonMapper.mapNotifikasjon(varselutsendingList, varselbestilling)).thenReturn(doknotifikasjon);
+
+		servicemeldingService.bestillServicemelding(bestilling);
+
+		ArgumentCaptor<BestillVarselTo> captor = ArgumentCaptor.forClass(BestillVarselTo.class);
+		verify(aktoerService, times(1)).findMissingAktoer(captor.capture());
+
+		BestillVarselTo captorValue = captor.getValue();
+		assertThat(captorValue.getVarselBestillingId()).isNotEmpty();
 	}
 
 	@Test
