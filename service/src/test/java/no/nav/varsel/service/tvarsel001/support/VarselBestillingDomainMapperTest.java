@@ -29,8 +29,6 @@ import java.util.HashSet;
 import java.util.UUID;
 
 import static java.util.Collections.singletonMap;
-import static no.nav.varsel.consumer.dokmet.DokmetConsumerTest.VARSEL_NAVN;
-import static no.nav.varsel.consumer.dokmet.DokmetConsumerTest.VARSEL_URL;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -57,6 +55,8 @@ public class VarselBestillingDomainMapperTest {
 	private static final HashSet<KanalCode> KANALER = Sets.newHashSet(KanalCode.EPOST, KanalCode.SMS);
 	private static final String BESTILLING_ID = "b592d5f1-7506-462d-9814-4c2d92bf8946";
 
+	private static final String VARSEL_NAVN = "varselnavn";
+	private static final String VARSEL_URL = "http://nav.no";
 	private static final String VARSEL_FOR_DIST_KANAL = "vardistkanal";
 	private static final String VARSEL_KATEGORI = "varkat";
 	private static final boolean INAKTIV = false;

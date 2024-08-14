@@ -22,8 +22,6 @@ import java.util.UUID;
 import static java.time.Duration.ofSeconds;
 import static no.nav.varsel.Utils.formatDateTime;
 import static no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
-import static no.nav.varsel.consumer.dokmet.DokmetConsumerTest.FOERSTE_GANG_TEKST;
-import static no.nav.varsel.consumer.dokmet.DokmetConsumerTest.VARSEL_TITTEL;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.MOTTAKER;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.UTLOEPSTIDSPUNKT_LDT;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VAL;
@@ -39,6 +37,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 @Disabled("Disse testene feiler på GHA uten noen åpenbar grunn, er nok noen svakheter i testoppsettet. Burde sees på.")
 public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
+
+	private static final String VARSEL_TITTEL = "Varsel Tittel";
+	private static final String FOERSTE_GANG_TEKST = "Første gang tekst til {mottaker}";
 
 	@Autowired
 	private Queue bestillServicemeldingQueue;

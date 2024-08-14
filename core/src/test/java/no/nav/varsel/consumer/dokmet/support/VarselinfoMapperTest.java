@@ -3,10 +3,9 @@ package no.nav.varsel.consumer.dokmet.support;
 import com.google.common.collect.Sets;
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
 import no.nav.dokkat.schemas.tkat021.VarselMalRestTo;
-import no.nav.varsel.consumer.dokmet.DokmetConsumerTest;
-import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.consumer.dokmet.to.Varselinfo;
 import no.nav.varsel.consumer.dokmet.to.Varselmal;
+import no.nav.varsel.domain.code.KanalCode;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +19,17 @@ import static org.hamcrest.Matchers.nullValue;
 
 public class VarselinfoMapperTest {
 
+	private static final String VARSEL_TITTEL = "Varsel Tittel";
+	private static final String FOERSTE_GANG_TEKST = "Første gang tekst til {mottaker}";
+	private static final String REVARSLING_TEKST = "Revarsling tekst til {mottaker}";
+	private static final String VARSEL_FOR_DIST_KANAL = "vardistkanal";
+	private static final String VARSEL_KATEGORI = "varkat";
+	private static final boolean INAKTIV = false;
+	private static final int REVARSLING_INTERVALL = 4;
+	private static final KanalCode PREFERERT_KANAL = KanalCode.EPOST;
+	private static final String VARSEL_NAVN = "varselnavn";
+	private static final String VARSEL_URL = "http://nav.no";
+
 	private final VarselinfoMapper mapper = new VarselinfoMapper();
 
 	@Test
@@ -27,21 +37,21 @@ public class VarselinfoMapperTest {
 		Varselinfo to = mapper.map(createVarselInfo());
 
 		assertThat(to.getVarseltypeId(), is(VARSELTYPE_ID));
-		assertThat(to.getVarselNavn(), Matchers.is(DokmetConsumerTest.VARSEL_NAVN));
-		assertThat(to.getVarselForDistKanal(), Matchers.is(DokmetConsumerTest.VARSEL_FOR_DIST_KANAL));
-		assertThat(to.getVarselKategori(), Matchers.is(DokmetConsumerTest.VARSEL_KATEGORI));
-		assertThat(to.isInaktiv(), Matchers.is(DokmetConsumerTest.INAKTIV));
-		assertThat(to.getRevarslingIntervall(), Matchers.is(DokmetConsumerTest.REVARSLING_INTERVALL));
+		assertThat(to.getVarselNavn(), Matchers.is(VARSEL_NAVN));
+		assertThat(to.getVarselForDistKanal(), Matchers.is(VARSEL_FOR_DIST_KANAL));
+		assertThat(to.getVarselKategori(), Matchers.is(VARSEL_KATEGORI));
+		assertThat(to.isInaktiv(), Matchers.is(INAKTIV));
+		assertThat(to.getRevarslingIntervall(), Matchers.is(REVARSLING_INTERVALL));
 		assertThat(to.getAntallRevarsling(), is(ANTALL_REVARSLINGER));
-		assertThat(to.getVarselUrl(), Matchers.is(DokmetConsumerTest.VARSEL_URL));
+		assertThat(to.getVarselUrl(), Matchers.is(VARSEL_URL));
 		assertThat(to.getPreferertKanal(), contains(KanalCode.EPOST));
 		assertThat(to.getMaler(), hasSize(1));
 
 		Varselmal malTo = to.getMaler().iterator().next();
 		assertThat(malTo.getKanal(), is(KanalCode.EPOST));
-		assertThat(malTo.getTittel(), Matchers.is(DokmetConsumerTest.VARSEL_TITTEL));
-		assertThat(malTo.getFoerstegangsTekst(), Matchers.is(DokmetConsumerTest.FOERSTE_GANG_TEKST));
-		assertThat(malTo.getRevarslingTekst(), Matchers.is(DokmetConsumerTest.REVARSLING_TEKST));
+		assertThat(malTo.getTittel(), Matchers.is(VARSEL_TITTEL));
+		assertThat(malTo.getFoerstegangsTekst(), Matchers.is(FOERSTE_GANG_TEKST));
+		assertThat(malTo.getRevarslingTekst(), Matchers.is(REVARSLING_TEKST));
 	}
 
 	@Test
@@ -65,20 +75,20 @@ public class VarselinfoMapperTest {
 	public static VarselInfoRestTo createVarselInfo() {
 		VarselInfoRestTo varselInfo = new VarselInfoRestTo();
 		varselInfo.setVarseltypeId(VARSELTYPE_ID);
-		varselInfo.setVarselNavn(DokmetConsumerTest.VARSEL_NAVN);
-		varselInfo.setVarselForDistribusjonKanal(DokmetConsumerTest.VARSEL_FOR_DIST_KANAL);
-		varselInfo.setVarselKategori(DokmetConsumerTest.VARSEL_KATEGORI);
-		varselInfo.setInaktiv(DokmetConsumerTest.INAKTIV);
-		varselInfo.setRevarslingIntervall(DokmetConsumerTest.REVARSLING_INTERVALL);
+		varselInfo.setVarselNavn(VARSEL_NAVN);
+		varselInfo.setVarselForDistribusjonKanal(VARSEL_FOR_DIST_KANAL);
+		varselInfo.setVarselKategori(VARSEL_KATEGORI);
+		varselInfo.setInaktiv(INAKTIV);
+		varselInfo.setRevarslingIntervall(REVARSLING_INTERVALL);
 		varselInfo.setAntallRevarslinger(ANTALL_REVARSLINGER);
-		varselInfo.setVarselURL(DokmetConsumerTest.VARSEL_URL);
-		varselInfo.setPreferertKanal(Sets.newHashSet(DokmetConsumerTest.PREFERERT_KANAL.toString()));
+		varselInfo.setVarselURL(VARSEL_URL);
+		varselInfo.setPreferertKanal(Sets.newHashSet(PREFERERT_KANAL.toString()));
 
 		VarselMalRestTo varselMal = new VarselMalRestTo();
-		varselMal.setKanal(DokmetConsumerTest.PREFERERT_KANAL.toString());
-		varselMal.setVarselTittel(DokmetConsumerTest.VARSEL_TITTEL);
-		varselMal.setFoerstegangsvarselTekst(DokmetConsumerTest.FOERSTE_GANG_TEKST);
-		varselMal.setRevarslingTekst(DokmetConsumerTest.REVARSLING_TEKST);
+		varselMal.setKanal(PREFERERT_KANAL.toString());
+		varselMal.setVarselTittel(VARSEL_TITTEL);
+		varselMal.setFoerstegangsvarselTekst(FOERSTE_GANG_TEKST);
+		varselMal.setRevarslingTekst(REVARSLING_TEKST);
 
 		varselInfo.setVarselmals(Sets.newHashSet(varselMal));
 		return varselInfo;
