@@ -36,16 +36,17 @@ public class DokmetConsumer {
 
 	@Cacheable(VARSELINFO_CACHE)
 	public Varselinfo hentVarselinfo(String varseltypeId) {
-		VarselInfoTo varselInfo;
+		VarselInfoTo varselInfoTo;
 		HttpHeaders headers = createHeaders();
 
 		try {
 			HttpEntity<String> request = new HttpEntity<>(headers);
-			varselInfo = restTemplate.exchange(varselinfoUrl + "/{varseltypeId}", GET, request, VarselInfoTo.class, varseltypeId).getBody();
+			varselInfoTo = restTemplate.exchange(varselinfoUrl + "/{varseltypeId}", GET, request, VarselInfoTo.class, varseltypeId).getBody();
 		} catch (Exception e) {
 			throw new RuntimeException("Could not find varseltypeId=" + varseltypeId + " from url=" + varselinfoUrl, e);
 		}
-		return varselinfoMapper.map(varselInfo);
+
+		return varselinfoMapper.map(varselInfoTo);
 	}
 
 	private HttpHeaders createHeaders() {
