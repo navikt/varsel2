@@ -1,6 +1,7 @@
 package no.nav.varsel.jms.consumer.tvarsel001.support;
 
 import jakarta.jms.JMSException;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLAktoer;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLAktoerId;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLParameter;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 import static no.nav.varsel.domain.utility.DateTimeConverter.toLocalDateTime;
 
+@Slf4j
 @Component
 public class BestillServicemeldingMapper {
 
@@ -31,6 +33,7 @@ public class BestillServicemeldingMapper {
 		to.setUtloepstidspunkt(toLocalDateTime(varsel.getUtloepstidspunkt()));
 		to.setParameters(map(varsel.getParameterListes()));
 		to.setTestvarsel(getTestVarselValue(varselWithMessage));
+		to.setVarselBestillingId(getVarselbestillingIdValue(varselWithMessage));
 
 		return to;
 	}
@@ -40,6 +43,14 @@ public class BestillServicemeldingMapper {
 			return varsel.getMessage().getBooleanProperty(BestillVarselTo.TESTVARSEL);
 		} catch (JMSException e) {
 			return false;
+		}
+	}
+
+	private String getVarselbestillingIdValue(ObjectMessageWrapper<XMLVarsel> varsel) {
+		try {
+			return varsel.getMessage().getStringProperty(BestillVarselTo.VARSELBESTILLING_ID);
+		} catch (JMSException e) {
+			return null;
 		}
 	}
 

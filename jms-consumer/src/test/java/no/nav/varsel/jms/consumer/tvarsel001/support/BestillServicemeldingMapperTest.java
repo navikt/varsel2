@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import static no.nav.varsel.Utils.formatDateTime;
 import static no.nav.varsel.domain.utility.DateTimeConverter.toJodaDateTime;
 import static no.nav.varsel.service.to.BestillVarselTo.TESTVARSEL;
+import static no.nav.varsel.service.to.BestillVarselTo.VARSELBESTILLING_ID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -33,6 +34,10 @@ public class BestillServicemeldingMapperTest {
 	private Message mockActiveMqMessageTestvarselFalse;
 	@Mock
 	private Message mockActiveMqMessageTestvarselTrue;
+	@Mock
+	private Message mockActiveMqMessageVarselbestillingIdPresent;
+	@Mock
+	private Message mockActiveMqMessageVarselbestillingIdNotPresent;
 
 	public static final LocalDateTime UTLOEPSTIDSPUNKT_LDT = LocalDateTime.now().plusHours(1);
 	public static final String MOTTAKER = "mottakeren";
@@ -42,13 +47,15 @@ public class BestillServicemeldingMapperTest {
 	private final BestillServicemeldingMapper mapper = new BestillServicemeldingMapper();
 
 	public static final String VARSELTYPE_ID = "varseltypeId";
-
+	private static final String VARSELBESTILLINGID_HEADER_VALUE = "c73b79c7-d4a2-497a-a93d-b2600cffa461";
 
 	@BeforeEach
 	public void setTestvarsel() throws JMSException {
 		MockitoAnnotations.openMocks(this);
 		Mockito.doReturn(false).when(mockActiveMqMessageTestvarselFalse).getBooleanProperty(TESTVARSEL);
 		Mockito.doReturn(true).when(mockActiveMqMessageTestvarselTrue).getBooleanProperty(TESTVARSEL);
+		Mockito.doReturn(VARSELBESTILLINGID_HEADER_VALUE).when(mockActiveMqMessageVarselbestillingIdPresent).getStringProperty(VARSELBESTILLING_ID);
+		Mockito.doReturn(null).when(mockActiveMqMessageVarselbestillingIdNotPresent).getStringProperty(VARSELBESTILLING_ID);
 	}
 
 	@Test
@@ -117,6 +124,18 @@ public class BestillServicemeldingMapperTest {
 	@Test
 	public void messageWithTestvarselFalse() {
 		Assertions.assertThat(mapper.map(createVarsel(mockActiveMqMessageTestvarselFalse)).isTestvarsel()).isFalse();
+	}
+
+	@Test
+	public void messageWithVarselbestillingIdPresent() {
+		Assertions.assertThat(mapper.map(createVarsel(mockActiveMqMessageVarselbestillingIdPresent)).getVarselBestillingId())
+				.isEqualTo(VARSELBESTILLINGID_HEADER_VALUE);
+	}
+
+	@Test
+	public void messageWithVarselbestillingIdNotPresent() {
+		Assertions.assertThat(mapper.map(createVarsel(mockActiveMqMessageVarselbestillingIdNotPresent)).getVarselBestillingId())
+				.isNull();
 	}
 
 	public static ObjectMessageWrapper<XMLVarsel> createVarsel(Message message) {

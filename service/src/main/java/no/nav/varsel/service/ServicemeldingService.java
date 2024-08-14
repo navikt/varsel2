@@ -3,6 +3,11 @@ package no.nav.varsel.service;
 import no.nav.brukernotifikasjon.schemas.input.BeskjedInput;
 import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
 import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
+import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
+import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
+import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
+import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.consumer.support.VarselKanalDecider;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.VarselbestillingRepo;
@@ -17,11 +22,6 @@ import no.nav.varsel.service.tvarsel001.support.BrukernotifikasjonMapper;
 import no.nav.varsel.service.tvarsel001.support.NotifikasjonMapper;
 import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
 import no.nav.varsel.tvarsel001.NotifikasjonPublisher;
-import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
-import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
-import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.consumer.support.VarselKanalDecider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,12 +82,19 @@ public class ServicemeldingService {
 			throw new VarselbestillingUtloeptException(bestilling.getVarselBestillingId(), bestilling.getUtloepstidspunkt());
 		}
 
+		//1.1 Duplikatkontroll
+		if (bestilling.getVarselBestillingId() != null && varselbestillingRepo.existsByVarselbestillingId(bestilling.getVarselBestillingId())) {
+			log.info("Varselbestilling med bestillingId={} finnes allerede. Sender ikke nytt varsel.", bestilling.getVarselBestillingId());
+			return;
+		}
+
+		bestilling.setVarselBestillingId(getVarselbestillingId(bestilling));
+
 		//2.Hent Aktørid for Ident
 		bestilling.setMottaker(aktoerService.findMissingAktoer(bestilling));
 
 		//3.Hent Varselinfo
 		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestilling.getVarseltypeId());
-		bestilling.setVarselBestillingId(UUID.randomUUID().toString());
 		validateVarselInfoForBestilling(bestilling, varselInfoTo);
 
 		overridePreferertKanalForTestmelding(bestilling, varselInfoTo);
@@ -177,5 +184,12 @@ public class ServicemeldingService {
 		if (to.isTestvarsel()) {
 			varselInfoTo.setPreferertKanal(new HashSet<>(Arrays.asList(KanalCode.values())));
 		}
+	}
+
+	private String getVarselbestillingId(BestillVarselTo bestilling) {
+		if (bestilling.getVarselBestillingId() == null) {
+			return UUID.randomUUID().toString();
+		}
+		return bestilling.getVarselBestillingId();
 	}
 }

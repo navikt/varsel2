@@ -15,7 +15,9 @@ import static no.nav.varsel.service.support.ValueValidator.notNull;
 public class BestillVarselTo extends AktoerBestillingTo {
 
 	public static final String TESTVARSEL = "Testvarsel";
+	public static final String VARSELBESTILLING_ID = "VarselbestillingId";
 	private static final String VALIDATION_FAILED_FOR_INPUT = "Validation failed for input, ";
+
 	protected String varseltypeId;
 	@ToString.Exclude
 	private Map<String, String> parameters = new HashMap<>();
