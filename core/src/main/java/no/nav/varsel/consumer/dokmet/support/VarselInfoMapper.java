@@ -1,16 +1,16 @@
-package no.nav.varsel.consumer.dokkat.support;
+package no.nav.varsel.consumer.dokmet.support;
 
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
 import no.nav.dokkat.schemas.tkat021.VarselMalRestTo;
-import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.consumer.dokkat.to.VarselMalTo;
+import no.nav.varsel.consumer.dokmet.to.VarselInfoTo;
+import no.nav.varsel.consumer.dokmet.to.VarselMalTo;
 import no.nav.varsel.domain.code.KanalCode;
 import org.springframework.util.Assert;
 
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
-import static no.nav.varsel.consumer.dokkat.to.VarselInfoTo.VarselInfoToBuilder.aVarselInfoTo;
+import static no.nav.varsel.consumer.dokmet.to.VarselInfoTo.VarselInfoToBuilder.aVarselInfoTo;
 
 public class VarselInfoMapper {
 

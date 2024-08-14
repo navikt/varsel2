@@ -1,12 +1,12 @@
-package no.nav.varsel.consumer.dokkat.support;
+package no.nav.varsel.consumer.dokmet.support;
 
 import com.google.common.collect.Sets;
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
 import no.nav.dokkat.schemas.tkat021.VarselMalRestTo;
-import no.nav.varsel.consumer.dokkat.VarselInfoConsumerTest;
+import no.nav.varsel.consumer.dokmet.VarselInfoConsumerTest;
 import no.nav.varsel.domain.code.KanalCode;
-import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.consumer.dokkat.to.VarselMalTo;
+import no.nav.varsel.consumer.dokmet.to.VarselInfoTo;
+import no.nav.varsel.consumer.dokmet.to.VarselMalTo;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 

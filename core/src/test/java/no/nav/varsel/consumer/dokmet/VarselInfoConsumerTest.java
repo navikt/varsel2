@@ -1,8 +1,8 @@
-package no.nav.varsel.consumer.dokkat;
+package no.nav.varsel.consumer.dokmet;
 
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
-import no.nav.varsel.consumer.dokkat.support.VarselInfoMapper;
-import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.consumer.dokmet.support.VarselInfoMapper;
+import no.nav.varsel.consumer.dokmet.to.VarselInfoTo;
 import no.nav.varsel.domain.code.KanalCode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

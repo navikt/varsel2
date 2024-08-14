@@ -1,9 +1,9 @@
-package no.nav.varsel.consumer.dokkat;
+package no.nav.varsel.consumer.dokmet;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
-import no.nav.varsel.consumer.dokkat.support.VarselInfoMapper;
-import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.consumer.dokmet.support.VarselInfoMapper;
+import no.nav.varsel.consumer.dokmet.to.VarselInfoTo;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;

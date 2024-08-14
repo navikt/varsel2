@@ -1,4 +1,4 @@
-package no.nav.varsel.consumer.dokkat.to;
+package no.nav.varsel.consumer.dokmet.to;
 
 import com.google.common.collect.Sets;
 import lombok.ToString;
