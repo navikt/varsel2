@@ -24,9 +24,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpMethod.GET;
 
-@SpringBootTest(classes = {VarselInfoConsumer.class})
+@SpringBootTest(classes = {DokmetConsumer.class})
 @ActiveProfiles({"itest"})
-public class VarselInfoConsumerTest {
+public class DokmetConsumerTest {
 
 	public static final String VARSEL_TITTEL = "Varsel Tittel";
 	public static final String FOERSTE_GANG_TEKST = "Første gang tekst til {mottaker}";
@@ -47,7 +47,7 @@ public class VarselInfoConsumerTest {
 	private VarselInfoMapper varselInfoMapper;
 
 	@Autowired
-	private VarselInfoConsumer varselInfoConsumer;
+	private DokmetConsumer dokmetConsumer;
 
 	@Test
 	public void shouldConsume() {
@@ -59,7 +59,7 @@ public class VarselInfoConsumerTest {
 		VarselInfoTo mock = new VarselInfoTo();
 		when(varselInfoMapper.map(varselInfoRestTo)).thenReturn(mock);
 
-		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID);
+		VarselInfoTo varselInfoTo = dokmetConsumer.hentVarselInfo(VARSELTYPE_ID);
 		assertThat(varselInfoTo, is(mock));
 	}
 
@@ -68,7 +68,7 @@ public class VarselInfoConsumerTest {
 		when(restTemplate.exchange(anyString(), eq(GET), any(HttpEntity.class), eq(VarselInfoRestTo.class), anyString()))
 				.thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
 
-		Exception e = Assertions.assertThrows(RuntimeException.class, () -> varselInfoConsumer.hentVarselInfo(VARSELTYPE_ID));
+		Exception e = Assertions.assertThrows(RuntimeException.class, () -> dokmetConsumer.hentVarselInfo(VARSELTYPE_ID));
 		Assertions.assertTrue(e.getMessage().contains("Could not find varseltypeId=varseltypeIden from url="));
 	}
 }

@@ -20,15 +20,15 @@ import static org.springframework.http.HttpMethod.GET;
 
 @Component
 @Slf4j
-public class VarselInfoConsumer {
+public class DokmetConsumer {
 
 	private final RestTemplate restTemplate;
 	private final VarselInfoMapper varselInfoMapper;
 	private final String varselinfoUrl;
 
-	public VarselInfoConsumer(@Value("${dokmet.varselinfo.url}") String varselinfoUrl,
-							  RestTemplate restTemplate,
-							  VarselInfoMapper varselInfoMapper) {
+	public DokmetConsumer(@Value("${dokmet.varselinfo.url}") String varselinfoUrl,
+						  RestTemplate restTemplate,
+						  VarselInfoMapper varselInfoMapper) {
 		this.restTemplate = restTemplate;
 		this.varselinfoUrl = varselinfoUrl;
 		this.varselInfoMapper = varselInfoMapper;

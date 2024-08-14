@@ -5,7 +5,7 @@ import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
 import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.consumer.dokmet.VarselInfoConsumer;
+import no.nav.varsel.consumer.dokmet.DokmetConsumer;
 import no.nav.varsel.consumer.dokmet.to.VarselInfoTo;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
 import no.nav.varsel.domain.code.KanalCode;
@@ -48,7 +48,7 @@ public class ServicemeldingService {
 	private AktoerService aktoerService;
 
 	@Autowired
-	private VarselInfoConsumer varselInfoConsumer;
+	private DokmetConsumer dokmetConsumer;
 
 	@Autowired
 	private HentDigitalKontaktinformasjonConsumer dkifConsumer;
@@ -94,7 +94,7 @@ public class ServicemeldingService {
 		bestilling.setMottaker(aktoerService.findMissingAktoer(bestilling));
 
 		//3.Hent Varselinfo
-		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestilling.getVarseltypeId());
+		VarselInfoTo varselInfoTo = dokmetConsumer.hentVarselInfo(bestilling.getVarseltypeId());
 		validateVarselInfoForBestilling(bestilling, varselInfoTo);
 
 		overridePreferertKanalForTestmelding(bestilling, varselInfoTo);

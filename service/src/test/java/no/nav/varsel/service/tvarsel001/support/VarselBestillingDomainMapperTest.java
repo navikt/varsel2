@@ -29,8 +29,8 @@ import java.util.HashSet;
 import java.util.UUID;
 
 import static java.util.Collections.singletonMap;
-import static no.nav.varsel.consumer.dokmet.VarselInfoConsumerTest.VARSEL_NAVN;
-import static no.nav.varsel.consumer.dokmet.VarselInfoConsumerTest.VARSEL_URL;
+import static no.nav.varsel.consumer.dokmet.DokmetConsumerTest.VARSEL_NAVN;
+import static no.nav.varsel.consumer.dokmet.DokmetConsumerTest.VARSEL_URL;
 import static no.nav.varsel.test.TestUtils.aboutNow;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

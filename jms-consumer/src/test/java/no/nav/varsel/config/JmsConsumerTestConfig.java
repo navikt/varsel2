@@ -5,7 +5,7 @@ import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
-import no.nav.varsel.consumer.dokmet.VarselInfoConsumer;
+import no.nav.varsel.consumer.dokmet.DokmetConsumer;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
 import no.nav.varsel.kafka.CustomKafkaTemplate;
 import no.nav.varsel.repo.config.RepoTestConfig;
@@ -23,7 +23,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 		HentDigitalKontaktinformasjonConsumer.class,
 		VarselKanalDecider.class,
 		HentDigitalKontaktinformasjonMapper.class,
-		VarselInfoConsumer.class
+		DokmetConsumer.class
 })
 @Configuration
 public class JmsConsumerTestConfig {
