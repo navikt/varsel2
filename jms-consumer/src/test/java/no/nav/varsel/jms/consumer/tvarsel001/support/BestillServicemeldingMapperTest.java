@@ -47,7 +47,7 @@ public class BestillServicemeldingMapperTest {
 	private final BestillServicemeldingMapper mapper = new BestillServicemeldingMapper();
 
 	public static final String VARSELTYPE_ID = "varseltypeId";
-	private static final String VARSELBESTILLINGID_HEADER_VALUE = "varselbestillingId";
+	private static final String VARSELBESTILLINGID_HEADER_VALUE = "c73b79c7-d4a2-497a-a93d-b2600cffa461";
 
 	@BeforeEach
 	public void setTestvarsel() throws JMSException {
