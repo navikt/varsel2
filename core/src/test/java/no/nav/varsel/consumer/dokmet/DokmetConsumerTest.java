@@ -1,8 +1,8 @@
 package no.nav.varsel.consumer.dokmet;
 
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
-import no.nav.varsel.consumer.dokmet.support.VarselInfoMapper;
-import no.nav.varsel.consumer.dokmet.to.VarselInfoTo;
+import no.nav.varsel.consumer.dokmet.support.VarselinfoMapper;
+import no.nav.varsel.consumer.dokmet.to.Varselinfo;
 import no.nav.varsel.domain.code.KanalCode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ public class DokmetConsumerTest {
 	@MockBean
 	private RestTemplate restTemplate;
 	@MockBean
-	private VarselInfoMapper varselInfoMapper;
+	private VarselinfoMapper varselInfoMapper;
 
 	@Autowired
 	private DokmetConsumer dokmetConsumer;
@@ -56,11 +56,11 @@ public class DokmetConsumerTest {
 		when(restTemplate.exchange(anyString(), eq(GET), any(HttpEntity.class), eq(VarselInfoRestTo.class), anyString()))
 				.thenReturn(response);
 
-		VarselInfoTo mock = new VarselInfoTo();
+		Varselinfo mock = new Varselinfo();
 		when(varselInfoMapper.map(varselInfoRestTo)).thenReturn(mock);
 
-		VarselInfoTo varselInfoTo = dokmetConsumer.hentVarselInfo(VARSELTYPE_ID);
-		assertThat(varselInfoTo, is(mock));
+		Varselinfo varselinfo = dokmetConsumer.hentVarselInfo(VARSELTYPE_ID);
+		assertThat(varselinfo, is(mock));
 	}
 
 	@Test

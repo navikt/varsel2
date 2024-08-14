@@ -1,6 +1,6 @@
 package no.nav.varsel.consumer.config;
 
-import no.nav.varsel.consumer.dokmet.support.VarselInfoMapper;
+import no.nav.varsel.consumer.dokmet.support.VarselinfoMapper;
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -37,8 +37,8 @@ public class RestConsumerConfig {
 	}
 
 	@Bean
-	public VarselInfoMapper varselInfoMapper() {
-		return new VarselInfoMapper();
+	public VarselinfoMapper varselInfoMapper() {
+		return new VarselinfoMapper();
 	}
 
 }

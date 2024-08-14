@@ -6,7 +6,7 @@ import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.dokmet.DokmetConsumer;
-import no.nav.varsel.consumer.dokmet.to.VarselInfoTo;
+import no.nav.varsel.consumer.dokmet.to.Varselinfo;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
@@ -97,7 +97,7 @@ public class ServicemeldingServiceTest {
 	private final Varselbestilling varselbestilling = new Varselbestilling();
 	private final BestillVarselTo bestilling = new BestillVarselTo();
 	private final KontaktregisterTo kontaktregisterTo = new KontaktregisterTo();
-	private final VarselInfoTo varselInfoTo = new VarselInfoTo();
+	private final Varselinfo varselinfo = new Varselinfo();
 	private final Doknotifikasjon doknotifikasjon = new Doknotifikasjon();
 	private final BeskjedInput beskjedInput = new BeskjedInput();
 
@@ -109,7 +109,7 @@ public class ServicemeldingServiceTest {
 		bestilling.setAktoerId(null);
 		bestilling.setVarseltypeId(VARSELTYPE_ID);
 
-		varselInfoTo.setPreferertKanal(PREFERERT_KANAL);
+		varselinfo.setPreferertKanal(PREFERERT_KANAL);
 	}
 
 	@Test
@@ -120,10 +120,10 @@ public class ServicemeldingServiceTest {
 		var varselutsendingList = List.of(varselutsendingEpost, varselutsendingSms);
 
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
-		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
+		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselinfo, kontaktregisterTo)).thenReturn(varselbestilling);
 		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
 
 		when(notifikasjonMapper.mapNotifikasjon(varselutsendingList, varselbestilling)).thenReturn(doknotifikasjon);
@@ -142,10 +142,10 @@ public class ServicemeldingServiceTest {
 		var varselutsendingList = List.of(varselutsendingEpost, varselutsendingSms);
 
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
-		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
+		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselinfo, kontaktregisterTo)).thenReturn(varselbestilling);
 		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
 
 		when(notifikasjonMapper.mapNotifikasjon(varselutsendingList, varselbestilling)).thenReturn(doknotifikasjon);
@@ -167,10 +167,10 @@ public class ServicemeldingServiceTest {
 		var varselutsendingList = List.of(varselutsendingEpost, varselutsendingSms);
 
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
-		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
+		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselinfo, kontaktregisterTo)).thenReturn(varselbestilling);
 		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
 
 		when(notifikasjonMapper.mapNotifikasjon(varselutsendingList, varselbestilling)).thenReturn(doknotifikasjon);
@@ -187,7 +187,7 @@ public class ServicemeldingServiceTest {
 	@Test
 	public void shouldBestillServicemeldingMedBrukernotifikasjon() {
 		bestilling.setAktoerId(AKTOR_ID);
-		varselInfoTo.setMaler(createMaler());
+		varselinfo.setMaler(createMaler());
 
 		var varselutsendingEpost = createVarselutsendingWithKanal(KanalCode.EPOST);
 		var varselutsendingDittNav = createVarselutsendingWithKanal(KanalCode.DITT_NAV);
@@ -200,11 +200,11 @@ public class ServicemeldingServiceTest {
 		var nokkelDittNav = createNokkelInputWithBestillingsId(doknotifikasjonDittNav.getBestillingsId());
 
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL_MED_DITT_NAV);
-		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
+		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselinfo, kontaktregisterTo)).thenReturn(varselbestilling);
 		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
 
 		when(notifikasjonMapper.mapNotifikasjon(varselutsendingList, varselbestilling)).thenReturn(doknotifikasjonEpost);
@@ -220,7 +220,7 @@ public class ServicemeldingServiceTest {
 	@Test
 	void shouldNotSendBrukernotifikasjonToDittNavWithoutFoerstegangsvarselTekst() {
 		bestilling.setAktoerId(AKTOR_ID);
-		varselInfoTo.setMaler(createDittNavMalUtenFoerstegangstekst());
+		varselinfo.setMaler(createDittNavMalUtenFoerstegangstekst());
 
 		var varselutsendingDittNav = createVarselutsendingWithKanal(KanalCode.DITT_NAV);
 		var varselutsendingList = singletonList(varselutsendingDittNav);
@@ -228,11 +228,11 @@ public class ServicemeldingServiceTest {
 		var nokkelDittNav = createNokkelInputWithBestillingsId(doknotifikasjonDittNav.getBestillingsId());
 
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL_MED_DITT_NAV);
-		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo)).thenReturn(varselbestilling);
+		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselinfo, kontaktregisterTo)).thenReturn(varselbestilling);
 		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
 
 		servicemeldingService.bestillServicemelding(bestilling);
@@ -243,7 +243,7 @@ public class ServicemeldingServiceTest {
 	@Test
 	public void shouldThrowTekniskForTekniskFeilDkif() {
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(TEKNISK));
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(TEKNISK)).thenThrow(new ArithmeticException(TEKNISK));
 
@@ -254,10 +254,10 @@ public class ServicemeldingServiceTest {
 	@Test
 	public void throwsInaktivVarselmalExceptionForInaktivVarselmal() {
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		bestilling.setTestvarsel(false);
-		varselInfoTo.setInaktiv(true);
-		varselInfoTo.setVarseltypeId(VARSELTYPE_ID);
+		varselinfo.setInaktiv(true);
+		varselinfo.setVarseltypeId(VARSELTYPE_ID);
 
 		Executable executable = () -> servicemeldingService.bestillServicemelding(bestilling);
 
@@ -269,10 +269,10 @@ public class ServicemeldingServiceTest {
 
 	@Test
 	public void doesNotStoreVarselbestillingWhenInaktivVarselmal() {
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		bestilling.setTestvarsel(false);
-		varselInfoTo.setInaktiv(true);
-		varselInfoTo.setVarseltypeId(VARSELTYPE_ID);
+		varselinfo.setInaktiv(true);
+		varselinfo.setVarseltypeId(VARSELTYPE_ID);
 		try {
 			servicemeldingService.bestillServicemelding(bestilling);
 			fail();
@@ -284,10 +284,10 @@ public class ServicemeldingServiceTest {
 	@Test
 	public void preferertKanalIsOverreidenWhenTestVarsel() {
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		bestilling.setTestvarsel(true);
-		varselInfoTo.setInaktiv(false);
+		varselinfo.setInaktiv(false);
 		servicemeldingService.bestillServicemelding(bestilling);
 		verify(varselKanalDecider, never()).decideKanaler(kontaktregisterTo, PREFERERT_KANAL);
 		verify(varselKanalDecider, times(1)).decideKanaler(kontaktregisterTo, OVERSTYRT_PREFERERT_KANAL);
@@ -296,10 +296,10 @@ public class ServicemeldingServiceTest {
 	@Test
 	public void preferertKanallisteNotOverridenForNormalVarsler() {
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselInfoTo);
+		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		bestilling.setTestvarsel(false);
-		varselInfoTo.setInaktiv(false);
+		varselinfo.setInaktiv(false);
 		servicemeldingService.bestillServicemelding(bestilling);
 		verify(varselKanalDecider, times(1)).decideKanaler(kontaktregisterTo, PREFERERT_KANAL);
 		verify(varselKanalDecider, never()).decideKanaler(kontaktregisterTo, OVERSTYRT_PREFERERT_KANAL);

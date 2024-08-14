@@ -2,8 +2,8 @@ package no.nav.varsel.consumer.dokmet;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
-import no.nav.varsel.consumer.dokmet.support.VarselInfoMapper;
-import no.nav.varsel.consumer.dokmet.to.VarselInfoTo;
+import no.nav.varsel.consumer.dokmet.support.VarselinfoMapper;
+import no.nav.varsel.consumer.dokmet.to.Varselinfo;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -23,19 +23,19 @@ import static org.springframework.http.HttpMethod.GET;
 public class DokmetConsumer {
 
 	private final RestTemplate restTemplate;
-	private final VarselInfoMapper varselInfoMapper;
+	private final VarselinfoMapper varselInfoMapper;
 	private final String varselinfoUrl;
 
 	public DokmetConsumer(@Value("${dokmet.varselinfo.url}") String varselinfoUrl,
 						  RestTemplate restTemplate,
-						  VarselInfoMapper varselInfoMapper) {
+						  VarselinfoMapper varselInfoMapper) {
 		this.restTemplate = restTemplate;
 		this.varselinfoUrl = varselinfoUrl;
 		this.varselInfoMapper = varselInfoMapper;
 	}
 
 	@Cacheable(VARSELINFO_CACHE)
-	public VarselInfoTo hentVarselInfo(String varseltypeId) {
+	public Varselinfo hentVarselInfo(String varseltypeId) {
 		VarselInfoRestTo varselInfo;
 		HttpHeaders headers = createHeaders();
 

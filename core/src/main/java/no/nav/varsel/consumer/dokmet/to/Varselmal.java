@@ -2,7 +2,7 @@ package no.nav.varsel.consumer.dokmet.to;
 
 import no.nav.varsel.domain.code.KanalCode;
 
-public class VarselMalTo {
+public class Varselmal {
 	private KanalCode kanal;
 	private String tittel;
 	private String foerstegangsTekst;
@@ -73,13 +73,13 @@ public class VarselMalTo {
 			return this;
 		}
 
-		public VarselMalTo build() {
-			VarselMalTo varselMalTo = new VarselMalTo();
-			varselMalTo.setKanal(kanal);
-			varselMalTo.setTittel(tittel);
-			varselMalTo.setFoerstegangsTekst(foerstegangsTekst);
-			varselMalTo.setRevarslingTekst(revarslingTekst);
-			return varselMalTo;
+		public Varselmal build() {
+			Varselmal varselmal = new Varselmal();
+			varselmal.setKanal(kanal);
+			varselmal.setTittel(tittel);
+			varselmal.setFoerstegangsTekst(foerstegangsTekst);
+			varselmal.setRevarslingTekst(revarslingTekst);
+			return varselmal;
 		}
 	}
 }

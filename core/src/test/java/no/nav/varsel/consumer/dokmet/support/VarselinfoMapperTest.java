@@ -5,8 +5,8 @@ import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
 import no.nav.dokkat.schemas.tkat021.VarselMalRestTo;
 import no.nav.varsel.consumer.dokmet.DokmetConsumerTest;
 import no.nav.varsel.domain.code.KanalCode;
-import no.nav.varsel.consumer.dokmet.to.VarselInfoTo;
-import no.nav.varsel.consumer.dokmet.to.VarselMalTo;
+import no.nav.varsel.consumer.dokmet.to.Varselinfo;
+import no.nav.varsel.consumer.dokmet.to.Varselmal;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
@@ -18,13 +18,13 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-public class VarselInfoMapperTest {
+public class VarselinfoMapperTest {
 
-	private final VarselInfoMapper mapper = new VarselInfoMapper();
+	private final VarselinfoMapper mapper = new VarselinfoMapper();
 
 	@Test
 	public void shouldMap() {
-		VarselInfoTo to = mapper.map(createVarselInfo());
+		Varselinfo to = mapper.map(createVarselInfo());
 
 		assertThat(to.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(to.getVarselNavn(), Matchers.is(DokmetConsumerTest.VARSEL_NAVN));
@@ -37,7 +37,7 @@ public class VarselInfoMapperTest {
 		assertThat(to.getPreferertKanal(), contains(KanalCode.EPOST));
 		assertThat(to.getMaler(), hasSize(1));
 
-		VarselMalTo malTo = to.getMaler().iterator().next();
+		Varselmal malTo = to.getMaler().iterator().next();
 		assertThat(malTo.getKanal(), is(KanalCode.EPOST));
 		assertThat(malTo.getTittel(), Matchers.is(DokmetConsumerTest.VARSEL_TITTEL));
 		assertThat(malTo.getFoerstegangsTekst(), Matchers.is(DokmetConsumerTest.FOERSTE_GANG_TEKST));
@@ -48,7 +48,7 @@ public class VarselInfoMapperTest {
 	public void shouldHandleNullRevarslingIntervall() {
 		VarselInfoRestTo varselInfo = createVarselInfo();
 		varselInfo.setRevarslingIntervall(null);
-		VarselInfoTo to = mapper.map(varselInfo);
+		Varselinfo to = mapper.map(varselInfo);
 
 		assertThat(to.getRevarslingIntervall(), nullValue());
 	}
@@ -57,7 +57,7 @@ public class VarselInfoMapperTest {
 	public void shouldHandleNullAntallRevarslinger() {
 		VarselInfoRestTo varselInfo = createVarselInfo();
 		varselInfo.setAntallRevarslinger(null);
-		VarselInfoTo to = mapper.map(varselInfo);
+		Varselinfo to = mapper.map(varselInfo);
 
 		assertThat(to.getAntallRevarsling(), nullValue());
 	}

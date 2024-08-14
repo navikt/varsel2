@@ -7,7 +7,7 @@ import no.nav.varsel.domain.code.KanalCode;
 import java.util.Set;
 
 @ToString
-public class VarselInfoTo {
+public class Varselinfo {
 	private Set<KanalCode> preferertKanal = Sets.newHashSet();
 	private String varselNavn;
 	private String varseltypeId;
@@ -17,13 +17,13 @@ public class VarselInfoTo {
 	private String varselUrl;
 	private Integer revarslingIntervall;
 	private Integer antallRevarsling;
-	private Set<VarselMalTo> maler;
+	private Set<Varselmal> maler;
 
 	public void addPreferertKanal(KanalCode kanal) {
 		this.preferertKanal.add(kanal);
 	}
 
-	public VarselMalTo getMal(KanalCode kanalCode) {
+	public Varselmal getMal(KanalCode kanalCode) {
 		return maler.stream().filter(m -> m.getKanal() == kanalCode).findFirst().get();
 	}
 
@@ -99,11 +99,11 @@ public class VarselInfoTo {
 		this.antallRevarsling = antallRevarsling;
 	}
 
-	public Set<VarselMalTo> getMaler() {
+	public Set<Varselmal> getMaler() {
 		return maler;
 	}
 
-	public void setMaler(Set<VarselMalTo> maler) {
+	public void setMaler(Set<Varselmal> maler) {
 		this.maler = maler;
 	}
 
@@ -117,7 +117,7 @@ public class VarselInfoTo {
 		private String varselUrl;
 		private Integer revarslingIntervall;
 		private Integer antallRevarsling;
-		private Set<VarselMalTo> maler;
+		private Set<Varselmal> maler;
 
 		private VarselInfoToBuilder() {
 		}
@@ -171,24 +171,24 @@ public class VarselInfoTo {
 			return this;
 		}
 
-		public VarselInfoToBuilder maler(Set<VarselMalTo> maler) {
+		public VarselInfoToBuilder maler(Set<Varselmal> maler) {
 			this.maler = maler;
 			return this;
 		}
 
-		public VarselInfoTo build() {
-			VarselInfoTo varselInfoTo = new VarselInfoTo();
-			varselInfoTo.setPreferertKanal(preferertKanal);
-			varselInfoTo.setVarseltypeId(varseltypeId);
-			varselInfoTo.setVarselNavn(varselNavn);
-			varselInfoTo.setVarselForDistKanal(varselForDistKanal);
-			varselInfoTo.setVarselKategori(varselKategori);
-			varselInfoTo.setInaktiv(inaktiv);
-			varselInfoTo.setVarselUrl(varselUrl);
-			varselInfoTo.setRevarslingIntervall(revarslingIntervall);
-			varselInfoTo.setAntallRevarsling(antallRevarsling);
-			varselInfoTo.setMaler(maler);
-			return varselInfoTo;
+		public Varselinfo build() {
+			Varselinfo varselinfo = new Varselinfo();
+			varselinfo.setPreferertKanal(preferertKanal);
+			varselinfo.setVarseltypeId(varseltypeId);
+			varselinfo.setVarselNavn(varselNavn);
+			varselinfo.setVarselForDistKanal(varselForDistKanal);
+			varselinfo.setVarselKategori(varselKategori);
+			varselinfo.setInaktiv(inaktiv);
+			varselinfo.setVarselUrl(varselUrl);
+			varselinfo.setRevarslingIntervall(revarslingIntervall);
+			varselinfo.setAntallRevarsling(antallRevarsling);
+			varselinfo.setMaler(maler);
+			return varselinfo;
 		}
 	}
 }

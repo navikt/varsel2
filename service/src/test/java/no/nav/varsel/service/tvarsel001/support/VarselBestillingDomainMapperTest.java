@@ -3,8 +3,8 @@ package no.nav.varsel.service.tvarsel001.support;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.consumer.dokmet.to.VarselInfoTo;
-import no.nav.varsel.consumer.dokmet.to.VarselMalTo;
+import no.nav.varsel.consumer.dokmet.to.Varselinfo;
+import no.nav.varsel.consumer.dokmet.to.Varselmal;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
@@ -140,7 +140,7 @@ public class VarselBestillingDomainMapperTest {
 	@Test
 	public void shouldThrowWhenFoerstegangVarselMissingVarselTekst() {
 		String expectedErrMsg = String.format("Missing varseltekst for varselbestillingsId=%s, kanalCode=%s", BESTILLING_ID, KanalCode.EPOST);
-		VarselInfoTo varselTo = createVarselTo();
+		Varselinfo varselTo = createVarselTo();
 		varselTo.getMal(KanalCode.EPOST).setFoerstegangsTekst(null);
 		Executable executable = () -> mapper.mapVarselbestillingFoerstegangVarselMedRevarsel(createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 		Exception exception = Assertions.assertThrows(VarselTekstMissingException.class, executable);
@@ -174,7 +174,7 @@ public class VarselBestillingDomainMapperTest {
 
 	@Test
 	public void shouldUseFasitPropertyWhenVarselUrlEquals$navnobaseurl$() {
-		VarselInfoTo varselTo = createVarselTo();
+		Varselinfo varselTo = createVarselTo();
 		varselTo.setVarselUrl("$navnobaseurl$");
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 
@@ -186,7 +186,7 @@ public class VarselBestillingDomainMapperTest {
 		String postfix = "/din-innboks";
 		String prefix = "prefix";
 
-		VarselInfoTo varselTo = createVarselTo();
+		Varselinfo varselTo = createVarselTo();
 		varselTo.setVarselUrl(prefix + "$navnobaseurl$" + postfix);
 
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
@@ -196,7 +196,7 @@ public class VarselBestillingDomainMapperTest {
 
 	@Test
 	public void shouldUseVarselUrlFromDokkat() {
-		VarselInfoTo varselTo = createVarselTo();
+		Varselinfo varselTo = createVarselTo();
 		varselTo.setVarselUrl("dokkat");
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 
@@ -205,7 +205,7 @@ public class VarselBestillingDomainMapperTest {
 
 	@Test
 	public void shouldHandleNoFlettingFromDokkat() {
-		VarselInfoTo varselTo = createVarselTo();
+		Varselinfo varselTo = createVarselTo();
 		varselTo.setVarselUrl("dokkat");
 		Varsel varsel = mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 
@@ -214,7 +214,7 @@ public class VarselBestillingDomainMapperTest {
 
 	@Test
 	public void shouldFletteUrl() {
-		VarselInfoTo varselTo = createVarselTo();
+		Varselinfo varselTo = createVarselTo();
 		varselTo.setVarselUrl("dokkat/{id}");
 
 		BestillVarselTo bestillTo = createBestillTo();
@@ -231,7 +231,7 @@ public class VarselBestillingDomainMapperTest {
 	@Test
 	public void shouldStopRevarslingWhenMissingRevarslingstekst() {
 		String expectedErrMsg = String.format("Missing varseltekst for varselbestillingsId=%s, kanalCode=%s", BESTILLING_ID, KanalCode.DITT_NAV);
-		VarselInfoTo varselTo = createVarselTo();
+		Varselinfo varselTo = createVarselTo();
 		varselTo.getMal(KanalCode.DITT_NAV).setRevarslingTekst(null);
 		Executable executable = () -> mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 		Exception exception = Assertions.assertThrows(VarselTekstMissingException.class, executable);
@@ -240,7 +240,7 @@ public class VarselBestillingDomainMapperTest {
 
 	@Test
 	public void shouldNotSetRevarslingsfieldsWhenRevarslingIntervallIsNull() {
-		VarselInfoTo varselTo = createVarselTo();
+		Varselinfo varselTo = createVarselTo();
 		varselTo.setRevarslingIntervall(null);
 
 		Varselbestilling varselbestilling = mapper.mapVarselbestillingFoerstegangVarselMedRevarsel(createBestillTo(),
@@ -254,7 +254,7 @@ public class VarselBestillingDomainMapperTest {
 
 	@Test
 	public void shouldNotSetRevarslingsfieldsWhenAntallRevarslingIsNull() {
-		VarselInfoTo varselTo = createVarselTo();
+		Varselinfo varselTo = createVarselTo();
 		varselTo.setAntallRevarsling(null);
 
 		Varselbestilling varselbestilling = mapper.mapVarselbestillingFoerstegangVarselMedRevarsel(createBestillTo(),
@@ -278,19 +278,19 @@ public class VarselBestillingDomainMapperTest {
 		return to;
 	}
 
-	private VarselInfoTo createVarselTo() {
-		VarselInfoTo to = createVarselInfoTo();
+	private Varselinfo createVarselTo() {
+		Varselinfo to = createVarselInfoTo();
 
-		VarselMalTo malToSms = createVarselMalTo(KanalCode.SMS);
-		VarselMalTo malToEpost = createVarselMalTo(KanalCode.EPOST);
-		VarselMalTo malToDittnav = createVarselMalTo(KanalCode.DITT_NAV);
+		Varselmal malToSms = createVarselMalTo(KanalCode.SMS);
+		Varselmal malToEpost = createVarselMalTo(KanalCode.EPOST);
+		Varselmal malToDittnav = createVarselMalTo(KanalCode.DITT_NAV);
 
 		to.setMaler(Sets.newHashSet(malToSms, malToEpost, malToDittnav));
 		return to;
 	}
 
-	private VarselInfoTo createVarselInfoTo() {
-		VarselInfoTo to = new VarselInfoTo();
+	private Varselinfo createVarselInfoTo() {
+		Varselinfo to = new Varselinfo();
 		to.setVarselForDistKanal(VARSEL_FOR_DIST_KANAL);
 		to.setVarselNavn(VARSEL_NAVN);
 		to.setVarselKategori(VARSEL_KATEGORI);
@@ -302,8 +302,8 @@ public class VarselBestillingDomainMapperTest {
 		return to;
 	}
 
-	private VarselMalTo createVarselMalTo(KanalCode kanalCode) {
-		VarselMalTo malToSms = new VarselMalTo();
+	private Varselmal createVarselMalTo(KanalCode kanalCode) {
+		Varselmal malToSms = new Varselmal();
 		malToSms.setTittel(TITTEL);
 		malToSms.setKanal(kanalCode);
 		malToSms.setFoerstegangsTekst(FOERSTEGANGS_TEKST);

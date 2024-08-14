@@ -2,19 +2,19 @@ package no.nav.varsel.consumer.dokmet.support;
 
 import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
 import no.nav.dokkat.schemas.tkat021.VarselMalRestTo;
-import no.nav.varsel.consumer.dokmet.to.VarselInfoTo;
-import no.nav.varsel.consumer.dokmet.to.VarselMalTo;
+import no.nav.varsel.consumer.dokmet.to.Varselinfo;
+import no.nav.varsel.consumer.dokmet.to.Varselmal;
 import no.nav.varsel.domain.code.KanalCode;
 import org.springframework.util.Assert;
 
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
-import static no.nav.varsel.consumer.dokmet.to.VarselInfoTo.VarselInfoToBuilder.aVarselInfoTo;
+import static no.nav.varsel.consumer.dokmet.to.Varselinfo.VarselInfoToBuilder.aVarselInfoTo;
 
-public class VarselInfoMapper {
+public class VarselinfoMapper {
 
-	public VarselInfoTo map(VarselInfoRestTo varselInfo) {
+	public Varselinfo map(VarselInfoRestTo varselInfo) {
 		Assert.notNull(varselInfo, "varselInfo is null");
 		Set<VarselMalRestTo> varselmals = varselInfo.getVarselmals();
 
@@ -32,8 +32,8 @@ public class VarselInfoMapper {
 				.build();
 	}
 
-	private VarselMalTo mapMal(VarselMalRestTo varselMal) {
-		return VarselMalTo.VarselMalToBuilder.aVarselMalTo()
+	private Varselmal mapMal(VarselMalRestTo varselMal) {
+		return Varselmal.VarselMalToBuilder.aVarselMalTo()
 				.kanal(mapKanal(varselMal.getKanal()))
 				.tittel(varselMal.getVarselTittel())
 				.foerstegangsTekst(varselMal.getFoerstegangsvarselTekst())

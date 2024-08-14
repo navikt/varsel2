@@ -7,7 +7,7 @@ import no.nav.doknotifikasjon.schemas.PrefererteKanal;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.to.BestillVarselTo;
-import no.nav.varsel.consumer.dokmet.to.VarselMalTo;
+import no.nav.varsel.consumer.dokmet.to.Varselmal;
 
 import java.util.List;
 import java.util.Set;
@@ -98,16 +98,16 @@ public class ServicemeldingTestUtils {
 		return kanaler.stream().map(ServicemeldingTestUtils::createVarselutsending).toList();
 	}
 
-	public static Set<VarselMalTo> createMaler() {
+	public static Set<Varselmal> createMaler() {
 
 		return Stream.of(
-						VarselMalTo.VarselMalToBuilder.aVarselMalTo()
+						Varselmal.VarselMalToBuilder.aVarselMalTo()
 								.foerstegangsTekst("Førstegangstekst epost")
 								.revarslingTekst("Revarslingstekst epost")
 								.kanal(EPOST)
 								.tittel("Epost-tittel")
 								.build(),
-						VarselMalTo.VarselMalToBuilder.aVarselMalTo()
+						Varselmal.VarselMalToBuilder.aVarselMalTo()
 								.foerstegangsTekst("Førstegangstekst ditt nav")
 								.revarslingTekst("Revarslingstekst ditt nav")
 								.kanal(DITT_NAV)
@@ -116,9 +116,9 @@ public class ServicemeldingTestUtils {
 				.collect(Collectors.toSet());
 	}
 
-	public static Set<VarselMalTo> createDittNavMalUtenFoerstegangstekst() {
+	public static Set<Varselmal> createDittNavMalUtenFoerstegangstekst() {
 		return Stream.of(
-				VarselMalTo.VarselMalToBuilder.aVarselMalTo()
+				Varselmal.VarselMalToBuilder.aVarselMalTo()
 						.foerstegangsTekst(null)
 						.revarslingTekst("Revarslingstekst epost")
 						.kanal(DITT_NAV)
