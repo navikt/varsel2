@@ -97,9 +97,9 @@ public class ServicemeldingServiceTest {
 	private final Varselbestilling varselbestilling = new Varselbestilling();
 	private final BestillVarselTo bestilling = new BestillVarselTo();
 	private final KontaktregisterTo kontaktregisterTo = new KontaktregisterTo();
-	private final Varselinfo varselinfo = new Varselinfo();
 	private final Doknotifikasjon doknotifikasjon = new Doknotifikasjon();
 	private final BeskjedInput beskjedInput = new BeskjedInput();
+	private Varselinfo varselinfo;
 
 	@BeforeEach
 	public void setUp() {
@@ -109,7 +109,9 @@ public class ServicemeldingServiceTest {
 		bestilling.setAktoerId(null);
 		bestilling.setVarseltypeId(VARSELTYPE_ID);
 
-		varselinfo.setPreferertKanal(PREFERERT_KANAL);
+		varselinfo = Varselinfo.builder()
+				.preferertKanal(PREFERERT_KANAL)
+				.build();
 	}
 
 	@Test

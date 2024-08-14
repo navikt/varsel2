@@ -1,85 +1,14 @@
 package no.nav.varsel.consumer.dokmet.to;
 
+import lombok.Builder;
+import lombok.Data;
 import no.nav.varsel.domain.code.KanalCode;
 
+@Data
+@Builder
 public class Varselmal {
-	private KanalCode kanal;
-	private String tittel;
-	private String foerstegangsTekst;
-	private String revarslingTekst;
-
-	public KanalCode getKanal() {
-		return kanal;
-	}
-
-	public void setKanal(KanalCode kanal) {
-		this.kanal = kanal;
-	}
-
-	public String getTittel() {
-		return tittel;
-	}
-
-	public void setTittel(String tittel) {
-		this.tittel = tittel;
-	}
-
-	public String getFoerstegangsTekst() {
-		return foerstegangsTekst;
-	}
-
-	public void setFoerstegangsTekst(String foerstegangsTekst) {
-		this.foerstegangsTekst = foerstegangsTekst;
-	}
-
-	public String getRevarslingTekst() {
-		return revarslingTekst;
-	}
-
-	public void setRevarslingTekst(String revarslingTekst) {
-		this.revarslingTekst = revarslingTekst;
-	}
-
-	public static final class VarselMalToBuilder {
-		private KanalCode kanal;
-		private String tittel;
-		private String foerstegangsTekst;
-		private String revarslingTekst;
-
-		private VarselMalToBuilder() {
-		}
-
-		public static VarselMalToBuilder aVarselMalTo() {
-			return new VarselMalToBuilder();
-		}
-
-		public VarselMalToBuilder kanal(KanalCode kanal) {
-			this.kanal = kanal;
-			return this;
-		}
-
-		public VarselMalToBuilder tittel(String tittel) {
-			this.tittel = tittel;
-			return this;
-		}
-
-		public VarselMalToBuilder foerstegangsTekst(String foerstegangsTekst) {
-			this.foerstegangsTekst = foerstegangsTekst;
-			return this;
-		}
-
-		public VarselMalToBuilder revarslingTekst(String revarslingTekst) {
-			this.revarslingTekst = revarslingTekst;
-			return this;
-		}
-
-		public Varselmal build() {
-			Varselmal varselmal = new Varselmal();
-			varselmal.setKanal(kanal);
-			varselmal.setTittel(tittel);
-			varselmal.setFoerstegangsTekst(foerstegangsTekst);
-			varselmal.setRevarslingTekst(revarslingTekst);
-			return varselmal;
-		}
-	}
+	KanalCode kanal;
+	String tittel;
+	String foerstegangsTekst;
+	String revarslingTekst;
 }

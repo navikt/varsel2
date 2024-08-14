@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import static java.util.Collections.singletonMap;
@@ -144,7 +145,7 @@ public class VarselBestillingDomainMapperTest {
 		varselTo.getMal(KanalCode.EPOST).setFoerstegangsTekst(null);
 		Executable executable = () -> mapper.mapVarselbestillingFoerstegangVarselMedRevarsel(createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 		Exception exception = Assertions.assertThrows(VarselTekstMissingException.class, executable);
-		assertEquals(exception.getMessage(),expectedErrMsg);
+		assertEquals(exception.getMessage(), expectedErrMsg);
 
 	}
 
@@ -235,7 +236,7 @@ public class VarselBestillingDomainMapperTest {
 		varselTo.getMal(KanalCode.DITT_NAV).setRevarslingTekst(null);
 		Executable executable = () -> mapper.mapReVarsel(KanalCode.DITT_NAV, createBestillTo(), varselTo, createDigitalKontaktinfoTo());
 		Exception exception = Assertions.assertThrows(VarselTekstMissingException.class, executable);
-		assertEquals(exception.getMessage(),expectedErrMsg);
+		assertEquals(exception.getMessage(), expectedErrMsg);
 	}
 
 	@Test
@@ -279,7 +280,7 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	private Varselinfo createVarselTo() {
-		Varselinfo to = createVarselInfoTo();
+		Varselinfo to = createVarselinfo();
 
 		Varselmal malToSms = createVarselMalTo(KanalCode.SMS);
 		Varselmal malToEpost = createVarselMalTo(KanalCode.EPOST);
@@ -289,26 +290,26 @@ public class VarselBestillingDomainMapperTest {
 		return to;
 	}
 
-	private Varselinfo createVarselInfoTo() {
-		Varselinfo to = new Varselinfo();
-		to.setVarselForDistKanal(VARSEL_FOR_DIST_KANAL);
-		to.setVarselNavn(VARSEL_NAVN);
-		to.setVarselKategori(VARSEL_KATEGORI);
-		to.setInaktiv(INAKTIV);
-		to.setRevarslingIntervall(REVARSLING_INTERVALL);
-		to.setAntallRevarsling(ANTALL_REVARSLING);
-		to.setVarselUrl(VARSEL_URL);
-		to.addPreferertKanal(PREFERERT_KANAL);
-		return to;
+	private Varselinfo createVarselinfo() {
+		return Varselinfo.builder()
+				.varselForDistKanal(VARSEL_FOR_DIST_KANAL)
+				.varselNavn(VARSEL_NAVN)
+				.varselKategori(VARSEL_KATEGORI)
+				.inaktiv(INAKTIV)
+				.revarslingIntervall(REVARSLING_INTERVALL)
+				.antallRevarsling(ANTALL_REVARSLING)
+				.varselUrl(VARSEL_URL)
+				.preferertKanal(Set.of(PREFERERT_KANAL))
+				.build();
 	}
 
 	private Varselmal createVarselMalTo(KanalCode kanalCode) {
-		Varselmal malToSms = new Varselmal();
-		malToSms.setTittel(TITTEL);
-		malToSms.setKanal(kanalCode);
-		malToSms.setFoerstegangsTekst(FOERSTEGANGS_TEKST);
-		malToSms.setRevarslingTekst(REVARSLING_TEKST);
-		return malToSms;
+		return Varselmal.builder()
+				.tittel(TITTEL)
+				.kanal(kanalCode)
+				.foerstegangsTekst(FOERSTEGANGS_TEKST)
+				.revarslingTekst(REVARSLING_TEKST)
+				.build();
 	}
 
 	private KontaktregisterTo createDigitalKontaktinfoTo() {

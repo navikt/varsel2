@@ -10,7 +10,6 @@ import org.springframework.util.Assert;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
-import static no.nav.varsel.consumer.dokmet.to.Varselinfo.VarselInfoToBuilder.aVarselInfoTo;
 
 public class VarselinfoMapper {
 
@@ -19,7 +18,7 @@ public class VarselinfoMapper {
 
 		Set<VarselMalTo> varselmaler = varselInfoTo.getVarselmals();
 
-		return aVarselInfoTo()
+		return Varselinfo.builder()
 				.varseltypeId(varselInfoTo.getVarseltypeId())
 				.varselNavn(varselInfoTo.getVarselNavn())
 				.varselForDistKanal(varselInfoTo.getVarselForDistribusjonKanal())
@@ -34,7 +33,7 @@ public class VarselinfoMapper {
 	}
 
 	private Varselmal mapMal(VarselMalTo varselMal) {
-		return Varselmal.VarselMalToBuilder.aVarselMalTo()
+		return Varselmal.builder()
 				.kanal(mapKanal(varselMal.getKanal()))
 				.tittel(varselMal.getVarselTittel())
 				.foerstegangsTekst(varselMal.getFoerstegangsvarselTekst())
