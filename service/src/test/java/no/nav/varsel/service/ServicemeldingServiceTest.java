@@ -120,7 +120,7 @@ public class ServicemeldingServiceTest {
 		var varselutsendingList = List.of(varselutsendingEpost, varselutsendingSms);
 
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
+		when(dokmetConsumer.hentVarselinfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
 		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselinfo, kontaktregisterTo)).thenReturn(varselbestilling);
@@ -142,7 +142,7 @@ public class ServicemeldingServiceTest {
 		var varselutsendingList = List.of(varselutsendingEpost, varselutsendingSms);
 
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
+		when(dokmetConsumer.hentVarselinfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
 		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselinfo, kontaktregisterTo)).thenReturn(varselbestilling);
@@ -167,7 +167,7 @@ public class ServicemeldingServiceTest {
 		var varselutsendingList = List.of(varselutsendingEpost, varselutsendingSms);
 
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
+		when(dokmetConsumer.hentVarselinfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
 		when(domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselinfo, kontaktregisterTo)).thenReturn(varselbestilling);
@@ -200,7 +200,7 @@ public class ServicemeldingServiceTest {
 		var nokkelDittNav = createNokkelInputWithBestillingsId(doknotifikasjonDittNav.getBestillingsId());
 
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
+		when(dokmetConsumer.hentVarselinfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL_MED_DITT_NAV);
@@ -228,7 +228,7 @@ public class ServicemeldingServiceTest {
 		var nokkelDittNav = createNokkelInputWithBestillingsId(doknotifikasjonDittNav.getBestillingsId());
 
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
+		when(dokmetConsumer.hentVarselinfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL_MED_DITT_NAV);
@@ -243,7 +243,7 @@ public class ServicemeldingServiceTest {
 	@Test
 	public void shouldThrowTekniskForTekniskFeilDkif() {
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
+		when(dokmetConsumer.hentVarselinfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(TEKNISK));
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(TEKNISK)).thenThrow(new ArithmeticException(TEKNISK));
 
@@ -254,7 +254,7 @@ public class ServicemeldingServiceTest {
 	@Test
 	public void throwsInaktivVarselmalExceptionForInaktivVarselmal() {
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
+		when(dokmetConsumer.hentVarselinfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		bestilling.setTestvarsel(false);
 		varselinfo.setInaktiv(true);
 		varselinfo.setVarseltypeId(VARSELTYPE_ID);
@@ -269,7 +269,7 @@ public class ServicemeldingServiceTest {
 
 	@Test
 	public void doesNotStoreVarselbestillingWhenInaktivVarselmal() {
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
+		when(dokmetConsumer.hentVarselinfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		bestilling.setTestvarsel(false);
 		varselinfo.setInaktiv(true);
 		varselinfo.setVarseltypeId(VARSELTYPE_ID);
@@ -284,7 +284,7 @@ public class ServicemeldingServiceTest {
 	@Test
 	public void preferertKanalIsOverreidenWhenTestVarsel() {
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
+		when(dokmetConsumer.hentVarselinfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		bestilling.setTestvarsel(true);
 		varselinfo.setInaktiv(false);
@@ -296,7 +296,7 @@ public class ServicemeldingServiceTest {
 	@Test
 	public void preferertKanallisteNotOverridenForNormalVarsler() {
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
-		when(dokmetConsumer.hentVarselInfo(VARSELTYPE_ID)).thenReturn(varselinfo);
+		when(dokmetConsumer.hentVarselinfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		bestilling.setTestvarsel(false);
 		varselinfo.setInaktiv(false);

@@ -1,7 +1,7 @@
 package no.nav.varsel.consumer.dokmet;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
+import no.nav.dokmet.api.tkat021.VarselInfoTo;
 import no.nav.varsel.consumer.dokmet.support.VarselinfoMapper;
 import no.nav.varsel.consumer.dokmet.to.Varselinfo;
 import org.slf4j.MDC;
@@ -23,29 +23,29 @@ import static org.springframework.http.HttpMethod.GET;
 public class DokmetConsumer {
 
 	private final RestTemplate restTemplate;
-	private final VarselinfoMapper varselInfoMapper;
+	private final VarselinfoMapper varselinfoMapper;
 	private final String varselinfoUrl;
 
 	public DokmetConsumer(@Value("${dokmet.varselinfo.url}") String varselinfoUrl,
 						  RestTemplate restTemplate,
-						  VarselinfoMapper varselInfoMapper) {
+						  VarselinfoMapper varselinfoMapper) {
 		this.restTemplate = restTemplate;
 		this.varselinfoUrl = varselinfoUrl;
-		this.varselInfoMapper = varselInfoMapper;
+		this.varselinfoMapper = varselinfoMapper;
 	}
 
 	@Cacheable(VARSELINFO_CACHE)
-	public Varselinfo hentVarselInfo(String varseltypeId) {
-		VarselInfoRestTo varselInfo;
+	public Varselinfo hentVarselinfo(String varseltypeId) {
+		VarselInfoTo varselInfo;
 		HttpHeaders headers = createHeaders();
 
 		try {
 			HttpEntity<String> request = new HttpEntity<>(headers);
-			varselInfo = restTemplate.exchange(varselinfoUrl + "/{varseltypeId}", GET, request, VarselInfoRestTo.class, varseltypeId).getBody();
+			varselInfo = restTemplate.exchange(varselinfoUrl + "/{varseltypeId}", GET, request, VarselInfoTo.class, varseltypeId).getBody();
 		} catch (Exception e) {
 			throw new RuntimeException("Could not find varseltypeId=" + varseltypeId + " from url=" + varselinfoUrl, e);
 		}
-		return varselInfoMapper.map(varselInfo);
+		return varselinfoMapper.map(varselInfo);
 	}
 
 	private HttpHeaders createHeaders() {

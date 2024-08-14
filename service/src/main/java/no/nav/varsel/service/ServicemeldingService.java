@@ -94,7 +94,7 @@ public class ServicemeldingService {
 		bestilling.setMottaker(aktoerService.findMissingAktoer(bestilling));
 
 		//3.Hent Varselinfo
-		Varselinfo varselinfo = dokmetConsumer.hentVarselInfo(bestilling.getVarseltypeId());
+		Varselinfo varselinfo = dokmetConsumer.hentVarselinfo(bestilling.getVarseltypeId());
 		validateVarselInfoForBestilling(bestilling, varselinfo);
 
 		overridePreferertKanalForTestmelding(bestilling, varselinfo);

@@ -1,7 +1,7 @@
 package no.nav.varsel.consumer.dokmet.support;
 
-import no.nav.dokkat.schemas.tkat021.VarselInfoRestTo;
-import no.nav.dokkat.schemas.tkat021.VarselMalRestTo;
+import no.nav.dokmet.api.tkat021.VarselInfoTo;
+import no.nav.dokmet.api.tkat021.VarselMalTo;
 import no.nav.varsel.consumer.dokmet.to.Varselinfo;
 import no.nav.varsel.consumer.dokmet.to.Varselmal;
 import no.nav.varsel.domain.code.KanalCode;
@@ -14,25 +14,26 @@ import static no.nav.varsel.consumer.dokmet.to.Varselinfo.VarselInfoToBuilder.aV
 
 public class VarselinfoMapper {
 
-	public Varselinfo map(VarselInfoRestTo varselInfo) {
-		Assert.notNull(varselInfo, "varselInfo is null");
-		Set<VarselMalRestTo> varselmals = varselInfo.getVarselmals();
+	public Varselinfo map(VarselInfoTo varselInfoTo) {
+		Assert.notNull(varselInfoTo, "varselInfoTo is null");
+
+		Set<VarselMalTo> varselmaler = varselInfoTo.getVarselmals();
 
 		return aVarselInfoTo()
-				.varseltypeId(varselInfo.getVarseltypeId())
-				.varselNavn(varselInfo.getVarselNavn())
-				.varselForDistKanal(varselInfo.getVarselForDistribusjonKanal())
-				.varselKategori(varselInfo.getVarselKategori())
-				.inaktiv(varselInfo.getInaktiv())
-				.revarslingIntervall(varselInfo.getRevarslingIntervall())
-				.antallRevarsling(varselInfo.getAntallRevarslinger())
-				.varselUrl(varselInfo.getVarselURL())
-				.preferertKanal(mapKanals(varselInfo.getPreferertKanal()))
-				.maler(varselmals == null ? null : varselmals.stream().map(this::mapMal).collect(toSet()))
+				.varseltypeId(varselInfoTo.getVarseltypeId())
+				.varselNavn(varselInfoTo.getVarselNavn())
+				.varselForDistKanal(varselInfoTo.getVarselForDistribusjonKanal())
+				.varselKategori(varselInfoTo.getVarselKategori())
+				.inaktiv(varselInfoTo.getInaktiv())
+				.revarslingIntervall(varselInfoTo.getRevarslingIntervall())
+				.antallRevarsling(varselInfoTo.getAntallRevarslinger())
+				.varselUrl(varselInfoTo.getVarselURL())
+				.preferertKanal(mapKanaler(varselInfoTo.getPreferertKanal()))
+				.maler(varselmaler == null ? null : varselmaler.stream().map(this::mapMal).collect(toSet()))
 				.build();
 	}
 
-	private Varselmal mapMal(VarselMalRestTo varselMal) {
+	private Varselmal mapMal(VarselMalTo varselMal) {
 		return Varselmal.VarselMalToBuilder.aVarselMalTo()
 				.kanal(mapKanal(varselMal.getKanal()))
 				.tittel(varselMal.getVarselTittel())
@@ -41,13 +42,15 @@ public class VarselinfoMapper {
 				.build();
 	}
 
-	private Set<KanalCode> mapKanals(Set<String> preferertKanal) {
+	private Set<KanalCode> mapKanaler(Set<String> preferertKanal) {
 		Assert.notNull(preferertKanal, "preferertKanal is null");
+
 		return preferertKanal.stream().map(this::mapKanal).collect(toSet());
 	}
 
 	private KanalCode mapKanal(String kanal) {
 		Assert.hasText(kanal, "kanal is empty");
+
 		return KanalCode.valueOf(kanal);
 	}
 }
