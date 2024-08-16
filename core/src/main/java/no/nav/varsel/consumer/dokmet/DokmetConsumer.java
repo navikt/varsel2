@@ -2,7 +2,6 @@ package no.nav.varsel.consumer.dokmet;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.dokmet.api.tkat021.VarselInfoTo;
-import no.nav.varsel.consumer.dokmet.support.VarselinfoMapper;
 import no.nav.varsel.consumer.dokmet.to.Varselinfo;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.VARSELINFO_CACHE;
+import static no.nav.varsel.consumer.dokmet.support.VarselinfoMapper.mapToVarselinfo;
 import static no.nav.varsel.consumer.pdl.helper.DomainConstants.APP_NAME;
 import static no.nav.varsel.util.MDCGenerate.CALL_ID;
 import static no.nav.varsel.util.MDCGenerate.NAV_CONSUMER_ID;
@@ -23,15 +23,12 @@ import static org.springframework.http.HttpMethod.GET;
 public class DokmetConsumer {
 
 	private final RestTemplate restTemplate;
-	private final VarselinfoMapper varselinfoMapper;
 	private final String varselinfoUrl;
 
 	public DokmetConsumer(@Value("${dokmet.varselinfo.url}") String varselinfoUrl,
-						  RestTemplate restTemplate,
-						  VarselinfoMapper varselinfoMapper) {
+						  RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 		this.varselinfoUrl = varselinfoUrl;
-		this.varselinfoMapper = varselinfoMapper;
 	}
 
 	@Cacheable(VARSELINFO_CACHE)
@@ -46,7 +43,7 @@ public class DokmetConsumer {
 			throw new RuntimeException("Could not find varseltypeId=" + varseltypeId + " from url=" + varselinfoUrl, e);
 		}
 
-		return varselinfoMapper.map(varselInfoTo);
+		return mapToVarselinfo(varselInfoTo);
 	}
 
 	private HttpHeaders createHeaders() {

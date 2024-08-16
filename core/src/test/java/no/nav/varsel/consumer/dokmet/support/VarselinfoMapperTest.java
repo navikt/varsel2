@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Set;
 
 import static java.util.Collections.singleton;
+import static no.nav.varsel.consumer.dokmet.support.VarselinfoMapper.mapToVarselinfo;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
 import static no.nav.varsel.repo.TestdataUtil.ANTALL_REVARSLINGER;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
@@ -28,11 +29,9 @@ public class VarselinfoMapperTest {
 	private static final String VARSEL_NAVN = "varselnavn";
 	private static final String VARSEL_URL = "http://nav.no";
 
-	private final VarselinfoMapper mapper = new VarselinfoMapper();
-
 	@Test
 	public void shouldMap() {
-		Varselinfo to = mapper.map(createVarselInfoTo());
+		Varselinfo to = mapToVarselinfo(createVarselInfoTo());
 
 		assertThat(to.getVarseltypeId()).isEqualTo(VARSELTYPE_ID);
 		assertThat(to.getVarselNavn()).isEqualTo(VARSEL_NAVN);
@@ -56,7 +55,7 @@ public class VarselinfoMapperTest {
 		var varselinfo = createVarselInfoTo();
 		varselinfo.setRevarslingIntervall(null);
 
-		Varselinfo to = mapper.map(varselinfo);
+		Varselinfo to = mapToVarselinfo(varselinfo);
 
 		assertThat(to.getRevarslingIntervall()).isNull();
 	}
@@ -66,7 +65,7 @@ public class VarselinfoMapperTest {
 		var varselinfo = createVarselInfoTo();
 		varselinfo.setAntallRevarslinger(null);
 
-		Varselinfo to = mapper.map(varselinfo);
+		Varselinfo to = mapToVarselinfo(varselinfo);
 
 		assertThat(to.getAntallRevarsling()).isNull();
 	}

@@ -5,16 +5,17 @@ import no.nav.dokmet.api.tkat021.VarselMalTo;
 import no.nav.varsel.consumer.dokmet.to.Varselinfo;
 import no.nav.varsel.consumer.dokmet.to.Varselmal;
 import no.nav.varsel.domain.code.KanalCode;
-import org.springframework.util.Assert;
 
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
+import static org.springframework.util.Assert.hasText;
+import static org.springframework.util.Assert.notNull;
 
 public class VarselinfoMapper {
 
-	public Varselinfo map(VarselInfoTo varselInfoTo) {
-		Assert.notNull(varselInfoTo, "varselInfoTo is null");
+	public static Varselinfo mapToVarselinfo(VarselInfoTo varselInfoTo) {
+		notNull(varselInfoTo, "varselInfoTo is null");
 
 		Set<VarselMalTo> varselmaler = varselInfoTo.getVarselmals();
 
@@ -28,11 +29,11 @@ public class VarselinfoMapper {
 				.antallRevarsling(varselInfoTo.getAntallRevarslinger())
 				.varselUrl(varselInfoTo.getVarselURL())
 				.preferertKanal(mapKanaler(varselInfoTo.getPreferertKanal()))
-				.maler(varselmaler == null ? null : varselmaler.stream().map(this::mapMal).collect(toSet()))
+				.maler(varselmaler == null ? null : varselmaler.stream().map(VarselinfoMapper::mapMal).collect(toSet()))
 				.build();
 	}
 
-	private Varselmal mapMal(VarselMalTo varselMal) {
+	private static Varselmal mapMal(VarselMalTo varselMal) {
 		return Varselmal.builder()
 				.kanal(mapKanal(varselMal.getKanal()))
 				.tittel(varselMal.getVarselTittel())
@@ -41,15 +42,16 @@ public class VarselinfoMapper {
 				.build();
 	}
 
-	private Set<KanalCode> mapKanaler(Set<String> preferertKanal) {
-		Assert.notNull(preferertKanal, "preferertKanal is null");
+	private static Set<KanalCode> mapKanaler(Set<String> preferertKanal) {
+		notNull(preferertKanal, "preferertKanal is null");
 
-		return preferertKanal.stream().map(this::mapKanal).collect(toSet());
+		return preferertKanal.stream().map(VarselinfoMapper::mapKanal).collect(toSet());
 	}
 
-	private KanalCode mapKanal(String kanal) {
-		Assert.hasText(kanal, "kanal is empty");
+	private static KanalCode mapKanal(String kanal) {
+		hasText(kanal, "kanal is empty");
 
 		return KanalCode.valueOf(kanal);
 	}
+
 }
