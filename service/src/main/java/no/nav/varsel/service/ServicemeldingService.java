@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
@@ -97,7 +98,9 @@ public class ServicemeldingService {
 		Varselinfo varselinfo = dokmetConsumer.hentVarselinfo(bestilling.getVarseltypeId());
 		validateVarselInfoForBestilling(bestilling, varselinfo);
 
-		overridePreferertKanalForTestmelding(bestilling, varselinfo);
+		if (bestilling.isTestvarsel()) {
+			varselinfo = varselinfo.withPreferertKanal(Set.of(KanalCode.values()));
+		}
 
 		KontaktregisterTo kontaktregisterTo = hentKontaktregisterTo(bestilling);
 
@@ -147,7 +150,7 @@ public class ServicemeldingService {
 				.findAny();
 
 		if (dittNavTo.isPresent()) {
-			if (hasText(varselinfo.getMal(DITT_NAV).getFoerstegangsTekst())) {
+			if (hasText(varselinfo.getMal(DITT_NAV).foerstegangsTekst())) {
 				beskjed = brukernotifikasjonMapper.mapBeskjed(dittNavTo.get());
 				nokkel = brukernotifikasjonMapper.mapNokkel(varselbestilling);
 
@@ -177,12 +180,6 @@ public class ServicemeldingService {
 	private void validateVarselInfoForBestilling(BestillVarselTo to, Varselinfo varselinfo) {
 		if (varselinfo.isInaktiv() && !to.isTestvarsel()) {
 			throw new VarselInaktivVarselmalException(to.getPersonIdent(), to.getVarseltypeId(), to.getVarselBestillingId());
-		}
-	}
-
-	private void overridePreferertKanalForTestmelding(BestillVarselTo to, Varselinfo varselinfo) {
-		if (to.isTestvarsel()) {
-			varselinfo.setPreferertKanal(new HashSet<>(Arrays.asList(KanalCode.values())));
 		}
 	}
 

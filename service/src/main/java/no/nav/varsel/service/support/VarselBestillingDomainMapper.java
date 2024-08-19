@@ -98,12 +98,12 @@ public class VarselBestillingDomainMapper {
 				kanalCode == KanalCode.SMS ? kontaktregisterTo.getMobiltelefonnummer() :
 						kanalCode == KanalCode.EPOST ? kontaktregisterTo.getEpostadresse() :
 								null;
-		String tekstMal = revarsel ? mal.getRevarslingTekst() : mal.getFoerstegangsTekst();
+		String tekstMal = revarsel ? mal.revarslingTekst() : mal.foerstegangsTekst();
 		String varselId = UUID.randomUUID().toString();
 		Map<String, String> params = Maps.newHashMap(bestillVarselTo.getParameters());
 		String varselUrl = varselFletter.weaveText(varselinfo.getVarselUrl(), params);
 		String varselTekst = varselFletter.weaveText(tekstMal, params);
-		String varselTittel = varselFletter.weaveText(mal.getTittel(), params);
+		String varselTittel = varselFletter.weaveText(mal.tittel(), params);
 
 		if (StringUtils.isEmpty(varselTekst)) {
 			throw new VarselTekstMissingException(

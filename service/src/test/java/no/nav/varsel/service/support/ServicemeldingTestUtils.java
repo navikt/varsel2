@@ -99,31 +99,15 @@ public class ServicemeldingTestUtils {
 	}
 
 	public static Set<Varselmal> createMaler() {
-
 		return Stream.of(
-						Varselmal.builder()
-								.foerstegangsTekst("Førstegangstekst epost")
-								.revarslingTekst("Revarslingstekst epost")
-								.kanal(EPOST)
-								.tittel("Epost-tittel")
-								.build(),
-						Varselmal.builder()
-								.foerstegangsTekst("Førstegangstekst ditt nav")
-								.revarslingTekst("Revarslingstekst ditt nav")
-								.kanal(DITT_NAV)
-								.tittel("Ditt Nav tittel")
-								.build())
+						new Varselmal(EPOST, "Epost-tittel", "Førstegangstekst epost", "Revarslingstekst epost"),
+						new Varselmal(DITT_NAV, "Ditt Nav tittel", "Førstegangstekst ditt nav", "Revarslingstekst ditt nav"))
 				.collect(Collectors.toSet());
 	}
 
 	public static Set<Varselmal> createDittNavMalUtenFoerstegangstekst() {
 		return Stream.of(
-				Varselmal.builder()
-						.foerstegangsTekst(null)
-						.revarslingTekst("Revarslingstekst epost")
-						.kanal(DITT_NAV)
-						.tittel(null)
-						.build()
+				new Varselmal(DITT_NAV, null, null, "Revarslingstekst epost")
 		).collect(Collectors.toSet());
 	}
 

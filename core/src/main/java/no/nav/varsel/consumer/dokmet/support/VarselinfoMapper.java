@@ -34,12 +34,12 @@ public class VarselinfoMapper {
 	}
 
 	private static Varselmal mapMal(VarselMalTo varselMal) {
-		return Varselmal.builder()
-				.kanal(mapKanal(varselMal.getKanal()))
-				.tittel(varselMal.getVarselTittel())
-				.foerstegangsTekst(varselMal.getFoerstegangsvarselTekst())
-				.revarslingTekst(varselMal.getRevarslingTekst())
-				.build();
+		return new Varselmal(
+				mapKanal(varselMal.getKanal()),
+				varselMal.getVarselTittel(),
+				varselMal.getFoerstegangsvarselTekst(),
+				varselMal.getRevarslingTekst()
+		);
 	}
 
 	private static Set<KanalCode> mapKanaler(Set<String> preferertKanal) {
