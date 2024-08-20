@@ -2,8 +2,8 @@ package no.nav.varsel.service.support;
 
 import com.google.common.collect.Maps;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
-import no.nav.varsel.consumer.dokkat.to.VarselMalTo;
+import no.nav.varsel.consumer.dokmet.to.Varselinfo;
+import no.nav.varsel.consumer.dokmet.to.Varselmal;
 import no.nav.varsel.domain.builder.VarselbestillingBuilder;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
@@ -30,26 +30,26 @@ public class VarselBestillingDomainMapper {
 	private VarselFletter varselFletter;
 
 	public Varselbestilling mapVarselbestillingFoerstegangVarselMedRevarsel(BestillVarselTo bestillingTo,
-			VarselInfoTo varselInfoTo,
+			Varselinfo varselinfo,
 			KontaktregisterTo kontaktregisterTo) {
-		return mapVarselbestilling(bestillingTo, varselInfoTo, kontaktregisterTo, true);
+		return mapVarselbestilling(bestillingTo, varselinfo, kontaktregisterTo, true);
 	}
 
 	public Varselbestilling mapVarselbestillingFoerstegangVarselUtenRevarsel(BestillVarselTo bestillingTo,
-			VarselInfoTo varselInfoTo,
+			Varselinfo varselinfo,
 			KontaktregisterTo kontaktregisterTo) {
-		return mapVarselbestilling(bestillingTo, varselInfoTo, kontaktregisterTo, false);
+		return mapVarselbestilling(bestillingTo, varselinfo, kontaktregisterTo, false);
 	}
 
 	public Varsel mapReVarsel(KanalCode kanalCode,
 			BestillVarselTo bestillVarselTo,
-			VarselInfoTo varselInfoTo,
+			Varselinfo varselinfo,
 			KontaktregisterTo kontaktregisterTo) {
-		return mapVarsel(kanalCode, bestillVarselTo, varselInfoTo, kontaktregisterTo, true);
+		return mapVarsel(kanalCode, bestillVarselTo, varselinfo, kontaktregisterTo, true);
 	}
 
 	private Varselbestilling mapVarselbestilling(BestillVarselTo bestillingTo,
-			VarselInfoTo varselInfoTo,
+			Varselinfo varselinfo,
 			KontaktregisterTo kontaktregisterTo,
 			boolean withRevarsel) {
 
@@ -64,17 +64,17 @@ public class VarselBestillingDomainMapper {
 				.parameters(bestillingTo.getParameters().entrySet().stream()
 						.collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
-		if (withRevarsel && varselInfoTo.getRevarslingIntervall() != null && varselInfoTo.getAntallRevarsling() != null) {
-			builder.revarslingIntervall(varselInfoTo.getRevarslingIntervall())
-					.antallRevarslinger(varselInfoTo.getAntallRevarsling())
-					.nesteVarslingDato(LocalDate.now().plusDays(varselInfoTo.getRevarslingIntervall()));
+		if (withRevarsel && varselinfo.getRevarslingIntervall() != null && varselinfo.getAntallRevarsling() != null) {
+			builder.revarslingIntervall(varselinfo.getRevarslingIntervall())
+					.antallRevarslinger(varselinfo.getAntallRevarsling())
+					.nesteVarslingDato(LocalDate.now().plusDays(varselinfo.getRevarslingIntervall()));
 		}
 
 		Varselbestilling varselbestilling = builder
 				.build();
 
 		kontaktregisterTo.getKanaler().stream()
-				.map((kanalCode) -> mapVarsel(kanalCode, bestillingTo, varselInfoTo, kontaktregisterTo))
+				.map((kanalCode) -> mapVarsel(kanalCode, bestillingTo, varselinfo, kontaktregisterTo))
 				.forEach(varselbestilling::addVarsel);
 
 		return varselbestilling;
@@ -82,28 +82,28 @@ public class VarselBestillingDomainMapper {
 
 	private Varsel mapVarsel(KanalCode kanalCode,
 			BestillVarselTo bestillVarselTo,
-			VarselInfoTo varselInfoTo,
+			Varselinfo varselinfo,
 			KontaktregisterTo kontaktregisterTo) {
-		return mapVarsel(kanalCode, bestillVarselTo, varselInfoTo, kontaktregisterTo, false);
+		return mapVarsel(kanalCode, bestillVarselTo, varselinfo, kontaktregisterTo, false);
 	}
 
 	private Varsel mapVarsel(KanalCode kanalCode,
 			BestillVarselTo bestillVarselTo,
-			VarselInfoTo varselInfoTo,
+			Varselinfo varselinfo,
 			KontaktregisterTo kontaktregisterTo,
 			boolean revarsel) {
 
-		VarselMalTo mal = varselInfoTo.getMal(kanalCode);
+		Varselmal mal = varselinfo.getMal(kanalCode);
 		String kontaktInfo =
 				kanalCode == KanalCode.SMS ? kontaktregisterTo.getMobiltelefonnummer() :
 						kanalCode == KanalCode.EPOST ? kontaktregisterTo.getEpostadresse() :
 								null;
-		String tekstMal = revarsel ? mal.getRevarslingTekst() : mal.getFoerstegangsTekst();
+		String tekstMal = revarsel ? mal.revarslingTekst() : mal.foerstegangsTekst();
 		String varselId = UUID.randomUUID().toString();
 		Map<String, String> params = Maps.newHashMap(bestillVarselTo.getParameters());
-		String varselUrl = varselFletter.weaveText(varselInfoTo.getVarselUrl(), params);
+		String varselUrl = varselFletter.weaveText(varselinfo.getVarselUrl(), params);
 		String varselTekst = varselFletter.weaveText(tekstMal, params);
-		String varselTittel = varselFletter.weaveText(mal.getTittel(), params);
+		String varselTittel = varselFletter.weaveText(mal.tittel(), params);
 
 		if (StringUtils.isEmpty(varselTekst)) {
 			throw new VarselTekstMissingException(

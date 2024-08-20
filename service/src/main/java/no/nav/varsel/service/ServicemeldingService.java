@@ -5,8 +5,8 @@ import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
 import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.consumer.dokkat.VarselInfoConsumer;
-import no.nav.varsel.consumer.dokkat.to.VarselInfoTo;
+import no.nav.varsel.consumer.dokmet.DokmetConsumer;
+import no.nav.varsel.consumer.dokmet.to.Varselinfo;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
@@ -48,7 +49,7 @@ public class ServicemeldingService {
 	private AktoerService aktoerService;
 
 	@Autowired
-	private VarselInfoConsumer varselInfoConsumer;
+	private DokmetConsumer dokmetConsumer;
 
 	@Autowired
 	private HentDigitalKontaktinformasjonConsumer dkifConsumer;
@@ -94,19 +95,21 @@ public class ServicemeldingService {
 		bestilling.setMottaker(aktoerService.findMissingAktoer(bestilling));
 
 		//3.Hent Varselinfo
-		VarselInfoTo varselInfoTo = varselInfoConsumer.hentVarselInfo(bestilling.getVarseltypeId());
-		validateVarselInfoForBestilling(bestilling, varselInfoTo);
+		Varselinfo varselinfo = dokmetConsumer.hentVarselinfo(bestilling.getVarseltypeId());
+		validateVarselInfoForBestilling(bestilling, varselinfo);
 
-		overridePreferertKanalForTestmelding(bestilling, varselInfoTo);
+		if (bestilling.isTestvarsel()) {
+			varselinfo = varselinfo.withPreferertKanal(Set.of(KanalCode.values()));
+		}
 
 		KontaktregisterTo kontaktregisterTo = hentKontaktregisterTo(bestilling);
 
 		//4.Bestem varslingskanal
-		Collection<KanalCode> kanalCodes = varselKanalDecider.decideKanaler(kontaktregisterTo, varselInfoTo.getPreferertKanal());
+		Collection<KanalCode> kanalCodes = varselKanalDecider.decideKanaler(kontaktregisterTo, varselinfo.getPreferertKanal());
 		kontaktregisterTo.setKanaler(kanalCodes);
 
 		//5. Flett varsel
-		Varselbestilling varselbestilling = domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselInfoTo, kontaktregisterTo);
+		Varselbestilling varselbestilling = domainMapper.mapVarselbestillingFoerstegangVarselUtenRevarsel(bestilling, varselinfo, kontaktregisterTo);
 
 		//6. Register varsel i DB
 		varselbestillingRepo.saveAndFlush(varselbestilling);
@@ -115,7 +118,7 @@ public class ServicemeldingService {
 		List<Varselutsending> varselutsendingList = varselutsendingMapper.map(varselbestilling);
 
 		try {
-			sendNotifikasjon(varselInfoTo, varselbestilling, varselutsendingList);
+			sendNotifikasjon(varselinfo, varselbestilling, varselutsendingList);
 
 		} catch (ServicemeldingMappingException e) {
 			log.error("Feil ved mapping av data til servicemelding med BestillingId={}. Feilmelding={}", bestilling.getVarselBestillingId(), e.getMessage());
@@ -130,7 +133,7 @@ public class ServicemeldingService {
 				varselutsendingList.stream().map(it -> it.getKanal().name()).toList());
 	}
 
-	private void sendNotifikasjon(VarselInfoTo varselInfoTo, Varselbestilling varselbestilling, List<Varselutsending> varselutsendingList) {
+	private void sendNotifikasjon(Varselinfo varselinfo, Varselbestilling varselbestilling, List<Varselutsending> varselutsendingList) {
 		Doknotifikasjon doknotifikasjon = null;
 		BeskjedInput beskjed = null;
 		NokkelInput nokkel = null;
@@ -147,7 +150,7 @@ public class ServicemeldingService {
 				.findAny();
 
 		if (dittNavTo.isPresent()) {
-			if (hasText(varselInfoTo.getMal(DITT_NAV).getFoerstegangsTekst())) {
+			if (hasText(varselinfo.getMal(DITT_NAV).foerstegangsTekst())) {
 				beskjed = brukernotifikasjonMapper.mapBeskjed(dittNavTo.get());
 				nokkel = brukernotifikasjonMapper.mapNokkel(varselbestilling);
 
@@ -174,15 +177,9 @@ public class ServicemeldingService {
 		return varselutsendingList.stream().anyMatch(it -> SMS_OG_EPOST.contains(it.getKanal()));
 	}
 
-	private void validateVarselInfoForBestilling(BestillVarselTo to, VarselInfoTo varselInfoTo) {
-		if (varselInfoTo.isInaktiv() && !to.isTestvarsel()) {
+	private void validateVarselInfoForBestilling(BestillVarselTo to, Varselinfo varselinfo) {
+		if (varselinfo.isInaktiv() && !to.isTestvarsel()) {
 			throw new VarselInaktivVarselmalException(to.getPersonIdent(), to.getVarseltypeId(), to.getVarselBestillingId());
-		}
-	}
-
-	private void overridePreferertKanalForTestmelding(BestillVarselTo to, VarselInfoTo varselInfoTo) {
-		if (to.isTestvarsel()) {
-			varselInfoTo.setPreferertKanal(new HashSet<>(Arrays.asList(KanalCode.values())));
 		}
 	}
 
