@@ -21,8 +21,7 @@ import javax.xml.namespace.QName;
 
 import static java.time.Duration.ofSeconds;
 import static java.time.LocalDateTime.now;
-import static java.time.temporal.ChronoUnit.SECONDS;
-import static no.nav.varsel.Utils.formatDateTime;
+import static java.time.temporal.ChronoUnit.HOURS;
 import static no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
 import static no.nav.varsel.domain.code.StatusCode.SENDT;
@@ -73,12 +72,12 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	public void shouldPutOnTechnicalBoqIfInternalServerErrorFromPdl() {
-		stubPdl(INTERNAL_SERVER_ERROR);
+	public void shouldPutOnFunctionalBoqIfBadRequestFromPdl() {
+		stubPdl(BAD_REQUEST);
 		JAXBElement<XMLVarsel> varsel = createVarsel();
 
 		await().atMost(ofSeconds(5)).untilAsserted(() -> {
-					Message response = sendMessageAndListenToResponseOnTechnicalBoq(bestillServicemeldingQueue, varsel);
+					Message response = sendMessageAndListenToResponseOnFunctionalBoq(bestillServicemeldingQueue, varsel);
 					assertThat(response).isNotNull();
 					assertThat(varselbestillingRepo.count()).isZero();
 				}
@@ -86,12 +85,12 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	public void shouldPutOnFunctionalBoqIfBadRequestFromPdl() {
-		stubPdl(BAD_REQUEST);
+	public void shouldPutOnTechnicalBoqIfInternalServerErrorFromPdl() {
+		stubPdl(INTERNAL_SERVER_ERROR);
 		JAXBElement<XMLVarsel> varsel = createVarsel();
 
 		await().atMost(ofSeconds(5)).untilAsserted(() -> {
-					Message response = sendMessageAndListenToResponseOnFunctionalBoq(bestillServicemeldingQueue, varsel);
+					Message response = sendMessageAndListenToResponseOnTechnicalBoq(bestillServicemeldingQueue, varsel);
 					assertThat(response).isNotNull();
 					assertThat(varselbestillingRepo.count()).isZero();
 				}
@@ -133,24 +132,27 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		return new JAXBElement<>(new QName("http://nav.no/melding/virksomhet/varsel/v1/varsel", "Varsel"), XMLVarsel.class, null, varsel);
 	}
 
+	// For å unngå tidssoneproblematikk på GHA er tidspunktene sjekket til å være innenfor et 3-timersintervall
 	private Varsel assertDb(String varselTekst) {
+		final var tidspunktMedTidssonebuffer = 3;
+
 		Varselbestilling varselbestilling = varselbestillingRepo.findAllEager().get(0);
 		assertThat(varselbestilling.getVarseltypeId()).isEqualTo(VARSELTYPE_ID);
-		assertThat(formatDateTime(varselbestilling.getUtlopTidspunkt())).isEqualTo(formatDateTime(UTLOEPSTIDSPUNKT_LDT));
+		assertThat(varselbestilling.getUtlopTidspunkt()).isCloseTo(UTLOEPSTIDSPUNKT_LDT, within(tidspunktMedTidssonebuffer, HOURS));
 		assertThat(varselbestilling.getFnr()).isEqualTo(PERSON_IDENT);
 		assertThat(varselbestilling.getAktorId()).isEqualTo(MOTTAKER);
-		assertThat(varselbestilling.getBestillingTidspunkt()).isCloseTo(now(), within(1, SECONDS));
+		assertThat(varselbestilling.getBestillingTidspunkt()).isCloseTo(now(), within(tidspunktMedTidssonebuffer, HOURS));
 		assertThat(varselbestilling.getRevarslingIntervall()).isNull();
 		assertThat(varselbestilling.getAntallRevarslinger()).isNull();
 		assertThat(varselbestilling.getNesteVarslingDato()).isNull();
 		assertThat(varselbestilling.getChangeStamp().getOpprettetAv()).isEqualTo(BESTILL_SERVICEMELDING.getServiceName());
-		assertThat(varselbestilling.getChangeStamp().getOpprettetDato()).isCloseTo(now(), within(1, SECONDS));
+		assertThat(varselbestilling.getChangeStamp().getOpprettetDato()).isCloseTo(now(), within(tidspunktMedTidssonebuffer, HOURS));
 
 		assertThat(varselbestilling.getVarsels()).hasSize(1);
 		no.nav.varsel.domain.object.Varsel varsel = varselbestilling.getVarsels().iterator().next();
 
 		assertThat(varsel.getKanal()).isEqualTo(EPOST);
-		assertThat(varsel.getSendtTidspunkt()).isCloseTo(now(), within(1, SECONDS));
+		assertThat(varsel.getSendtTidspunkt()).isCloseTo(now(), within(tidspunktMedTidssonebuffer, HOURS));
 		assertThat(varsel.getDistribusjonTidspunkt()).isNull();
 		assertThat(varsel.getKontaktInfo()).isEqualTo(EPOSTADRESSE);
 		assertThat(varsel.getStatus()).isEqualTo(SENDT);
@@ -160,7 +162,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		assertThat(varsel.getVarselUrl()).isNull();
 		assertThat(varsel.getErRevarsel()).isFalse();
 		assertThat(varsel.getChangeStamp().getOpprettetAv()).isEqualTo(BESTILL_SERVICEMELDING.getServiceName());
-		assertThat(varsel.getChangeStamp().getOpprettetDato()).isCloseTo(now(), within(1, SECONDS));
+		assertThat(varsel.getChangeStamp().getOpprettetDato()).isCloseTo(now(), within(tidspunktMedTidssonebuffer, HOURS));
 
 		return varsel;
 	}
