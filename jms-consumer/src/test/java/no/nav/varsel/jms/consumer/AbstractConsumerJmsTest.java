@@ -29,7 +29,9 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
+import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE;
 import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.DOKMET_CACHE;
+import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.STS_CACHE;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
@@ -75,8 +77,14 @@ public abstract class AbstractConsumerJmsTest {
 
 	@AfterEach
 	public void tearDown() {
-		cacheManager.getCache(DOKMET_CACHE).clear();
+		clearCacher();
 		varselbestillingRepo.deleteAll();
+	}
+
+	private void clearCacher() {
+		cacheManager.getCache(DOKMET_CACHE).clear();
+		cacheManager.getCache(STS_CACHE).clear();
+		cacheManager.getCache(AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE).clear();
 	}
 
 	protected JmsReply sendMessage(Queue queue, JAXBElement<?> message) {
