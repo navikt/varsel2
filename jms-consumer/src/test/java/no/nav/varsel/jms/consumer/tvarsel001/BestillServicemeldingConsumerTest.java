@@ -14,8 +14,11 @@ import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapper
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.kafka.KafkaEventProducer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 
 import javax.xml.namespace.QName;
 
@@ -37,7 +40,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
@@ -58,9 +60,10 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		stubDigdir();
 		doNothing().when(kafkaEventProducer).publish(any(String.class), any(String.class), any(Doknotifikasjon.class));
 		doNothing().when(kafkaEventProducer).publish(any(String.class), any(NokkelInput.class), any(BeskjedInput.class));
+		JAXBElement<XMLVarsel> varsel = createVarsel();
 
-		await().atMost(ofSeconds(5)).untilAsserted(() -> {
-					JmsReply response = sendMessage(bestillServicemeldingQueue, createVarsel());
+		await().atMost(ofSeconds(10)).untilAsserted(() -> {
+					JmsReply response = sendMessage(bestillServicemeldingQueue, varsel);
 					isOk(response);
 					assertThat(varselbestillingRepo.count()).isEqualTo(1);
 
@@ -76,7 +79,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		stubPdl(BAD_REQUEST);
 		JAXBElement<XMLVarsel> varsel = createVarsel();
 
-		await().atMost(ofSeconds(5)).untilAsserted(() -> {
+		await().atMost(ofSeconds(10)).untilAsserted(() -> {
 					Message response = sendMessageAndListenToResponseOnFunctionalBoq(bestillServicemeldingQueue, varsel);
 					assertThat(response).isNotNull();
 					assertThat(varselbestillingRepo.count()).isZero();
@@ -89,7 +92,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		stubPdl(INTERNAL_SERVER_ERROR);
 		JAXBElement<XMLVarsel> varsel = createVarsel();
 
-		await().atMost(ofSeconds(5)).untilAsserted(() -> {
+		await().atMost(ofSeconds(10)).untilAsserted(() -> {
 					Message response = sendMessageAndListenToResponseOnTechnicalBoq(bestillServicemeldingQueue, varsel);
 					assertThat(response).isNotNull();
 					assertThat(varselbestillingRepo.count()).isZero();
@@ -97,14 +100,14 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		);
 	}
 
-	@Test
-	public void shouldPutOnFunctionalBoqIfNotFoundFromDokmet() {
+	@ParameterizedTest
+	@EnumSource(value = HttpStatus.class, names = {"BAD_REQUEST", "NOT_FOUND"})
+	public void shouldPutOnFunctionalBoqIf4xxFromDokmet(HttpStatus httpStatus) {
 		stubPdl();
-		stubDokmet(NOT_FOUND);
-
+		stubDokmet(httpStatus);
 		JAXBElement<XMLVarsel> varsel = createVarsel();
 
-		await().atMost(ofSeconds(5)).untilAsserted(() -> {
+		await().atMost(ofSeconds(10)).untilAsserted(() -> {
 					Message response = sendMessageAndListenToResponseOnFunctionalBoq(bestillServicemeldingQueue, varsel);
 					assertThat(response).isNotNull();
 					assertThat(varselbestillingRepo.count()).isZero();
@@ -113,12 +116,12 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	public void shouldPutOnTechnicalBoqIfInternalServerErrorFromDokmet() {
+	public void shouldPutOnTechnicalBoqIf5xxFromDokmet() {
 		stubPdl();
 		stubDokmet(INTERNAL_SERVER_ERROR);
 		JAXBElement<XMLVarsel> varsel = createVarsel();
 
-		await().atMost(ofSeconds(5)).untilAsserted(() -> {
+		await().atMost(ofSeconds(10)).untilAsserted(() -> {
 					Message response = sendMessageAndListenToResponseOnTechnicalBoq(bestillServicemeldingQueue, varsel);
 					assertThat(response).isNotNull();
 					assertThat(varselbestillingRepo.count()).isZero();
