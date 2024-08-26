@@ -1,8 +1,6 @@
 package no.nav.varsel.config;
 
-import com.ibm.mq.jakarta.jms.MQQueue;
 import jakarta.jms.ConnectionFactory;
-import jakarta.jms.JMSException;
 import jakarta.jms.Queue;
 import no.nav.varsel.config.alias.ListenerProperties;
 import no.nav.varsel.config.alias.MqGatewayProperties;
@@ -42,8 +40,8 @@ public class JmsTestConfig {
 	}
 
 	@Bean
-	public Queue bestillServicemeldingFunksjonellFeilQueue(@Value("${bestillservicemelding.funkfeil.queuename}") String bestillServicemeldingFunksjonellFeilQueueName) throws JMSException {
-		return new MQQueue(bestillServicemeldingFunksjonellFeilQueueName);
+	public Queue bestillServicemeldingFunksjonellFeilQueue(@Value("${bestillservicemelding.funkfeil.queuename}") String bestillServicemeldingFunksjonellFeilQueueName) {
+		return new ActiveMQQueue(bestillServicemeldingFunksjonellFeilQueueName);
 	}
 
 	@Bean

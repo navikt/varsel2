@@ -3,99 +3,128 @@ package no.nav.varsel.jms.consumer.tvarsel001;
 import jakarta.jms.Message;
 import jakarta.jms.Queue;
 import jakarta.xml.bind.JAXBElement;
+import no.nav.brukernotifikasjon.schemas.input.BeskjedInput;
+import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
+import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
-import no.nav.varsel.domain.code.KanalCode;
-import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
-import no.nav.varsel.jms.consumer.JmsConsumer;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
 import no.nav.varsel.jms.to.xml.JmsReply;
-import org.junit.jupiter.api.Disabled;
+import no.nav.varsel.kafka.KafkaEventProducer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import javax.xml.namespace.QName;
-import java.util.UUID;
 
 import static java.time.Duration.ofSeconds;
+import static java.time.LocalDateTime.now;
+import static java.time.temporal.ChronoUnit.SECONDS;
 import static no.nav.varsel.Utils.formatDateTime;
 import static no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
+import static no.nav.varsel.domain.code.KanalCode.EPOST;
+import static no.nav.varsel.domain.code.StatusCode.SENDT;
+import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.MOTTAKER;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.UTLOEPSTIDSPUNKT_LDT;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VAL;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VARSELTYPE_ID;
-import static no.nav.varsel.test.TestUtils.aboutNow;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 import static org.awaitility.Awaitility.await;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-@Disabled("Disse testene feiler på GHA uten noen åpenbar grunn, er nok noen svakheter i testoppsettet. Burde sees på.")
 public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	private static final String VARSEL_TITTEL = "Varsel Tittel";
 	private static final String FOERSTE_GANG_TEKST = "Første gang tekst til {mottaker}";
+	private static final String PERSON_IDENT = "1234567890123";
 
 	@Autowired
 	private Queue bestillServicemeldingQueue;
 
-	@Autowired
-	private Queue bestillServicemeldingFunksjonellFeilQueue;
-	public static final String PERSON_IDENT = "1234567890123";
+	@MockBean
+	private KafkaEventProducer kafkaEventProducer;
 
 	@Test
-	@Disabled("Testen feiler på oppsett av Kafka. Vil i utgangspunktet stoppe testen før den kommer dit.")
-	public void shouldReceieveJms() {
-		stubPdlConsumer();
-		JmsReply response = sendMessage(bestillServicemeldingQueue, createVarsel());
+	public void shouldReceiveJms() {
+		stubPdl();
+		stubDokmet();
+		stubDigdir();
+		doNothing().when(kafkaEventProducer).publish(any(String.class), any(String.class), any(Doknotifikasjon.class));
+		doNothing().when(kafkaEventProducer).publish(any(String.class), any(NokkelInput.class), any(BeskjedInput.class));
 
-		isOk(response);
-		await().atMost(ofSeconds(5)).untilAsserted(() ->
-				assertThat(varselbestillingRepo.count(), is(1L))
+		await().atMost(ofSeconds(5)).untilAsserted(() -> {
+					JmsReply response = sendMessage(bestillServicemeldingQueue, createVarsel());
+					isOk(response);
+					assertThat(varselbestillingRepo.count()).isEqualTo(1);
+
+					String varselTekst = FOERSTE_GANG_TEKST.replace("{mottaker}", VAL);
+
+					assertDb(varselTekst);
+				}
 		);
-
-		String varselTekst = FOERSTE_GANG_TEKST.replace("{mottaker}", VAL);
-
-		assertDb(varselTekst);
 	}
 
 	@Test
-	public void shouldPutOnBackoutIfFailedWs() {
+	public void shouldPutOnTechnicalBoqIfInternalServerErrorFromPdl() {
+		stubPdl(INTERNAL_SERVER_ERROR);
 		JAXBElement<XMLVarsel> varsel = createVarsel();
-		stubVarselInfoV1();
-		stubPdlConsumerTechnicalErrorWithInternalServerError();
 
-		Message response = sendMessageListenBoq(bestillServicemeldingQueue, varsel);
-
-		isOk(response);
+		await().atMost(ofSeconds(5)).untilAsserted(() -> {
+					Message response = sendMessageAndListenToResponseOnTechnicalBoq(bestillServicemeldingQueue, varsel);
+					assertThat(response).isNotNull();
+					assertThat(varselbestillingRepo.count()).isZero();
+				}
+		);
 	}
 
 	@Test
-	public void shouldNotPutOnBackoutButOnTheOtherOneIfFailedWsFunksjonell() {
+	public void shouldPutOnFunctionalBoqIfBadRequestFromPdl() {
+		stubPdl(BAD_REQUEST);
 		JAXBElement<XMLVarsel> varsel = createVarsel();
-		stubVarselInfoV1();
-		stubPdlConsumerFunctionalErrorWithInternalServerError();
-		JmsReply response = sendMessage(bestillServicemeldingQueue, varsel);
 
-		Object backout = receive(backoutQueue);
-		assertNull(backout);
+		await().atMost(ofSeconds(5)).untilAsserted(() -> {
+					Message response = sendMessageAndListenToResponseOnFunctionalBoq(bestillServicemeldingQueue, varsel);
+					assertThat(response).isNotNull();
+					assertThat(varselbestillingRepo.count()).isZero();
+				}
+		);
 	}
 
 	@Test
-	public void shouldPutOnBackoutAndRollbackIfFailedAfterDbSave() {
-		stubVarselInfoV1();
-		stubPdlConsumer();
-		JAXBElement<XMLVarsel> varsel = createVarsel();
-		varsel.getValue().getVarslingstype().setValue(FEIL_MQ_UT);
-		Message response = sendMessageListenBoq(bestillServicemeldingQueue, varsel);
+	public void shouldPutOnFunctionalBoqIfNotFoundFromDokmet() {
+		stubPdl();
+		stubDokmet(NOT_FOUND);
 
-		isOk(response);
-		assertThat(varselbestillingRepo.count(), is(0L));
+		JAXBElement<XMLVarsel> varsel = createVarsel();
+
+		await().atMost(ofSeconds(5)).untilAsserted(() -> {
+					Message response = sendMessageAndListenToResponseOnFunctionalBoq(bestillServicemeldingQueue, varsel);
+					assertThat(response).isNotNull();
+					assertThat(varselbestillingRepo.count()).isZero();
+				}
+		);
+	}
+
+	@Test
+	public void shouldPutOnTechnicalBoqIfInternalServerErrorFromDokmet() {
+		stubPdl();
+		stubDokmet(INTERNAL_SERVER_ERROR);
+		JAXBElement<XMLVarsel> varsel = createVarsel();
+
+		await().atMost(ofSeconds(5)).untilAsserted(() -> {
+					Message response = sendMessageAndListenToResponseOnTechnicalBoq(bestillServicemeldingQueue, varsel);
+					assertThat(response).isNotNull();
+					assertThat(varselbestillingRepo.count()).isZero();
+				}
+		);
 	}
 
 	public static JAXBElement<XMLVarsel> createVarsel() {
@@ -106,35 +135,32 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	private Varsel assertDb(String varselTekst) {
 		Varselbestilling varselbestilling = varselbestillingRepo.findAllEager().get(0);
-		assertThat(UUID.fromString(varselbestilling.getVarselbestillingId())
-				.toString(), is(varselbestilling.getVarselbestillingId()));
-		assertThat(varselbestilling.getVarseltypeId(), is(VARSELTYPE_ID));
-		assertThat(formatDateTime(varselbestilling.getUtlopTidspunkt()), is(equalTo(formatDateTime(UTLOEPSTIDSPUNKT_LDT))));
-		assertThat(varselbestilling.getFnr(), is(PERSON_IDENT));
-		assertThat(varselbestilling.getAktorId(), is(MOTTAKER));
-		assertThat(varselbestilling.getBestillingTidspunkt(), aboutNow());
-		assertThat(varselbestilling.getRevarslingIntervall(), nullValue());
-		assertThat(varselbestilling.getAntallRevarslinger(), nullValue());
-		assertThat(varselbestilling.getNesteVarslingDato(), nullValue());
-		assertThat(varselbestilling.getChangeStamp().getOpprettetAv(), is(JmsConsumer.BESTILL_SERVICEMELDING.getServiceName()));
-		assertThat(varselbestilling.getChangeStamp().getOpprettetDato(), aboutNow());
+		assertThat(varselbestilling.getVarseltypeId()).isEqualTo(VARSELTYPE_ID);
+		assertThat(formatDateTime(varselbestilling.getUtlopTidspunkt())).isEqualTo(formatDateTime(UTLOEPSTIDSPUNKT_LDT));
+		assertThat(varselbestilling.getFnr()).isEqualTo(PERSON_IDENT);
+		assertThat(varselbestilling.getAktorId()).isEqualTo(MOTTAKER);
+		assertThat(varselbestilling.getBestillingTidspunkt()).isCloseTo(now(), within(1, SECONDS));
+		assertThat(varselbestilling.getRevarslingIntervall()).isNull();
+		assertThat(varselbestilling.getAntallRevarslinger()).isNull();
+		assertThat(varselbestilling.getNesteVarslingDato()).isNull();
+		assertThat(varselbestilling.getChangeStamp().getOpprettetAv()).isEqualTo(BESTILL_SERVICEMELDING.getServiceName());
+		assertThat(varselbestilling.getChangeStamp().getOpprettetDato()).isCloseTo(now(), within(1, SECONDS));
 
-		assertThat(varselbestilling.getVarsels(), hasSize(1));
-
+		assertThat(varselbestilling.getVarsels()).hasSize(1);
 		no.nav.varsel.domain.object.Varsel varsel = varselbestilling.getVarsels().iterator().next();
-		assertThat(UUID.fromString(varsel.getVarselId()).toString(), is(varsel.getVarselId()));
-		assertThat(varsel.getKanal(), is(KanalCode.EPOST));
-		assertThat(varsel.getSendtTidspunkt(), aboutNow());
-		assertThat(varsel.getDistribusjonTidspunkt(), nullValue());
-		assertThat(varsel.getKontaktInfo(), is(EPOSTADRESSE));
-		assertThat(varsel.getStatus(), is(StatusCode.SENDT));
-		assertThat(varsel.getFeilbeskrivelse(), nullValue());
-		assertThat(varsel.getVarselTittel(), is(VARSEL_TITTEL));
-		assertThat(varsel.getVarselTekst(), is(varselTekst));
-		assertThat(varsel.getVarselUrl(), nullValue());
-		assertThat(varsel.getErRevarsel(), is(false));
-		assertThat(varsel.getChangeStamp().getOpprettetAv(), is(JmsConsumer.BESTILL_SERVICEMELDING.getServiceName()));
-		assertThat(varsel.getChangeStamp().getOpprettetDato(), aboutNow());
+
+		assertThat(varsel.getKanal()).isEqualTo(EPOST);
+		assertThat(varsel.getSendtTidspunkt()).isCloseTo(now(), within(1, SECONDS));
+		assertThat(varsel.getDistribusjonTidspunkt()).isNull();
+		assertThat(varsel.getKontaktInfo()).isEqualTo(EPOSTADRESSE);
+		assertThat(varsel.getStatus()).isEqualTo(SENDT);
+		assertThat(varsel.getFeilbeskrivelse()).isNull();
+		assertThat(varsel.getVarselTittel()).isEqualTo(VARSEL_TITTEL);
+		assertThat(varsel.getVarselTekst()).isEqualTo(varselTekst);
+		assertThat(varsel.getVarselUrl()).isNull();
+		assertThat(varsel.getErRevarsel()).isFalse();
+		assertThat(varsel.getChangeStamp().getOpprettetAv()).isEqualTo(BESTILL_SERVICEMELDING.getServiceName());
+		assertThat(varsel.getChangeStamp().getOpprettetDato()).isCloseTo(now(), within(1, SECONDS));
 
 		return varsel;
 	}

@@ -2,8 +2,8 @@ package no.nav.varsel.service.support;
 
 import com.google.common.collect.Maps;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.consumer.dokmet.to.Varselinfo;
-import no.nav.varsel.consumer.dokmet.to.Varselmal;
+import no.nav.varsel.consumer.dokmet.Varselinfo;
+import no.nav.varsel.consumer.dokmet.Varselmal;
 import no.nav.varsel.domain.builder.VarselbestillingBuilder;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;

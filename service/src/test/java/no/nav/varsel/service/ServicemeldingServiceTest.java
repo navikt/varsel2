@@ -6,7 +6,7 @@ import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.dokmet.DokmetConsumer;
-import no.nav.varsel.consumer.dokmet.to.Varselinfo;
+import no.nav.varsel.consumer.dokmet.Varselinfo;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.TestdataUtil;

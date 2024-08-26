@@ -1,4 +1,4 @@
-package no.nav.varsel.consumer.dokmet.to;
+package no.nav.varsel.consumer.dokmet;
 
 import lombok.Builder;
 import lombok.Value;

@@ -4,7 +4,7 @@ import no.nav.brukernotifikasjon.schemas.builders.NokkelInputBuilder;
 import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
 import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.doknotifikasjon.schemas.PrefererteKanal;
-import no.nav.varsel.consumer.dokmet.to.Varselmal;
+import no.nav.varsel.consumer.dokmet.Varselmal;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.service.to.BestillVarselTo;

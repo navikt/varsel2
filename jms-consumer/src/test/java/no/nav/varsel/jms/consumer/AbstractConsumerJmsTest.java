@@ -1,6 +1,5 @@
 package no.nav.varsel.jms.consumer;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
 import jakarta.jms.Message;
 import jakarta.jms.Queue;
 import jakarta.xml.bind.JAXBElement;
@@ -14,8 +13,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.TransactionStatus;
@@ -26,12 +27,13 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
+import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.DOKMET_CACHE;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -41,8 +43,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @AutoConfigureTestDatabase
 @AutoConfigureWireMock(port = 0)
 public abstract class AbstractConsumerJmsTest {
-
-	public static final String FEIL_MQ_UT = "feil_mq_ut";
 
 	@Autowired
 	protected JmsTemplate jmsTemplate;
@@ -54,7 +54,13 @@ public abstract class AbstractConsumerJmsTest {
 	protected Queue backoutQueue;
 
 	@Autowired
+	protected Queue bestillServicemeldingFunksjonellFeilQueue;
+
+	@Autowired
 	protected VarselbestillingRepo varselbestillingRepo;
+
+	@Autowired
+	public CacheManager cacheManager;
 
 	@Autowired
 	protected VarselRepo varselRepo;
@@ -63,14 +69,13 @@ public abstract class AbstractConsumerJmsTest {
 	private TransactionTemplate transactionTemplate;
 
 	@BeforeEach
-	public void setUpAbstract() {
-		this.stubStsConsumer();
+	public void setUp() {
+		stubSts();
 	}
 
 	@AfterEach
-	public void tearDownAbstract() {
-		WireMock.removeAllMappings();
-		WireMock.resetAllRequests();
+	public void tearDown() {
+		cacheManager.getCache(DOKMET_CACHE).clear();
 		varselbestillingRepo.deleteAll();
 	}
 
@@ -85,15 +90,6 @@ public abstract class AbstractConsumerJmsTest {
 			}
 		});
 		return transactionTemplate.execute(transactionStatus -> receive(bestillServicemeldingQueue));
-	}
-
-	protected void sendMessageNoReply(Queue queue, JAXBElement<?> message) {
-		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-			@Override
-			protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-				jmsTemplate.convertAndSend(queue, message);
-			}
-		});
 	}
 
 	@SuppressWarnings("unchecked")
@@ -113,7 +109,7 @@ public abstract class AbstractConsumerJmsTest {
 		return (T) response;
 	}
 
-	protected Message sendMessageListenBoq(Queue queue, JAXBElement<?> message) {
+	protected Message sendMessageAndListenToResponseOnTechnicalBoq(Queue queue, JAXBElement<?> message) {
 		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
@@ -121,6 +117,16 @@ public abstract class AbstractConsumerJmsTest {
 			}
 		});
 		return transactionTemplate.execute(t -> jmsTemplate.receive(backoutQueue));
+	}
+
+	protected Message sendMessageAndListenToResponseOnFunctionalBoq(Queue queue, JAXBElement<?> message) {
+		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+			@Override
+			protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+				jmsTemplate.convertAndSend(queue, message);
+			}
+		});
+		return transactionTemplate.execute(t -> jmsTemplate.receive(bestillServicemeldingFunksjonellFeilQueue));
 	}
 
 	protected void isOk(JmsReply response) {
@@ -135,39 +141,46 @@ public abstract class AbstractConsumerJmsTest {
 		assertThat(response, notNullValue());
 	}
 
-	public void stubVarselInfoV1() {
-		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varseltypeId")
+	public void stubDokmet() {
+		stubFor(get(urlMatching("/rest/varselinfo/varseltypeId"))
 				.willReturn(aResponse()
 						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-						.withBodyFile("varselInfoV1/varselInfoV1-happy.json")));
+						.withBodyFile("dokmet/varselinfo-happy.json")));
 	}
 
-	public void stubVarselInfoV1VarselFeil() {
+	public void stubDokmet(HttpStatus httpStatus) {
+		stubFor(get(urlEqualTo("/rest/varselinfo/varseltypeId"))
+				.willReturn(aResponse()
+						.withStatus(httpStatus.value())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
+	}
+
+	public void stubVarselInfoUtenParamIVarselUrl() {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_test_feil")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-						.withBodyFile("varselInfoV1/varsel-test-feil.json")));
+						.withBodyFile("dokmet/uten-param-i-varselurl.json")));
 	}
 
-	public void stubVarselInfoV1VarselURL() {
+	public void stubVarselinfoMedParamIVarselUrl() {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_varselUrl")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-						.withBodyFile("varselInfoV1/varsel-varsel-url.json")));
+						.withBodyFile("dokmet/med-param-i-varselurl.json")));
 	}
 
-	public void stubVarselInfoV1VarselMissing() {
+	public void stubVarselinfoMedManglendeRevarslingstekst() {
 		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_missing")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-						.withBodyFile("varselInfoV1/varsel-missing.json")));
+						.withBodyFile("dokmet/manglende-revarslingstekst.json")));
 	}
 
-	public void stubStsConsumer() {
+	public void stubSts() {
 		stubFor(get("/securitytoken?grant_type=client_credentials&scope=openid")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
@@ -175,12 +188,20 @@ public abstract class AbstractConsumerJmsTest {
 						.withBodyFile("sts/stsResponse-happy.json")));
 	}
 
-	public void stubPdlConsumer() {
+	public void stubDigdir() {
+		stubFor(post("/digdir-krr-proxy/rest/v1/personer?inkluderSikkerDigitalPost=true")
+				.willReturn(aResponse()
+						.withStatus(OK.value())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+						.withBodyFile("digdir/dki-digipost-happy.json")));
+	}
+
+	public void stubPdl() {
 		stubFor(post("/pdl")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-						.withBodyFile("__/files/pdl/pdl-aktoerid-happy.json")));
+						.withBodyFile("pdl/pdl-aktoerid-happy.json")));
 	}
 
 	public void stubPdlConsumerNotFound() {
@@ -199,17 +220,12 @@ public abstract class AbstractConsumerJmsTest {
 						.withBodyFile("pdl/pdl-ident-server-error.json")));
 	}
 
-	public void stubPdlConsumerTechnicalErrorWithInternalServerError() {
+	public void stubPdl(HttpStatus httpStatus) {
 		stubFor(post("/pdl")
 				.willReturn(aResponse()
-						.withStatus(INTERNAL_SERVER_ERROR.value())
+						.withStatus(httpStatus.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
 	}
 
-	public void stubPdlConsumerFunctionalErrorWithInternalServerError() {
-		stubFor(post("/pdl")
-				.willReturn(aResponse()
-						.withStatus(BAD_REQUEST.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
-	}
+
 }

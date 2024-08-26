@@ -2,54 +2,74 @@ package no.nav.varsel.consumer.dokmet;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.dokmet.api.tkat021.VarselInfoTo;
-import no.nav.varsel.consumer.dokmet.to.Varselinfo;
-import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Value;
+import no.nav.varsel.config.VarselProperties;
+import no.nav.varsel.util.NavHeadersFilter;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
-import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.VARSELINFO_CACHE;
-import static no.nav.varsel.consumer.dokmet.support.VarselinfoMapper.mapToVarselinfo;
-import static no.nav.varsel.consumer.pdl.helper.DomainConstants.APP_NAME;
-import static no.nav.varsel.util.MDCGenerate.CALL_ID;
-import static no.nav.varsel.util.MDCGenerate.NAV_CONSUMER_ID;
-import static org.springframework.http.HttpMethod.GET;
+import java.util.function.Consumer;
 
-@Component
+import static java.lang.String.format;
+import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.DOKMET_CACHE;
+import static no.nav.varsel.consumer.dokmet.VarselinfoMapper.mapToVarselinfo;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @Slf4j
+@Component
 public class DokmetConsumer {
 
-	private final RestTemplate restTemplate;
-	private final String varselinfoUrl;
+	private final WebClient webClient;
 
-	public DokmetConsumer(@Value("${dokmet.varselinfo.url}") String varselinfoUrl,
-						  RestTemplate restTemplate) {
-		this.restTemplate = restTemplate;
-		this.varselinfoUrl = varselinfoUrl;
+	public DokmetConsumer(VarselProperties varselProperties,
+						  WebClient webClient) {
+		this.webClient = webClient.mutate()
+				.baseUrl(varselProperties.getEndpoints().getDokmetUrl())
+				.filter(new NavHeadersFilter())
+				.defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+				.build();
 	}
 
-	@Cacheable(VARSELINFO_CACHE)
-	public Varselinfo hentVarselinfo(String varseltypeId) {
-		VarselInfoTo varselInfoTo;
-		HttpHeaders headers = createHeaders();
+	@Cacheable(DOKMET_CACHE)
+	@Retryable(retryFor = DokmetTechnicalException.class, maxAttempts = 5, backoff = @Backoff(delay = 1000))
+	public Varselinfo hentVarselinfo(final String varseltypeId) {
+		log.info("hentVarselinfo henter varselinfo for varseltypeId={}", varseltypeId);
 
-		try {
-			HttpEntity<String> request = new HttpEntity<>(headers);
-			varselInfoTo = restTemplate.exchange(varselinfoUrl + "/{varseltypeId}", GET, request, VarselInfoTo.class, varseltypeId).getBody();
-		} catch (Exception e) {
-			throw new RuntimeException("Could not find varseltypeId=" + varseltypeId + " from url=" + varselinfoUrl, e);
-		}
+		var varselinfoTo = webClient.get()
+				.uri(uriBuilder -> uriBuilder.path("/{varseltypeId}")
+						.build(varseltypeId))
+				.retrieve()
+				.bodyToMono(VarselInfoTo.class)
+				.doOnError(handleError(varseltypeId))
+				.block();
 
-		return mapToVarselinfo(varselInfoTo);
+		log.info("hentVarselinfo har hentet varselinfo for varseltypeId={}", varseltypeId);
+
+		return mapToVarselinfo(varselinfoTo);
 	}
 
-	private HttpHeaders createHeaders() {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add(NAV_CONSUMER_ID, APP_NAME);
-		headers.add(CALL_ID, MDC.get(CALL_ID));
-		return headers;
+	private Consumer<Throwable> handleError(String varseltypeId) {
+		log.warn("Inni handleError");
+		return error -> {
+			if (error instanceof WebClientResponseException response && response.getStatusCode().is4xxClientError()) {
+				if (response.getStatusCode().isSameCodeAs(NOT_FOUND)) {
+					throw new VarselinfoIkkeFunnetException(format("Dokmet feilet funksjonelt med statuskode=%s. Fant ingen varselinfo med varseltypeId=%s. Feilmelding=%s",
+							response.getStatusCode(), varseltypeId, response.getResponseBodyAsString()), error);
+				}
+
+				throw new DokmetFunctionalException(format("Dokmet feilet funksjonelt med statuskode=%s. Kunne ikke hente varselinfo med varseltypeId=%s. Feilmelding=%s",
+						response.getStatusCode(), varseltypeId, response.getResponseBodyAsString()), error);
+			} else {
+				throw new DokmetTechnicalException(format("Dokmet feilet teknisk for varseltypeId=%s med feilmelding=%s",
+						varseltypeId, error.getMessage()), error
+				);
+			}
+		};
 	}
+
 }

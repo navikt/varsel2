@@ -23,8 +23,8 @@ spec:
       value: {{ DIGDIR_KRR_PROXY_URL }}
     - name: SECURITY_TOKEN_REST_SERVICE_URL
       value: {{ SECURITY_TOKEN_REST_SERVICE_URL }}
-    - name: DOKMET_VARSELINFO_URL
-      value: {{ DOKMET_VARSELINFO_URL }}
+    - name: VARSEL_ENDPOINTS_DOKMET_URL
+      value: {{ VARSEL_ENDPOINTS_DOKMET_URL }}
     - name: PDL_URL
       value: {{ PDL_URL }}
     - name: VARSEL_SIGSUBJECTCERTCONSTRAINTS
