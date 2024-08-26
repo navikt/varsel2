@@ -9,7 +9,6 @@ import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -27,8 +26,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 
 import static java.time.Duration.ofSeconds;
-import static no.nav.varsel.consumer.pdl.helper.DomainConstants.APP_NAME;
-import static no.nav.varsel.util.MDCGenerate.CALL_ID;
+import static no.nav.varsel.util.MDCGenerate.getCallId;
+import static no.nav.varsel.util.NavConstants.NAV_CALL_ID;
 
 @Component
 public class HentDigitalKontaktinformasjonConsumer {
@@ -39,7 +38,6 @@ public class HentDigitalKontaktinformasjonConsumer {
 	private final String dkiUrl;
 	private final TokenConsumer tokenConsumer;
 	private final HentDigitalKontaktinformasjonMapper mapper;
-	private static final String NAV_CONSUMER_ID = "Nav-Consumer-Id";
 	private final AzureProperties azureProperties;
 
 	@Autowired
@@ -100,8 +98,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setBearerAuth(clientCredentialToken.getAccess_token());
-		headers.add(NAV_CONSUMER_ID, APP_NAME);
-		headers.add(CALL_ID, MDC.get(CALL_ID));
+		headers.add(NAV_CALL_ID, getCallId());
 		return headers;
 	}
 }

@@ -2,12 +2,15 @@ package no.nav.varsel.util;
 
 import org.slf4j.MDC;
 
+import java.util.Set;
 import java.util.UUID;
 
 public class MDCGenerate {
-	public static final String CALL_ID = "Nav-Call-Id";
+
+	public static final String CALL_ID = "callId";
 	public static final String USER_ID = "userId";
-	public static final String NAV_CONSUMER_ID = "Nav-Consumer-Id";
+
+	public static Set<String> ALL_KEYS = Set.of(CALL_ID);
 
 	public static void generateCallId() {
 		MDC.put(CALL_ID, UUID.randomUUID().toString());

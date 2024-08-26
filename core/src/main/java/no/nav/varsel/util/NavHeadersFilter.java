@@ -8,10 +8,9 @@ import org.springframework.web.reactive.function.client.ExchangeFunction;
 import reactor.core.publisher.Mono;
 
 import static no.nav.varsel.util.MDCGenerate.CALL_ID;
+import static no.nav.varsel.util.NavConstants.NAV_CALLID;
 
 public class NavHeadersFilter implements ExchangeFilterFunction {
-
-	public static final String NAV_CALLID = "Nav-Callid";
 
 	@Override
 	public Mono<ClientResponse> filter(ClientRequest request, ExchangeFunction next) {
