@@ -54,7 +54,6 @@ public class DokmetConsumer {
 	}
 
 	private Consumer<Throwable> handleError(String varseltypeId) {
-		log.warn("Inni handleError");
 		return error -> {
 			if (error instanceof WebClientResponseException response && response.getStatusCode().is4xxClientError()) {
 				if (response.getStatusCode().isSameCodeAs(NOT_FOUND)) {
