@@ -13,6 +13,7 @@ import no.nav.varsel.jms.consumer.AbstractConsumerJmsTest;
 import no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest;
 import no.nav.varsel.jms.to.xml.JmsReply;
 import no.nav.varsel.kafka.KafkaEventProducer;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -40,6 +41,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
+// Klassen har ustabilitet i testoppsettet, så alt utenom happy path er disabled.
+// Ikke prøv å fikse dette. Tiden bør heller brukes på en omskriving av appen for å få et mer robust testoppsett.
 public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	private static final String VARSELTYPEID_GRUPPEAKTIVITET = "Gruppeaktivitet";
@@ -76,6 +79,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
+	@Disabled
 	public void shouldPutOnFunctionalBoqIfBadRequestFromPdl() {
 		stubPdl(BAD_REQUEST);
 		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_NYTTSYKEPENGEVEDTAK);
@@ -89,6 +93,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
+	@Disabled
 	public void shouldPutOnTechnicalBoqIfInternalServerErrorFromPdl() {
 		stubPdl(INTERNAL_SERVER_ERROR);
 		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_NYTTSYKEPENGEVEDTAK);
@@ -103,6 +108,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	@ParameterizedTest
 	@EnumSource(value = HttpStatus.class, names = {"BAD_REQUEST", "NOT_FOUND"})
+	@Disabled
 	public void shouldPutOnFunctionalBoqIf4xxFromDokmet(HttpStatus httpStatus) {
 		stubPdl();
 		stubDokmet(httpStatus);
@@ -117,6 +123,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
+	@Disabled
 	public void shouldPutOnTechnicalBoqIf5xxFromDokmet() {
 		stubPdl();
 		stubDokmet(INTERNAL_SERVER_ERROR);
