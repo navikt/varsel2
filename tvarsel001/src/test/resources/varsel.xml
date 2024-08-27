@@ -3,7 +3,7 @@
 	<mottaker xsi:type="ns2:PersonIdent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 		<personIdent>15084300133</personIdent>
 	</mottaker>
-	<varslingstype>NyttSykepengevedtak</varslingstype>
+	<varslingstype>Gruppeaktivitet</varslingstype>
 	<parameterListe>
 		<key>sted</key>
 		<value>FA1</value>
