@@ -46,7 +46,7 @@ public class BestillServicemeldingMapperTest {
 
 	private final BestillServicemeldingMapper mapper = new BestillServicemeldingMapper();
 
-	private static final String VARSELTYPE_ID = "NyttSykepengevedtak";
+	private static final String VARSELTYPE_ID = "1.GangVarselBrevPensj";
 	private static final String VARSELBESTILLINGID_HEADER_VALUE = "c73b79c7-d4a2-497a-a93d-b2600cffa461";
 
 	@BeforeEach

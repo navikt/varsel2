@@ -46,7 +46,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	private static final String VARSELTYPEID_GRUPPEAKTIVITET = "Gruppeaktivitet";
-	private static final String VARSELTYPEID_NYTTSYKEPENGEVEDTAK = "NyttSykepengevedtak";
+	private static final String VARSELTYPEID_INDIVIDUELLSAMTALE = "IndividuellSamtale";
 	private static final String VARSEL_TITTEL = "Varsel Tittel";
 	private static final String FOERSTE_GANG_TEKST = "Første gang tekst til {mottaker}";
 	private static final String PERSON_IDENT = "1234567890123";
@@ -82,7 +82,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	@Disabled
 	public void shouldPutOnFunctionalBoqIfBadRequestFromPdl() {
 		stubPdl(BAD_REQUEST);
-		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_NYTTSYKEPENGEVEDTAK);
+		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_INDIVIDUELLSAMTALE);
 
 		await().atMost(ofSeconds(10)).untilAsserted(() -> {
 					Message response = sendMessageAndListenToResponseOnFunctionalBoq(bestillServicemeldingQueue, varsel);
@@ -96,7 +96,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	@Disabled
 	public void shouldPutOnTechnicalBoqIfInternalServerErrorFromPdl() {
 		stubPdl(INTERNAL_SERVER_ERROR);
-		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_NYTTSYKEPENGEVEDTAK);
+		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_INDIVIDUELLSAMTALE);
 
 		await().atMost(ofSeconds(10)).untilAsserted(() -> {
 					Message response = sendMessageAndListenToResponseOnTechnicalBoq(bestillServicemeldingQueue, varsel);
@@ -112,7 +112,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	public void shouldPutOnFunctionalBoqIf4xxFromDokmet(HttpStatus httpStatus) {
 		stubPdl();
 		stubDokmet(httpStatus);
-		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_NYTTSYKEPENGEVEDTAK);
+		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_INDIVIDUELLSAMTALE);
 
 		await().atMost(ofSeconds(10)).untilAsserted(() -> {
 					Message response = sendMessageAndListenToResponseOnFunctionalBoq(bestillServicemeldingQueue, varsel);
@@ -127,7 +127,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	public void shouldPutOnTechnicalBoqIf5xxFromDokmet() {
 		stubPdl();
 		stubDokmet(INTERNAL_SERVER_ERROR);
-		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_NYTTSYKEPENGEVEDTAK);
+		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_INDIVIDUELLSAMTALE);
 
 		await().atMost(ofSeconds(10)).untilAsserted(() -> {
 					Message response = sendMessageAndListenToResponseOnTechnicalBoq(bestillServicemeldingQueue, varsel);

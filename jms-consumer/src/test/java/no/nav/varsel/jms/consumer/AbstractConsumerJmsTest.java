@@ -158,7 +158,7 @@ public abstract class AbstractConsumerJmsTest {
 	}
 
 	public void stubDokmet(HttpStatus httpStatus) {
-		stubFor(get(urlEqualTo("/rest/varselinfo/NyttSykepengevedtak"))
+		stubFor(get(urlEqualTo("/rest/varselinfo/IndividuellSamtale"))
 				.willReturn(aResponse()
 						.withStatus(httpStatus.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
