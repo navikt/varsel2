@@ -12,21 +12,21 @@ import static org.springframework.util.Assert.notNull;
 
 public class VarselinfoMapper {
 
-	public static Varselinfo mapToVarselinfo(VarselInfoTo varselinfoTo) {
-		notNull(varselinfoTo, "varselinfoTo is null");
+	public static Varselinfo mapToVarselinfo(VarselInfoTo varselInfoTo) {
+		notNull(varselInfoTo, "varselInfoTo is null");
 
-		Set<VarselMalTo> varselmaler = varselinfoTo.getVarselmals();
+		Set<VarselMalTo> varselmaler = varselInfoTo.getVarselmals();
 
 		return Varselinfo.builder()
-				.varseltypeId(varselinfoTo.getVarseltypeId())
-				.varselNavn(varselinfoTo.getVarselNavn())
-				.varselForDistKanal(varselinfoTo.getVarselForDistribusjonKanal())
-				.varselKategori(varselinfoTo.getVarselKategori())
-				.inaktiv(varselinfoTo.getInaktiv())
-				.revarslingIntervall(varselinfoTo.getRevarslingIntervall())
-				.antallRevarsling(varselinfoTo.getAntallRevarslinger())
-				.varselUrl(varselinfoTo.getVarselURL())
-				.preferertKanal(mapKanaler(varselinfoTo.getPreferertKanal()))
+				.varseltypeId(varselInfoTo.getVarseltypeId())
+				.varselNavn(varselInfoTo.getVarselNavn())
+				.varselForDistKanal(varselInfoTo.getVarselForDistribusjonKanal())
+				.varselKategori(varselInfoTo.getVarselKategori())
+				.inaktiv(varselInfoTo.getInaktiv())
+				.revarslingIntervall(varselInfoTo.getRevarslingIntervall())
+				.antallRevarsling(varselInfoTo.getAntallRevarslinger())
+				.varselUrl(varselInfoTo.getVarselURL())
+				.preferertKanal(mapKanaler(varselInfoTo.getPreferertKanal()))
 				.maler(varselmaler == null ? null : varselmaler.stream().map(VarselinfoMapper::mapMal).collect(toSet()))
 				.build();
 	}
