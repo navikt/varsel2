@@ -150,7 +150,7 @@ public abstract class AbstractConsumerJmsTest {
 	}
 
 	public void stubDokmet() {
-		stubFor(get(urlMatching("/rest/varselinfo/varseltypeId"))
+		stubFor(get(urlMatching("/rest/varselinfo/Gruppeaktivitet"))
 				.willReturn(aResponse()
 						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
@@ -158,7 +158,7 @@ public abstract class AbstractConsumerJmsTest {
 	}
 
 	public void stubDokmet(HttpStatus httpStatus) {
-		stubFor(get(urlEqualTo("/rest/varselinfo/varseltypeId"))
+		stubFor(get(urlEqualTo("/rest/varselinfo/NyttSykepengevedtak"))
 				.willReturn(aResponse()
 						.withStatus(httpStatus.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));

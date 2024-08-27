@@ -57,12 +57,12 @@ public class DokmetConsumer {
 		return error -> {
 			if (error instanceof WebClientResponseException response && response.getStatusCode().is4xxClientError()) {
 				if (response.getStatusCode().isSameCodeAs(NOT_FOUND)) {
-					throw new VarselinfoIkkeFunnetException(format("Dokmet feilet funksjonelt med statuskode=%s. Fant ingen varselinfo med varseltypeId=%s. Feilmelding=%s",
-							response.getStatusCode(), varseltypeId, response.getResponseBodyAsString()), error);
+					throw new VarselinfoIkkeFunnetException(format("Dokmet feilet funksjonelt med statuskode=%s. Fant ingen varselinfo med varseltypeId=%s.",
+							response.getStatusCode(), varseltypeId), error);
 				}
 
-				throw new DokmetFunctionalException(format("Dokmet feilet funksjonelt med statuskode=%s. Kunne ikke hente varselinfo med varseltypeId=%s. Feilmelding=%s",
-						response.getStatusCode(), varseltypeId, response.getResponseBodyAsString()), error);
+				throw new DokmetFunctionalException(format("Dokmet feilet funksjonelt med statuskode=%s. Kunne ikke hente varselinfo med varseltypeId=%s.",
+						response.getStatusCode(), varseltypeId), error);
 			} else {
 				throw new DokmetTechnicalException(format("Dokmet feilet teknisk for varseltypeId=%s med feilmelding=%s",
 						varseltypeId, error.getMessage()), error
