@@ -39,14 +39,14 @@ public class BestillServicemeldingMapperTest {
 	@Mock
 	private Message mockActiveMqMessageVarselbestillingIdNotPresent;
 
-	public static final LocalDateTime UTLOEPSTIDSPUNKT_LDT = LocalDateTime.now().plusHours(1);
+	public static final LocalDateTime UTLOEPSTIDSPUNKT_LDT = LocalDateTime.now().plusHours(24);
 	public static final String MOTTAKER = "mottakeren";
 	public static final String KEY = "mottaker";
 	public static final String VAL = "val";
 
 	private final BestillServicemeldingMapper mapper = new BestillServicemeldingMapper();
 
-	public static final String VARSELTYPE_ID = "varseltypeId";
+	private static final String VARSELTYPE_ID = "1.GangVarselBrevPensj";
 	private static final String VARSELBESTILLINGID_HEADER_VALUE = "c73b79c7-d4a2-497a-a93d-b2600cffa461";
 
 	@BeforeEach
@@ -139,13 +139,13 @@ public class BestillServicemeldingMapperTest {
 	}
 
 	public static ObjectMessageWrapper<XMLVarsel> createVarsel(Message message) {
-		return new ObjectMessageWrapper<>(createVarsel(), message);
+		return new ObjectMessageWrapper<>(createVarsel(VARSELTYPE_ID), message);
 	}
 
-	public static XMLVarsel createVarsel() {
+	public static XMLVarsel createVarsel(String varseltypeId) {
 		XMLVarsel varsel = new XMLVarsel();
 		XMLVarslingstyper varslingstype = new XMLVarslingstyper();
-		varslingstype.setValue(VARSELTYPE_ID);
+		varslingstype.setValue(varseltypeId);
 		varsel.setVarslingstype(varslingstype);
 		XMLAktoerId aktoerId = new XMLAktoerId();
 		aktoerId.setAktoerId(MOTTAKER);

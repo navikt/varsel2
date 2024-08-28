@@ -3,6 +3,7 @@ package no.nav.varsel.config;
 import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
+import no.nav.varsel.consumer.config.WebClientConfig;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dokmet.DokmetConsumer;
@@ -19,6 +20,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 		RepoTestConfig.class,
 		ServiceTestConfig.class,
 		JmsConsumerConfig.class,
+		WebClientConfig.class,
 		CustomKafkaTemplate.class,
 		HentDigitalKontaktinformasjonConsumer.class,
 		VarselKanalDecider.class,
@@ -46,6 +48,13 @@ public class JmsConsumerTestConfig {
 	@Bean
 	public ClientHttpRequestFactory requestFactory() {
 		return new SimpleClientHttpRequestFactory();
+	}
+
+	@Bean
+	public VarselProperties varselProperties() {
+		VarselProperties varselProperties = new VarselProperties();
+		varselProperties.getEndpoints().setDokmetUrl("dokmeturl");
+		return varselProperties;
 	}
 
 }

@@ -1,9 +1,7 @@
-package no.nav.varsel.consumer.dokmet.support;
+package no.nav.varsel.consumer.dokmet;
 
 import no.nav.dokmet.api.tkat021.VarselInfoTo;
 import no.nav.dokmet.api.tkat021.VarselMalTo;
-import no.nav.varsel.consumer.dokmet.to.Varselinfo;
-import no.nav.varsel.consumer.dokmet.to.Varselmal;
 import no.nav.varsel.domain.code.KanalCode;
 
 import java.util.Set;
@@ -45,7 +43,9 @@ public class VarselinfoMapper {
 	private static Set<KanalCode> mapKanaler(Set<String> preferertKanal) {
 		notNull(preferertKanal, "preferertKanal is null");
 
-		return preferertKanal.stream().map(VarselinfoMapper::mapKanal).collect(toSet());
+		return preferertKanal.stream()
+				.map(VarselinfoMapper::mapKanal)
+				.collect(toSet());
 	}
 
 	private static KanalCode mapKanal(String kanal) {

@@ -2,14 +2,14 @@ package no.nav.varsel.consumer.dokmet.support;
 
 import no.nav.dokmet.api.tkat021.VarselInfoTo;
 import no.nav.dokmet.api.tkat021.VarselMalTo;
-import no.nav.varsel.consumer.dokmet.to.Varselinfo;
+import no.nav.varsel.consumer.dokmet.Varselinfo;
 import no.nav.varsel.domain.code.KanalCode;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
 import static java.util.Collections.singleton;
-import static no.nav.varsel.consumer.dokmet.support.VarselinfoMapper.mapToVarselinfo;
+import static no.nav.varsel.consumer.dokmet.VarselinfoMapper.mapToVarselinfo;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
 import static no.nav.varsel.repo.TestdataUtil.ANTALL_REVARSLINGER;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;

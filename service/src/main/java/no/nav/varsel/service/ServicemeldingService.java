@@ -6,7 +6,7 @@ import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.dokmet.DokmetConsumer;
-import no.nav.varsel.consumer.dokmet.to.Varselinfo;
+import no.nav.varsel.consumer.dokmet.Varselinfo;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
@@ -27,10 +27,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -96,7 +94,7 @@ public class ServicemeldingService {
 
 		//3.Hent Varselinfo
 		Varselinfo varselinfo = dokmetConsumer.hentVarselinfo(bestilling.getVarseltypeId());
-		validateVarselInfoForBestilling(bestilling, varselinfo);
+		validateVarselinfoForBestilling(bestilling, varselinfo);
 
 		if (bestilling.isTestvarsel()) {
 			varselinfo = varselinfo.withPreferertKanal(Set.of(KanalCode.values()));
@@ -177,7 +175,7 @@ public class ServicemeldingService {
 		return varselutsendingList.stream().anyMatch(it -> SMS_OG_EPOST.contains(it.getKanal()));
 	}
 
-	private void validateVarselInfoForBestilling(BestillVarselTo to, Varselinfo varselinfo) {
+	private void validateVarselinfoForBestilling(BestillVarselTo to, Varselinfo varselinfo) {
 		if (varselinfo.isInaktiv() && !to.isTestvarsel()) {
 			throw new VarselInaktivVarselmalException(to.getPersonIdent(), to.getVarseltypeId(), to.getVarselBestillingId());
 		}

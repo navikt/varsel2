@@ -15,7 +15,7 @@
   "VARSEL_SIGSUBJECTCERTCONSTRAINTS": ".*DC=adeo.*DC=no,.*adeo.no.*",
   "DIGDIR_KRR_PROXY_URL": "https://digdir-krr-proxy.intern.nav.no",
   "SECURITY_TOKEN_REST_SERVICE_URL": "https://security-token-service.nais.adeo.no/rest/v1/sts/token",
-  "DOKMET_VARSELINFO_URL": "https://dokmet.intern.nav.no/rest/varselinfo",
+  "VARSEL_ENDPOINTS_DOKMET_URL": "https://dokmet.intern.nav.no/rest/varselinfo",
   "PDL_URL": "https://pdl-api.intern.nav.no/graphql",
   "BESTILLSERVICEMELDING_QUEUENAME": "QA.P_VARSELPRODUKSJON.SEND_VARSEL",
   "BESTILLSERVICEMELDING_FUNKFEIL_QUEUENAME": "QA.P_VARSELPRODUKSJON.SEND_VARSEL_FUNK_FEIL",

@@ -25,6 +25,8 @@ import java.util.HashMap;
 
 import static java.util.Objects.requireNonNull;
 import static no.nav.varsel.consumer.pdl.helper.DomainConstants.BEARER_PREFIX;
+import static no.nav.varsel.util.MDCGenerate.getCallId;
+import static no.nav.varsel.util.NavConstants.NAV_CALL_ID;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
@@ -123,6 +125,7 @@ public class PdlIdentConsumer {
 		return RequestEntity.post(pdlUri)
 				.accept(APPLICATION_JSON)
 				.header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-				.header(AUTHORIZATION, BEARER_PREFIX + serviceuserToken);
+				.header(AUTHORIZATION, BEARER_PREFIX + serviceuserToken)
+				.header(NAV_CALL_ID, getCallId());
 	}
 }

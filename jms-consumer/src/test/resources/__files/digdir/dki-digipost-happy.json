@@ -1,0 +1,21 @@
+{
+  "personer": {
+    "1234567890123": {
+      "epostadresse": "er@mocked.data",
+      "epostadresseOppdatert": "2030-08-22T07:28:41.587Z",
+      "epostadresseVerifisert": "2030-08-22T07:28:41.587Z",
+      "kanVarsles": true,
+      "mobiltelefonnummer": "54621378",
+      "mobiltelefonnummerOppdatert": "2030-08-22T07:28:41.587Z",
+      "mobiltelefonnummerVerifisert": "2030-08-22T07:28:41.587Z",
+      "personident": "1234567890123",
+      "reservert": false,
+      "sikkerDigitalPostkasse": {
+        "adresse": "varsel2@digipost.no",
+        "leverandoerAdresse": "984661185",
+        "leverandoerSertifikat": "abcd1234"
+      },
+      "spraak": "nb"
+    }
+  }
+}

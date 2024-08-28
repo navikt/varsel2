@@ -3,8 +3,8 @@ package no.nav.varsel.service.tvarsel001.support;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.consumer.dokmet.to.Varselinfo;
-import no.nav.varsel.consumer.dokmet.to.Varselmal;
+import no.nav.varsel.consumer.dokmet.Varselinfo;
+import no.nav.varsel.consumer.dokmet.Varselmal;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
@@ -22,7 +22,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
 import static java.lang.String.format;
@@ -137,9 +136,9 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	@Test
-	public void shouldThrowWhenFoerstegangVarselMissingVarselTekst() {
-		var varselmal = new Varselmal(EPOST, TITTEL, null, REVARSLING_TEKST);
-		var varselinfo = createVarselinfoWithMaler(Set.of(varselmal));
+	public void shouldThrowWhenFoerstegangVarselMissingFoerstegangstekst() {
+		var varselmalUtenFoerstegangstekst = new Varselmal(EPOST, TITTEL, null, REVARSLING_TEKST);
+		var varselinfo = createVarselinfoWithMaler(Set.of(varselmalUtenFoerstegangstekst, createVarselmal(SMS), createVarselmal(DITT_NAV)));
 
 		assertThatExceptionOfType(VarselTekstMissingException.class)
 				.isThrownBy(() -> mapper.mapVarselbestillingFoerstegangVarselMedRevarsel(createBestillTo(), varselinfo, createDigitalKontaktinfoTo()))
@@ -215,8 +214,8 @@ public class VarselBestillingDomainMapperTest {
 
 	@Test
 	public void shouldStopRevarslingWhenMissingRevarslingstekst() {
-		var varselmal = new Varselmal(DITT_NAV, TITTEL, FOERSTEGANGS_TEKST, null);
-		var varselinfo = createVarselinfoWithMaler(Set.of(varselmal));
+		var varselmalUtenRevarslingstekst = new Varselmal(DITT_NAV, TITTEL, FOERSTEGANGS_TEKST, null);
+		var varselinfo = createVarselinfoWithMaler(Set.of(varselmalUtenRevarslingstekst, createVarselmal(SMS), createVarselmal(EPOST)));
 
 		assertThatExceptionOfType(VarselTekstMissingException.class)
 				.isThrownBy(() -> mapper.mapReVarsel(DITT_NAV, createBestillTo(), varselinfo, createDigitalKontaktinfoTo()))
