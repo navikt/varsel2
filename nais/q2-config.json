@@ -24,7 +24,6 @@
   "VARSEL_JMS_CONSUMER_ERROR_CONTEXT_TIME_SECONDS": "600",
   "VARSEL_JMS_CONSUMER_ERROR_RESTART_DELAY_SECONDS": "600",
   "SERVICEUSER_VAULT_PATH": "/serviceuser/data/dev/srvvarsel",
-  "VARSEL_CERT": "/kv/preprod/fss/varsel2/certificate",
   "LISTENER_AUTO_STARTUP": "true",
   "AZURE_APP_SCOPE_DIGDIR_KRR": "api://dev-gcp.team-rocket.digdir-krr-proxy/.default"
 }

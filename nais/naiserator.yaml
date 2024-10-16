@@ -80,8 +80,6 @@ spec:
         mountPath: "/var/run/secrets/nais.io/db_config"
       - kvPath: {{ SERVICEUSER_VAULT_PATH }}
         mountPath: /secrets/serviceuser/srvvarsel
-      - kvPath: {{ VARSEL_CERT }}
-        mountPath: /var/run/secrets/nais.io/certificate
   azure:
     application:
       enabled: true
