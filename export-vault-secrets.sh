@@ -35,16 +35,3 @@ then
     echo "Setting varsel_serviceuser_password"
     export VARSEL_SERVICEUSER_PASSWORD=$(cat /secrets/serviceuser/srvvarsel/password)
 fi
-if test -f /var/run/secrets/nais.io/certificate/keystore
-then
-    echo "Setting VARSEL_CERT_KEYSTORE"
-    CERT_PATH='/var/run/secrets/nais.io/certificate/keystore-extracted'
-    openssl base64 -d -A -in /var/run/secrets/nais.io/certificate/keystore -out $CERT_PATH
-    export VARSEL_CERT_KEYSTORE=$CERT_PATH
-fi
-
-if test -f /var/run/secrets/nais.io/certificate/keystorepassword
-then
-    echo "Setting VARSEL_CERT_KEYSTORE_PASSWORD"
-    export VARSEL_CERT_KEYSTORE_PASSWORD=$(cat /var/run/secrets/nais.io/certificate/keystorepassword)
-fi
