@@ -94,6 +94,8 @@
 				<artifactId>kafka-avro-serializer</artifactId>
 				<version>${kafka-avro-serializer.version}</version>
 			</dependency>
+			<!-- kafka-avro-serializer, brukernotifikasjon-schemas, teamdokumenthandtering-avro-schemas tar alle inn
+			 avro som avhengighet. Vi ønsker å tvinge 1.11.4+ -->
 			<dependency>
 				<groupId>org.apache.avro</groupId>
 				<artifactId>avro</artifactId>
