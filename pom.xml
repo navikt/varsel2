@@ -21,26 +21,27 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.7</version>
+		<version>3.3.4</version>
 	</parent>
 
 	<properties>
 		<java.version>21</java.version>
 
-		<guava.version>33.1.0-jre</guava.version>
-		<ibm.mq.client.version>9.3.5.0</ibm.mq.client.version>
-		<joda.version>2.12.7</joda.version>
+		<guava.version>33.3.1-jre</guava.version>
+		<ibm.mq.client.version>9.4.1.0</ibm.mq.client.version>
+		<joda.version>2.13.0</joda.version>
 
-		<logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
-		<kafka-avro-serializer.version>7.6.0</kafka-avro-serializer.version>
+		<logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
+		<kafka-avro-serializer.version>7.7.1</kafka-avro-serializer.version>
 		<resilience4j.version>2.2.0</resilience4j.version>
-		<context-propagation.version>1.1.1</context-propagation.version>
+		<context-propagation.version>1.1.2</context-propagation.version>
 
 		<!-- NAV -->
-		<teamdokumenthandtering-avro-schemas.version>1.1.0</teamdokumenthandtering-avro-schemas.version>
+		<teamdokumenthandtering-avro-schemas.version>1.1.6</teamdokumenthandtering-avro-schemas.version>
 		<brukernotifikasjon.version>v2.5.2</brukernotifikasjon.version>
+		<avro.version>1.11.4</avro.version>
 		<dok-legacy-tjenestespesifikasjoner.version>29-af3d66d</dok-legacy-tjenestespesifikasjoner.version>
-		<dokmet-api.version>2024.04.19-11.00-f9cf0b7</dokmet-api.version>
+		<dokmet-api.version>2024.10.23-12.35-3fce0da</dokmet-api.version>
 
 		<!-- test -->
 		<spring-cloud-contract-wiremock.version>4.1.2</spring-cloud-contract-wiremock.version>
@@ -92,6 +93,11 @@
 				<groupId>io.confluent</groupId>
 				<artifactId>kafka-avro-serializer</artifactId>
 				<version>${kafka-avro-serializer.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.avro</groupId>
+				<artifactId>avro</artifactId>
+				<version>${avro.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.teamdokumenthandtering</groupId>
