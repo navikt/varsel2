@@ -6,7 +6,6 @@ import no.nav.varsel.azure.TokenResponse;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dkif.support.PostPersonerRequest;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.consumer.support.VarselKanalDecider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,6 @@ public class HentDigitalKontaktinformasjonConsumer {
 
 	private static final Logger LOG = LoggerFactory.getLogger(HentDigitalKontaktinformasjonConsumer.class);
 	private final RestTemplate restTemplate;
-	private final VarselKanalDecider varselKanalDecider;
 	private final String dkiUrl;
 	private final TokenConsumer tokenConsumer;
 	private final HentDigitalKontaktinformasjonMapper mapper;
@@ -47,7 +45,6 @@ public class HentDigitalKontaktinformasjonConsumer {
 												 AzureProperties azureProperties,
 												 ClientHttpRequestFactory clientHttpRequestFactory) {
 		this.mapper = new HentDigitalKontaktinformasjonMapper();
-		this.varselKanalDecider = new VarselKanalDecider();
 		this.dkiUrl = dkiUrl;
 		this.tokenConsumer = tokenConsumer;
 		this.restTemplate = restTemplateBuilder

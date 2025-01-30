@@ -6,4 +6,7 @@ public class ServicemeldingMappingException extends FunctionalVarselException {
 		super(message, cause);
 	}
 
+	public ServicemeldingMappingException(String message) {
+		super(message);
+	}
 }

@@ -1,6 +1,5 @@
 # Varsel2
-Varsel2 les varsel-bestillingar frå MQ, hentar varselmal og bestiller sms/epost-utsending gjennom [doknotifikasjon-2](https://github.com/navikt/doknotifikasjon-2).
-Det blir også oppretta varsel til Ditt NAV gjennom brukarnotifikasjon. Meldingar som går ut av appen blir sendt via Kakfa.
+Varsel2 les varsel-bestillingar frå MQ, hentar varselmal og opprettar beskjed på Ditt Nav, med mogelegheit for ekstern notifikasjon via sms og/eller e-post, gjennom brukarnotifikasjon. Meldingar som går ut av appen blir sendt via Kakfa.
 
 Du finn meir informasjon om det funksjonelle på [Confluence-sidene for varsel-2](https://confluence.adeo.no/display/BOA/Varsel-2).
 

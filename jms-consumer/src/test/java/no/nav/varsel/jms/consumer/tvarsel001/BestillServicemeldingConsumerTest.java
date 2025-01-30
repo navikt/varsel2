@@ -5,7 +5,6 @@ import jakarta.jms.Queue;
 import jakarta.xml.bind.JAXBElement;
 import no.nav.brukernotifikasjon.schemas.input.BeskjedInput;
 import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
-import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
@@ -22,18 +21,23 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
 import javax.xml.namespace.QName;
+import java.util.List;
+import java.util.Set;
 
 import static java.time.Duration.ofSeconds;
 import static java.time.LocalDateTime.now;
 import static java.time.temporal.ChronoUnit.HOURS;
 import static no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.EPOSTADRESSE;
+import static no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapperTest.MOBILTELEFONNUMMER;
+import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
+import static no.nav.varsel.domain.code.KanalCode.SMS;
 import static no.nav.varsel.domain.code.StatusCode.SENDT;
 import static no.nav.varsel.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.MOTTAKER;
 import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.UTLOEPSTIDSPUNKT_LDT;
-import static no.nav.varsel.jms.consumer.tvarsel001.support.BestillServicemeldingMapperTest.VAL;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.assertj.core.api.Assertions.within;
 import static org.awaitility.Awaitility.await;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,9 +51,12 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	private static final String VARSELTYPEID_GRUPPEAKTIVITET = "Gruppeaktivitet";
 	private static final String VARSELTYPEID_INDIVIDUELLSAMTALE = "IndividuellSamtale";
-	private static final String VARSEL_TITTEL = "Varsel Tittel";
-	private static final String FOERSTE_GANG_TEKST = "Første gang tekst til {mottaker}";
-	private static final String PERSON_IDENT = "1234567890123";
+	private static final String PERSON_IDENT = "12345678901";
+	private static final String DITT_NAV_VARSELTEKST = "Dette er en beskjed om at du har et møte på FA1 01.01.2025 klokken 12:00";
+	private static final String SMS_VARSELTEKST = "Hei! Du har et møte i regi av NAV på FA1 01.01.2025 klokken 12:00. Vennlig hilsen NAV";
+	private static final String EPOST_VARSELTEKST = "Hei! Dette er en beskjed om at du har et møte på FA1 01.01.2025 klokken 12:00. Vennlig hilsen NAV";
+	private static final String VARSEL_URL = "http://nav.no";
+	private static final String EPOST_TITTEL = "Påminnelse om møte";
 
 	@Autowired
 	private Queue bestillServicemeldingQueue;
@@ -62,7 +69,6 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		stubPdl();
 		stubDokmet();
 		stubDigdir();
-		doNothing().when(kafkaEventProducer).publish(any(String.class), any(String.class), any(Doknotifikasjon.class));
 		doNothing().when(kafkaEventProducer).publish(any(String.class), any(NokkelInput.class), any(BeskjedInput.class));
 		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_GRUPPEAKTIVITET);
 
@@ -71,9 +77,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 					isOk(response);
 					assertThat(varselbestillingRepo.count()).isEqualTo(1);
 
-					String varselTekst = FOERSTE_GANG_TEKST.replace("{mottaker}", VAL);
-
-					assertDb(varselTekst);
+					assertVarselbestilling();
 				}
 		);
 	}
@@ -144,37 +148,45 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	// For å unngå tidssoneproblematikk på GHA er tidspunktene sjekket til å være innenfor et 3-timersintervall
-	private Varsel assertDb(String varselTekst) {
-		final var tidspunktMedTidssonebuffer = 3;
+	private void assertVarselbestilling() {
+		final int tidspunktMedTidssonebuffer = 3;
 
-		Varselbestilling varselbestilling = varselbestillingRepo.findAllEager().get(0);
-		assertThat(varselbestilling.getVarseltypeId()).isEqualTo(VARSELTYPEID_GRUPPEAKTIVITET);
-		assertThat(varselbestilling.getUtlopTidspunkt()).isCloseTo(UTLOEPSTIDSPUNKT_LDT, within(tidspunktMedTidssonebuffer, HOURS));
-		assertThat(varselbestilling.getFnr()).isEqualTo(PERSON_IDENT);
-		assertThat(varselbestilling.getAktorId()).isEqualTo(MOTTAKER);
-		assertThat(varselbestilling.getBestillingTidspunkt()).isCloseTo(now(), within(tidspunktMedTidssonebuffer, HOURS));
-		assertThat(varselbestilling.getRevarslingIntervall()).isNull();
-		assertThat(varselbestilling.getAntallRevarslinger()).isNull();
-		assertThat(varselbestilling.getNesteVarslingDato()).isNull();
-		assertThat(varselbestilling.getChangeStamp().getOpprettetAv()).isEqualTo(BESTILL_SERVICEMELDING.getServiceName());
-		assertThat(varselbestilling.getChangeStamp().getOpprettetDato()).isCloseTo(now(), within(tidspunktMedTidssonebuffer, HOURS));
+		List<Varselbestilling> varselbestilling = varselbestillingRepo.findAllEager();
 
-		assertThat(varselbestilling.getVarsels()).hasSize(1);
-		no.nav.varsel.domain.object.Varsel varsel = varselbestilling.getVarsels().iterator().next();
+		assertThat(varselbestilling)
+				.singleElement()
+				.satisfies(vb -> {
+					assertThat(vb.getVarseltypeId()).isEqualTo(VARSELTYPEID_GRUPPEAKTIVITET);
+					assertThat(vb.getUtlopTidspunkt()).isCloseTo(UTLOEPSTIDSPUNKT_LDT, within(tidspunktMedTidssonebuffer, HOURS));
+					assertThat(vb.getFnr()).isEqualTo(PERSON_IDENT);
+					assertThat(vb.getAktorId()).isEqualTo(MOTTAKER);
+					assertThat(vb.getBestillingTidspunkt()).isCloseTo(now(), within(tidspunktMedTidssonebuffer, HOURS));
+					assertThat(vb.getRevarslingIntervall()).isNull();
+					assertThat(vb.getAntallRevarslinger()).isNull();
+					assertThat(vb.getNesteVarslingDato()).isNull();
+					assertThat(vb.getChangeStamp().getOpprettetAv()).isEqualTo(BESTILL_SERVICEMELDING.getServiceName());
+					assertThat(vb.getChangeStamp().getOpprettetDato()).isCloseTo(now(), within(tidspunktMedTidssonebuffer, HOURS));
+				});
 
-		assertThat(varsel.getKanal()).isEqualTo(EPOST);
-		assertThat(varsel.getSendtTidspunkt()).isCloseTo(now(), within(tidspunktMedTidssonebuffer, HOURS));
-		assertThat(varsel.getDistribusjonTidspunkt()).isNull();
-		assertThat(varsel.getKontaktInfo()).isEqualTo(EPOSTADRESSE);
-		assertThat(varsel.getStatus()).isEqualTo(SENDT);
-		assertThat(varsel.getFeilbeskrivelse()).isNull();
-		assertThat(varsel.getVarselTittel()).isEqualTo(VARSEL_TITTEL);
-		assertThat(varsel.getVarselTekst()).isEqualTo(varselTekst);
-		assertThat(varsel.getVarselUrl()).isNull();
-		assertThat(varsel.getErRevarsel()).isFalse();
-		assertThat(varsel.getChangeStamp().getOpprettetAv()).isEqualTo(BESTILL_SERVICEMELDING.getServiceName());
-		assertThat(varsel.getChangeStamp().getOpprettetDato()).isCloseTo(now(), within(tidspunktMedTidssonebuffer, HOURS));
+		Set<Varsel> varselListe = varselbestilling.getFirst().getVarsels();
 
-		return varsel;
+		assertThat(varselListe)
+				.hasSize(3)
+				.extracting(Varsel::getKanal, Varsel::getKontaktInfo, Varsel::getVarselTittel, Varsel::getVarselTekst, Varsel::getVarselUrl)
+				.containsExactlyInAnyOrder(
+						tuple(DITT_NAV, null, null, DITT_NAV_VARSELTEKST, VARSEL_URL),
+						tuple(SMS, MOBILTELEFONNUMMER, null, SMS_VARSELTEKST, null),
+						tuple(EPOST, EPOSTADRESSE, EPOST_TITTEL, EPOST_VARSELTEKST, null));
+
+		assertThat(varselListe)
+				.allSatisfy(v -> {
+					assertThat(v.getSendtTidspunkt()).isCloseTo(now(), within(tidspunktMedTidssonebuffer, HOURS));
+					assertThat(v.getDistribusjonTidspunkt()).isNull();
+					assertThat(v.getStatus()).isEqualTo(SENDT);
+					assertThat(v.getFeilbeskrivelse()).isNull();
+					assertThat(v.getErRevarsel()).isFalse();
+					assertThat(v.getChangeStamp().getOpprettetAv()).isEqualTo(BESTILL_SERVICEMELDING.getServiceName());
+					assertThat(v.getChangeStamp().getOpprettetDato()).isCloseTo(now(), within(tidspunktMedTidssonebuffer, HOURS));
+				});
 	}
 }

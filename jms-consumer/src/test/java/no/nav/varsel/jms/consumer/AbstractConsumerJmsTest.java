@@ -141,14 +141,6 @@ public abstract class AbstractConsumerJmsTest {
 		assertTrue(response != null && response.isOk());
 	}
 
-	protected void isError(JmsReply response) {
-		assertTrue(response != null && !response.isOk());
-	}
-
-	protected void isOk(Message response) {
-		assertThat(response, notNullValue());
-	}
-
 	public void stubDokmet() {
 		stubFor(get(urlMatching("/rest/varselinfo/Gruppeaktivitet"))
 				.willReturn(aResponse()
@@ -162,30 +154,6 @@ public abstract class AbstractConsumerJmsTest {
 				.willReturn(aResponse()
 						.withStatus(httpStatus.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
-	}
-
-	public void stubVarselInfoUtenParamIVarselUrl() {
-		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_test_feil")
-				.willReturn(aResponse()
-						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-						.withBodyFile("dokmet/uten-param-i-varselurl.json")));
-	}
-
-	public void stubVarselinfoMedParamIVarselUrl() {
-		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_varselUrl")
-				.willReturn(aResponse()
-						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-						.withBodyFile("dokmet/med-param-i-varselurl.json")));
-	}
-
-	public void stubVarselinfoMedManglendeRevarslingstekst() {
-		stubFor(get("/no/nav/varsel/rest/varselInfoV1/varsel_missing")
-				.willReturn(aResponse()
-						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-						.withBodyFile("dokmet/manglende-revarslingstekst.json")));
 	}
 
 	public void stubSts() {
@@ -212,28 +180,10 @@ public abstract class AbstractConsumerJmsTest {
 						.withBodyFile("pdl/pdl-aktoerid-happy.json")));
 	}
 
-	public void stubPdlConsumerNotFound() {
-		stubFor(post("/pdl")
-				.willReturn(aResponse()
-						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-						.withBodyFile("pdl/pdl-ident-notfound.json")));
-	}
-
-	public void stubPdlConsumerServerError() {
-		stubFor(post("/pdl")
-				.willReturn(aResponse()
-						.withStatus(OK.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-						.withBodyFile("pdl/pdl-ident-server-error.json")));
-	}
-
 	public void stubPdl(HttpStatus httpStatus) {
 		stubFor(post("/pdl")
 				.willReturn(aResponse()
 						.withStatus(httpStatus.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
 	}
-
-
 }

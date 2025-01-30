@@ -1,18 +1,36 @@
 {
-  "varseltypeId" : "Gruppeaktivitet",
-  "varselNavn" : "varselnavn",
-  "varselKategori" : "varkat",
-  "varselForDistribusjonKanal" : "vardistkanal",
-  "inaktiv" : false,
-  "revarslingIntervall" : 4,
-  "antallRevarslinger" : 2,
-  "malVersion" : null,
-  "varselURL" : "http://nav.no",
-  "preferertKanal" : [ "EPOST" ],
-  "varselmals" : [ {
-    "kanal" : "EPOST",
-    "varselTittel" : "Varsel Tittel",
-    "foerstegangsvarselTekst" : "Første gang tekst til {mottaker}",
-    "revarslingTekst" : "Revarsling tekst til {mottaker}"
-  } ]
+  "varseltypeId": "Gruppeaktivitet",
+  "varselNavn": "varselnavn",
+  "varselKategori": "varkat",
+  "varselForDistribusjonKanal": "vardistkanal",
+  "inaktiv": false,
+  "revarslingIntervall": 4,
+  "antallRevarslinger": 2,
+  "malVersion": null,
+  "varselURL": "http://nav.no",
+  "preferertKanal": [
+    "EPOST",
+    "SMS",
+    "DITT_NAV"
+  ],
+  "varselmals": [
+    {
+      "kanal": "EPOST",
+      "varselTittel": "Påminnelse om møte",
+      "foerstegangsvarselTekst": "Hei! Dette er en beskjed om at du har et møte på {sted} {tid:dd.MM.yyyy} klokken {tid:HH:mm}. Vennlig hilsen NAV",
+      "revarslingTekst": null
+    },
+    {
+      "kanal": "SMS",
+      "varselTittel": null,
+      "foerstegangsvarselTekst": "Hei! Du har et møte i regi av NAV på {sted} {tid:dd.MM.yyyy} klokken {tid:HH:mm}. Vennlig hilsen NAV",
+      "revarslingTekst": null
+    },
+    {
+      "kanal": "DITT_NAV",
+      "varselTittel": null,
+      "foerstegangsvarselTekst": "Dette er en beskjed om at du har et møte på {sted} {tid:dd.MM.yyyy} klokken {tid:HH:mm}",
+      "revarslingTekst": null
+    }
+  ]
 }
