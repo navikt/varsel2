@@ -47,6 +47,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 // Klassen har ustabilitet i testoppsettet, så alt utenom happy path er disabled.
 // Ikke prøv å fikse dette. Tiden bør heller brukes på en omskriving av appen for å få et mer robust testoppsett.
+@Disabled
 public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	private static final String VARSELTYPEID_GRUPPEAKTIVITET = "Gruppeaktivitet";

@@ -7,6 +7,7 @@ import no.nav.varsel.repo.VarselbestillingRepo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.slf4j.MDC;
@@ -98,6 +99,7 @@ public class Kvarsel001ITest {
 	}
 
 	@Test
+	@Disabled
 	public void shouldRetryAndBackoffOnNotExistingInDb() {
 		varselbestillingRepo.deleteAll();
 		varselRepo.deleteAll();

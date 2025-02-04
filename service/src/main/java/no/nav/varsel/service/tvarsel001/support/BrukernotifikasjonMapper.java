@@ -3,6 +3,7 @@ package no.nav.varsel.service.tvarsel001.support;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.brukernotifikasjon.schemas.builders.BeskjedInputBuilder;
 import no.nav.brukernotifikasjon.schemas.builders.NokkelInputBuilder;
+import no.nav.brukernotifikasjon.schemas.builders.domain.PreferertKanal;
 import no.nav.brukernotifikasjon.schemas.input.BeskjedInput;
 import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
 import no.nav.varsel.domain.code.KanalCode;
