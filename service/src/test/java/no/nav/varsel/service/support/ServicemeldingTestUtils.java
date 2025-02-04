@@ -24,6 +24,7 @@ public class ServicemeldingTestUtils {
 	public static final String FNR = "12345678910";
 	public static final String NAMESPACE = "teamdokumenthandtering";
 	public static final String APPNAVN = "no/nav/varsel";
+	public static final String BESTILLER_ID = "tms-ekstern-varsling";
 	public static final Integer SIKKERHETSNIVAA = 3;
 	public static final String VARSEL_URL = "https://www.varsel.com";
 	public static final String UGYLDIG_VARSEL_URL = "httpp://www.invalidurl.com";
@@ -121,7 +122,7 @@ public class ServicemeldingTestUtils {
 	public static Doknotifikasjon createDoknotifikasjonWithKanalAndBestillingsId(KanalCode kanalCode, String bestillingsId) {
 		return Doknotifikasjon.newBuilder()
 				.setBestillingsId(bestillingsId)
-				.setBestillerId(APPNAVN)
+				.setBestillerId(BESTILLER_ID)
 				.setSikkerhetsnivaa(3)
 				.setFodselsnummer(FNR)
 				.setTittel(utledTittel(kanalCode))
@@ -140,13 +141,6 @@ public class ServicemeldingTestUtils {
 				.withNamespace(NAMESPACE)
 				.withAppnavn(APPNAVN)
 				.build();
-	}
-
-	public static BestillVarselTo createBestillVarselTo() {
-		var bestillVarselTo = new BestillVarselTo();
-		bestillVarselTo.setMobiltelefonnummer(MOBILNUMMER);
-		bestillVarselTo.setEpost(EPOSTADRESSE);
-		return bestillVarselTo;
 	}
 
 }

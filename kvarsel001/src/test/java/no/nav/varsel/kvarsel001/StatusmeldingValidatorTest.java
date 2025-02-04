@@ -29,7 +29,7 @@ class StatusmeldingValidatorTest {
 	@Test
 	void shouldNotValidateOnInvalidBestillerId() {
 		var doknotifikasjonStatus = createDoknotifikasjonStatus();
-		doknotifikasjonStatus.setBestillerId("ikke varsel");
+		doknotifikasjonStatus.setBestillerId("ikke tms-ekstern-varsling");
 
 		assertFalse(validerStatusmelding(doknotifikasjonStatus));
 	}

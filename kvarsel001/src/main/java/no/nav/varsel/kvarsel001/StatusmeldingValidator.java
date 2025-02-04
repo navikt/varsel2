@@ -11,7 +11,7 @@ import java.util.List;
 public class StatusmeldingValidator {
 
 	private static final List<String> FEILET_ELLER_FERDIGSTILT = List.of("FEILET", "FERDIGSTILT");
-	public static final String GYLDIG_BESTILLERID = "varsel";
+	public static final String GYLDIG_BESTILLERID = "tms-ekstern-varsling";
 
 	public static boolean validerStatusmelding(DoknotifikasjonStatus doknotifikasjonStatus) {
 
