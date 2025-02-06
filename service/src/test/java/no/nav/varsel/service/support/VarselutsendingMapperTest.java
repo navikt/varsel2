@@ -1,18 +1,18 @@
 package no.nav.varsel.service.support;
 
-import no.nav.varsel.domain.object.Varselbestilling;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
+import static no.nav.varsel.domain.code.KanalCode.EPOST;
+import static no.nav.varsel.domain.code.KanalCode.SMS;
 import static no.nav.varsel.repo.TestdataUtil.VARSEL_TEKST;
 import static no.nav.varsel.repo.TestdataUtil.VARSEL_TITTEL;
 import static no.nav.varsel.repo.TestdataUtil.VARSEL_URL;
-import static no.nav.varsel.repo.TestdataUtil.createVarselbestilling;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static no.nav.varsel.repo.TestdataUtil.createVarselBuilder;
+import static no.nav.varsel.repo.TestdataUtil.createVarselbestillingBuilder;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class VarselutsendingMapperTest {
 
@@ -20,36 +20,30 @@ public class VarselutsendingMapperTest {
 
 	@Test
 	public void shouldMapVarselbestilling() {
-		List<Varselutsending> tos = mapper.map(createVarselbestilling());
+		var epostVarsel = createVarselBuilder()
+				.kanal(EPOST)
+				.build();
+		var smsVarsel = createVarselBuilder()
+				.kanal(SMS)
+				.build();
+		var dittNavVarsel = createVarselBuilder()
+				.kanal(DITT_NAV)
+				.build();
+		var varselbestilling = createVarselbestillingBuilder()
+									   .varsels(List.of(epostVarsel, smsVarsel, dittNavVarsel))
+									   .build();
 
-		assertThat(tos, hasSize(1));
-		assertVarselTo(tos.get(0));
+		List<Varselutsending> varselutsendingList = mapper.map(varselbestilling);
+
+		assertThat(varselutsendingList)
+				.hasSize(3)
+				.allSatisfy(varsel -> {
+					assertThat(varsel.getVarselUrl()).isEqualTo(VARSEL_URL);
+					assertThat(varsel.getVarselTekst()).isEqualTo(VARSEL_TEKST);
+					assertThat(varsel.getVarselTittel()).isEqualTo(VARSEL_TITTEL);
+				})
+				.extracting(Varselutsending::getKanal)
+				.containsExactlyInAnyOrder(EPOST, SMS, DITT_NAV);
 	}
 
-	@Test
-	public void shouldMapEpostVarsel() {
-		Varselbestilling varselbestilling = createVarselbestilling();
-
-		List<Varselutsending> tos = mapper.mapVarsler(varselbestilling.getVarsels());
-
-		assertThat(tos, hasSize(1));
-		assertVarselTo(tos.get(0));
-	}
-
-	@Test
-	public void shouldMapDittNavVarsel() {
-		Varselbestilling varselbestilling = createVarselbestilling();
-		varselbestilling.getVarsels().iterator().next().setKanal(DITT_NAV);
-
-		List<Varselutsending> tos = mapper.mapVarsler(varselbestilling.getVarsels());
-
-		assertThat(tos, hasSize(1));
-		assertVarselTo(tos.get(0));
-	}
-
-	private void assertVarselTo(Varselutsending to) {
-		assertThat(to.getVarselTittel(), is(VARSEL_TITTEL));
-		assertThat(to.getVarselTekst(), is(VARSEL_TEKST));
-		assertThat(to.getVarselUrl(), is(VARSEL_URL));
-	}
 }

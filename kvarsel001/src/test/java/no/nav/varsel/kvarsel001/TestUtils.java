@@ -15,7 +15,7 @@ import static no.nav.varsel.domain.code.StatusCode.SENDT;
 public class TestUtils {
 
 	private static final String BESTILLINGSID = UUID.randomUUID().toString();
-	private static final String BESTILLERID = "varsel";
+	private static final String BESTILLERID = "tms-ekstern-varsling";
 	private static final String STATUS = "FERDIGSTILT";
 	private static final String MELDING = "En melding";
 	private static final Long DISTRIBUSJONID = null;

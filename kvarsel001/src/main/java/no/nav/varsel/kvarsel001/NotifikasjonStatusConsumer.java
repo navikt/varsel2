@@ -66,6 +66,8 @@ public class NotifikasjonStatusConsumer {
 			throw new StatusmeldingMappingException(e.getMessage(), e.getCause());
 		} catch (StatusmeldingValidationException e) {
 			throw e;
+		} catch (VarselbestillingNotExistException e) {
+			log.warn("{} Avbryter behandling.", e.getMessage());
 		} catch (Exception e) {
 			log.error("Ukjent teknisk feil under prosessering av statusmelding (kvarsel001). Konsumerer hendelse på nytt.", e);
 			throw e;

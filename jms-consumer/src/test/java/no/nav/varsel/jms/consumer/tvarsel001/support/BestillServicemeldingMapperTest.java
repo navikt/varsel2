@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static no.nav.varsel.Utils.formatDateTime;
 import static no.nav.varsel.domain.utility.DateTimeConverter.toJodaDateTime;
@@ -30,6 +31,16 @@ import static org.hamcrest.Matchers.nullValue;
 
 public class BestillServicemeldingMapperTest {
 
+	private static final String STED_KEY = "sted";
+	private static final String STED_VALUE = "FA1";
+	private static final String TID_KEY = "tid";
+	private static final String TID_VALUE = "2025-01-01T12:00:00";
+	private static final String VARSELTYPE_ID = "1.GangVarselBrevPensj";
+	private static final String VARSELBESTILLINGID_HEADER_VALUE = "c73b79c7-d4a2-497a-a93d-b2600cffa461";
+
+	public static final LocalDateTime UTLOEPSTIDSPUNKT_LDT = LocalDateTime.now().plusHours(24);
+	public static final String MOTTAKER = "mottakeren";
+
 	@Mock
 	private Message mockActiveMqMessageTestvarselFalse;
 	@Mock
@@ -39,15 +50,7 @@ public class BestillServicemeldingMapperTest {
 	@Mock
 	private Message mockActiveMqMessageVarselbestillingIdNotPresent;
 
-	public static final LocalDateTime UTLOEPSTIDSPUNKT_LDT = LocalDateTime.now().plusHours(24);
-	public static final String MOTTAKER = "mottakeren";
-	public static final String KEY = "mottaker";
-	public static final String VAL = "val";
-
 	private final BestillServicemeldingMapper mapper = new BestillServicemeldingMapper();
-
-	private static final String VARSELTYPE_ID = "1.GangVarselBrevPensj";
-	private static final String VARSELBESTILLINGID_HEADER_VALUE = "c73b79c7-d4a2-497a-a93d-b2600cffa461";
 
 	@BeforeEach
 	public void setTestvarsel() throws JMSException {
@@ -66,8 +69,9 @@ public class BestillServicemeldingMapperTest {
 		assertThat(to.getPersonIdent(), nullValue());
 		assertThat(to.getVarseltypeId(), is(VARSELTYPE_ID));
 		assertThat(formatDateTime(to.getUtloepstidspunkt()), equalTo(formatDateTime(UTLOEPSTIDSPUNKT_LDT)));
-		assertThat(to.getParameters().keySet(), hasSize(1));
-		assertThat(to.getParameters().get(KEY), is(VAL));
+		assertThat(to.getParameters().keySet(), hasSize(2));
+		assertThat(to.getParameters().get(STED_KEY), is(STED_VALUE));
+		assertThat(to.getParameters().get(TID_KEY), is(TID_VALUE));
 		assertThat(to.isTestvarsel(), is(false));
 	}
 
@@ -143,6 +147,15 @@ public class BestillServicemeldingMapperTest {
 	}
 
 	public static XMLVarsel createVarsel(String varseltypeId) {
+
+		XMLParameter sted = new XMLParameter();
+		sted.setKey(STED_KEY);
+		sted.setValue(STED_VALUE);
+
+		XMLParameter tid = new XMLParameter();
+		tid.setKey(TID_KEY);
+		tid.setValue(TID_VALUE);
+
 		XMLVarsel varsel = new XMLVarsel();
 		XMLVarslingstyper varslingstype = new XMLVarslingstyper();
 		varslingstype.setValue(varseltypeId);
@@ -151,10 +164,7 @@ public class BestillServicemeldingMapperTest {
 		aktoerId.setAktoerId(MOTTAKER);
 		varsel.setMottaker(aktoerId);
 		varsel.setUtloepstidspunkt(toJodaDateTime(UTLOEPSTIDSPUNKT_LDT));
-		XMLParameter parameter = new XMLParameter();
-		parameter.setKey(KEY);
-		parameter.setValue(VAL);
-		varsel.getParameterListes().add(parameter);
+		varsel.getParameterListes().addAll(List.of(sted, tid));
 		return varsel;
 	}
 }

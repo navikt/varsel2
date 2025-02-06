@@ -15,7 +15,6 @@ import no.nav.varsel.service.to.BestillVarselTo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
@@ -29,29 +28,9 @@ public class VarselBestillingDomainMapper {
 	@Autowired
 	private VarselFletter varselFletter;
 
-	public Varselbestilling mapVarselbestillingFoerstegangVarselMedRevarsel(BestillVarselTo bestillingTo,
+	public Varselbestilling mapVarselbestilling(BestillVarselTo bestillingTo,
 			Varselinfo varselinfo,
 			KontaktregisterTo kontaktregisterTo) {
-		return mapVarselbestilling(bestillingTo, varselinfo, kontaktregisterTo, true);
-	}
-
-	public Varselbestilling mapVarselbestillingFoerstegangVarselUtenRevarsel(BestillVarselTo bestillingTo,
-			Varselinfo varselinfo,
-			KontaktregisterTo kontaktregisterTo) {
-		return mapVarselbestilling(bestillingTo, varselinfo, kontaktregisterTo, false);
-	}
-
-	public Varsel mapReVarsel(KanalCode kanalCode,
-			BestillVarselTo bestillVarselTo,
-			Varselinfo varselinfo,
-			KontaktregisterTo kontaktregisterTo) {
-		return mapVarsel(kanalCode, bestillVarselTo, varselinfo, kontaktregisterTo, true);
-	}
-
-	private Varselbestilling mapVarselbestilling(BestillVarselTo bestillingTo,
-			Varselinfo varselinfo,
-			KontaktregisterTo kontaktregisterTo,
-			boolean withRevarsel) {
 
 		VarselbestillingBuilder builder = aVarselbestilling()
 				.varselbestillingId(bestillingTo.getVarselBestillingId())
@@ -64,14 +43,7 @@ public class VarselBestillingDomainMapper {
 				.parameters(bestillingTo.getParameters().entrySet().stream()
 						.collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
-		if (withRevarsel && varselinfo.getRevarslingIntervall() != null && varselinfo.getAntallRevarsling() != null) {
-			builder.revarslingIntervall(varselinfo.getRevarslingIntervall())
-					.antallRevarslinger(varselinfo.getAntallRevarsling())
-					.nesteVarslingDato(LocalDate.now().plusDays(varselinfo.getRevarslingIntervall()));
-		}
-
-		Varselbestilling varselbestilling = builder
-				.build();
+		Varselbestilling varselbestilling = builder.build();
 
 		kontaktregisterTo.getKanaler().stream()
 				.map((kanalCode) -> mapVarsel(kanalCode, bestillingTo, varselinfo, kontaktregisterTo))
@@ -84,21 +56,10 @@ public class VarselBestillingDomainMapper {
 			BestillVarselTo bestillVarselTo,
 			Varselinfo varselinfo,
 			KontaktregisterTo kontaktregisterTo) {
-		return mapVarsel(kanalCode, bestillVarselTo, varselinfo, kontaktregisterTo, false);
-	}
-
-	private Varsel mapVarsel(KanalCode kanalCode,
-			BestillVarselTo bestillVarselTo,
-			Varselinfo varselinfo,
-			KontaktregisterTo kontaktregisterTo,
-			boolean revarsel) {
 
 		Varselmal mal = varselinfo.getMal(kanalCode);
-		String kontaktInfo =
-				kanalCode == KanalCode.SMS ? kontaktregisterTo.getMobiltelefonnummer() :
-						kanalCode == KanalCode.EPOST ? kontaktregisterTo.getEpostadresse() :
-								null;
-		String tekstMal = revarsel ? mal.revarslingTekst() : mal.foerstegangsTekst();
+		String kontaktInfo = utledKontaktinfo(kanalCode, kontaktregisterTo);
+		String tekstMal = mal.foerstegangsTekst();
 		String varselId = UUID.randomUUID().toString();
 		Map<String, String> params = Maps.newHashMap(bestillVarselTo.getParameters());
 		String varselUrl = varselFletter.weaveText(varselinfo.getVarselUrl(), params);
@@ -121,7 +82,15 @@ public class VarselBestillingDomainMapper {
 				.varselTittel(varselTittel)
 				.varselTekst(varselTekst)
 				.varselUrl(kanalCode == KanalCode.DITT_NAV ? varselUrl : null)
-				.erRevarsel(revarsel)
+				.erRevarsel(false)
 				.build();
+	}
+
+	private static String utledKontaktinfo(KanalCode kanalCode, KontaktregisterTo kontaktregisterTo) {
+		return switch (kanalCode) {
+			case SMS -> kontaktregisterTo.getMobiltelefonnummer();
+			case EPOST -> kontaktregisterTo.getEpostadresse();
+			case null, default -> null;
+		};
 	}
 }
