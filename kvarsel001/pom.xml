@@ -18,10 +18,6 @@
 			<artifactId>core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>no.nav.varsel</groupId>
-			<artifactId>service</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>no.nav.teamdokumenthandtering</groupId>
 			<artifactId>teamdokumenthandtering-avro-schemas</artifactId>
 		</dependency>

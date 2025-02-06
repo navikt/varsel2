@@ -11,9 +11,6 @@
 	<modules>
 		<module>app</module>
 		<module>core</module>
-		<module>service</module>
-		<module>jms</module>
-		<module>jms-consumer</module>
 		<module>tvarsel001</module>
 		<module>kvarsel001</module>
 	</modules>

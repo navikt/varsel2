@@ -1,8 +1,8 @@
 package no.nav.varsel.web;
 
-import no.nav.varsel.config.JmsTestConfig;
 import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.repo.config.RepoTestConfig;
+import no.nav.varsel.tvarsel001.jms.config.JmsTestConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
