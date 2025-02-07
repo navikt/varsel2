@@ -103,6 +103,7 @@ public class ServicemeldingService {
 			sendBrukernotifikasjon(varselbestilling, varselutsendingList);
 		} catch (ServicemeldingMappingException e) {
 			log.error("Feil ved mapping av data til servicemelding med BestillingId={}. Feilmelding={}", bestilling.getVarselBestillingId(), e.getMessage());
+			throw e;
 		} catch (Exception e) {
 			log.error("Ukjent feil ved sending av servicemelding med BestillingId={}. Feilmelding={}", bestilling.getVarselBestillingId(), e.getMessage());
 			throw e;
