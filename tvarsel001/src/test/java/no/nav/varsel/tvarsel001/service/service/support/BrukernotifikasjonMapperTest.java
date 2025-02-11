@@ -1,5 +1,6 @@
 package no.nav.varsel.tvarsel001.service.service.support;
 
+import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.exception.functional.ServicemeldingMappingException;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +34,13 @@ public class BrukernotifikasjonMapperTest {
 	private static final Varselutsending SMS_VARSEL = createVarselutsending(SMS);
 	private static final Varselutsending EPOST_VARSEL = createVarselutsending(EPOST);
 
-	private final BrukernotifikasjonMapper brukernotifikasjonMapper = new BrukernotifikasjonMapper(APPNAVN);
+	private final BrukernotifikasjonMapper brukernotifikasjonMapper;
+
+	public BrukernotifikasjonMapperTest() {
+		VarselProperties varselProperties = new VarselProperties();
+		varselProperties.setAppName(APPNAVN);
+		this.brukernotifikasjonMapper = new BrukernotifikasjonMapper(varselProperties);
+	}
 
 	@Test
 	public void shouldMapNokkel() {

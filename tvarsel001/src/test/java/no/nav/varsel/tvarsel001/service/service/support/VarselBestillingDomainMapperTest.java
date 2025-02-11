@@ -2,21 +2,17 @@ package no.nav.varsel.tvarsel001.service.service.support;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.dokmet.Varselinfo;
 import no.nav.varsel.consumer.dokmet.Varselmal;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.tvarsel001.service.service.VarselFletter;
 import no.nav.varsel.exception.functional.VarselTekstMissingException;
+import no.nav.varsel.tvarsel001.service.service.VarselFletter;
 import no.nav.varsel.tvarsel001.service.service.to.BestillVarselTo;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -34,7 +30,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.within;
 
-@ExtendWith(MockitoExtension.class)
 public class VarselBestillingDomainMapperTest {
 
 	private static final LocalDateTime UTLOEPSTIDSPUNKT = LocalDateTime.parse("2013-12-03T21:25:45");
@@ -63,14 +58,13 @@ public class VarselBestillingDomainMapperTest {
 	private static final String BASE_URL = "baseurl";
 	private static final Set<KanalCode> DITT_NAV_KONTAKTINFO = Set.of(DITT_NAV);
 
-	@Spy
-	private VarselFletter varselFletter;
-	@InjectMocks
-	private VarselBestillingDomainMapper mapper;
+	private final VarselBestillingDomainMapper mapper;
 
-	@BeforeEach
-	public void setUp() {
-		varselFletter.setVarselUrlFromFasit(BASE_URL);
+	public VarselBestillingDomainMapperTest() {
+		VarselProperties varselProperties = new VarselProperties();
+		varselProperties.setUrl(BASE_URL);
+		VarselFletter varselFletter = new VarselFletter(varselProperties);
+		this.mapper = new VarselBestillingDomainMapper(varselFletter);
 	}
 
 	@Test

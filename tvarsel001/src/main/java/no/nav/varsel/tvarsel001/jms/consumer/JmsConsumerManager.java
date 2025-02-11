@@ -2,9 +2,9 @@ package no.nav.varsel.tvarsel001.jms.consumer;
 
 import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.Queues;
+import no.nav.varsel.config.VarselProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.config.JmsListenerEndpointRegistry;
 import org.springframework.jms.listener.MessageListenerContainer;
 import org.springframework.stereotype.Component;
@@ -21,19 +21,20 @@ public class JmsConsumerManager {
 
 	public static final Logger LOG = LoggerFactory.getLogger(JmsConsumerManager.class);
 
-	@Value("${varsel.jms.consumer.error.context.size}")
 	private Integer contextSize;
-	@Value("${varsel.jms.consumer.error.context.time.seconds}")
 	private Integer contextTimeSeconds;
-	@Value("${varsel.jms.consumer.error.restart.delay.seconds}")
 	private Integer restartTimeSeconds;
 
 	private Map<JmsConsumer, Queue<LocalDateTime>> recentErrors = new ConcurrentHashMap<>();
 
 	private JmsListenerEndpointRegistry endpointRegistry;
 
-	public JmsConsumerManager(JmsListenerEndpointRegistry endpointRegistry) {
+	public JmsConsumerManager(VarselProperties varselProperties,
+							  JmsListenerEndpointRegistry endpointRegistry) {
 		this.endpointRegistry = endpointRegistry;
+		this.contextSize = varselProperties.getJms().getConsumerErrorContextSize();
+		this.contextTimeSeconds = varselProperties.getJms().getConsumerErrorContextTimeSeconds();
+		this.restartTimeSeconds = varselProperties.getJms().getConsumerErrorRestartDelaySeconds();
 	}
 
 	public Queue<LocalDateTime> getErrorsFor(JmsConsumer jmsConsumer) {

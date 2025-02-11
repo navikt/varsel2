@@ -9,11 +9,11 @@ import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.tvarsel001.service.service.VarselFletter;
 import no.nav.varsel.exception.functional.VarselTekstMissingException;
+import no.nav.varsel.tvarsel001.service.service.VarselFletter;
 import no.nav.varsel.tvarsel001.service.service.to.BestillVarselTo;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -23,10 +23,14 @@ import static java.util.stream.Collectors.toMap;
 import static no.nav.varsel.domain.builder.VarselBuilder.aVarsel;
 import static no.nav.varsel.domain.builder.VarselbestillingBuilder.aVarselbestilling;
 
+@Component
 public class VarselBestillingDomainMapper {
 
-	@Autowired
-	private VarselFletter varselFletter;
+	private final VarselFletter varselFletter;
+
+	public VarselBestillingDomainMapper(VarselFletter varselFletter) {
+		this.varselFletter = varselFletter;
+	}
 
 	public Varselbestilling mapVarselbestilling(BestillVarselTo bestillingTo,
 			Varselinfo varselinfo,

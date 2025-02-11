@@ -1,15 +1,14 @@
 package no.nav.varsel.consumer.dkif;
 
-import no.nav.varsel.azure.AzureProperties;
 import no.nav.varsel.azure.TokenConsumer;
 import no.nav.varsel.azure.TokenResponse;
+import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dkif.support.PostPersonerRequest;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -36,22 +35,21 @@ public class HentDigitalKontaktinformasjonConsumer {
 	private final String dkiUrl;
 	private final TokenConsumer tokenConsumer;
 	private final HentDigitalKontaktinformasjonMapper mapper;
-	private final AzureProperties azureProperties;
+	private final VarselProperties varselProperties;
 
 	@Autowired
-	public HentDigitalKontaktinformasjonConsumer(@Value("${digdir_krr_proxy_url}") String dkiUrl,
+	public HentDigitalKontaktinformasjonConsumer(VarselProperties varselProperties,
 												 TokenConsumer tokenConsumer,
 												 RestTemplateBuilder restTemplateBuilder,
-												 AzureProperties azureProperties,
 												 ClientHttpRequestFactory clientHttpRequestFactory) {
 		this.mapper = new HentDigitalKontaktinformasjonMapper();
-		this.dkiUrl = dkiUrl;
+		this.dkiUrl = varselProperties.getEndpoints().getDigdirKrrProxy().getUrl();
 		this.tokenConsumer = tokenConsumer;
 		this.restTemplate = restTemplateBuilder
 				.setConnectTimeout(ofSeconds(5))
 				.requestFactory(() -> clientHttpRequestFactory)
 				.build();
-		this.azureProperties = azureProperties;
+		this.varselProperties = varselProperties;
 	}
 
 	@Retryable(maxAttempts = 5, backoff = @Backoff(delay = 1000L, multiplier = 2))
@@ -91,7 +89,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 	}
 
 	private HttpHeaders createHeaders() {
-		TokenResponse clientCredentialToken = tokenConsumer.getClientCredentialToken(azureProperties.getAppScopeDigdirKrr());
+		TokenResponse clientCredentialToken = tokenConsumer.getClientCredentialToken(varselProperties.getEndpoints().getDigdirKrrProxy().getScope());
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setBearerAuth(clientCredentialToken.getAccess_token());

@@ -1,15 +1,14 @@
 package no.nav.varsel.tvarsel001.service.service.support;
 
-import lombok.extern.slf4j.Slf4j;
 import no.nav.brukernotifikasjon.schemas.builders.BeskjedInputBuilder;
 import no.nav.brukernotifikasjon.schemas.builders.NokkelInputBuilder;
 import no.nav.brukernotifikasjon.schemas.builders.domain.PreferertKanal;
 import no.nav.brukernotifikasjon.schemas.input.BeskjedInput;
 import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
+import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.exception.functional.ServicemeldingMappingException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -20,17 +19,16 @@ import java.util.List;
 
 import static java.time.ZoneOffset.UTC;
 
-@Slf4j
 @Component
 public class BrukernotifikasjonMapper {
 
 	private static final String NAMESPACE = "teamdokumenthandtering";
 	private static final Integer SIKKERHETSNIVAA = 3;
 
-	private final String applicationName;
+	private final VarselProperties varselProperties;
 
-	public BrukernotifikasjonMapper(@Value("${applicationName}") String applicationName) {
-		this.applicationName = applicationName;
+	public BrukernotifikasjonMapper(VarselProperties varselProperties) {
+		this.varselProperties = varselProperties;
 	}
 
 	public NokkelInput mapNokkel(Varselbestilling varselbestilling) {
@@ -41,7 +39,7 @@ public class BrukernotifikasjonMapper {
 					.withGrupperingsId(varselbestilling.getVarselbestillingId())
 					.withFodselsnummer(varselbestilling.getFnr())
 					.withNamespace(NAMESPACE)
-					.withAppnavn(applicationName)
+					.withAppnavn(varselProperties.getAppName())
 					.build();
 		} catch (Exception e) {
 			throw new ServicemeldingMappingException(e.getMessage(), e.getCause());

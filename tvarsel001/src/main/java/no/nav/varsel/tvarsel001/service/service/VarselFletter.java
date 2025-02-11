@@ -2,12 +2,12 @@ package no.nav.varsel.tvarsel001.service.service;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.exception.functional.FletteparameterMissingException;
 import no.nav.varsel.exception.functional.InvalidDateTimeFormatException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,13 +21,18 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import static java.util.regex.Pattern.compile;
 import static no.nav.varsel.domain.Constants.LOCALE_NO;
 
+@Component
 public class VarselFletter {
 
 	private static final Pattern TEKST_PARAMETER_PATTERN = compile("\\{([æøåA-Z0-9\\-_]+)}", CASE_INSENSITIVE);
 	private static final Pattern TIDSPUNKT_PARAMETER_PATTERN = compile("\\{([æøåA-Z0-9\\-_]+):([^}]*)}", CASE_INSENSITIVE);
 	private static final String BASE_URL_IDENTIFIER = "$navnobaseurl$";
 
-	private String varselUrlFromFasit;
+	private final VarselProperties varselProperties;
+
+	public VarselFletter(VarselProperties varselProperties) {
+		this.varselProperties = varselProperties;
+	}
 
 	/**
 	 * Replaces values (identified by surrounding curly brackets) in a string.
@@ -44,7 +49,7 @@ public class VarselFletter {
 		if (text == null) {
 			return null;
 		}
-		String fletteText = text.replace(BASE_URL_IDENTIFIER, varselUrlFromFasit);
+		String fletteText = text.replace(BASE_URL_IDENTIFIER, varselProperties.getUrl());
 		String string = weave(fletteText, weavedataInput);
 
 		assertNoMissedParameters(string);
@@ -110,11 +115,6 @@ public class VarselFletter {
 			groups.add(matcher.group(1));
 		}
 		return Joiner.on(" ").join(groups);
-	}
-
-	@Autowired
-	public void setVarselUrlFromFasit(@Value("${varsel.url}") String varselUrlFromFasit) {
-		this.varselUrlFromFasit = varselUrlFromFasit;
 	}
 
 }

@@ -7,6 +7,7 @@ import jakarta.jms.Message;
 import jakarta.jms.Session;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
+import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.tvarsel001.jms.config.alias.ListenerProperties;
 import no.nav.varsel.tvarsel001.jms.config.alias.MqGatewayProperties;
 import no.nav.varsel.tvarsel001.jms.xml.JmsReply;
@@ -14,7 +15,6 @@ import org.messaginghub.pooled.jms.JmsPoolConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -48,19 +48,15 @@ import static com.ibm.msg.client.jakarta.wmq.compat.base.internal.MQC.MQENC_NATI
 @Slf4j
 public class JmsConfig {
 
-	@Value("${varsel.jms.consumer.min}")
-	private Integer minimumConsumers;
-	@Value("${varsel.jms.consumer.max}")
-	private Integer maximumConsumers;
-
-	@Value("${varsel.serviceuser.username}")
-	private String srvVarselUsername;
-	@Value("${varsel.serviceuser.password}")
-	private String srvVarselPassword;
+	private final VarselProperties varselProperties;
 
 	private static final Logger LOG = LoggerFactory.getLogger(JmsConfig.class);
 	private static final String ANY_TLS13_OR_HIGHER = "*TLS13ORHIGHER";
 	private static final int UTF_8_WITH_PUA = 1208;
+
+	public JmsConfig(VarselProperties varselProperties) {
+		this.varselProperties = varselProperties;
+	}
 
 
 	@Bean
@@ -89,6 +85,8 @@ public class JmsConfig {
 		factory.setDestinationResolver(destinationResolver);
 		factory.setMessageConverter(new ConsumerMessageConverter(converter()));
 		factory.setTransactionManager(transactionManager);
+		int minimumConsumers = 1;
+		int maximumConsumers = 2;
 		factory.setConcurrency(String.format("%d-%d", minimumConsumers, maximumConsumers));
 		factory.setAutoStartup(listenerProperties.isAutoStartup());
 		log.info("Listener autostart={}", listenerProperties.isAutoStartup());
@@ -137,8 +135,8 @@ public class JmsConfig {
 
 		UserCredentialsConnectionFactoryAdapter adapter = new UserCredentialsConnectionFactoryAdapter();
 		adapter.setTargetConnectionFactory(connectionFactory);
-		adapter.setUsername(srvVarselUsername);
-		adapter.setPassword(srvVarselPassword);
+		adapter.setUsername(varselProperties.getServiceuser().getUsername());
+		adapter.setPassword(varselProperties.getServiceuser().getPassword());
 
 		JmsPoolConnectionFactory pooledFactory = new JmsPoolConnectionFactory();
 		pooledFactory.setConnectionFactory(adapter);

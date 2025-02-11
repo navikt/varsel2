@@ -2,14 +2,13 @@ package no.nav.varsel.tvarsel001.jms.config;
 
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Queue;
+import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.tvarsel001.jms.config.alias.ListenerProperties;
 import no.nav.varsel.tvarsel001.jms.config.alias.MqGatewayProperties;
 import org.apache.activemq.artemis.core.server.embedded.EmbeddedActiveMQ;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.apache.activemq.artemis.jms.client.ActiveMQQueue;
-import org.junit.jupiter.api.BeforeEach;
 import org.messaginghub.pooled.jms.JmsPoolConnectionFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -17,31 +16,30 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import static java.lang.System.setProperty;
-
 @EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class})
 @Import({JmsConfig.class})
 @Configuration
 @EnableConfigurationProperties({
 		ListenerProperties.class,
-		MqGatewayProperties.class
+		MqGatewayProperties.class,
+		VarselProperties.class
 })
 public class JmsTestConfig {
 
-	@BeforeEach
-	public void setUp() {
-		setProperty("varsel.serviceuser.username", "srvvarsel");
-		setProperty("varsel.serviceuser.password", "passord");
+	private final VarselProperties varselProperties;
+
+	public JmsTestConfig(VarselProperties varselProperties) {
+		this.varselProperties = varselProperties;
 	}
 
 	@Bean
-	public Queue bestillServicemeldingQueue(@Value("${bestillservicemelding.queuename}") String bestillServicemeldingQueueName) {
-		return new ActiveMQQueue(bestillServicemeldingQueueName);
+	public Queue bestillServicemeldingQueue() {
+		return new ActiveMQQueue(varselProperties.getQueues().getBestillServicemelding().getQueuename());
 	}
 
 	@Bean
-	public Queue bestillServicemeldingFunksjonellFeilQueue(@Value("${bestillservicemelding.funkfeil.queuename}") String bestillServicemeldingFunksjonellFeilQueueName) {
-		return new ActiveMQQueue(bestillServicemeldingFunksjonellFeilQueueName);
+	public Queue bestillServicemeldingFunksjonellFeilQueue() {
+		return new ActiveMQQueue(varselProperties.getQueues().getBestillServicemelding().getFunkfeilQueuename());
 	}
 
 	@Bean

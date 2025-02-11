@@ -6,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.doknotifikasjon.schemas.DoknotifikasjonStatus;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.exception.functional.StatusmeldingMappingException;
 import no.nav.varsel.exception.functional.StatusmeldingValidationException;
 import no.nav.varsel.exception.functional.VarselbestillingNotExistException;
+import no.nav.varsel.repo.VarselbestillingRepo;
 import no.nav.varsel.util.MDCGenerate;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -23,7 +23,7 @@ import static no.nav.varsel.kvarsel001.StatusmeldingValidator.validerStatusmeldi
 @Component
 public class NotifikasjonStatusConsumer {
 
-	private static final String KAFKA_TOPIC_DOK_NOTIFIKASJON_STATUS = "teamdokumenthandtering.aapen-dok-notifikasjon-status";
+	public static final String KAFKA_TOPIC_DOK_NOTIFIKASJON_STATUS = "teamdokumenthandtering.aapen-dok-notifikasjon-status";
 	private static final String FEILET = "FEILET";
 	private static final String FERDIGSTILT = "FERDIGSTILT";
 

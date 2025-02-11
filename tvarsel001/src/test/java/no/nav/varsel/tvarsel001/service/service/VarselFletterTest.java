@@ -1,11 +1,10 @@
 package no.nav.varsel.tvarsel001.service.service;
 
 import com.google.common.collect.Maps;
+import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.exception.functional.FletteparameterMissingException;
 import no.nav.varsel.exception.functional.InvalidDateTimeFormatException;
-import no.nav.varsel.tvarsel001.service.service.VarselFletter;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
@@ -27,11 +26,12 @@ public class VarselFletterTest {
 	private static final String URL_FROM_FASIT = "http://fasit.adeo.no";
 	private static final String TIME = "2015-07-03T14:30:00";
 
-	private VarselFletter fletter = new VarselFletter();
+	private final VarselFletter fletter;
 
-	@BeforeEach
-	public void setUp() throws Exception {
-		fletter.setVarselUrlFromFasit(URL_FROM_FASIT);
+	public VarselFletterTest() {
+		VarselProperties varselProperties = new VarselProperties();
+		varselProperties.setUrl(URL_FROM_FASIT);
+		this.fletter = new VarselFletter(varselProperties);
 	}
 
 	@Test

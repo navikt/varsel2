@@ -23,6 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Duration;
 
+import static no.nav.varsel.kvarsel001.NotifikasjonStatusConsumer.KAFKA_TOPIC_DOK_NOTIFIKASJON_STATUS;
 import static no.nav.varsel.kvarsel001.TestUtils.createDoknotifikasjonStatus;
 import static no.nav.varsel.kvarsel001.TestUtils.createVarsel;
 import static no.nav.varsel.kvarsel001.TestUtils.createVarselbestilling;
@@ -35,7 +36,7 @@ import static org.mockito.ArgumentMatchers.any;
 @EmbeddedKafka(
 		partitions = 1,
 		topics = {
-				"teamdokumenthandtering.aapen-dok-notifikasjon-status"
+				KAFKA_TOPIC_DOK_NOTIFIKASJON_STATUS
 		},
 		controlledShutdown = true,
 		brokerProperties = {
@@ -47,8 +48,6 @@ import static org.mockito.ArgumentMatchers.any;
 @AutoConfigureTestDatabase
 @Import(RepoTestConfig.class)
 public class Kvarsel001ITest {
-
-	private static final String TOPIC = "teamdokumenthandtering.aapen-dok-notifikasjon-status";
 
 	private DoknotifikasjonStatus doknotifikasjonStatus;
 
@@ -88,7 +87,7 @@ public class Kvarsel001ITest {
 	@Test
 	public void shouldUpdateStatusToFerdigbehandlet() {
 		doknotifikasjonStatus = createDoknotifikasjonStatus();
-		kafkaTemplate.send(TOPIC, doknotifikasjonStatus);
+		kafkaTemplate.send(KAFKA_TOPIC_DOK_NOTIFIKASJON_STATUS, doknotifikasjonStatus);
 
 		await().atMost(Duration.ofSeconds(10)).untilAsserted(() -> {
 			var result = varselRepo.findAll().get(0);
@@ -103,7 +102,7 @@ public class Kvarsel001ITest {
 	public void shouldRetryAndBackoffOnNotExistingInDb() {
 		varselbestillingRepo.deleteAll();
 		varselRepo.deleteAll();
-		kafkaTemplate.send(TOPIC, doknotifikasjonStatus);
+		kafkaTemplate.send(KAFKA_TOPIC_DOK_NOTIFIKASJON_STATUS, doknotifikasjonStatus);
 
 		await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
 			Mockito.verify(spyableExponentialBackoffErrorhandler, Mockito.times(4)).handleRemaining(any(), any(), any(), any());
