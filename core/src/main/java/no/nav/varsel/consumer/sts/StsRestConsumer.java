@@ -1,10 +1,11 @@
 package no.nav.varsel.consumer.sts;
 
 
+import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.consumer.sts.support.StsTechnicalException;
 import no.nav.varsel.consumer.sts.support.TechnicalVarselException;
 import no.nav.varsel.consumer.sts.to.StsResponseTo;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.retry.annotation.Backoff;
@@ -12,8 +13,6 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
 
@@ -31,14 +30,12 @@ public class StsRestConsumer {
 	@Autowired
 	public StsRestConsumer(
 			RestTemplateBuilder restTemplate,
-			@Value("${security.token.rest.service.url}") String stsUrl,
-			@Value("${varsel.serviceuser.username}") String serviceuserUsername,
-			@Value("${varsel.serviceuser.password}") String serviceuserPassword
+			VarselProperties varselProperties
 	) {
-		this.stsUrl = stsUrl;
+		this.stsUrl = varselProperties.getEndpoints().getStsUrl();
 		this.restTemplate = restTemplate
 				.setConnectTimeout(Duration.ofSeconds(5))
-				.basicAuthentication(serviceuserUsername, serviceuserPassword)
+				.basicAuthentication(varselProperties.getServiceuser().getUsername(), varselProperties.getServiceuser().getPassword())
 				.build();
 	}
 

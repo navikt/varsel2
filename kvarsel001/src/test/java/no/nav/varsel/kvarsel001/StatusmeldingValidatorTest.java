@@ -1,6 +1,6 @@
 package no.nav.varsel.kvarsel001;
 
-import no.nav.varsel.service.support.exception.functional.StatusmeldingValidationException;
+import no.nav.varsel.exception.functional.StatusmeldingValidationException;
 import org.junit.jupiter.api.Test;
 
 import static no.nav.varsel.kvarsel001.StatusmeldingValidator.validerStatusmelding;

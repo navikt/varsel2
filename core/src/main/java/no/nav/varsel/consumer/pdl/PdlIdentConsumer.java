@@ -1,5 +1,6 @@
 package no.nav.varsel.consumer.pdl;
 
+import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.consumer.pdl.support.PdlFunctionalException;
 import no.nav.varsel.consumer.pdl.support.PersonIkkeFunnetException;
 import no.nav.varsel.consumer.pdl.support.ServerErrorException;
@@ -7,7 +8,6 @@ import no.nav.varsel.consumer.pdl.to.PdlRequest;
 import no.nav.varsel.consumer.pdl.to.PdlResponse;
 import no.nav.varsel.consumer.sts.StsRestConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -47,7 +47,7 @@ public class PdlIdentConsumer {
 
 	@Autowired
 	public PdlIdentConsumer(
-			@Value("${pdl.url}") String pdlUrl,
+			VarselProperties varselProperties,
 			RestTemplateBuilder restTemplateBuilder,
 			StsRestConsumer stsRestConsumer,
 			ClientHttpRequestFactory clientHttpRequestFactory
@@ -57,7 +57,7 @@ public class PdlIdentConsumer {
 				.requestFactory(() -> clientHttpRequestFactory)
 				.build();
 		this.stsRestConsumer = stsRestConsumer;
-		this.pdlUri = UriComponentsBuilder.fromHttpUrl(pdlUrl).build().toUri();
+		this.pdlUri = UriComponentsBuilder.fromHttpUrl(varselProperties.getEndpoints().getPdlUrl()).build().toUri();
 	}
 
 	@Retryable(

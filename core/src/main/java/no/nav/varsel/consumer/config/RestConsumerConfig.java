@@ -1,8 +1,8 @@
 package no.nav.varsel.consumer.config;
 
+import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.consumer.dokmet.VarselinfoMapper;
 import org.apache.hc.client5.http.classic.HttpClient;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,18 +17,16 @@ public class RestConsumerConfig {
 
 	public static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(5);
 
-	@Value("${varsel.serviceuser.username}")
-	private String srvVarselUsername;
-	@Value("${varsel.serviceuser.password}")
-	private String srvVarselPassword;
-
 	@Bean
-	public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder,
-									 ClientHttpRequestFactory clientHttpRequestFactory) {
+	public RestTemplate restTemplate(
+			VarselProperties varselProperties,
+			RestTemplateBuilder restTemplateBuilder,
+			ClientHttpRequestFactory clientHttpRequestFactory) {
 		return restTemplateBuilder
 				.requestFactory(() -> clientHttpRequestFactory)
 				.setConnectTimeout(CONNECT_TIMEOUT)
-				.basicAuthentication(srvVarselUsername, srvVarselPassword).build();
+				.basicAuthentication(varselProperties.getServiceuser().getUsername(), varselProperties.getServiceuser().getPassword())
+				.build();
 	}
 
 	@Bean

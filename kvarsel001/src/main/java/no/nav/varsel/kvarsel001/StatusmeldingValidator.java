@@ -2,7 +2,7 @@ package no.nav.varsel.kvarsel001;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.doknotifikasjon.schemas.DoknotifikasjonStatus;
-import no.nav.varsel.service.support.exception.functional.StatusmeldingValidationException;
+import no.nav.varsel.exception.functional.StatusmeldingValidationException;
 
 import java.util.List;
 

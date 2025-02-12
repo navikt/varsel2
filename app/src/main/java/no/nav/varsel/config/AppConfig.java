@@ -1,11 +1,13 @@
 package no.nav.varsel.config;
 
 import no.nav.varsel.azure.AzureProperties;
-import no.nav.varsel.config.alias.ListenerProperties;
-import no.nav.varsel.config.alias.MqGatewayProperties;
+import no.nav.varsel.tvarsel001.jms.config.alias.ListenerProperties;
+import no.nav.varsel.tvarsel001.jms.config.alias.MqGatewayProperties;
 import no.nav.varsel.consumer.config.WebClientConfig;
 import no.nav.varsel.kafka.CustomKafkaTemplate;
 import no.nav.varsel.kvarsel001.NotifikasjonStatusConsumer;
+import no.nav.varsel.tvarsel001.jms.config.JmsConsumerConfig;
+import no.nav.varsel.tvarsel001.service.config.ServiceConfig;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

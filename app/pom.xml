@@ -17,7 +17,7 @@
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>jms-consumer</artifactId>
+			<artifactId>tvarsel001</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
@@ -47,7 +47,7 @@
 		</dependency>
 		<dependency>
 			<groupId>no.nav.varsel</groupId>
-			<artifactId>jms</artifactId>
+			<artifactId>tvarsel001</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
