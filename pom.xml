@@ -36,7 +36,7 @@
 		<!-- NAV -->
 		<teamdokumenthandtering-avro-schemas.version>1.1.6</teamdokumenthandtering-avro-schemas.version>
 		<brukernotifikasjon.version>v2.5.2</brukernotifikasjon.version>
-		<dok-legacy-tjenestespesifikasjoner.version>33-f7132fc</dok-legacy-tjenestespesifikasjoner.version>
+		<dok-legacy-tjenestespesifikasjoner.version>35-6ab698b</dok-legacy-tjenestespesifikasjoner.version>
 		<dokmet-api.version>2025.04.29-15.21-2c96c87</dokmet-api.version>
 
 		<!-- test -->
