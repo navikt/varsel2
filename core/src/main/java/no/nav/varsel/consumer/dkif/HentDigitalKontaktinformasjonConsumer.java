@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
@@ -21,11 +20,13 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
+import java.util.List;
 
+import static java.lang.String.format;
 import static java.time.Duration.ofSeconds;
 import static no.nav.varsel.util.MDCGenerate.getCallId;
 import static no.nav.varsel.util.NavConstants.NAV_CALL_ID;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
 public class HentDigitalKontaktinformasjonConsumer {
@@ -46,7 +47,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 		this.dkiUrl = varselProperties.getEndpoints().getDigdirKrrProxy().getUrl();
 		this.tokenConsumer = tokenConsumer;
 		this.restTemplate = restTemplateBuilder
-				.setConnectTimeout(ofSeconds(5))
+				.connectTimeout(ofSeconds(5))
 				.requestFactory(() -> clientHttpRequestFactory)
 				.build();
 		this.varselProperties = varselProperties;
@@ -58,12 +59,12 @@ public class HentDigitalKontaktinformasjonConsumer {
 		DigitalKontaktInfoResponse response;
 		final String fnrTrimmed = personIdent.strip();
 		try {
-			PostPersonerRequest postPersonRequest = PostPersonerRequest.builder().personidenter(Arrays.asList(fnrTrimmed)).build();
+			PostPersonerRequest postPersonRequest = PostPersonerRequest.builder().personidenter(List.of(fnrTrimmed)).build();
 			HttpEntity<String> request = new HttpEntity(postPersonRequest, headers);
 			response = restTemplate.postForEntity(dkiUrl + "/rest/v1/personer?inkluderSikkerDigitalPost=true", request, DigitalKontaktInfoResponse.class).getBody();
 
 		} catch (HttpClientErrorException | HttpServerErrorException e) {
-			LOG.warn(String.format("Feil mot DKIF %s: %s", e.getClass().getSimpleName(), e.getMessage()));
+			LOG.warn(format("Feil mot DKIF %s: %s", e.getClass().getSimpleName(), e.getMessage()));
 			return new KontaktregisterTo();
 		}
 		if (isValidResponse(response, fnrTrimmed)) {
@@ -71,7 +72,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 			kontaktregisterTo.cleanExpiredInfo();
 			return kontaktregisterTo;
 		} else {
-			LOG.warn(String.format("Feil mot DKIF: %s", getErrorMsg(response, fnrTrimmed)));
+			LOG.warn(format("Feil mot DKIF: %s", getErrorMsg(response, fnrTrimmed)));
 			return new KontaktregisterTo();
 		}
 	}
@@ -91,7 +92,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 	private HttpHeaders createHeaders() {
 		TokenResponse clientCredentialToken = tokenConsumer.getClientCredentialToken(varselProperties.getEndpoints().getDigdirKrrProxy().getScope());
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.setContentType(APPLICATION_JSON);
 		headers.setBearerAuth(clientCredentialToken.getAccess_token());
 		headers.add(NAV_CALL_ID, getCallId());
 		return headers;

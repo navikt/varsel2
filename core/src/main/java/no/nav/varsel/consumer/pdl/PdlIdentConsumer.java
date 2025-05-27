@@ -53,11 +53,11 @@ public class PdlIdentConsumer {
 			ClientHttpRequestFactory clientHttpRequestFactory
 	) {
 		this.restTemplate = restTemplateBuilder
-				.setConnectTimeout(Duration.ofSeconds(5))
+				.connectTimeout(Duration.ofSeconds(5))
 				.requestFactory(() -> clientHttpRequestFactory)
 				.build();
 		this.stsRestConsumer = stsRestConsumer;
-		this.pdlUri = UriComponentsBuilder.fromHttpUrl(varselProperties.getEndpoints().getPdlUrl()).build().toUri();
+		this.pdlUri = UriComponentsBuilder.fromUriString(varselProperties.getEndpoints().getPdlUrl()).build().toUri();
 	}
 
 	@Retryable(
@@ -72,7 +72,7 @@ public class PdlIdentConsumer {
 	}
 
 	@Retryable(
-			include = HttpServerErrorException.class,
+			retryFor = HttpServerErrorException.class,
 			backoff = @Backoff(delay = DELAY, multiplier = MULTIPLIER)
 	)
 	public String hentFolkeregisterIdent(final String aktoerId) throws PersonIkkeFunnetException {

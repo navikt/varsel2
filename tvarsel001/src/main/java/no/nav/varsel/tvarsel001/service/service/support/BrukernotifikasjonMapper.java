@@ -96,7 +96,7 @@ public class BrukernotifikasjonMapper {
 
 	private URL mapLink(String varselUrl) {
 		try {
-			return UriComponentsBuilder.fromHttpUrl(varselUrl).build().toUri().toURL();
+			return UriComponentsBuilder.fromUriString(varselUrl).build().toUri().toURL();
 		} catch (MalformedURLException | IllegalArgumentException e) {
 			throw new RuntimeException(String.format("Ugyldig URL i varselbestilling. URL=%s", varselUrl), e.getCause());
 		}

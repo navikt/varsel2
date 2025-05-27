@@ -2,16 +2,17 @@ package no.nav.varsel.repo;
 
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static no.nav.varsel.repo.TestdataUtil.VARSEL_ID;
+import static no.nav.varsel.repo.TestdataUtil.createVarselbestilling;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class VarselRepoTest extends AbstractRepoTest {
 
 	@Test
 	public void shouldFindByVarselId() {
-		varselbestillingRepo.save(TestdataUtil.createVarselbestilling());
+		varselbestillingRepo.save(createVarselbestilling());
 
-		assertThat(varselRepo.findByVarselId(TestdataUtil.VARSEL_ID), notNullValue());
+		assertThat(varselRepo.findByVarselId(VARSEL_ID)).isNotNull();
 	}
 
 }

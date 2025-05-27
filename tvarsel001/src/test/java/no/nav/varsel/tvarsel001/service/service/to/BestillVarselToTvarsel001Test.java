@@ -1,55 +1,56 @@
 package no.nav.varsel.tvarsel001.service.service.to;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import static no.nav.varsel.tvarsel001.service.service.to.BestillVarselToTest.createTo;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class BestillVarselToTvarsel001Test {
 
 	@Test
-	public void shouldValidate() throws Exception {
+	public void shouldValidate() {
 		createTo().validateTvarsel001Input();
 	}
 
 	@Test
-	public void shouldValidateMissingMottaker() throws Exception {
+	public void shouldValidateMissingMottaker() {
 		BestillVarselTo to = createTo();
 		to.setPersonIdent(null);
 		to.setAktoerId(null);
-		Executable executable = () -> to.validateTvarsel001Input();
-		Exception exception = Assertions.assertThrows(Exception.class, executable);
-		assertEquals(exception.getMessage(),"Validation failed for input, mottaker cannot be empty or missing");
 
+		assertThatExceptionOfType(Exception.class)
+				.isThrownBy(to::validateTvarsel001Input)
+				.withMessage("Validation failed for input, mottaker cannot be empty or missing");
 	}
 
 	@Test
-	public void shouldValidateMissingVarseltypeId() throws Exception {
+	public void shouldValidateMissingVarseltypeId() {
 		BestillVarselTo to = createTo();
 		to.setVarseltypeId(null);
-		Executable executable = () -> to.validateTvarsel001Input();
-		Exception exception = Assertions.assertThrows(Exception.class, executable);
-		assertEquals(exception.getMessage(),"Validation failed for input, varseltypeId cannot be empty or missing");
+
+		assertThatExceptionOfType(Exception.class)
+				.isThrownBy(to::validateTvarsel001Input)
+				.withMessage("Validation failed for input, varseltypeId cannot be empty or missing");
 	}
 
 	@Test
-	public void shouldValidateMissingParamKey() throws Exception {
+	public void shouldValidateMissingParamKey() {
 		BestillVarselTo to = createTo();
 		to.getParameters().put(null, "val2");
-		Executable executable = () -> to.validateTvarsel001Input();
-		Exception exception = Assertions.assertThrows(Exception.class, executable);
-		assertEquals(exception.getMessage(),"Validation failed for input, parameter.key cannot be empty or missing");
+
+		assertThatExceptionOfType(Exception.class)
+				.isThrownBy(to::validateTvarsel001Input)
+				.withMessage("Validation failed for input, parameter.key cannot be empty or missing");
 	}
 
 	@Test
-	public void shouldValidateMissingParamValue() throws Exception {
+	public void shouldValidateMissingParamValue() {
 		BestillVarselTo to = createTo();
 		to.getParameters().put("key2", null);
-		Executable executable = () -> to.validateTvarsel001Input();
-		Exception exception = Assertions.assertThrows(Exception.class, executable);
-		assertEquals(exception.getMessage(),"Validation failed for input, parameter.value cannot be empty or missing");
+
+		assertThatExceptionOfType(Exception.class)
+				.isThrownBy(to::validateTvarsel001Input)
+				.withMessage("Validation failed for input, parameter.value cannot be empty or missing");
 	}
 
 }

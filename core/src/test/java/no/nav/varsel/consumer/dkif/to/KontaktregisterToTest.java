@@ -21,6 +21,7 @@ class KontaktregisterToTest {
 				.mobiltelefonSistOppdatert(MOBILNUMMER_OLD)
 				.mobiltelefonSistVerifisert(LocalDateTime.now())
 				.build();
+
 		assertThat(kontaktregisterTo.isMobilDateInvalid()).isFalse();
 	}
 
@@ -31,6 +32,7 @@ class KontaktregisterToTest {
 				.mobiltelefonSistOppdatert(MOBILNUMMER_OLD)
 				.mobiltelefonSistVerifisert(MOBILNUMMER_OLD)
 				.build();
+
 		assertThat(kontaktregisterTo.isMobilDateInvalid()).isTrue();
 	}
 
@@ -41,6 +43,7 @@ class KontaktregisterToTest {
 				.epostSistOppdatert(EPOSTADRESSE_OLD)
 				.epostSistVerifisert(LocalDateTime.now())
 				.build();
+
 		assertThat(kontaktregisterTo.isEpostDateInvalid()).isFalse();
 	}
 
@@ -51,6 +54,7 @@ class KontaktregisterToTest {
 				.epostSistOppdatert(EPOSTADRESSE_OLD)
 				.epostSistVerifisert(EPOSTADRESSE_OLD)
 				.build();
+
 		assertThat(kontaktregisterTo.isEpostDateInvalid()).isTrue();
 	}
 }

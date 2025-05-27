@@ -104,9 +104,9 @@ public class Kvarsel001ITest {
 		varselRepo.deleteAll();
 		kafkaTemplate.send(KAFKA_TOPIC_DOK_NOTIFIKASJON_STATUS, doknotifikasjonStatus);
 
-		await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
-			Mockito.verify(spyableExponentialBackoffErrorhandler, Mockito.times(4)).handleRemaining(any(), any(), any(), any());
-		});
+		await().atMost(Duration.ofSeconds(5)).untilAsserted(
+				() -> Mockito.verify(spyableExponentialBackoffErrorhandler, Mockito.times(4)).handleRemaining(any(), any(), any(), any())
+		);
 
 		var varselbestilling = varselbestillingRepo.save(createVarselbestilling());
 		varselRepo.save(createVarsel(varselbestilling));
