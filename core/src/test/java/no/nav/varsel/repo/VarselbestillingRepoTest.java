@@ -66,11 +66,8 @@ public class VarselbestillingRepoTest extends AbstractRepoTest {
 
 		List<Varselbestilling> allEager = varselbestillingRepo.findAllEager();
 
-		assertThat(allEager).hasSize(1);
-
-		Varselbestilling varselbestilling = allEager.get(0);
-		assertThat(varselbestilling)
-				.isNotNull()
+		assertThat(allEager)
+				.singleElement()
 				.extracting(Varselbestilling::getVarsels)
 				.isNotNull();
 	}
@@ -82,11 +79,9 @@ public class VarselbestillingRepoTest extends AbstractRepoTest {
 		varselbestillingRepo.saveAndFlush(varselbestilling);
 
 		List<Varselbestilling> allEager = varselbestillingRepo.findAllEager();
-		assertThat(allEager).hasSize(1);
 
-		varselbestilling = allEager.get(0);
-		assertThat(varselbestilling)
-				.isNotNull()
+		assertThat(allEager)
+				.singleElement()
 				.extracting(Varselbestilling::getVarsels)
 				.isNotNull();
 	}
