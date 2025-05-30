@@ -87,8 +87,8 @@ public class ServicemeldingService {
 		KontaktregisterTo kontaktregisterTo = dkifConsumer.hentDigitalKontaktinformasjon(bestilling.getPersonIdent());
 
 		//4.Bestem varslingskanal
-		Collection<KanalCode> kanalCodes = varselKanalDecider.decideKanaler(kontaktregisterTo, varselinfo.getPreferertKanal());
-		kontaktregisterTo.setKanaler(kanalCodes);
+		Set<KanalCode> kanaler = varselKanalDecider.decideKanaler(kontaktregisterTo, varselinfo.getPreferertKanal());
+		kontaktregisterTo.setKanaler(kanaler);
 
 		//5. Flett varsel
 		Varselbestilling varselbestilling = domainMapper.mapVarselbestilling(bestilling, varselinfo, kontaktregisterTo);

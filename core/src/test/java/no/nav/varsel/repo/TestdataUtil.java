@@ -17,15 +17,12 @@ import static no.nav.varsel.domain.builder.VarselBuilder.aVarsel;
 import static no.nav.varsel.domain.builder.VarselbestillingBuilder.aVarselbestilling;
 
 public class TestdataUtil {
-	public static final String PERSONIDENT_WHITESPACE_TEST="test whitespace";
+
 	public static final String VARSELBESTILLING_ID = "d9f8f75e-13cb-4766-81c8-306d9d9385b2";
 	public static final String VARSELTYPE_ID = "UT";
-	public static final String ORG_NR = "orgnr";
-	public static final String TLF = "11112222";
 	public static final String EPOST = "test@test.no";
 	public static final Set<KanalCode> PREFERERT_KANAL = Sets.newHashSet(KanalCode.EPOST);
 	public static final Set<KanalCode> PREFERERT_KANAL_MED_DITT_NAV = Sets.newHashSet(KanalCode.EPOST, KanalCode.DITT_NAV);
-	public static final Set<KanalCode> OVERSTYRT_PREFERERT_KANAL = Sets.newHashSet(KanalCode.values());
 	public static final LocalDateTime UTLOP_TIDSPUNKT = LocalDateTime.now().plusHours(1);
 	public static final String FNR = "11112222333";
 	public static final String AKTOR_ID = "1111222233334444";
@@ -56,14 +53,6 @@ public class TestdataUtil {
 		return createVarselbestillingBuilder()
 				.varselbestillingId(VARSELBESTILLING_ID)
 				.varsels(createVarsel())
-				.build();
-	}
-
-	/**
-	 * Create varselbestilling with unique ids
-	 */
-	public static Varselbestilling createVarselbestillingUnique() {
-		return createVarselbestillingBuilder()
 				.build();
 	}
 

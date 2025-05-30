@@ -20,7 +20,6 @@ import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-
 @Component
 @Profile({"nais"})
 public class AzureTokenConsumer implements TokenConsumer {
@@ -31,7 +30,7 @@ public class AzureTokenConsumer implements TokenConsumer {
 	public AzureTokenConsumer(AzureProperties azureProperties,
 							  RestTemplateBuilder restTemplateBuilder) {
 		this.restTemplate = restTemplateBuilder
-				.setConnectTimeout(Duration.ofSeconds(3))
+				.connectTimeout(Duration.ofSeconds(3))
 				.build();
 		this.azureProperties = azureProperties;
 	}

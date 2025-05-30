@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HentDigitalKontaktinformasjonMapperTest {
 
-	public static final String ID = "id";
 	public static final boolean RESERVASJON = false;
 	public static final String EPOSTADRESSE = "er@mocked.data";
 	public static final String MOBILTELEFONNUMMER = "54621378";
@@ -33,6 +32,7 @@ public class HentDigitalKontaktinformasjonMapperTest {
 	@Test
 	public void shouldMapResponse() {
 		KontaktregisterTo map = mapper.map(createResponse());
+
 		assertThat(map.isReservasjon(), is(RESERVASJON));
 		assertThat(map.getEpostadresse(), is(EPOSTADRESSE));
 		assertThat(map.getEpostSistOppdatert(), is(EPOST_OPPDATERT.toLocalDateTime()));
@@ -46,7 +46,9 @@ public class HentDigitalKontaktinformasjonMapperTest {
 	public void shouldMapResponseNullDate() {
 		DigitalKontaktinfo response = createResponse();
 		response.setMobiltelefonnummerVerifisert(null);
+
 		KontaktregisterTo map = mapper.map(response);
+
 		assertThat(map.getMobiltelefonSistVerifisert(), nullValue());
 	}
 	@Test
@@ -54,7 +56,9 @@ public class HentDigitalKontaktinformasjonMapperTest {
 		DigitalKontaktinfo response = createResponse();
 		response.setEpostadresse(null);
 		response.setMobiltelefonnummer(null);
+
 		KontaktregisterTo map = mapper.map(response);
+
 		assertThat(map.getMobiltelefonnummer(), nullValue());
 		assertThat(map.getEpostadresse(), nullValue());
 	}
@@ -62,7 +66,9 @@ public class HentDigitalKontaktinformasjonMapperTest {
 	@Test
 	public void shoulRemoveWhitespaceFromEpostadresseAndMobiltelefonnummer() {
 		DigitalKontaktinfo response = createResponse();
+
 		KontaktregisterTo map = mapper.map(response);
+
 		assertEquals(map.getMobiltelefonnummer(), MOBILTELEFONNUMMER);
 		assertEquals(map.getEpostadresse(), EPOSTADRESSE);
 	}

@@ -13,7 +13,6 @@ import org.slf4j.MDC;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,7 +25,7 @@ public class ChangeStampInterceptorTest {
 
 	Varselbestilling entity = new Varselbestilling(1L, 1L);
 
-	private ChangeStampInterceptor interceptor = new ChangeStampInterceptor();
+	private final ChangeStampInterceptor interceptor = new ChangeStampInterceptor();
 
 	@BeforeEach
 	public void setUp() {
@@ -35,7 +34,7 @@ public class ChangeStampInterceptorTest {
 	}
 
 	@Test
-	public void shouldCreateChangeStampOnSave() throws Exception {
+	public void shouldCreateChangeStampOnSave() {
 		Object[] state = new Object[1];
 		interceptor.onSave(entity, null, state, null, new Type[]{changeStampType});
 
@@ -45,7 +44,7 @@ public class ChangeStampInterceptorTest {
 	}
 
 	@Test
-	public void shouldUpdateChangeStampOnUpdate() throws Exception {
+	public void shouldUpdateChangeStampOnUpdate() {
 		ChangeStamp changeStamp = new ChangeStamp("Other user");
 		Object[] currentState = new Object[]{changeStamp};
 

@@ -2,7 +2,6 @@ package no.nav.varsel.tvarsel001.service.service.to;
 
 import no.nav.varsel.domain.to.AktoerTo;
 import no.nav.varsel.domain.to.MottakerType;
-import no.nav.varsel.tvarsel001.service.service.to.BestillVarselTo;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -15,9 +14,8 @@ public class BestillVarselToTest {
 	private static final MottakerType MOTTAKER_TYPE = MottakerType.AKTOER;
 	private static final String MOTTAKER = "mottaker";
 
-
 	@Test
-	public void shouldCreateAktoerTo() throws Exception {
+	public void shouldCreateAktoerTo() {
 		BestillVarselTo to = createTo();
 		assertThat(to.isTestvarsel(), is(true));
 

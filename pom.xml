@@ -18,30 +18,29 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.4</version>
+		<version>3.5.0</version>
 	</parent>
 
 	<properties>
 		<java.version>21</java.version>
 
-		<guava.version>33.3.1-jre</guava.version>
-		<ibm.mq.client.version>9.4.1.0</ibm.mq.client.version>
-		<joda.version>2.13.0</joda.version>
+		<guava.version>33.4.8-jre</guava.version>
+		<com.ibm.mq.jakarta.client.version>9.4.2.1</com.ibm.mq.jakarta.client.version>
+		<joda.version>2.14.0</joda.version>
 
-		<logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
-		<kafka-avro-serializer.version>7.7.1</kafka-avro-serializer.version>
-		<resilience4j.version>2.2.0</resilience4j.version>
-		<context-propagation.version>1.1.2</context-propagation.version>
+		<logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
+		<kafka-avro-serializer.version>7.9.1</kafka-avro-serializer.version>
+		<resilience4j-spring-boot3.version>2.3.0</resilience4j-spring-boot3.version>
+		<context-propagation.version>1.1.3</context-propagation.version>
 
 		<!-- NAV -->
 		<teamdokumenthandtering-avro-schemas.version>1.1.6</teamdokumenthandtering-avro-schemas.version>
 		<brukernotifikasjon.version>v2.5.2</brukernotifikasjon.version>
-		<avro.version>1.11.4</avro.version>
-		<dok-legacy-tjenestespesifikasjoner.version>29-af3d66d</dok-legacy-tjenestespesifikasjoner.version>
-		<dokmet-api.version>2024.10.23-12.35-3fce0da</dokmet-api.version>
+		<dok-legacy-tjenestespesifikasjoner.version>33-f7132fc</dok-legacy-tjenestespesifikasjoner.version>
+		<dokmet-api.version>2025.04.29-15.21-2c96c87</dokmet-api.version>
 
 		<!-- test -->
-		<spring-cloud-contract-wiremock.version>4.1.2</spring-cloud-contract-wiremock.version>
+		<spring-cloud-contract-wiremock.version>4.2.1</spring-cloud-contract-wiremock.version>
 		<!-- Spring Boot 3.0.x drar inn versjon 2.1.x av h2 som gir problem for testene -->
 		<h2.version>1.4.200</h2.version>
 
@@ -91,13 +90,6 @@
 				<artifactId>kafka-avro-serializer</artifactId>
 				<version>${kafka-avro-serializer.version}</version>
 			</dependency>
-			<!-- kafka-avro-serializer, brukernotifikasjon-schemas, teamdokumenthandtering-avro-schemas tar alle inn
-			 avro som avhengighet. Vi ønsker å tvinge 1.11.4+ -->
-			<dependency>
-				<groupId>org.apache.avro</groupId>
-				<artifactId>avro</artifactId>
-				<version>${avro.version}</version>
-			</dependency>
 			<dependency>
 				<groupId>no.nav.teamdokumenthandtering</groupId>
 				<artifactId>teamdokumenthandtering-avro-schemas</artifactId>
@@ -128,7 +120,7 @@
 			<dependency>
 				<groupId>com.ibm.mq</groupId>
 				<artifactId>com.ibm.mq.jakarta.client</artifactId>
-				<version>${ibm.mq.client.version}</version>
+				<version>${com.ibm.mq.jakarta.client.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.logstash.logback</groupId>
@@ -148,7 +140,7 @@
 			<dependency>
 				<groupId>io.github.resilience4j</groupId>
 				<artifactId>resilience4j-spring-boot3</artifactId>
-				<version>${resilience4j.version}</version>
+				<version>${resilience4j-spring-boot3.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.micrometer</groupId>

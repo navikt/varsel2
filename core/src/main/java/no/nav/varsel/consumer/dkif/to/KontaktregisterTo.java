@@ -10,7 +10,7 @@ import no.nav.varsel.domain.code.KanalCode;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.Set;
 
 @Data
 @Slf4j
@@ -31,7 +31,7 @@ public class KontaktregisterTo implements Serializable {
 	private LocalDateTime mobiltelefonSistOppdatert;
 	private LocalDateTime mobiltelefonSistVerifisert;
 	private String kontaktInfo;
-	private Collection<KanalCode> kanaler;
+	private Set<KanalCode> kanaler;
 
 	public boolean isEpostDateInvalid() {
 		return isInvalid(getEpostSistOppdatert()) && isInvalid(getEpostSistVerifisert());
@@ -47,22 +47,22 @@ public class KontaktregisterTo implements Serializable {
 
 	public void cleanExpiredInfo() {
 		if (isMobilDateInvalid()) {
-			if(mobiltelefonnummer == null) {
+			if (mobiltelefonnummer == null) {
 				log.info("Sender ikke SMS. Mobiltelefonnummer er null. Sist oppdatert og sist verifisert må være maks 18 måneder siden. " +
-						"mobiltelefonSistOppdatert={}, mobiltelefonSistVerifisert={}", mobiltelefonSistOppdatert, mobiltelefonSistVerifisert);
+						 "mobiltelefonSistOppdatert={}, mobiltelefonSistVerifisert={}", mobiltelefonSistOppdatert, mobiltelefonSistVerifisert);
 			} else {
 				log.info("Sender ikke SMS. Mobiltelefonnummer er satt. Sist oppdatert og sist verifisert må være maks 18 måneder siden. " +
-						"mobiltelefonSistOppdatert={}, mobiltelefonSistVerifisert={}", mobiltelefonSistOppdatert, mobiltelefonSistVerifisert);
+						 "mobiltelefonSistOppdatert={}, mobiltelefonSistVerifisert={}", mobiltelefonSistOppdatert, mobiltelefonSistVerifisert);
 			}
 			setMobiltelefonnummer(null);
 		}
 		if (isEpostDateInvalid()) {
-			if(epostadresse == null) {
+			if (epostadresse == null) {
 				log.info("Sender ikke EPOST. Epostadresse er null. Sist oppdatert og sist verifisert må være maks 18 måneder siden. " +
-						"epostSistOppdatert={}, epostSistVerifisert={}", epostSistOppdatert, epostSistVerifisert);
+						 "epostSistOppdatert={}, epostSistVerifisert={}", epostSistOppdatert, epostSistVerifisert);
 			} else {
 				log.info("Sender ikke EPOST. Epostadresse er satt. Sist oppdatert og sist verifisert må være maks 18 måneder siden. " +
-						"epostSistOppdatert={}, epostSistVerifisert={}", epostSistOppdatert, epostSistVerifisert);
+						 "epostSistOppdatert={}, epostSistVerifisert={}", epostSistOppdatert, epostSistVerifisert);
 			}
 			setEpostadresse(null);
 		}

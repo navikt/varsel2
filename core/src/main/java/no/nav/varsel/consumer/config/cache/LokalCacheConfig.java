@@ -30,13 +30,16 @@ public class LokalCacheConfig {
 		manager.setCaches(asList(
 						new CaffeineCache(DOKMET_CACHE, Caffeine.newBuilder()
 								.expireAfterWrite(1, DAYS)
+								.recordStats()
 								.build()),
 						new CaffeineCache(STS_CACHE, Caffeine.newBuilder()
 								.expireAfterWrite(55, MINUTES)
+								.recordStats()
 								.build()),
 						new CaffeineCache(AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE, Caffeine.newBuilder()
 								.expireAfterWrite(50, MINUTES)
 								.maximumSize(1)
+								.recordStats()
 								.build())
 				)
 		);

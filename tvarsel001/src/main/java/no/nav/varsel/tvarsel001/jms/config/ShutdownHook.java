@@ -4,7 +4,6 @@ import jakarta.annotation.PreDestroy;
 import jakarta.jms.ConnectionFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.messaginghub.pooled.jms.JmsPoolConnectionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +15,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ShutdownHook {
 
-	@Autowired
-	private ConnectionFactory connectionFactory;
+	private final ConnectionFactory connectionFactory;
+
+	public ShutdownHook(ConnectionFactory connectionFactory) {
+		this.connectionFactory = connectionFactory;
+	}
 
 	@PreDestroy
 	public void destroy() {

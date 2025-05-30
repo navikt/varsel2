@@ -24,7 +24,7 @@ public class RestConsumerConfig {
 			ClientHttpRequestFactory clientHttpRequestFactory) {
 		return restTemplateBuilder
 				.requestFactory(() -> clientHttpRequestFactory)
-				.setConnectTimeout(CONNECT_TIMEOUT)
+				.connectTimeout(CONNECT_TIMEOUT)
 				.basicAuthentication(varselProperties.getServiceuser().getUsername(), varselProperties.getServiceuser().getPassword())
 				.build();
 	}

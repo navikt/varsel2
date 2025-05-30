@@ -8,15 +8,15 @@ import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.tvarsel001.jms.xml.JmsReply;
 import no.nav.varsel.kafka.KafkaEventProducer;
+import no.nav.varsel.tvarsel001.jms.xml.JmsReply;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import javax.xml.namespace.QName;
 import java.util.List;
@@ -31,9 +31,9 @@ import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
 import static no.nav.varsel.domain.code.KanalCode.SMS;
 import static no.nav.varsel.domain.code.StatusCode.SENDT;
-import static no.nav.varsel.tvarsel001.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING;
 import static no.nav.varsel.tvarsel001.jms.consumer.BestillServicemeldingMapperTest.MOTTAKER;
 import static no.nav.varsel.tvarsel001.jms.consumer.BestillServicemeldingMapperTest.UTLOEPSTIDSPUNKT_LDT;
+import static no.nav.varsel.tvarsel001.jms.consumer.JmsConsumer.BESTILL_SERVICEMELDING;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.assertj.core.api.Assertions.within;
@@ -60,7 +60,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	@Autowired
 	private Queue bestillServicemeldingQueue;
 
-	@MockBean
+	@MockitoBean
 	private KafkaEventProducer kafkaEventProducer;
 
 	@Test

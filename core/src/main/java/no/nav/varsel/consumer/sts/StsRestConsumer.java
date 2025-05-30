@@ -34,7 +34,7 @@ public class StsRestConsumer {
 	) {
 		this.stsUrl = varselProperties.getEndpoints().getStsUrl();
 		this.restTemplate = restTemplate
-				.setConnectTimeout(Duration.ofSeconds(5))
+				.connectTimeout(Duration.ofSeconds(5))
 				.basicAuthentication(varselProperties.getServiceuser().getUsername(), varselProperties.getServiceuser().getPassword())
 				.build();
 	}
