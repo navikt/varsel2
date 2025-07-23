@@ -19,8 +19,7 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 public class LokalCacheConfig {
 
 	public static final String DOKMET_CACHE = "dokmetCache";
-	public static final String STS_CACHE = "stsCache";
-	public static final String AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE = "DIGDIRKRRAZUREAD";
+	public static final String NAIS_TEXAS_TOKEN_CACHE = "naisTexasTokenCache";
 
 	@Bean
 	@Primary
@@ -32,13 +31,8 @@ public class LokalCacheConfig {
 								.expireAfterWrite(1, DAYS)
 								.recordStats()
 								.build()),
-						new CaffeineCache(STS_CACHE, Caffeine.newBuilder()
+						new CaffeineCache(NAIS_TEXAS_TOKEN_CACHE, Caffeine.newBuilder()
 								.expireAfterWrite(55, MINUTES)
-								.recordStats()
-								.build()),
-						new CaffeineCache(AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE, Caffeine.newBuilder()
-								.expireAfterWrite(50, MINUTES)
-								.maximumSize(1)
 								.recordStats()
 								.build())
 				)

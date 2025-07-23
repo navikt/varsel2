@@ -1,79 +1,72 @@
 package no.nav.varsel.consumer.dkif;
 
-import no.nav.varsel.azure.TokenConsumer;
-import no.nav.varsel.azure.TokenResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
 import no.nav.varsel.consumer.dkif.support.PostPersonerRequest;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ProblemDetail;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
-import static java.lang.String.format;
-import static java.time.Duration.ofSeconds;
+import static no.nav.varsel.consumer.naistoken.NaisTexasRequestInterceptor.TARGET_SCOPE;
 import static no.nav.varsel.util.MDCGenerate.getCallId;
 import static no.nav.varsel.util.NavConstants.NAV_CALL_ID;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
+@Slf4j
 @Component
 public class HentDigitalKontaktinformasjonConsumer {
 
-	private static final Logger LOG = LoggerFactory.getLogger(HentDigitalKontaktinformasjonConsumer.class);
-	private final RestTemplate restTemplate;
-	private final String dkiUrl;
-	private final TokenConsumer tokenConsumer;
+	private final RestClient restClientTexas;
+	private final ObjectMapper objectMapper;
 	private final HentDigitalKontaktinformasjonMapper mapper;
-	private final VarselProperties varselProperties;
+	private final String digdirKrrScope;
 
-	@Autowired
 	public HentDigitalKontaktinformasjonConsumer(VarselProperties varselProperties,
-												 TokenConsumer tokenConsumer,
-												 RestTemplateBuilder restTemplateBuilder,
-												 ClientHttpRequestFactory clientHttpRequestFactory) {
+												RestClient restClientTexas) {
 		this.mapper = new HentDigitalKontaktinformasjonMapper();
-		this.dkiUrl = varselProperties.getEndpoints().getDigdirKrrProxy().getUrl();
-		this.tokenConsumer = tokenConsumer;
-		this.restTemplate = restTemplateBuilder
-				.connectTimeout(ofSeconds(5))
-				.requestFactory(() -> clientHttpRequestFactory)
+		this.restClientTexas = restClientTexas.mutate()
+				.baseUrl(varselProperties.getEndpoints().getDigdirKrrProxy().getUrl())
+				.defaultHeaders(httpHeaders -> {
+					httpHeaders.set(NAV_CALL_ID, getCallId());
+					httpHeaders.setContentType(APPLICATION_JSON);
+				})
 				.build();
-		this.varselProperties = varselProperties;
+		this.objectMapper = new ObjectMapper();
+		this.digdirKrrScope = varselProperties.getEndpoints().getDigdirKrrProxy().getScope();
 	}
 
 	@Retryable(maxAttempts = 5, backoff = @Backoff(delay = 1000L, multiplier = 2))
 	public KontaktregisterTo hentDigitalKontaktinformasjon(String personIdent) {
-		HttpHeaders headers = createHeaders();
-		DigitalKontaktInfoResponse response;
 		final String fnrTrimmed = personIdent.strip();
-		try {
-			PostPersonerRequest postPersonRequest = PostPersonerRequest.builder().personidenter(List.of(fnrTrimmed)).build();
-			HttpEntity<String> request = new HttpEntity(postPersonRequest, headers);
-			response = restTemplate.postForEntity(dkiUrl + "/rest/v1/personer?inkluderSikkerDigitalPost=true", request, DigitalKontaktInfoResponse.class).getBody();
 
-		} catch (HttpClientErrorException | HttpServerErrorException e) {
-			LOG.warn(format("Feil mot DKIF %s: %s", e.getClass().getSimpleName(), e.getMessage()));
-			return new KontaktregisterTo();
-		}
+		PostPersonerRequest postPersonRequest = PostPersonerRequest.builder().personidenter(List.of(fnrTrimmed)).build();
+
+		DigitalKontaktInfoResponse response = restClientTexas.post()
+				.uri("/rest/v1/personer?inkluderSikkerDigitalPost=true")
+				.attribute(TARGET_SCOPE, digdirKrrScope)
+				.body(postPersonRequest)
+				.retrieve()
+				.onStatus(HttpStatusCode::isError, (req, res) -> {
+					ProblemDetail problemDetail = objectMapper.readValue(res.getBody(), ProblemDetail.class);
+					log.warn("Feil mot digdir-krr-proxy:  status: {}, problemDetail: {}", res.getStatusCode(), problemDetail.getDetail());
+				})
+				.body(DigitalKontaktInfoResponse.class);
+
 		if (isValidResponse(response, fnrTrimmed)) {
 			KontaktregisterTo kontaktregisterTo = mapper.map(response.getPersoner().get(fnrTrimmed));
 			kontaktregisterTo.cleanExpiredInfo();
 			return kontaktregisterTo;
 		} else {
-			LOG.warn(format("Feil mot DKIF: %s", getErrorMsg(response, fnrTrimmed)));
-			return new KontaktregisterTo();
+			log.warn("Feil mot digdir-krr-proxy: {}", getErrorMsg(response, fnrTrimmed));
+			return null;
 		}
 	}
 
@@ -87,14 +80,5 @@ public class HentDigitalKontaktinformasjonConsumer {
 		} else {
 			return response.getFeil().get(fnr);
 		}
-	}
-
-	private HttpHeaders createHeaders() {
-		TokenResponse clientCredentialToken = tokenConsumer.getClientCredentialToken(varselProperties.getEndpoints().getDigdirKrrProxy().getScope());
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(APPLICATION_JSON);
-		headers.setBearerAuth(clientCredentialToken.getAccess_token());
-		headers.add(NAV_CALL_ID, getCallId());
-		return headers;
 	}
 }

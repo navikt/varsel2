@@ -4,10 +4,9 @@ import jakarta.jms.Message;
 import jakarta.jms.Queue;
 import jakarta.xml.bind.JAXBElement;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
-import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.repo.VarselbestillingRepo;
-import no.nav.varsel.tvarsel001.jms.xml.JmsReply;
 import no.nav.varsel.tvarsel001.jms.config.JmsConsumerTestConfig;
+import no.nav.varsel.tvarsel001.jms.xml.JmsReply;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +28,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
-import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE;
 import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.DOKMET_CACHE;
-import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.STS_CACHE;
+import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.NAIS_TEXAS_TOKEN_CACHE;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.OK;
@@ -63,14 +61,11 @@ public abstract class AbstractConsumerJmsTest {
 	public CacheManager cacheManager;
 
 	@Autowired
-	protected VarselRepo varselRepo;
-
-	@Autowired
 	private TransactionTemplate transactionTemplate;
 
 	@BeforeEach
 	public void setUp() {
-		stubSts();
+		stubNaisTexasToken();
 	}
 
 	@AfterEach
@@ -81,8 +76,7 @@ public abstract class AbstractConsumerJmsTest {
 
 	private void clearCacher() {
 		cacheManager.getCache(DOKMET_CACHE).clear();
-		cacheManager.getCache(STS_CACHE).clear();
-		cacheManager.getCache(AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE).clear();
+		cacheManager.getCache(NAIS_TEXAS_TOKEN_CACHE).clear();
 	}
 
 	protected JmsReply sendMessage(Queue queue, JAXBElement<?> message) {
@@ -154,12 +148,12 @@ public abstract class AbstractConsumerJmsTest {
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
 	}
 
-	public void stubSts() {
-		stubFor(get("/securitytoken?grant_type=client_credentials&scope=openid")
+	public void stubNaisTexasToken() {
+		stubFor(post("/nais-texas")
 				.willReturn(aResponse()
 						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-						.withBodyFile("sts/stsResponse-happy.json")));
+						.withBodyFile("nais-texas/token_response.json")));
 	}
 
 	public void stubDigdir() {

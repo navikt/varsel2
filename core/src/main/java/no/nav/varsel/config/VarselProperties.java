@@ -31,12 +31,10 @@ public class VarselProperties {
 	public static class Endpoints {
 		@NotEmpty
 		private String dokmetUrl;
-		@NotEmpty
-		private String pdlUrl;
+		@NotNull
+		private AzureEndpoint pdl;
 		@NotNull
 		private AzureEndpoint digdirKrrProxy;
-		@NotEmpty
-		private String stsUrl;
 	}
 
 	@Data
