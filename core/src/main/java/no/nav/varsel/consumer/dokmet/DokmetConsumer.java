@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.dokmet.api.tkat021.VarselInfoTo;
 import no.nav.varsel.config.VarselProperties;
+import org.slf4j.MDC;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
@@ -15,6 +16,8 @@ import org.springframework.web.client.RestClient;
 import static java.lang.String.format;
 import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.DOKMET_CACHE;
 import static no.nav.varsel.consumer.dokmet.VarselinfoMapper.mapToVarselinfo;
+import static no.nav.varsel.util.MDCGenerate.CALL_ID;
+import static no.nav.varsel.util.NavConstants.NAV_CALL_ID;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -43,6 +46,7 @@ public class DokmetConsumer {
 		var varselinfoTo = restClient.get()
 				.uri(uriBuilder -> uriBuilder.path("/{varseltypeId}")
 						.build(varseltypeId))
+				.header(NAV_CALL_ID, MDC.get(CALL_ID))
 				.retrieve()
 				.onStatus(HttpStatusCode::isError, (req, res) -> {
 					ProblemDetail problemDetail = objectMapper.readValue(res.getBody(), ProblemDetail.class);

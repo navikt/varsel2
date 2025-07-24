@@ -27,6 +27,7 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Component
 public class PdlIdentConsumer {
+
 	private static final String PERSON_IKKE_FUNNET_CODE = "not_found";
 	private final ObjectMapper objectMapper;
 
