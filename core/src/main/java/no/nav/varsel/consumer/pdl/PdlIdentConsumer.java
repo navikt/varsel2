@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
 
 import java.util.EnumSet;
@@ -22,8 +21,6 @@ import static java.lang.String.format;
 import static no.nav.varsel.consumer.naistoken.NaisTexasRequestInterceptor.TARGET_SCOPE;
 import static no.nav.varsel.consumer.pdl.to.PdlResponse.PdlGruppe.AKTORID;
 import static no.nav.varsel.consumer.pdl.to.PdlResponse.PdlGruppe.FOLKEREGISTERIDENT;
-import static no.nav.varsel.util.MDCGenerate.getCallId;
-import static no.nav.varsel.util.NavConstants.NAV_CALL_ID;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.util.CollectionUtils.isEmpty;
@@ -45,7 +42,8 @@ public class PdlIdentConsumer {
 	private final String pdlScope;
 
 	public PdlIdentConsumer(VarselProperties varselProperties,
-							RestClient restClientTexas, ObjectMapper objectMapper) {
+							RestClient restClientTexas,
+							ObjectMapper objectMapper) {
 		this.restClientTexas = restClientTexas
 				.mutate()
 				.baseUrl(varselProperties.getEndpoints().getPdl().getUrl())
@@ -58,7 +56,7 @@ public class PdlIdentConsumer {
 		this.objectMapper = objectMapper;
 	}
 
-	@Retryable(retryFor = HttpServerErrorException.class)
+	@Retryable(retryFor = PdlHentIdentTechnicalException.class)
 	public String hentAktoerId(final String folkeregisterIdent) throws PersonIkkeFunnetException {
 		if (isBlank(folkeregisterIdent)) {
 			throw new PersonIkkeFunnetException("Folkeregisterident er null eller blank.");
