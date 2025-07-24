@@ -51,7 +51,6 @@ public class PdlIdentConsumer {
 				.baseUrl(varselProperties.getEndpoints().getPdl().getUrl())
 				.defaultHeaders(httpHeader -> {
 					httpHeader.setContentType(APPLICATION_JSON);
-					httpHeader.set(NAV_CALL_ID, getCallId());
 					httpHeader.set(HEADER_PDL_BEHANDLINGSNUMMER, ARKIVPLEIE_BEHANDLINGSNUMMER);
 				})
 				.build();
@@ -67,7 +66,7 @@ public class PdlIdentConsumer {
 		return baseHentIdent(mapHentAktoerIdForFolkeregisterident(folkeregisterIdent), "aktoerid");
 	}
 
-	@Retryable(retryFor = HttpServerErrorException.class)
+	@Retryable(retryFor = PdlHentIdentTechnicalException.class)
 	public String hentFolkeregisterIdent(final String aktoerId) throws PersonIkkeFunnetException {
 		if (isBlank(aktoerId)) {
 			throw new PersonIkkeFunnetException("AktoerId er null eller blank.");
@@ -77,9 +76,6 @@ public class PdlIdentConsumer {
 
 	public String baseHentIdent(final PdlRequest query, String identGruppe) {
 		final PdlResponse pdlResponse = restClientTexas.post()
-				.headers(httpHeaders ->
-						httpHeaders.set(NAV_CALL_ID, getCallId())
-				)
 				.attribute(TARGET_SCOPE, pdlScope)
 				.body(query)
 				.retrieve()

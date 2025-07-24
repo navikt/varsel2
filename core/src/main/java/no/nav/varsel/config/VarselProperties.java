@@ -1,5 +1,6 @@
 package no.nav.varsel.config;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -11,9 +12,13 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "varsel")
 public class VarselProperties {
 
+	@Valid
 	private Endpoints endpoints = new Endpoints();
+	@Valid
 	private Serviceuser serviceuser = new Serviceuser();
+	@Valid
 	private Queues queues = new Queues();
+	@Valid
 	private Jms jms = new Jms();
 
 	private String url;
@@ -31,13 +36,14 @@ public class VarselProperties {
 	public static class Endpoints {
 		@NotEmpty
 		private String dokmetUrl;
-		@NotNull
+		@Valid
 		private AzureEndpoint pdl;
-		@NotNull
+		@Valid
 		private AzureEndpoint digdirKrrProxy;
 	}
 
 	@Data
+	@Valid
 	public static class AzureEndpoint {
 		@NotEmpty
 		private String url;
@@ -48,6 +54,7 @@ public class VarselProperties {
 	@Data
 	public static class Queues {
 		@NotNull
+		@Valid
 		private Queue bestillServicemelding = new Queue();
 	}
 

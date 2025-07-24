@@ -23,19 +23,13 @@ public class NaisTexasRequestInterceptor implements ClientHttpRequestInterceptor
 
 	@Override
 	public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-
 		Map<String, Object> attributes = request.getAttributes();
-		if (!attributes.containsKey(TARGET_SCOPE)) {
-			throw new IllegalArgumentException("Kan ikke bruke denne restClient uten at targetScope attributtet er satt");
-		}
-		String targetScope = (String) attributes.get(TARGET_SCOPE);
-		String token = naisTexasConsumer.getSystemToken(targetScope);
-		if (token != null) {
+		if (attributes.containsKey(TARGET_SCOPE)) {
+			String targetScope = (String) attributes.get(TARGET_SCOPE);
+			String token = naisTexasConsumer.getSystemToken(targetScope);
 			request.getHeaders().setBearerAuth(token);
-			request.getHeaders().set(NAV_CALL_ID, getCallId());
-			return execution.execute(request, body);
-		} else {
-			throw new IllegalStateException("Kunne ikke hente token for targetScope: " + targetScope);
 		}
+		request.getHeaders().set(NAV_CALL_ID, getCallId());
+		return execution.execute(request, body);
 	}
 }

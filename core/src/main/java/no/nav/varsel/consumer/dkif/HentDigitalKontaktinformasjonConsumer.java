@@ -16,8 +16,6 @@ import org.springframework.web.client.RestClient;
 import java.util.List;
 
 import static no.nav.varsel.consumer.naistoken.NaisTexasRequestInterceptor.TARGET_SCOPE;
-import static no.nav.varsel.util.MDCGenerate.getCallId;
-import static no.nav.varsel.util.NavConstants.NAV_CALL_ID;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Slf4j
@@ -30,16 +28,16 @@ public class HentDigitalKontaktinformasjonConsumer {
 	private final String digdirKrrScope;
 
 	public HentDigitalKontaktinformasjonConsumer(VarselProperties varselProperties,
-												RestClient restClientTexas) {
+												 RestClient restClientTexas,
+												 ObjectMapper objectMapper) {
 		this.mapper = new HentDigitalKontaktinformasjonMapper();
 		this.restClientTexas = restClientTexas.mutate()
 				.baseUrl(varselProperties.getEndpoints().getDigdirKrrProxy().getUrl())
 				.defaultHeaders(httpHeaders -> {
-					httpHeaders.set(NAV_CALL_ID, getCallId());
 					httpHeaders.setContentType(APPLICATION_JSON);
 				})
 				.build();
-		this.objectMapper = new ObjectMapper();
+		this.objectMapper = objectMapper;
 		this.digdirKrrScope = varselProperties.getEndpoints().getDigdirKrrProxy().getScope();
 	}
 

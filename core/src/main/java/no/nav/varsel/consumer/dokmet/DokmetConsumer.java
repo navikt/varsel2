@@ -15,9 +15,8 @@ import org.springframework.web.client.RestClient;
 import static java.lang.String.format;
 import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.DOKMET_CACHE;
 import static no.nav.varsel.consumer.dokmet.VarselinfoMapper.mapToVarselinfo;
-import static no.nav.varsel.util.MDCGenerate.getCallId;
-import static no.nav.varsel.util.NavConstants.NAV_CALL_ID;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @Component
@@ -31,10 +30,7 @@ public class DokmetConsumer {
 						  ObjectMapper objectMapper) {
 		this.restClient = restClientBuilder
 				.baseUrl(varselProperties.getEndpoints().getDokmetUrl())
-				.defaultHeaders(httpHeader -> {
-					httpHeader.setContentType(APPLICATION_JSON);
-					httpHeader.set(NAV_CALL_ID, getCallId());
-				})
+				.defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 				.build();
 		this.objectMapper = objectMapper;
 	}

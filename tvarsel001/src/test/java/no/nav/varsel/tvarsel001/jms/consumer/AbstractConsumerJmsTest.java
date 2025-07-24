@@ -29,7 +29,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.DOKMET_CACHE;
-import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.NAIS_TEXAS_TOKEN_CACHE;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.OK;
@@ -76,7 +75,6 @@ public abstract class AbstractConsumerJmsTest {
 
 	private void clearCacher() {
 		cacheManager.getCache(DOKMET_CACHE).clear();
-		cacheManager.getCache(NAIS_TEXAS_TOKEN_CACHE).clear();
 	}
 
 	protected JmsReply sendMessage(Queue queue, JAXBElement<?> message) {
