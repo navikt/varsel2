@@ -20,6 +20,7 @@ public class JmsConsumerManagerTest extends AbstractConsumerJmsTest {
 	@Autowired
 	protected JmsConsumerManager jmsConsumerManager;
 
+
 	@BeforeEach
 	public void setUp() {
 		jmsConsumerManager.startAll();

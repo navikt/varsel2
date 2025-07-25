@@ -10,35 +10,23 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
-import static java.util.Arrays.asList;
+import static java.util.List.of;
 import static java.util.concurrent.TimeUnit.DAYS;
-import static java.util.concurrent.TimeUnit.MINUTES;
 
 @Configuration
 @EnableCaching
 public class LokalCacheConfig {
 
 	public static final String DOKMET_CACHE = "dokmetCache";
-	public static final String STS_CACHE = "stsCache";
-	public static final String AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE = "DIGDIRKRRAZUREAD";
 
 	@Bean
 	@Primary
 	@Profile({"nais", "itest"})
 	CacheManager cacheManager() {
 		SimpleCacheManager manager = new SimpleCacheManager();
-		manager.setCaches(asList(
+		manager.setCaches(of(
 						new CaffeineCache(DOKMET_CACHE, Caffeine.newBuilder()
 								.expireAfterWrite(1, DAYS)
-								.recordStats()
-								.build()),
-						new CaffeineCache(STS_CACHE, Caffeine.newBuilder()
-								.expireAfterWrite(55, MINUTES)
-								.recordStats()
-								.build()),
-						new CaffeineCache(AZURE_CLIENT_CREDENTIAL_DIGDIR_TOKEN_CACHE, Caffeine.newBuilder()
-								.expireAfterWrite(50, MINUTES)
-								.maximumSize(1)
 								.recordStats()
 								.build())
 				)

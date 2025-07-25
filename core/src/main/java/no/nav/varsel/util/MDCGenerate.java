@@ -5,15 +5,17 @@ import org.slf4j.MDC;
 import java.util.Set;
 import java.util.UUID;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 public class MDCGenerate {
 
 	public static final String CALL_ID = "callId";
 	public static final String USER_ID = "userId";
-
 	public static Set<String> ALL_KEYS = Set.of(CALL_ID);
 
+
 	public static void generateCallId() {
-		MDC.put(CALL_ID, UUID.randomUUID().toString());
+		MDC.put(CALL_ID, getCallId());
 	}
 
 	public static void clearCallId() {
@@ -33,6 +35,7 @@ public class MDCGenerate {
 	}
 
 	public static String getCallId() {
-		return MDC.get(CALL_ID);
+		String callId = MDC.get(CALL_ID);
+		return isBlank(callId) ? UUID.randomUUID().toString() : callId;
 	}
 }

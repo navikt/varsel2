@@ -10,7 +10,6 @@ import no.nav.varsel.exception.functional.StatusmeldingMappingException;
 import no.nav.varsel.exception.functional.StatusmeldingValidationException;
 import no.nav.varsel.exception.functional.VarselbestillingNotExistException;
 import no.nav.varsel.repo.VarselbestillingRepo;
-import no.nav.varsel.util.MDCGenerate;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -18,6 +17,10 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 import static no.nav.varsel.kvarsel001.StatusmeldingValidator.validerStatusmelding;
+import static no.nav.varsel.util.MDCGenerate.clearCallId;
+import static no.nav.varsel.util.MDCGenerate.clearUserId;
+import static no.nav.varsel.util.MDCGenerate.generateCallId;
+import static no.nav.varsel.util.MDCGenerate.setUserId;
 
 @Slf4j
 @Component
@@ -106,12 +109,12 @@ public class NotifikasjonStatusConsumer {
 	}
 
 	private void setUserIdAndGenerateCallId() {
-		MDCGenerate.generateCallId();
-		MDCGenerate.setUserId("kvarsel001");
+		generateCallId();
+		setUserId("kvarsel001");
 	}
 
 	private void clearUserIdAndCallId() {
-		MDCGenerate.clearUserId();
-		MDCGenerate.clearCallId();
+		clearUserId();
+		clearCallId();
 	}
 }
