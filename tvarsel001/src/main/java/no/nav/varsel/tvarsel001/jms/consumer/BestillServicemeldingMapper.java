@@ -29,7 +29,7 @@ public class BestillServicemeldingMapper {
 		map(varsel.getMottaker(), to);
 		to.setVarseltypeId(varsel.getVarslingstype() == null ? null :
 				varsel.getVarslingstype().getValue());
-		to.setUtloepstidspunkt(toLocalDateTime(varsel.getUtloepstidspunkt()));
+		to.setUtloepstidspunkt(varsel.getUtloepstidspunkt() != null ? varsel.getUtloepstidspunkt().toLocalDateTime() : null);
 		to.setParameters(map(varsel.getParameterListes()));
 		to.setTestvarsel(getTestVarselValue(varselWithMessage));
 		to.setVarselBestillingId(getVarselbestillingIdValue(varselWithMessage));

@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import static no.nav.varsel.tvarsel001.jms.consumer.Utils.formatDateTime;
@@ -162,7 +163,7 @@ public class BestillServicemeldingMapperTest {
 		XMLAktoerId aktoerId = new XMLAktoerId();
 		aktoerId.setAktoerId(MOTTAKER);
 		varsel.setMottaker(aktoerId);
-		varsel.setUtloepstidspunkt(toJodaDateTime(UTLOEPSTIDSPUNKT_LDT));
+		varsel.setUtloepstidspunkt(UTLOEPSTIDSPUNKT_LDT.atZone(ZoneId.of("Europe/Oslo")));
 		varsel.getParameterListes().addAll(List.of(sted, tid));
 		return varsel;
 	}
