@@ -1,21 +1,28 @@
 package no.nav.varsel.tvarsel001.service.service.support;
 
-import no.nav.brukernotifikasjon.schemas.builders.NokkelInputBuilder;
-import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
-import no.nav.doknotifikasjon.schemas.Doknotifikasjon;
-import no.nav.doknotifikasjon.schemas.PrefererteKanal;
+import com.google.common.collect.Maps;
+import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
+import no.nav.varsel.consumer.dokmet.Varselinfo;
 import no.nav.varsel.consumer.dokmet.Varselmal;
+import no.nav.varsel.domain.builder.VarselbestillingBuilder;
 import no.nav.varsel.domain.code.KanalCode;
+import no.nav.varsel.domain.code.StatusCode;
+import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
+import no.nav.varsel.exception.functional.VarselTekstMissingException;
+import no.nav.varsel.tvarsel001.service.service.to.BestillVarselTo;
+import org.apache.commons.lang3.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static no.nav.varsel.domain.builder.VarselBuilder.aVarsel;
+import static no.nav.varsel.domain.builder.VarselbestillingBuilder.aVarselbestilling;
 import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
-import static no.nav.varsel.domain.code.KanalCode.EPOST;
 
 public class ServicemeldingTestUtils {
 
@@ -24,7 +31,7 @@ public class ServicemeldingTestUtils {
 	public static final String NAMESPACE = "teamdokumenthandtering";
 	public static final String APPNAVN = "no/nav/varsel";
 	public static final String BESTILLER_ID = "tms-ekstern-varsling";
-	public static final Integer SIKKERHETSNIVAA = 3;
+	public static final String SIKKERHETSNIVAA_MINID = "substantial";
 	public static final String VARSEL_URL = "https://www.varsel.com";
 	public static final String UGYLDIG_VARSEL_URL = "httpp://www.invalidurl.com";
 	public static final String VARSELTEKST_EPOST = "Tekst i epost-varsel";
@@ -36,42 +43,10 @@ public class ServicemeldingTestUtils {
 	public static final String VARSELTITTEL_DITT_NAV = "Ditt NAV-tittel";
 	public static final String MOBILNUMMER = "12345678";
 	public static final String EPOSTADRESSE = "epost@post.no";
+	public static final String FOERSTEGANGS_TEKST = "foreste tekst for ";
+	public static final String REVARSLING_TEKST = "revarsling tekst for ";
+	public static final String TITTEL = "tittel";
 
-
-	public static Varselbestilling createVarselbestilling() {
-		var varselbestilling = new Varselbestilling();
-
-		varselbestilling.setVarselbestillingId(VARSELBESTILLINGS_ID);
-		varselbestilling.setFnr(FNR);
-
-		return varselbestilling;
-	}
-
-	public static Varselutsending createVarselutsending(KanalCode kanalCode) {
-		return Varselutsending.builder()
-				.varselTekst(utledVarseltekst(kanalCode))
-				.kanal(kanalCode)
-				.varselTittel(utledTittel(kanalCode))
-				.varselUrl(VARSEL_URL)
-				.build();
-	}
-
-	public static Varselutsending createVarselutsendingMedUgyldigUrl(KanalCode kanalCode) {
-		return Varselutsending.builder()
-				.varselTekst(utledVarseltekst(kanalCode))
-				.kanal(kanalCode)
-				.varselTittel(utledTittel(kanalCode))
-				.varselUrl(UGYLDIG_VARSEL_URL)
-				.build();
-	}
-
-	public static Varselutsending createVarselutsendingUtenUrl(KanalCode kanalCode) {
-		return Varselutsending.builder()
-				.varselTekst(utledVarseltekst(kanalCode))
-				.kanal(kanalCode)
-				.varselTittel(utledTittel(kanalCode))
-				.build();
-	}
 
 	private static String utledVarseltekst(KanalCode kanalCode) {
 		return switch (kanalCode) {
@@ -93,53 +68,44 @@ public class ServicemeldingTestUtils {
 		};
 	}
 
-
-	public static List<Varselutsending> createVarselutsendingForKanaler(List<KanalCode> kanaler) {
-		return kanaler.stream().map(ServicemeldingTestUtils::createVarselutsending).toList();
+	public static Varselmal createDittNavMalUtenFoerstegangstekst() {
+		return new Varselmal(DITT_NAV, null, null, "Revarslingstekst epost");
 	}
 
-	public static Set<Varselmal> createMaler() {
-		return Stream.of(
-						new Varselmal(EPOST, "Epost-tittel", "Førstegangstekst epost", "Revarslingstekst epost"),
-						new Varselmal(DITT_NAV, "Ditt Nav tittel", "Førstegangstekst ditt nav", "Revarslingstekst ditt nav"))
-				.collect(Collectors.toSet());
+	public static Varselmal createVarselmal(KanalCode kanalCode) {
+		return new Varselmal(kanalCode, TITTEL, FOERSTEGANGS_TEKST, REVARSLING_TEKST);
 	}
 
-	public static Set<Varselmal> createDittNavMalUtenFoerstegangstekst() {
-		return Stream.of(
-				new Varselmal(DITT_NAV, null, null, "Revarslingstekst epost")
-		).collect(Collectors.toSet());
+	public static Varselbestilling createFrom(KanalCode... kanalCodes) {
+		return createFrom(VARSEL_URL, kanalCodes);
 	}
 
-	public static Varselutsending createVarselutsendingWithKanal(KanalCode kanalCode) {
+	public static Varselbestilling createFrom(String varselUrl, KanalCode... kanalCodes) {
+		VarselbestillingBuilder builder = aVarselbestilling()
+				.varselbestillingId(VARSELBESTILLINGS_ID)
+				.fnr(FNR);
 
-		return Varselutsending.builder()
+		Varselbestilling varselbestilling = builder.build();
+
+		Stream.of(kanalCodes)
+				.map((KanalCode kanalCode) -> mapVarsel(kanalCode, varselUrl))
+				.forEach(varselbestilling::addVarsel);
+
+		return varselbestilling;
+	}
+
+	private static Varsel mapVarsel(KanalCode kanalCode, String varselUrl) {
+		return aVarsel()
+				.varselId(UUID.randomUUID().toString())
 				.kanal(kanalCode)
+				.sendtTidspunkt(LocalDateTime.now())
+				.distribusjonTidspunkt(null)
+				.status(StatusCode.SENDT)
+				.feilbeskrivelse(null)
+				.varselTittel(utledTittel(kanalCode))
+				.varselTekst(utledVarseltekst(kanalCode))
+				.varselUrl(kanalCode == KanalCode.DITT_NAV ? varselUrl : null)
+				.erRevarsel(false)
 				.build();
 	}
-
-	public static Doknotifikasjon createDoknotifikasjonWithKanalAndBestillingsId(KanalCode kanalCode, String bestillingsId) {
-		return Doknotifikasjon.newBuilder()
-				.setBestillingsId(bestillingsId)
-				.setBestillerId(BESTILLER_ID)
-				.setSikkerhetsnivaa(3)
-				.setFodselsnummer(FNR)
-				.setTittel(utledTittel(kanalCode))
-				.setEpostTekst(VARSELTEKST_EPOST)
-				.setSmsTekst(VARSELTEKST_SMS)
-				.setPrefererteKanaler(
-						kanalCode == null ? List.of() : List.of(PrefererteKanal.valueOf(kanalCode.name())))
-				.build();
-	}
-
-	public static NokkelInput createNokkelInputWithBestillingsId(String bestillingsId) {
-		return new NokkelInputBuilder()
-				.withEventId(bestillingsId)
-				.withGrupperingsId(bestillingsId)
-				.withFodselsnummer(FNR)
-				.withNamespace(NAMESPACE)
-				.withAppnavn(APPNAVN)
-				.build();
-	}
-
 }

@@ -6,8 +6,6 @@ import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
 import no.nav.varsel.tvarsel001.jms.config.JmsConfig;
 import no.nav.varsel.tvarsel001.service.service.AktoerService;
 import no.nav.varsel.tvarsel001.service.service.ServicemeldingService;
-import no.nav.varsel.tvarsel001.service.service.support.BrukernotifikasjonMapper;
-import no.nav.varsel.tvarsel001.service.service.support.VarselutsendingMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -17,19 +15,9 @@ import org.springframework.context.annotation.Import;
 		WsConsumerConfig.class,
 		JmsConfig.class,
 		BrukernotifikasjonBeskjedPublisher.class,
-		BrukernotifikasjonMapper.class
+		ServicemeldingService.class
 })
 public class ServiceConfig {
-
-	@Bean
-	public ServicemeldingService servicemeldingService() {
-		return new ServicemeldingService();
-	}
-
-	@Bean
-	public VarselutsendingMapper varselutsendingMapper() {
-		return new VarselutsendingMapper();
-	}
 
 	@Bean
 	public AktoerService aktoerService() {
