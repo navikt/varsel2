@@ -34,7 +34,6 @@
 
 		<!-- NAV -->
 		<teamdokumenthandtering-avro-schemas.version>1.1.6</teamdokumenthandtering-avro-schemas.version>
-		<brukernotifikasjon.version>v2.5.2</brukernotifikasjon.version>
 		<dok-legacy-tjenestespesifikasjoner.version>33-f7132fc</dok-legacy-tjenestespesifikasjoner.version>
 		<dokmet-api.version>2025.04.29-15.21-2c96c87</dokmet-api.version>
 		<tms-varsel.version>2.1.1</tms-varsel.version>
@@ -94,11 +93,6 @@
 				<groupId>no.nav.teamdokumenthandtering</groupId>
 				<artifactId>teamdokumenthandtering-avro-schemas</artifactId>
 				<version>${teamdokumenthandtering-avro-schemas.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.github.navikt</groupId>
-				<artifactId>brukernotifikasjon-schemas</artifactId>
-				<version>${brukernotifikasjon.version}</version>
 			</dependency>
 
 			<!--Tjenestespesifikasjoner-->

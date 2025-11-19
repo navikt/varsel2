@@ -18,7 +18,7 @@ public class BrukernotifikasjonTestConsumer {
 
 	@KafkaListener(
 			topics = KAFKA_TOPIC_VARSEL_MIN_SIDE,
-			properties = {"key.deserializer=io.confluent.kafka.serializers.KafkaAvroDeserializer"}
+			properties = {"key.deserializer=org.apache.kafka.common.serialization.StringDeserializer"}
 	)
 	public void receive(ConsumerRecord<?, ?> consumerRecord) {
 		setConsumerRecord(consumerRecord);

@@ -22,10 +22,6 @@
 			<artifactId>teamdokumenthandtering-avro-schemas</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.navikt</groupId>
-			<artifactId>brukernotifikasjon-schemas</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>io.confluent</groupId>
 			<artifactId>kafka-avro-serializer</artifactId>
 		</dependency>

@@ -38,10 +38,6 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.navikt</groupId>
-			<artifactId>brukernotifikasjon-schemas</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>no.nav.teamdokumenthandtering</groupId>
 			<artifactId>teamdokumenthandtering-avro-schemas</artifactId>
 		</dependency>

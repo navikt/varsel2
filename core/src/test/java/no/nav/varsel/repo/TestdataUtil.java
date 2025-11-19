@@ -1,6 +1,5 @@
 package no.nav.varsel.repo;
 
-import com.google.common.collect.Sets;
 import no.nav.varsel.domain.builder.VarselBuilder;
 import no.nav.varsel.domain.builder.VarselbestillingBuilder;
 import no.nav.varsel.domain.code.KanalCode;
@@ -21,8 +20,8 @@ public class TestdataUtil {
 	public static final String VARSELBESTILLING_ID = "d9f8f75e-13cb-4766-81c8-306d9d9385b2";
 	public static final String VARSELTYPE_ID = "UT";
 	public static final String EPOST = "test@test.no";
-	public static final Set<KanalCode> PREFERERT_KANAL = Sets.newHashSet(KanalCode.EPOST);
-	public static final Set<KanalCode> PREFERERT_KANAL_MED_DITT_NAV = Sets.newHashSet(KanalCode.EPOST, KanalCode.DITT_NAV);
+	public static final Set<KanalCode> PREFERERT_KANAL = Set.of(KanalCode.EPOST);
+	public static final Set<KanalCode> PREFERERT_KANAL_MED_DITT_NAV = Set.of(KanalCode.EPOST, KanalCode.DITT_NAV);
 	public static final LocalDateTime UTLOP_TIDSPUNKT = LocalDateTime.now().plusHours(1);
 	public static final String FNR = "11112222333";
 	public static final String AKTOR_ID = "1111222233334444";

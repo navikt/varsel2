@@ -3,8 +3,6 @@ package no.nav.varsel.tvarsel001.jms.consumer;
 import jakarta.jms.Message;
 import jakarta.jms.Queue;
 import jakarta.xml.bind.JAXBElement;
-import no.nav.brukernotifikasjon.schemas.input.BeskjedInput;
-import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
 import no.nav.melding.virksomhet.varsel.v1.varsel.XMLVarsel;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
@@ -68,7 +66,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		stubPdl();
 		stubDokmet();
 		stubDigdir();
-		doNothing().when(kafkaEventProducer).publish(any(String.class), any(NokkelInput.class), any(BeskjedInput.class));
+		doNothing().when(kafkaEventProducer).publish(any(String.class), any(), any());
 		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_GRUPPEAKTIVITET);
 
 		await().atMost(ofSeconds(10)).untilAsserted(() -> {
