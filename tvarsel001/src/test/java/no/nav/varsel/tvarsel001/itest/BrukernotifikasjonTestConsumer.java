@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CountDownLatch;
 
-import static no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher.KAFKA_TOPIC_AAPEN_BRUKERNOTIFIKASJON_BESKJED;
+import static no.nav.varsel.tvarsel001.BeskjedMinSidePublisher.KAFKA_TOPIC_VARSEL_MIN_SIDE;
 
 @Component
 @Data
@@ -17,7 +17,7 @@ public class BrukernotifikasjonTestConsumer {
 	private ConsumerRecord<?, ?> consumerRecord;
 
 	@KafkaListener(
-			topics = KAFKA_TOPIC_AAPEN_BRUKERNOTIFIKASJON_BESKJED,
+			topics = KAFKA_TOPIC_VARSEL_MIN_SIDE,
 			properties = {"key.deserializer=io.confluent.kafka.serializers.KafkaAvroDeserializer"}
 	)
 	public void receive(ConsumerRecord<?, ?> consumerRecord) {

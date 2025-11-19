@@ -19,7 +19,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
-import static no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher.KAFKA_TOPIC_AAPEN_BRUKERNOTIFIKASJON_BESKJED;
+import static no.nav.varsel.tvarsel001.BeskjedMinSidePublisher.KAFKA_TOPIC_VARSEL_MIN_SIDE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("itest")
@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @EmbeddedKafka(
 		partitions = 1,
 		topics = {
-				KAFKA_TOPIC_AAPEN_BRUKERNOTIFIKASJON_BESKJED
+				KAFKA_TOPIC_VARSEL_MIN_SIDE
 		},
 		controlledShutdown = true,
 		brokerProperties = {
@@ -67,14 +67,14 @@ public class Tvarsel001ITest {
 		brukernotifikasjonTestConsumer.getLatch().await(10, TimeUnit.SECONDS);
 
 		assertEquals(brukernotifikasjonTestConsumer.getLatch().getCount(), 0L);
-		assertEquals(KAFKA_TOPIC_AAPEN_BRUKERNOTIFIKASJON_BESKJED, brukernotifikasjonTestConsumer.getConsumerRecord().topic());
+		assertEquals(KAFKA_TOPIC_VARSEL_MIN_SIDE, brukernotifikasjonTestConsumer.getConsumerRecord().topic());
 		assertEquals(nokkelInput(), brukernotifikasjonTestConsumer.getConsumerRecord().key());
 		assertEquals(beskjedInput(), brukernotifikasjonTestConsumer.getConsumerRecord().value());
 	}
 
 	private void publishBrukernotifikasjon(BeskjedInput beskjedInput, NokkelInput nokkelInput) {
 		kafkaEventProducer.publish(
-				KAFKA_TOPIC_AAPEN_BRUKERNOTIFIKASJON_BESKJED,
+				KAFKA_TOPIC_VARSEL_MIN_SIDE,
 				nokkelInput,
 				beskjedInput
 		);

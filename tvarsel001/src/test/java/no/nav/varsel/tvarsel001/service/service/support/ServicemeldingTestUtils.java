@@ -1,23 +1,14 @@
 package no.nav.varsel.tvarsel001.service.service.support;
 
-import com.google.common.collect.Maps;
-import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
-import no.nav.varsel.consumer.dokmet.Varselinfo;
 import no.nav.varsel.consumer.dokmet.Varselmal;
 import no.nav.varsel.domain.builder.VarselbestillingBuilder;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.domain.object.Varsel;
 import no.nav.varsel.domain.object.Varselbestilling;
-import no.nav.varsel.exception.functional.VarselTekstMissingException;
-import no.nav.varsel.tvarsel001.service.service.to.BestillVarselTo;
-import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static no.nav.varsel.domain.builder.VarselBuilder.aVarsel;

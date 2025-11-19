@@ -5,6 +5,10 @@ import no.nav.varsel.exception.functional.ServicemeldingMappingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
@@ -21,7 +25,7 @@ import static no.nav.varsel.tvarsel001.service.service.support.ServicemeldingTes
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class BrukernotifikasjonMapperTest {
+public class BrukervarselMapperTest {
 
 	private static final String JSON_CONTEXT = "\"%s\":\"%s\"";
 	private static final String EKSTERN_VARSEL_JSON_KEY = "eksternVarsling";
@@ -31,7 +35,11 @@ public class BrukernotifikasjonMapperTest {
 	private static final String DITT_NAV_TEKST_JSON_KEY = "tekst";
 	private static final String DITT_NAV_URL_JSON_KEY = "link";
 	private static final String SIKKERHETSNIVAA_JSON_KEY = "sensitivitet";
+	private static final String AKTIV_FREM_TIL = "aktivFremTil";
 
+	private final Clock clock = Clock.fixed(Instant.now(), ZoneOffset.UTC);
+	private final BrukervarselMapper brukervarselMapper = new BrukervarselMapper(clock);
+	private final String om10Dager = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(clock.instant().atZone(ZoneOffset.UTC).plusDays(10));
 
 	@BeforeEach
 	void setUp() {
@@ -44,12 +52,13 @@ public class BrukernotifikasjonMapperTest {
 
 	@Test
 	public void shouldMapBeskjed() {
-		var marshalledOpprettVarsel = BrukernotifikasjonMapper.mapAndMarshalOpprettVarsel(createFrom(DITT_NAV, SMS, EPOST));
+		var marshalledOpprettVarsel = brukervarselMapper.mapAndMarshalVarsel(createFrom(DITT_NAV, SMS, EPOST));
 
 		assertThat(marshalledOpprettVarsel).contains(JSON_CONTEXT.formatted(DITT_NAV_TEKST_JSON_KEY, VARSELTEKST_DITT_NAV));
 		assertThat(marshalledOpprettVarsel).contains(JSON_CONTEXT.formatted(DITT_NAV_URL_JSON_KEY, VARSEL_URL));
 		assertThat(marshalledOpprettVarsel).contains(JSON_CONTEXT.formatted(SIKKERHETSNIVAA_JSON_KEY, SIKKERHETSNIVAA_MINID));
 		assertThat(marshalledOpprettVarsel).contains(EKSTERN_VARSEL_JSON_KEY);
+		assertThat(marshalledOpprettVarsel).contains(JSON_CONTEXT.formatted(AKTIV_FREM_TIL, om10Dager));
 
 		assertThat(marshalledOpprettVarsel).contains(JSON_CONTEXT.formatted(SMS_TEKST_JSON_KEY, VARSELTEKST_SMS));
 		assertThat(marshalledOpprettVarsel).contains(JSON_CONTEXT.formatted(EPOST_TEKST_JSON_KEY, VARSELTEKST_EPOST));
@@ -58,14 +67,14 @@ public class BrukernotifikasjonMapperTest {
 
 	@Test
 	void shouldMapBeskjedUtenSms() {
-		var marshalledOpprettVarsel = BrukernotifikasjonMapper.mapAndMarshalOpprettVarsel(createFrom(DITT_NAV, EPOST));
+		var marshalledOpprettVarsel = brukervarselMapper.mapAndMarshalVarsel(createFrom(DITT_NAV, EPOST));
 
 		assertThat(marshalledOpprettVarsel).doesNotContain(SMS_TEKST_JSON_KEY);
 	}
 
 	@Test
 	void shouldMapBeskjedUtenEpost() {
-		var marshalledOpprettVarsel = BrukernotifikasjonMapper.mapAndMarshalOpprettVarsel(createFrom(DITT_NAV, SMS));
+		var marshalledOpprettVarsel = brukervarselMapper.mapAndMarshalVarsel(createFrom(DITT_NAV, SMS));
 
 		assertThat(marshalledOpprettVarsel).doesNotContain(EPOST_TEKST_JSON_KEY);
 		assertThat(marshalledOpprettVarsel).doesNotContain(EPOST_TITTEL_JSON_KEY);
@@ -73,7 +82,7 @@ public class BrukernotifikasjonMapperTest {
 
 	@Test
 	void shouldMapBeskjedUtenSmsOgEpost() {
-		var marshalledOpprettVarsel = BrukernotifikasjonMapper.mapAndMarshalOpprettVarsel(createFrom(DITT_NAV));
+		var marshalledOpprettVarsel = brukervarselMapper.mapAndMarshalVarsel(createFrom(DITT_NAV));
 
 		assertThat(marshalledOpprettVarsel).doesNotContain(EKSTERN_VARSEL_JSON_KEY);
 		assertThat(marshalledOpprettVarsel).doesNotContain(SMS_TEKST_JSON_KEY);
@@ -83,7 +92,7 @@ public class BrukernotifikasjonMapperTest {
 
 	@Test
 	public void shouldMapBeskjedUtenUrl() {
-		var marshalledOpprettVarsel = BrukernotifikasjonMapper.mapAndMarshalOpprettVarsel(createFrom((String) null, DITT_NAV));
+		var marshalledOpprettVarsel = brukervarselMapper.mapAndMarshalVarsel(createFrom((String) null, DITT_NAV));
 
 		assertThat(marshalledOpprettVarsel).doesNotContain(EKSTERN_VARSEL_JSON_KEY);
 		assertThat(marshalledOpprettVarsel).doesNotContain(DITT_NAV_URL_JSON_KEY);
@@ -93,7 +102,7 @@ public class BrukernotifikasjonMapperTest {
 
 	@Test
 	public void shouldFailOnInvalidVarselUrl() {
-		Exception e = assertThrows(ServicemeldingMappingException.class, () -> BrukernotifikasjonMapper.mapAndMarshalOpprettVarsel(createFrom(UGYLDIG_VARSEL_URL, DITT_NAV)));
+		Exception e = assertThrows(ServicemeldingMappingException.class, () -> brukervarselMapper.mapAndMarshalVarsel(createFrom(UGYLDIG_VARSEL_URL, DITT_NAV)));
 		assertThat(e.getMessage()).contains("Feil ved validering av varsel-action: Link må være gyldig URL og maks 200 tegn");
 	}
 }

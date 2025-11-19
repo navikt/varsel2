@@ -12,7 +12,8 @@ import no.nav.varsel.exception.functional.VarselTekstMissingException;
 import no.nav.varsel.exception.functional.VarselbestillingUtloeptException;
 import no.nav.varsel.repo.TestdataUtil;
 import no.nav.varsel.repo.VarselbestillingRepo;
-import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
+import no.nav.varsel.tvarsel001.BeskjedMinSidePublisher;
+import no.nav.varsel.tvarsel001.service.service.support.BrukervarselMapper;
 import no.nav.varsel.tvarsel001.service.service.support.VarselBestillingDomainMapper;
 import no.nav.varsel.tvarsel001.service.service.to.BestillVarselTo;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
@@ -68,10 +70,12 @@ public class ServicemeldingServiceTest {
 	@Mock
 	private VarselbestillingRepo varselbestillingRepo;
 	@Mock
-	private BrukernotifikasjonBeskjedPublisher brukernotifikasjonBeskjedPublisher;
+	private BeskjedMinSidePublisher beskjedMinSidePublisher;
 	private VarselBestillingDomainMapper domainMapper;
 	@Mock
 	private VarselFletter varselFletter;
+
+	private BrukervarselMapper brukervarselMapper = new BrukervarselMapper(Clock.systemUTC());
 
 	private ServicemeldingService servicemeldingService;
 
@@ -88,7 +92,7 @@ public class ServicemeldingServiceTest {
 		lenient().when(varselFletter.weaveText(anyString(), any())).thenReturn("en tekst i et varsel");
 
 		domainMapper = Mockito.spy(new VarselBestillingDomainMapper(varselFletter));
-		servicemeldingService = new ServicemeldingService(aktoerService, dokmetConsumer, digitalKontaktinformasjonConsumer, varselKanalDecider, domainMapper, varselbestillingRepo, brukernotifikasjonBeskjedPublisher);
+		servicemeldingService = new ServicemeldingService(aktoerService, dokmetConsumer, digitalKontaktinformasjonConsumer, varselKanalDecider, domainMapper, varselbestillingRepo, beskjedMinSidePublisher, brukervarselMapper);
 		bestilling.setVarselBestillingId(null);
 		bestilling.setPersonIdent(null);
 		bestilling.setAktoerId(null);
@@ -110,7 +114,7 @@ public class ServicemeldingServiceTest {
 
 		servicemeldingService.bestillServicemelding(bestilling);
 
-		verify(brukernotifikasjonBeskjedPublisher, times(1)).sendNotifikasjon(anyString(), anyString());
+		verify(beskjedMinSidePublisher, times(1)).sendBeskjedMinSide(anyString(), anyString());
 	}
 
 	@Test
@@ -161,7 +165,7 @@ public class ServicemeldingServiceTest {
 	}
 
 	@Test
-	void shouldNotSendBrukernotifikasjonToDittNavWithoutFoerstegangsvarselTekst() {
+	void shouldNotSendBrukervarselMinSideToDittNavWithoutFoerstegangsvarselTekst() {
 		var varselinfo = Varselinfo.builder()
 				.preferertKanal(TestdataUtil.PREFERERT_KANAL_MED_DITT_NAV)
 				.maler(Set.of(createDittNavMalUtenFoerstegangstekst(), createVarselmal(EPOST)))
@@ -176,7 +180,7 @@ public class ServicemeldingServiceTest {
 
 		assertThrows(VarselTekstMissingException.class, () -> servicemeldingService.bestillServicemelding(bestilling));
 
-		verify(brukernotifikasjonBeskjedPublisher, times(0)).sendNotifikasjon(eq(VARSELBESTILLING_ID), anyString());
+		verify(beskjedMinSidePublisher, times(0)).sendBeskjedMinSide(eq(VARSELBESTILLING_ID), anyString());
 	}
 
 	@Test

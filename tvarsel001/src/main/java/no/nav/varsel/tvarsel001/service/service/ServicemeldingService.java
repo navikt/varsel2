@@ -8,13 +8,13 @@ import no.nav.varsel.consumer.support.VarselKanalDecider;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.repo.VarselbestillingRepo;
-import no.nav.varsel.tvarsel001.service.service.support.BrukernotifikasjonMapper;
+import no.nav.varsel.tvarsel001.service.service.support.BrukervarselMapper;
 import no.nav.varsel.tvarsel001.service.service.support.VarselBestillingDomainMapper;
 import no.nav.varsel.exception.functional.ServicemeldingMappingException;
 import no.nav.varsel.exception.functional.VarselInaktivVarselmalException;
 import no.nav.varsel.exception.functional.VarselbestillingUtloeptException;
 import no.nav.varsel.tvarsel001.service.service.to.BestillVarselTo;
-import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
+import no.nav.varsel.tvarsel001.BeskjedMinSidePublisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -36,16 +36,25 @@ public class ServicemeldingService {
 	private final VarselKanalDecider varselKanalDecider;
 	private final VarselBestillingDomainMapper domainMapper;
 	private final VarselbestillingRepo varselbestillingRepo;
-	private final BrukernotifikasjonBeskjedPublisher brukernotifikasjonBeskjedPublisher;
+	private final BeskjedMinSidePublisher beskjedMinSidePublisher;
+	private final BrukervarselMapper brukervarselMapper;
 
-	public ServicemeldingService(AktoerService aktoerService, DokmetConsumer dokmetConsumer, HentDigitalKontaktinformasjonConsumer dkifConsumer, VarselKanalDecider varselKanalDecider, VarselBestillingDomainMapper domainMapper, VarselbestillingRepo varselbestillingRepo, BrukernotifikasjonBeskjedPublisher brukernotifikasjonBeskjedPublisher) {
+	public ServicemeldingService(AktoerService aktoerService,
+	DokmetConsumer dokmetConsumer,
+	HentDigitalKontaktinformasjonConsumer dkifConsumer,
+	VarselKanalDecider varselKanalDecider,
+	VarselBestillingDomainMapper domainMapper,
+	VarselbestillingRepo varselbestillingRepo,
+	BeskjedMinSidePublisher beskjedMinSidePublisher,
+	BrukervarselMapper brukervarselMapper) {
 		this.aktoerService = aktoerService;
 		this.dokmetConsumer = dokmetConsumer;
 		this.dkifConsumer = dkifConsumer;
 		this.varselKanalDecider = varselKanalDecider;
 		this.domainMapper = domainMapper;
 		this.varselbestillingRepo = varselbestillingRepo;
-		this.brukernotifikasjonBeskjedPublisher = brukernotifikasjonBeskjedPublisher;
+		this.beskjedMinSidePublisher = beskjedMinSidePublisher;
+		this.brukervarselMapper = brukervarselMapper;
 	}
 
 	public void bestillServicemelding(BestillVarselTo bestilling) {
@@ -85,7 +94,7 @@ public class ServicemeldingService {
 		varselbestillingRepo.saveAndFlush(varselbestilling);
 
 		try {
-			sendBrukernotifikasjon(varselbestilling);
+			sendBrukervarselMinSide(varselbestilling);
 		} catch (ServicemeldingMappingException e) {
 			log.error("Feil ved mapping av data til servicemelding med BestillingId={}. Feilmelding={}", bestilling.getVarselBestillingId(), e.getMessage());
 			throw e;
@@ -95,22 +104,22 @@ public class ServicemeldingService {
 		}
 	}
 
-	private void sendBrukernotifikasjon(Varselbestilling varselbestilling) {
+	private void sendBrukervarselMinSide(Varselbestilling varselbestilling) {
 		if (varselbestilling.getVarsels().stream().noneMatch(it -> DITT_NAV.equals(it.getKanal()))) {
-			log.info("Varsel med bestillingsId={} og varseltypeId={} mangler kanal=DITT_NAV. Oppretter ikke beskjed gjennom brukernotifikasjon.",
+			log.info("Varsel med bestillingsId={} og varseltypeId={} mangler kanal=DITT_NAV. Oppretter ikke beskjed gjennom min-side.brukervarsel.",
 					varselbestilling == null ? null : varselbestilling.getVarselbestillingId(),
 					varselbestilling == null ? null : varselbestilling.getVarseltypeId());
 			return;
 		}
 
-		String opprettVarselJson = BrukernotifikasjonMapper.mapAndMarshalOpprettVarsel(varselbestilling);
+		String opprettVarselJson = brukervarselMapper.mapAndMarshalVarsel(varselbestilling);
 
-		log.info("Sender brukernotifikasjon med bestillingId={}, varseltypeId={} til kanal(er)={}",
+		log.info("Sender beskjed med bestillingId={}, varseltypeId={} til kanal(er)={}",
 				varselbestilling.getVarselbestillingId(),
 				varselbestilling.getVarseltypeId(),
 				varselbestilling.getVarsels().stream().map(it -> it.getKanal().name()).toList());
 
-		brukernotifikasjonBeskjedPublisher.sendNotifikasjon(varselbestilling.getVarselbestillingId(), opprettVarselJson);
+		beskjedMinSidePublisher.sendBeskjedMinSide(varselbestilling.getVarselbestillingId(), opprettVarselJson);
 	}
 
 	private void validateVarselinfoForBestilling(BestillVarselTo to, Varselinfo varselinfo) {

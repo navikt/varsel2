@@ -7,16 +7,22 @@ import no.nav.tms.varsel.builder.OpprettVarselBuilder;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.object.Varselbestilling;
 import no.nav.varsel.exception.functional.ServicemeldingMappingException;
+import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
+import java.time.Clock;
 import java.time.ZoneOffset;
 import java.util.List;
 
-public class BrukernotifikasjonMapper {
+@Component
+public class BrukervarselMapper {
 
-	private BrukernotifikasjonMapper() {}
+	private final Clock clock;
 
-	public static String mapAndMarshalOpprettVarsel(Varselbestilling varselbestilling) {
+	public BrukervarselMapper(Clock clock) {
+		this.clock = clock;
+	}
+
+	public String mapAndMarshalVarsel(Varselbestilling varselbestilling) {
 
 		List<Varselutsending> varselutsendingList = varselbestilling.getVarsels().stream()
 				.map(varsel -> Varselutsending.builder()
@@ -40,7 +46,7 @@ public class BrukernotifikasjonMapper {
 					.withIdent(varselbestilling.getFnr())
 					.withTekst("nb", dittNavVarsel.getVarselTekst(), true)
 					.withLink(dittNavVarsel.getVarselUrl())
-					.withAktivFremTil(LocalDate.now().plusDays(10).atStartOfDay(ZoneOffset.UTC));
+					.withAktivFremTil(clock.instant().atZone(ZoneOffset.UTC).plusDays(10));
 
 			var smsVarsel = varselutsendingList.stream()
 					.filter(varsel -> varsel.getKanal().equals(KanalCode.SMS))
