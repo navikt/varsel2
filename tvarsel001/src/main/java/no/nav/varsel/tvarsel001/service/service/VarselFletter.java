@@ -1,6 +1,5 @@
 package no.nav.varsel.tvarsel001.service.service;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.exception.functional.FletteparameterMissingException;
@@ -114,7 +113,7 @@ public class VarselFletter {
 		while (matcher.find()) {
 			groups.add(matcher.group(1));
 		}
-		return Joiner.on(" ").join(groups);
+		return String.join(" ", groups);
 	}
 
 }

@@ -1,6 +1,5 @@
 package no.nav.varsel.tvarsel001.service.service.support;
 
-import com.google.common.collect.Maps;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.dokmet.Varselinfo;
 import no.nav.varsel.consumer.dokmet.Varselmal;
@@ -16,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -65,7 +65,7 @@ public class VarselBestillingDomainMapper {
 		String kontaktInfo = utledKontaktinfo(kanalCode, kontaktregisterTo);
 		String tekstMal = mal.foerstegangsTekst();
 		String varselId = UUID.randomUUID().toString();
-		Map<String, String> params = Maps.newHashMap(bestillVarselTo.getParameters());
+		Map<String, String> params = new HashMap<>(bestillVarselTo.getParameters());
 		String varselUrl = varselFletter.weaveText(varselinfo.getVarselUrl(), params);
 		String varselTekst = varselFletter.weaveText(tekstMal, params);
 		String varselTittel = varselFletter.weaveText(mal.tittel(), params);

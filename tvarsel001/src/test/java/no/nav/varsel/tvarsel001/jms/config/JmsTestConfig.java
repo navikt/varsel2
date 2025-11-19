@@ -5,6 +5,7 @@ import jakarta.jms.Queue;
 import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.tvarsel001.jms.config.alias.ListenerProperties;
 import no.nav.varsel.tvarsel001.jms.config.alias.MqGatewayProperties;
+import no.nav.varsel.tvarsel001.service.service.support.BrukervarselMapper;
 import org.apache.activemq.artemis.core.server.embedded.EmbeddedActiveMQ;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.apache.activemq.artemis.jms.client.ActiveMQQueue;
@@ -16,8 +17,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import java.time.Clock;
+
 @EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class})
-@Import({JmsConfig.class})
+@Import({JmsConfig.class, BrukervarselMapper.class})
 @Configuration
 @EnableConfigurationProperties({
 		ListenerProperties.class,
@@ -61,6 +64,11 @@ public class JmsTestConfig {
 		pooledFactory.setConnectionFactory(activeMQConnectionFactory);
 		pooledFactory.setMaxConnections(1);
 		return pooledFactory;
+	}
+
+	@Bean
+	public Clock clock() {
+		return Clock.systemUTC();
 	}
 
 }

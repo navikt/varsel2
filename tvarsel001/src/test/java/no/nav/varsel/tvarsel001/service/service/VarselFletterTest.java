@@ -1,6 +1,5 @@
 package no.nav.varsel.tvarsel001.service.service;
 
-import com.google.common.collect.Maps;
 import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.exception.functional.FletteparameterMissingException;
 import no.nav.varsel.exception.functional.InvalidDateTimeFormatException;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -93,7 +93,7 @@ public class VarselFletterTest {
 
 	@Test
 	public void shouldReturnNullWhenTextIsNull() {
-		String flettetTekst = fletter.weaveText(null, Maps.newHashMap());
+		String flettetTekst = fletter.weaveText(null, emptyMap());
 
 		assertThat(flettetTekst).isNull();
 	}
@@ -119,7 +119,7 @@ public class VarselFletterTest {
 
 	@Test
 	public void shouldDoNothingWhenNoFletteparameters() {
-		String flettetTekst = fletter.weaveText(DEFAULT_URL, Maps.newHashMap());
+		String flettetTekst = fletter.weaveText(DEFAULT_URL, emptyMap());
 
 		assertThat(flettetTekst).isEqualTo(DEFAULT_URL);
 	}
@@ -140,7 +140,7 @@ public class VarselFletterTest {
 		String postfix = "/din-innboks";
 		String prefix = "prefix";
 
-		String flettetTekst = fletter.weaveText(prefix + "$navnobaseurl$" + postfix, Maps.newHashMap());
+		String flettetTekst = fletter.weaveText(prefix + "$navnobaseurl$" + postfix, emptyMap());
 
 		assertThat(flettetTekst).isEqualTo(prefix + URL_FROM_FASIT + postfix);
 	}
