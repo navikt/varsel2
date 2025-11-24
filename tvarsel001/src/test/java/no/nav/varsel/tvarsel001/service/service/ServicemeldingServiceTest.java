@@ -30,6 +30,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
 
+import static no.nav.varsel.domain.Constants.NORGE_ZONE;
 import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
 import static no.nav.varsel.domain.code.KanalCode.SMS;
@@ -75,7 +76,7 @@ public class ServicemeldingServiceTest {
 	@Mock
 	private VarselFletter varselFletter;
 
-	private BrukervarselMapper brukervarselMapper = new BrukervarselMapper(Clock.systemUTC());
+	private BrukervarselMapper brukervarselMapper = new BrukervarselMapper(Clock.system(NORGE_ZONE));
 
 	private ServicemeldingService servicemeldingService;
 

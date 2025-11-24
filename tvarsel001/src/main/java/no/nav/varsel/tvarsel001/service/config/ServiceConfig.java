@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import java.time.Clock;
+import java.time.ZoneId;
+
+import static no.nav.varsel.domain.Constants.NORGE_ZONE;
 
 @Configuration
 @Import({RepoConfig.class,
@@ -28,6 +31,6 @@ public class ServiceConfig {
 
 	@Bean
 	public Clock clock() {
-		return Clock.systemUTC();
+		return Clock.system(NORGE_ZONE);
 	}
 }

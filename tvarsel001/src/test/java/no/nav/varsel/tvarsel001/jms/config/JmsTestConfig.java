@@ -19,6 +19,8 @@ import org.springframework.context.annotation.Import;
 
 import java.time.Clock;
 
+import static no.nav.varsel.domain.Constants.NORGE_ZONE;
+
 @EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class})
 @Import({JmsConfig.class, BrukervarselMapper.class})
 @Configuration
@@ -68,7 +70,7 @@ public class JmsTestConfig {
 
 	@Bean
 	public Clock clock() {
-		return Clock.systemUTC();
+		return Clock.system(NORGE_ZONE);
 	}
 
 }

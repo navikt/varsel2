@@ -11,6 +11,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
+import static no.nav.varsel.domain.Constants.NORGE_ZONE;
 import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
 import static no.nav.varsel.domain.code.KanalCode.SMS;
@@ -37,7 +38,7 @@ public class BrukervarselMapperTest {
 	private static final String SIKKERHETSNIVAA_JSON_KEY = "sensitivitet";
 	private static final String AKTIV_FREM_TIL = "aktivFremTil";
 
-	private final Clock clock = Clock.fixed(Instant.now(), ZoneOffset.UTC);
+	private final Clock clock = Clock.fixed(Instant.now(), NORGE_ZONE);
 	private final BrukervarselMapper brukervarselMapper = new BrukervarselMapper(clock);
 	private final String om10Dager = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(clock.instant().atZone(ZoneOffset.UTC).plusDays(10));
 
