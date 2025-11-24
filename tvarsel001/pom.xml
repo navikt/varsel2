@@ -22,10 +22,6 @@
 			<artifactId>teamdokumenthandtering-avro-schemas</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.navikt</groupId>
-			<artifactId>brukernotifikasjon-schemas</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>io.confluent</groupId>
 			<artifactId>kafka-avro-serializer</artifactId>
 		</dependency>
@@ -45,6 +41,10 @@
 		</dependency>
 
 		<!--Tjenestespesifikasjoner-->
+		<dependency>
+			<groupId>no.nav.tms.varsel</groupId>
+			<artifactId>java-builder</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>no.nav.tjenestespesifikasjoner</groupId>
 			<artifactId>nav-varsel-inn</artifactId>

@@ -1,11 +1,10 @@
 package no.nav.varsel.consumer.support;
 
-import com.google.common.collect.Sets;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.domain.code.KanalCode;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 
 import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
@@ -18,13 +17,13 @@ public class VarselKanalDeciderTest {
 	private static final String KONTAKTINFO_EPOST = "epost@epost.no";
 	private static final String KONTAKTINFO_MOBIL = "12345678";
 
-	private static final HashSet<KanalCode> PREFERERT_KANAL_KUN_SMS = Sets.newHashSet(SMS);
-	private static final HashSet<KanalCode> PREFERERT_KANAL_KUN_EPOST = Sets.newHashSet(EPOST);
-	private static final HashSet<KanalCode> PREFERERT_KANAL_KUN_DITTNAV = Sets.newHashSet(DITT_NAV);
-	private static final HashSet<KanalCode> PREFERERT_KANAL_BAADE_SMS_OG_EPOST = Sets.newHashSet(SMS, EPOST);
-	private static final HashSet<KanalCode> PREFERERT_KANAL_BAADE_DITTNAV_OG_EPOST = Sets.newHashSet(DITT_NAV, EPOST);
-	private static final HashSet<KanalCode> PREFERERT_KANAL_BAADE_DITTNAV_OG_SMS = Sets.newHashSet(DITT_NAV, SMS);
-	private static final HashSet<KanalCode> PREFERERT_KANAL_ALLE = Sets.newHashSet(SMS, EPOST, DITT_NAV);
+	private static final Set<KanalCode> PREFERERT_KANAL_KUN_SMS = EnumSet.of(SMS);
+	private static final Set<KanalCode> PREFERERT_KANAL_KUN_EPOST = EnumSet.of(EPOST);
+	private static final Set<KanalCode> PREFERERT_KANAL_KUN_DITTNAV = EnumSet.of(DITT_NAV);
+	private static final Set<KanalCode> PREFERERT_KANAL_BAADE_SMS_OG_EPOST = EnumSet.of(SMS, EPOST);
+	private static final Set<KanalCode> PREFERERT_KANAL_BAADE_DITTNAV_OG_EPOST = EnumSet.of(DITT_NAV, EPOST);
+	private static final Set<KanalCode> PREFERERT_KANAL_BAADE_DITTNAV_OG_SMS = EnumSet.of(DITT_NAV, SMS);
+	private static final Set<KanalCode> PREFERERT_KANAL_ALLE = EnumSet.of(SMS, EPOST, DITT_NAV);
 
 	private final VarselKanalDecider decider = new VarselKanalDecider();
 

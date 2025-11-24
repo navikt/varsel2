@@ -1,38 +1,36 @@
 package no.nav.varsel.tvarsel001.service.service;
 
-import no.nav.brukernotifikasjon.schemas.input.BeskjedInput;
-import no.nav.brukernotifikasjon.schemas.input.NokkelInput;
+import no.nav.tms.varsel.builder.BuilderEnvironment;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.dokmet.DokmetConsumer;
 import no.nav.varsel.consumer.dokmet.Varselinfo;
 import no.nav.varsel.consumer.support.VarselKanalDecider;
 import no.nav.varsel.domain.code.KanalCode;
-import no.nav.varsel.domain.object.Varselbestilling;
+import no.nav.varsel.exception.functional.VarselInaktivVarselmalException;
+import no.nav.varsel.exception.functional.VarselTekstMissingException;
+import no.nav.varsel.exception.functional.VarselbestillingUtloeptException;
 import no.nav.varsel.repo.TestdataUtil;
 import no.nav.varsel.repo.VarselbestillingRepo;
+import no.nav.varsel.tvarsel001.BeskjedMinSidePublisher;
+import no.nav.varsel.tvarsel001.service.service.support.BrukervarselMapper;
 import no.nav.varsel.tvarsel001.service.service.support.VarselBestillingDomainMapper;
-import no.nav.varsel.tvarsel001.service.service.support.Varselutsending;
-import no.nav.varsel.tvarsel001.service.service.support.VarselutsendingMapper;
-import no.nav.varsel.exception.functional.VarselInaktivVarselmalException;
-import no.nav.varsel.exception.functional.VarselbestillingUtloeptException;
 import no.nav.varsel.tvarsel001.service.service.to.BestillVarselTo;
-import no.nav.varsel.tvarsel001.service.service.support.BrukernotifikasjonMapper;
-import no.nav.varsel.tvarsel001.BrukernotifikasjonBeskjedPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import static java.util.Collections.singletonList;
+import static no.nav.varsel.domain.Constants.NORGE_ZONE;
 import static no.nav.varsel.domain.code.KanalCode.DITT_NAV;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
 import static no.nav.varsel.domain.code.KanalCode.SMS;
@@ -43,14 +41,15 @@ import static no.nav.varsel.repo.TestdataUtil.PREFERERT_KANAL;
 import static no.nav.varsel.repo.TestdataUtil.VARSELBESTILLING_ID;
 import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static no.nav.varsel.tvarsel001.service.service.support.ServicemeldingTestUtils.createDittNavMalUtenFoerstegangstekst;
-import static no.nav.varsel.tvarsel001.service.service.support.ServicemeldingTestUtils.createNokkelInputWithBestillingsId;
-import static no.nav.varsel.tvarsel001.service.service.support.ServicemeldingTestUtils.createVarselutsendingWithKanal;
+import static no.nav.varsel.tvarsel001.service.service.support.ServicemeldingTestUtils.createVarselmal;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -61,10 +60,6 @@ public class ServicemeldingServiceTest {
 
 	private static final String TEKNISK = "teknisk";
 
-	private static final Varselutsending VARSELUTSENDING_DITT_NAV = createVarselutsendingWithKanal(DITT_NAV);
-	private static final Varselutsending VARSELUTSENDING_EPOST = createVarselutsendingWithKanal(EPOST);
-	private static final Varselutsending VARSELUTSENDING_SMS = createVarselutsendingWithKanal(SMS);
-
 	@Mock
 	private AktoerService aktoerService;
 	@Mock
@@ -72,28 +67,33 @@ public class ServicemeldingServiceTest {
 	@Mock
 	private HentDigitalKontaktinformasjonConsumer digitalKontaktinformasjonConsumer;
 	@Mock
-	private VarselutsendingMapper varselutsendingMapper;
-	@Mock
-	private VarselBestillingDomainMapper domainMapper;
-	@Mock
 	private VarselKanalDecider varselKanalDecider;
 	@Mock
 	private VarselbestillingRepo varselbestillingRepo;
 	@Mock
-	private BrukernotifikasjonBeskjedPublisher brukernotifikasjonBeskjedPublisher;
+	private BeskjedMinSidePublisher beskjedMinSidePublisher;
+	private VarselBestillingDomainMapper domainMapper;
 	@Mock
-	private BrukernotifikasjonMapper brukernotifikasjonMapper;
+	private VarselFletter varselFletter;
 
-	@InjectMocks
+	private BrukervarselMapper brukervarselMapper = new BrukervarselMapper(Clock.system(NORGE_ZONE));
+
 	private ServicemeldingService servicemeldingService;
 
-	private final Varselbestilling varselbestilling = new Varselbestilling();
 	private final BestillVarselTo bestilling = new BestillVarselTo();
 	private final KontaktregisterTo kontaktregisterTo = new KontaktregisterTo();
-	private final BeskjedInput beskjedInput = new BeskjedInput();
 
 	@BeforeEach
 	public void setUp() {
+		BuilderEnvironment.extend(Map.of(
+				"NAIS_APP_NAME", "varsel2",
+				"NAIS_NAMESPACE", "teamdokumenthandtering",
+				"NAIS_CLUSTER_NAME", "test"
+		));
+		lenient().when(varselFletter.weaveText(anyString(), any())).thenReturn("en tekst i et varsel");
+
+		domainMapper = Mockito.spy(new VarselBestillingDomainMapper(varselFletter));
+		servicemeldingService = new ServicemeldingService(aktoerService, dokmetConsumer, digitalKontaktinformasjonConsumer, varselKanalDecider, domainMapper, varselbestillingRepo, beskjedMinSidePublisher, brukervarselMapper);
 		bestilling.setVarselBestillingId(null);
 		bestilling.setPersonIdent(null);
 		bestilling.setAktoerId(null);
@@ -104,46 +104,34 @@ public class ServicemeldingServiceTest {
 	public void shouldBestillServicemelding() {
 		var varselinfo = Varselinfo.builder()
 				.preferertKanal(PREFERERT_KANAL)
+				.maler(Set.of(createVarselmal(EPOST), createVarselmal(DITT_NAV)))
 				.build();
 		bestilling.setAktoerId(AKTOR_ID);
-
-		var varselutsendingList = List.of(VARSELUTSENDING_EPOST, VARSELUTSENDING_SMS, VARSELUTSENDING_DITT_NAV);
-		var nokkelDittNav = createNokkelInputWithBestillingsId(VARSELBESTILLING_ID);
 
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
 		when(dokmetConsumer.hentVarselinfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
-		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
-		when(domainMapper.mapVarselbestilling(bestilling, varselinfo, kontaktregisterTo)).thenReturn(varselbestilling);
-		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
-		when(brukernotifikasjonMapper.mapBeskjed(varselutsendingList)).thenReturn(beskjedInput);
-		when(brukernotifikasjonMapper.mapNokkel(varselbestilling)).thenReturn(nokkelDittNav);
+		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(Set.of(EPOST, DITT_NAV));
 
 		servicemeldingService.bestillServicemelding(bestilling);
 
-		verify(brukernotifikasjonBeskjedPublisher, times(1)).sendNotifikasjon(any(BeskjedInput.class), any(NokkelInput.class));
+		verify(beskjedMinSidePublisher, times(1)).sendBeskjedMinSide(anyString(), anyString());
 	}
 
 	@Test
 	public void shouldBestillServicemeldingForBestillingMedVarselbestillingId() {
 		var varselinfo = Varselinfo.builder()
 				.preferertKanal(PREFERERT_KANAL)
+				.maler(Set.of(createVarselmal(EPOST), createVarselmal(SMS), createVarselmal(DITT_NAV)))
 				.build();
 
 		bestilling.setAktoerId(AKTOR_ID);
 		bestilling.setVarselBestillingId(VARSELBESTILLING_ID);
 
-		var varselutsendingList = List.of(VARSELUTSENDING_EPOST, VARSELUTSENDING_SMS, VARSELUTSENDING_DITT_NAV);
-		var nokkelDittNav = createNokkelInputWithBestillingsId(VARSELBESTILLING_ID);
-
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
 		when(dokmetConsumer.hentVarselinfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
-		when(domainMapper.mapVarselbestilling(bestilling, varselinfo, kontaktregisterTo)).thenReturn(varselbestilling);
-		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
-		when(brukernotifikasjonMapper.mapBeskjed(varselutsendingList)).thenReturn(beskjedInput);
-		when(brukernotifikasjonMapper.mapNokkel(varselbestilling)).thenReturn(nokkelDittNav);
 
 		servicemeldingService.bestillServicemelding(bestilling);
 
@@ -158,21 +146,15 @@ public class ServicemeldingServiceTest {
 	public void shouldBestillServicemeldingForBestillingUtenVarselbestillingId() {
 		var varselinfo = Varselinfo.builder()
 				.preferertKanal(PREFERERT_KANAL)
+				.maler(Set.of(createVarselmal(EPOST), createVarselmal(SMS), createVarselmal(DITT_NAV)))
 				.build();
 
 		bestilling.setAktoerId(AKTOR_ID);
-
-		var varselutsendingList = List.of(VARSELUTSENDING_EPOST, VARSELUTSENDING_SMS, VARSELUTSENDING_DITT_NAV);
-		var nokkelDittNav = createNokkelInputWithBestillingsId(VARSELBESTILLING_ID);
 
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
 		when(dokmetConsumer.hentVarselinfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
 		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL);
-		when(domainMapper.mapVarselbestilling(bestilling, varselinfo, kontaktregisterTo)).thenReturn(varselbestilling);
-		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
-		when(brukernotifikasjonMapper.mapBeskjed(varselutsendingList)).thenReturn(beskjedInput);
-		when(brukernotifikasjonMapper.mapNokkel(varselbestilling)).thenReturn(nokkelDittNav);
 
 		servicemeldingService.bestillServicemelding(bestilling);
 
@@ -184,27 +166,22 @@ public class ServicemeldingServiceTest {
 	}
 
 	@Test
-	void shouldNotSendBrukernotifikasjonToDittNavWithoutFoerstegangsvarselTekst() {
+	void shouldNotSendBrukervarselMinSideToDittNavWithoutFoerstegangsvarselTekst() {
 		var varselinfo = Varselinfo.builder()
-				.preferertKanal(PREFERERT_KANAL)
-				.maler(createDittNavMalUtenFoerstegangstekst())
+				.preferertKanal(TestdataUtil.PREFERERT_KANAL_MED_DITT_NAV)
+				.maler(Set.of(createDittNavMalUtenFoerstegangstekst(), createVarselmal(EPOST)))
 				.build();
 
 		bestilling.setAktoerId(AKTOR_ID);
 
-		var varselutsendingList = singletonList(VARSELUTSENDING_DITT_NAV);
-		var nokkelDittNav = createNokkelInputWithBestillingsId(VARSELBESTILLING_ID);
-
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
 		when(dokmetConsumer.hentVarselinfo(VARSELTYPE_ID)).thenReturn(varselinfo);
 		when(digitalKontaktinformasjonConsumer.hentDigitalKontaktinformasjon(FNR)).thenReturn(kontaktregisterTo);
-		when(varselKanalDecider.decideKanaler(kontaktregisterTo, PREFERERT_KANAL)).thenReturn(TestdataUtil.PREFERERT_KANAL_MED_DITT_NAV);
-		when(domainMapper.mapVarselbestilling(bestilling, varselinfo, kontaktregisterTo)).thenReturn(varselbestilling);
-		when(varselutsendingMapper.map(eq(varselbestilling))).thenReturn(varselutsendingList);
+		when(varselKanalDecider.decideKanaler(kontaktregisterTo, TestdataUtil.PREFERERT_KANAL_MED_DITT_NAV)).thenReturn(TestdataUtil.PREFERERT_KANAL_MED_DITT_NAV);
 
-		servicemeldingService.bestillServicemelding(bestilling);
+		assertThrows(VarselTekstMissingException.class, () -> servicemeldingService.bestillServicemelding(bestilling));
 
-		verify(brukernotifikasjonBeskjedPublisher, times(0)).sendNotifikasjon(any(BeskjedInput.class), eq(nokkelDittNav));
+		verify(beskjedMinSidePublisher, times(0)).sendBeskjedMinSide(eq(VARSELBESTILLING_ID), anyString());
 	}
 
 	@Test
@@ -308,5 +285,4 @@ public class ServicemeldingServiceTest {
 		Exception exception = assertThrows(VarselbestillingUtloeptException.class, executable);
 		assertTrue(exception.getMessage().contains("Varselbestilling has utloepstidspunkt=" + pastTime));
 	}
-
 }

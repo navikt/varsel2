@@ -1,7 +1,5 @@
 package no.nav.varsel.tvarsel001.service.service.support;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import no.nav.varsel.consumer.dokmet.Varselinfo;
@@ -150,7 +148,7 @@ public class VarselBestillingDomainMapperTest {
 		Varselinfo varselinfo = createVarselinfoWithVarselUrl("dokkat/{id}");
 
 		BestillVarselTo bestillTo = createBestillTo();
-		HashMap<String, String> map = Maps.newHashMap();
+		HashMap<String, String> map = new HashMap<>();
 		map.put("id", "1234");
 		map.put(KEY, VALUE);
 		bestillTo.setParameters(map);
@@ -190,7 +188,7 @@ public class VarselBestillingDomainMapperTest {
 		Varselmal malToEpost = createVarselmal(EPOST);
 		Varselmal malToDittnav = createVarselmal(DITT_NAV);
 
-		return createVarselinfoWithMaler(Sets.newHashSet(malToSms, malToEpost, malToDittnav));
+		return createVarselinfoWithMaler(Set.of(malToSms, malToEpost, malToDittnav));
 	}
 
 	private Varselinfo createVarselinfoWithVarselUrl(String varselUrl) {
