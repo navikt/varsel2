@@ -6,8 +6,6 @@
   "INGRESSES": [
     "https://varsel2.intern.nav.no"
   ],
-  "DB_CREDS": "/oracle/data/prod/creds/varsel-user",
-  "DB_CONFIG": "/oracle/data/prod/config/varsel",
   "MQGATEWAY01_HOSTNAME": "mpls01.adeo.no",
   "MQGATEWAY01_PORT": "1414",
   "MQGATEWAY01_NAME": "MPLS01",
@@ -24,6 +22,5 @@
   "VARSEL_JMS_CONSUMER_ERROR_CONTEXT_SIZE": "20",
   "VARSEL_JMS_CONSUMER_ERROR_CONTEXT_TIME_SECONDS": "600",
   "VARSEL_JMS_CONSUMER_ERROR_RESTART_DELAY_SECONDS": "600",
-  "SERVICEUSER_VAULT_PATH": "/serviceuser/data/prod/srvvarsel",
   "LISTENER_AUTO_STARTUP": "true"
 }

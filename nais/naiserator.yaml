@@ -8,7 +8,18 @@ metadata:
 spec:
   kafka:
     pool: {{ KAFKA_POOL }}
+  envFrom:
+    - secret: varsel2
   env:
+    - name: JAVA_TRUSTSTORE_OPTIONS
+      value: "-Djavax.net.ssl.trustStore=$(NAV_TRUSTSTORE_PATH)
+              -Djavax.net.ssl.trustStorePassword=$(NAV_TRUSTSTORE_PASSWORD)"
+    - name: JDK_JAVA_OPTIONS
+      value: "-XX:MaxRAMPercentage=75
+              -Djavax.net.ssl.keyStore=$(NAV_TRUSTSTORE_PATH)
+              -Djavax.net.ssl.keyStorePassword=$(NAV_TRUSTSTORE_PASSWORD)
+              -Djavax.net.ssl.keyStoreType=jks
+              $(JAVA_PROXY_OPTIONS) $(JAVA_TRUSTSTORE_OPTIONS)"
     - name: MQGATEWAY01_HOSTNAME
       value: {{ MQGATEWAY01_HOSTNAME }}
     - name: MQGATEWAY01_PORT
@@ -71,15 +82,6 @@ spec:
       memory: 3072Mi
     requests:
       memory: 1920Mi
-  vault:
-    enabled: true
-    paths:
-      - kvPath: {{ DB_CREDS }}
-        mountPath: "/var/run/secrets/nais.io/db_creds"
-      - kvPath: {{ DB_CONFIG }}
-        mountPath: "/var/run/secrets/nais.io/db_config"
-      - kvPath: {{ SERVICEUSER_VAULT_PATH }}
-        mountPath: /secrets/serviceuser/srvvarsel
   azure:
     application:
       enabled: true
