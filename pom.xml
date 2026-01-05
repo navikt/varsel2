@@ -39,7 +39,7 @@
 		<tms-varsel.version>2.1.1</tms-varsel.version>
 
 		<!-- test -->
-		<spring-cloud-contract-wiremock.version>4.3.0</spring-cloud-contract-wiremock.version>
+		<spring-cloud-contract-wiremock.version>5.0.1</spring-cloud-contract-wiremock.version>
 		<!-- Spring Boot 3.0.x drar inn versjon 2.1.x av h2 som gir problem for testene -->
 		<h2.version>1.4.200</h2.version>
 
