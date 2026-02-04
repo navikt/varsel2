@@ -21,6 +21,14 @@
 		<version>3.5.7</version>
 	</parent>
 
+	<repositories>
+		<repository>
+			<id>confluent</id>
+			<name>confluent</name>
+			<url>https://packages.confluent.io/maven/</url>
+		</repository>
+	</repositories>
+
 	<properties>
 		<java.version>25</java.version>
 
