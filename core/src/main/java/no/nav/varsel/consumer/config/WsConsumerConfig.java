@@ -2,6 +2,7 @@ package no.nav.varsel.consumer.config;
 
 import no.nav.varsel.consumer.pdl.PdlIdentConsumer;
 import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
@@ -31,8 +32,12 @@ public class WsConsumerConfig {
 				.setMaxConnTotal(400)
 				.setDefaultSocketConfig(socketConfig)
 				.build();
+		RequestConfig requestConfig = RequestConfig.custom()
+				.setConnectTimeout(Timeout.of(RestConsumerConfig.CONNECT_TIMEOUT))
+				.build();
 		return HttpClients.custom()
 				.setConnectionManager(connectionManager)
+				.setDefaultRequestConfig(requestConfig)
 				.build();
 	}
 

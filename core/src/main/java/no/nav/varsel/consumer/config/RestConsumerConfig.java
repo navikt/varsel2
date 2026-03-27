@@ -3,7 +3,7 @@ package no.nav.varsel.consumer.config;
 import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.consumer.dokmet.VarselinfoMapper;
 import org.apache.hc.client5.http.classic.HttpClient;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -24,7 +24,6 @@ public class RestConsumerConfig {
 			ClientHttpRequestFactory clientHttpRequestFactory) {
 		return restTemplateBuilder
 				.requestFactory(() -> clientHttpRequestFactory)
-				.connectTimeout(CONNECT_TIMEOUT)
 				.basicAuthentication(varselProperties.getServiceuser().getUsername(), varselProperties.getServiceuser().getPassword())
 				.build();
 	}

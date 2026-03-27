@@ -15,8 +15,7 @@ import jakarta.persistence.UniqueConstraint;
 import no.nav.varsel.domain.auxiliary.AbstractDomainObject;
 import no.nav.varsel.domain.code.KanalCode;
 import no.nav.varsel.domain.code.StatusCode;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
+import jakarta.persistence.SequenceGenerator;
 
 import java.time.LocalDateTime;
 
@@ -30,15 +29,7 @@ public class Varsel extends AbstractDomainObject {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = VARSEL_SEQ)
-	@GenericGenerator(name = VARSEL_SEQ,
-			strategy = "sequence",
-			parameters = {
-					@Parameter(name = "sequence_name",  value = VARSEL_SEQ),
-					@Parameter(name = "initial_value",  value = "1"),
-					@Parameter(name = "increment_size",  value = "100"),
-					@Parameter(name = "optimizer", value = "hilo")
-			}
-		)
+	@SequenceGenerator(name = VARSEL_SEQ, sequenceName = VARSEL_SEQ, allocationSize = 100)
 	@Column(name = "id", updatable = false)
 	private Long id;
 

@@ -1,6 +1,6 @@
 package no.nav.varsel.consumer.pdl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.consumer.pdl.support.PersonIkkeFunnetException;
 import no.nav.varsel.consumer.pdl.to.PdlRequest;
@@ -9,7 +9,7 @@ import no.nav.varsel.exception.functional.PdlHentIdentFunctionalException;
 import no.nav.varsel.exception.technical.PdlHentIdentTechnicalException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
-import org.springframework.retry.annotation.Retryable;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -57,7 +57,7 @@ public class PdlIdentConsumer {
 		this.objectMapper = objectMapper;
 	}
 
-	@Retryable(retryFor = PdlHentIdentTechnicalException.class)
+	@Retryable(includes = PdlHentIdentTechnicalException.class, maxRetries = 2)
 	public String hentAktoerId(final String folkeregisterIdent) throws PersonIkkeFunnetException {
 		if (isBlank(folkeregisterIdent)) {
 			throw new PersonIkkeFunnetException("Folkeregisterident er null eller blank.");
@@ -65,7 +65,7 @@ public class PdlIdentConsumer {
 		return baseHentIdent(mapHentAktoerIdForFolkeregisterident(folkeregisterIdent), "aktoerid");
 	}
 
-	@Retryable(retryFor = PdlHentIdentTechnicalException.class)
+	@Retryable(includes = PdlHentIdentTechnicalException.class, maxRetries = 2)
 	public String hentFolkeregisterIdent(final String aktoerId) throws PersonIkkeFunnetException {
 		if (isBlank(aktoerId)) {
 			throw new PersonIkkeFunnetException("AktoerId er null eller blank.");

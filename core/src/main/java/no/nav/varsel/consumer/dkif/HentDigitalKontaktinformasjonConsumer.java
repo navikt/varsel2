@@ -1,6 +1,6 @@
 package no.nav.varsel.consumer.dkif;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
@@ -8,8 +8,7 @@ import no.nav.varsel.consumer.dkif.support.PostPersonerRequest;
 import no.nav.varsel.consumer.dkif.to.KontaktregisterTo;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -41,7 +40,7 @@ public class HentDigitalKontaktinformasjonConsumer {
 		this.digdirKrrScope = varselProperties.getEndpoints().getDigdirKrrProxy().getScope();
 	}
 
-	@Retryable(maxAttempts = 5, backoff = @Backoff(delay = 1000L, multiplier = 2))
+	@Retryable(maxRetries = 4, delay = 1000L, multiplier = 2)
 	public KontaktregisterTo hentDigitalKontaktinformasjon(String personIdent) {
 		final String fnrTrimmed = personIdent.strip();
 
