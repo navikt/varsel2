@@ -2,6 +2,7 @@ package no.nav.varsel.tvarsel001.jms.config;
 
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Queue;
+import no.nav.varsel.config.NaisProperties;
 import no.nav.varsel.config.VarselProperties;
 import no.nav.varsel.tvarsel001.jms.config.alias.ListenerProperties;
 import no.nav.varsel.tvarsel001.jms.config.alias.MqGatewayProperties;
@@ -11,8 +12,8 @@ import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.apache.activemq.artemis.jms.client.ActiveMQQueue;
 import org.messaginghub.pooled.jms.JmsPoolConnectionFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -27,6 +28,7 @@ import static no.nav.varsel.domain.Constants.NORGE_ZONE;
 @EnableConfigurationProperties({
 		ListenerProperties.class,
 		MqGatewayProperties.class,
+		NaisProperties.class,
 		VarselProperties.class
 })
 public class JmsTestConfig {
@@ -50,6 +52,11 @@ public class JmsTestConfig {
 	@Bean
 	public Queue backoutQueue() {
 		return new ActiveMQQueue("backout_queue");
+	}
+
+	@Bean
+	public Queue testReplyQueue() {
+		return new ActiveMQQueue("test_reply_queue");
 	}
 
 	@Bean(initMethod = "start", destroyMethod = "stop")

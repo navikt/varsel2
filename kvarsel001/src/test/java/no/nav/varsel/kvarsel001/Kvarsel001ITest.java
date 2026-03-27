@@ -13,7 +13,6 @@ import org.mockito.Mockito;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -38,14 +37,10 @@ import static org.mockito.ArgumentMatchers.any;
 		topics = {
 				KAFKA_TOPIC_DOK_NOTIFIKASJON_STATUS
 		},
-		controlledShutdown = true,
-		brokerProperties = {
-				"listeners=PLAINTEXT://127.0.0.1:9092"
-		}
+		controlledShutdown = true
 )
 @ActiveProfiles("itest")
 @EnableAutoConfiguration
-@AutoConfigureTestDatabase
 @Import(RepoTestConfig.class)
 public class Kvarsel001ITest {
 
