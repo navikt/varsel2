@@ -37,7 +37,7 @@
 		<joda.version>2.14.1</joda.version>
 
 		<logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
-		<kafka-avro-serializer.version>7.9.1</kafka-avro-serializer.version>
+		<kafka-avro-serializer.version>8.2.0</kafka-avro-serializer.version>
 		<resilience4j-spring-boot3.version>2.4.0</resilience4j-spring-boot3.version>
 
 		<!-- NAV -->
