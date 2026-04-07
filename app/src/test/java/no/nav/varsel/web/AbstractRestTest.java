@@ -19,7 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
-@EnableWireMock(@ConfigureWireMock(port = 0))
+@EnableWireMock()
 @SpringBootTest(classes = {
 		JmsTestConfig.class,
 		RepoTestConfig.class

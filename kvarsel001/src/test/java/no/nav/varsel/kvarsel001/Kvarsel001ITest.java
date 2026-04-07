@@ -41,7 +41,7 @@ import static org.mockito.ArgumentMatchers.any;
 )
 @ActiveProfiles("itest")
 @EnableAutoConfiguration
-@Import(RepoTestConfig.class)
+@Import(Kvarsel001TestConfig.class)
 public class Kvarsel001ITest {
 
 	private DoknotifikasjonStatus doknotifikasjonStatus;

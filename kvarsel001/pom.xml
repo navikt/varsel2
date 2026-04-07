@@ -18,6 +18,13 @@
 			<artifactId>core</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>no.nav.varsel</groupId>
+			<artifactId>core</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>no.nav.teamdokumenthandtering</groupId>
 			<artifactId>teamdokumenthandtering-avro-schemas</artifactId>
 		</dependency>
