@@ -4,6 +4,7 @@ import no.nav.doknotifikasjon.schemas.DoknotifikasjonStatus;
 import no.nav.varsel.domain.code.StatusCode;
 import no.nav.varsel.repo.VarselRepo;
 import no.nav.varsel.repo.VarselbestillingRepo;
+import io.github.resilience4j.springboot3.verifier.autoconfigure.SpringBoot3VerifierAutoConfiguration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +41,7 @@ import static org.mockito.ArgumentMatchers.any;
 		controlledShutdown = true
 )
 @ActiveProfiles("itest")
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = SpringBoot3VerifierAutoConfiguration.class)
 @Import(Kvarsel001TestConfig.class)
 public class Kvarsel001ITest {
 
