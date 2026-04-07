@@ -1,6 +1,5 @@
 package no.nav.varsel.tvarsel001.jms.config;
 
-import io.github.resilience4j.springboot3.verifier.autoconfigure.SpringBoot3VerifierAutoConfiguration;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Queue;
 import no.nav.varsel.config.NaisProperties;
@@ -23,7 +22,7 @@ import java.time.Clock;
 
 import static no.nav.varsel.domain.Constants.NORGE_ZONE;
 
-@EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class, SpringBoot3VerifierAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class})
 @Import({JmsConfig.class, BrukervarselMapper.class})
 @Configuration
 @EnableConfigurationProperties({

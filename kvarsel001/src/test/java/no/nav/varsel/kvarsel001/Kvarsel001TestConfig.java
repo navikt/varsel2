@@ -2,7 +2,6 @@ package no.nav.varsel.kvarsel001;
 
 import no.nav.varsel.repo.config.H2TestDataSourceConfig;
 import no.nav.varsel.repo.config.RepoConfig;
-import io.github.resilience4j.springboot3.verifier.autoconfigure.SpringBoot3VerifierAutoConfiguration;
 import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
@@ -15,7 +14,7 @@ import org.springframework.util.backoff.ExponentialBackOff;
 
 @Configuration
 @EnableConfigurationProperties(DataSourceProperties.class)
-@EnableAutoConfiguration(exclude = SpringBoot3VerifierAutoConfiguration.class)
+@EnableAutoConfiguration
 @Import({NotifikasjonStatusConsumer.class, RepoConfig.class, H2TestDataSourceConfig.class})
 public class Kvarsel001TestConfig {
 
