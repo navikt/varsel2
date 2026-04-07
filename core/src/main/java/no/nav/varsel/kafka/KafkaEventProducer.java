@@ -9,8 +9,7 @@ import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaProducerException;
 import org.springframework.kafka.core.RoutingKafkaTemplate;
 import org.springframework.kafka.support.SendResult;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ExecutionException;
@@ -28,7 +27,7 @@ public class KafkaEventProducer {
 		this.routingKafkaTemplate = routingKafkaTemplate;
 	}
 
-	@Retryable(retryFor = KafkaTechnicalException.class, backoff = @Backoff(delay = 2000))
+	@Retryable(includes = KafkaTechnicalException.class, maxRetries = 2, delay = 2000)
 	public void publish(String topic, Object key, Object event) {
 		ProducerRecord<Object, Object> producerRecord = new ProducerRecord<>(
 				topic,

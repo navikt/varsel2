@@ -19,6 +19,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import javax.xml.namespace.QName;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static java.time.Duration.ofSeconds;
 import static java.time.LocalDateTime.now;
@@ -41,9 +42,6 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
-// Klassen har ustabilitet i testoppsettet, så alt utenom happy path er disabled.
-// Ikke prøv å fikse dette. Tiden bør heller brukes på en omskriving av appen for å få et mer robust testoppsett.
-@Disabled
 public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	private static final String VARSELTYPEID_GRUPPEAKTIVITET = "Gruppeaktivitet";
@@ -69,18 +67,43 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 		doNothing().when(kafkaEventProducer).publish(any(String.class), any(), any());
 		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_GRUPPEAKTIVITET);
 
-		await().atMost(ofSeconds(10)).untilAsserted(() -> {
-					JmsReply response = sendMessage(bestillServicemeldingQueue, varsel);
-					isOk(response);
-					assertThat(varselbestillingRepo.count()).isEqualTo(1);
+		JmsReply response = sendMessage(bestillServicemeldingQueue, varsel);
+		isOk(response);
 
-					assertVarselbestilling();
-				}
-		);
+		await().atMost(ofSeconds(10)).untilAsserted(this::assertVarselbestilling);
 	}
 
 	@Test
-	@Disabled
+	public void shouldNotProcessExpiredVarsel() {
+		JAXBElement<XMLVarsel> varsel = createExpiredVarsel();
+
+		await().atMost(ofSeconds(10)).untilAsserted(() -> {
+			Message response = sendMessageAndListenToResponseOnFunctionalBoq(bestillServicemeldingQueue, varsel);
+			assertThat(response).isNotNull();
+			assertThat(varselbestillingRepo.count()).isZero();
+		});
+	}
+
+	@Test
+	public void shouldHandleDuplicateVarselbestillingId() {
+		stubPdl();
+		stubDokmet();
+		stubDigdir();
+		doNothing().when(kafkaEventProducer).publish(any(String.class), any(), any());
+		String varselbestillingId = UUID.randomUUID().toString();
+		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_GRUPPEAKTIVITET);
+
+		JmsReply response1 = sendMessageWithVarselbestillingId(bestillServicemeldingQueue, varsel, varselbestillingId);
+		isOk(response1);
+		assertThat(varselbestillingRepo.count()).isEqualTo(1);
+
+		// Same ID sent again — should be silently ignored
+		JmsReply response2 = sendMessageWithVarselbestillingId(bestillServicemeldingQueue, varsel, varselbestillingId);
+		isOk(response2);
+		assertThat(varselbestillingRepo.count()).isEqualTo(1);
+	}
+
+	@Test
 	public void shouldPutOnFunctionalBoqIfBadRequestFromPdl() {
 		stubPdl(BAD_REQUEST);
 		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_INDIVIDUELLSAMTALE);
@@ -94,7 +117,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	@Disabled
+	@Disabled("Avhenger av JMS dead-letter routing — krever ekstra Artemis-konfigurasjon for å være stabil")
 	public void shouldPutOnTechnicalBoqIfInternalServerErrorFromPdl() {
 		stubPdl(INTERNAL_SERVER_ERROR);
 		JAXBElement<XMLVarsel> varsel = createVarselWithVarseltypeId(VARSELTYPEID_INDIVIDUELLSAMTALE);
@@ -109,7 +132,6 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	@ParameterizedTest
 	@EnumSource(value = HttpStatus.class, names = {"BAD_REQUEST", "NOT_FOUND"})
-	@Disabled
 	public void shouldPutOnFunctionalBoqIf4xxFromDokmet(HttpStatus httpStatus) {
 		stubPdl();
 		stubDokmet(httpStatus);
@@ -124,7 +146,7 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 	}
 
 	@Test
-	@Disabled
+	@Disabled("Avhenger av JMS dead-letter routing — krever ekstra Artemis-konfigurasjon for å være stabil")
 	public void shouldPutOnTechnicalBoqIf5xxFromDokmet() {
 		stubPdl();
 		stubDokmet(INTERNAL_SERVER_ERROR);
@@ -140,7 +162,16 @@ public class BestillServicemeldingConsumerTest extends AbstractConsumerJmsTest {
 
 	public static JAXBElement<XMLVarsel> createVarselWithVarseltypeId(String varseltypeId) {
 		XMLVarsel varsel = BestillServicemeldingMapperTest.createVarsel(varseltypeId);
+		return toJaxbElement(varsel);
+	}
 
+	private static JAXBElement<XMLVarsel> createExpiredVarsel() {
+		XMLVarsel varsel = BestillServicemeldingMapperTest.createVarsel(VARSELTYPEID_GRUPPEAKTIVITET);
+		varsel.setUtloepstidspunkt(no.nav.varsel.domain.utility.DateTimeConverter.toJodaDateTime(now().minusHours(1)));
+		return toJaxbElement(varsel);
+	}
+
+	private static JAXBElement<XMLVarsel> toJaxbElement(XMLVarsel varsel) {
 		return new JAXBElement<>(new QName("http://nav.no/melding/virksomhet/varsel/v1/varsel", "Varsel"), XMLVarsel.class, null, varsel);
 	}
 

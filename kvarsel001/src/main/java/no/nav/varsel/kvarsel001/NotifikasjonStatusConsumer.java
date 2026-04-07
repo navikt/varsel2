@@ -1,7 +1,7 @@
 package no.nav.varsel.kvarsel001;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.doknotifikasjon.schemas.DoknotifikasjonStatus;
 import no.nav.varsel.domain.code.StatusCode;
@@ -64,7 +64,7 @@ public class NotifikasjonStatusConsumer {
 			varselbestillingRepo.saveAndFlush(varselbestilling);
 
 			log.info("Varsler i bestillingsId={} oppdatert til status={}", doknotifikasjonStatus.getBestillingsId(), doknotifikasjonStatus.getStatus());
-		} catch (JsonProcessingException e) {
+		} catch (JacksonException e) {
 			log.error("Mapping av statusmelding (kvarsel001) feilet med melding={}", e.getMessage());
 			throw new StatusmeldingMappingException(e.getMessage(), e.getCause());
 		} catch (StatusmeldingValidationException e) {

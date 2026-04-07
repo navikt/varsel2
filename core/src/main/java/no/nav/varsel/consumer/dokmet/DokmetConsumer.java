@@ -1,6 +1,6 @@
 package no.nav.varsel.consumer.dokmet;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.dokmet.api.tkat021.VarselInfoTo;
 import no.nav.varsel.config.VarselProperties;
@@ -8,8 +8,7 @@ import org.slf4j.MDC;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -39,7 +38,7 @@ public class DokmetConsumer {
 	}
 
 	@Cacheable(DOKMET_CACHE)
-	@Retryable(retryFor = DokmetTechnicalException.class, maxAttempts = 5, backoff = @Backoff(delay = 1000))
+	@Retryable(includes = DokmetTechnicalException.class, maxRetries = 4, delay = 1000)
 	public Varselinfo hentVarselinfo(final String varseltypeId) {
 		log.info("hentVarselinfo henter varselinfo for varseltypeId={}", varseltypeId);
 

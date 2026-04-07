@@ -18,7 +18,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.7</version>
+		<version>4.0.3</version>
 	</parent>
 
 	<repositories>
@@ -38,18 +38,15 @@
 
 		<logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
 		<kafka-avro-serializer.version>7.9.1</kafka-avro-serializer.version>
-		<resilience4j-spring-boot3.version>2.4.0</resilience4j-spring-boot3.version>
+		<resilience4j-spring-boot.version>2.4.0</resilience4j-spring-boot.version>
+		<spring-boot.version>4.0.3</spring-boot.version>
+		<wiremock-spring-boot.version>4.0.9</wiremock-spring-boot.version>
 
 		<!-- NAV -->
 		<teamdokumenthandtering-avro-schemas.version>1.1.6</teamdokumenthandtering-avro-schemas.version>
 		<dok-legacy-tjenestespesifikasjoner.version>33-f7132fc</dok-legacy-tjenestespesifikasjoner.version>
-		<dokmet-api.version>2025.04.29-15.21-2c96c87</dokmet-api.version>
+		<dokmet-api.version>2026.03.10-15.52-dc85b68</dokmet-api.version>
 		<tms-varsel.version>2.1.1</tms-varsel.version>
-
-		<!-- test -->
-		<spring-cloud-contract-wiremock.version>4.3.0</spring-cloud-contract-wiremock.version>
-		<!-- Spring Boot 3.0.x drar inn versjon 2.1.x av h2 som gir problem for testene -->
-		<h2.version>1.4.200</h2.version>
 
 		<!-- Plugins -->
 		<maven-toolchains-plugin.version>3.2.0</maven-toolchains-plugin.version>
@@ -140,15 +137,24 @@
 				<version>${joda.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-contract-wiremock</artifactId>
-				<version>${spring-cloud-contract-wiremock.version}</version>
+				<groupId>io.github.resilience4j</groupId>
+				<artifactId>resilience4j-spring-boot4</artifactId>
+				<version>${resilience4j-spring-boot.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.wiremock.integrations</groupId>
+				<artifactId>wiremock-spring-boot</artifactId>
+				<version>${wiremock-spring-boot.version}</version>
+				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>io.github.resilience4j</groupId>
-				<artifactId>resilience4j-spring-boot3</artifactId>
-				<version>${resilience4j-spring-boot3.version}</version>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-jdbc-test</artifactId>
+				<version>${spring-boot.version}</version>
+				<scope>test</scope>
 			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

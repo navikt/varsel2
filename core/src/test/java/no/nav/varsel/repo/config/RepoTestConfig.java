@@ -3,7 +3,7 @@ package no.nav.varsel.repo.config;
 import no.nav.varsel.config.DataSourceAdditionalProperties;
 import no.nav.varsel.kafka.CustomKafkaTemplate;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @EnableConfigurationProperties({DataSourceProperties.class, DataSourceAdditionalProperties.class})
 @EnableAutoConfiguration
-@Import({RepoConfig.class, CustomKafkaTemplate.class})
+@Import({RepoConfig.class, CustomKafkaTemplate.class, H2TestDataSourceConfig.class})
 public class RepoTestConfig {
 
 }

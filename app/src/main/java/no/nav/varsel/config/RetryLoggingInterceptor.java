@@ -2,18 +2,18 @@ package no.nav.varsel.config;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.retry.RetryCallback;
-import org.springframework.retry.RetryContext;
-import org.springframework.retry.RetryListener;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.retry.RetryException;
+import org.springframework.resilience.retry.MethodRetryEvent;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class RetryLoggingInterceptor implements RetryListener {
+public class RetryLoggingInterceptor {
 
-	@Override
-	public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback, Throwable throwable) {
-		// Logg retry uten stacktrace
-		log.info("Retry trigget for {}. gang med feilmelding={} ", context.getRetryCount(), throwable.getMessage());
+	@EventListener
+	public void onRetry(MethodRetryEvent event) {
+		Throwable cause = (event.getFailure() instanceof RetryException re) ? re.getCause() : event.getFailure();
+		log.info("Retry trigget for {} med feilmelding={}", event.getMethod().getName(), cause.getMessage(), cause);
 	}
 }

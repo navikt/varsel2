@@ -1,8 +1,8 @@
 package no.nav.varsel.tvarsel001.jms.config;
 
-import no.nav.varsel.config.NaisProperties;
 import no.nav.varsel.consumer.dkif.HentDigitalKontaktinformasjonConsumer;
 import no.nav.varsel.consumer.dkif.support.HentDigitalKontaktinformasjonMapper;
+import no.nav.varsel.tvarsel001.jms.consumer.BestillServicemeldingMapper;
 import no.nav.varsel.consumer.dokmet.DokmetConsumer;
 import no.nav.varsel.consumer.naistoken.NaisTexasConsumer;
 import no.nav.varsel.consumer.naistoken.RestClientConfig;
@@ -23,6 +23,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 		ServiceTestConfig.class,
 		JmsConsumerConfig.class,
 		CustomKafkaTemplate.class,
+		BestillServicemeldingMapper.class,
 		HentDigitalKontaktinformasjonConsumer.class,
 		VarselKanalDecider.class,
 		HentDigitalKontaktinformasjonMapper.class,
@@ -35,10 +36,6 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 @Configuration
 public class JmsConsumerTestConfig {
 
-	@Bean
-	public NaisProperties naisProperties() {
-		return new NaisProperties("url");
-	}
 	@Bean
 	public ClientHttpRequestFactory requestFactory() {
 		return new SimpleClientHttpRequestFactory();

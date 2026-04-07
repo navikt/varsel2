@@ -19,6 +19,8 @@ public class DigitalKontaktInfoResponse {
 
 	@Data
 	@Builder
+	@AllArgsConstructor
+	@NoArgsConstructor
 	public static class DigitalKontaktinfo {
 		private String epostadresse;
 		private ZonedDateTime epostadresseOppdatert;
@@ -33,6 +35,8 @@ public class DigitalKontaktInfoResponse {
 
 	@Data
 	@Builder
+	@AllArgsConstructor
+	@NoArgsConstructor
 	public static class SikkerDigitalPostkasse {
 		private String adresse;
 		private String leverandoerAdresse;

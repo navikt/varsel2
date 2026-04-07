@@ -10,10 +10,8 @@ import no.nav.varsel.tvarsel001.jms.xml.JmsReply;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.jms.core.JmsTemplate;
@@ -21,6 +19,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.wiremock.spring.ConfigureWireMock;
+import org.wiremock.spring.EnableWireMock;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -29,7 +29,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static no.nav.varsel.consumer.config.cache.LokalCacheConfig.DOKMET_CACHE;
-import static org.apache.http.HttpHeaders.CONTENT_TYPE;
+import static no.nav.varsel.tvarsel001.service.service.to.BestillVarselTo.VARSELBESTILLING_ID;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -37,8 +38,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @SpringBootTest(classes = JmsConsumerTestConfig.class)
 @ActiveProfiles({"itest"})
 @ComponentScan
-@AutoConfigureTestDatabase
-@AutoConfigureWireMock(port = 0)
+@EnableWireMock()
 public abstract class AbstractConsumerJmsTest {
 
 	@Autowired
@@ -52,6 +52,9 @@ public abstract class AbstractConsumerJmsTest {
 
 	@Autowired
 	protected Queue bestillServicemeldingFunksjonellFeilQueue;
+
+	@Autowired
+	private Queue testReplyQueue;
 
 	@Autowired
 	protected VarselbestillingRepo varselbestillingRepo;
@@ -71,6 +74,13 @@ public abstract class AbstractConsumerJmsTest {
 	public void tearDown() {
 		clearCacher();
 		varselbestillingRepo.deleteAll();
+		drainQueue(testReplyQueue);
+	}
+
+	private void drainQueue(Queue queue) {
+		while (jmsTemplate.receiveAndConvert(queue) != null) {
+			// drain lingering messages between tests
+		}
 	}
 
 	private void clearCacher() {
@@ -82,12 +92,26 @@ public abstract class AbstractConsumerJmsTest {
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
 				jmsTemplate.convertAndSend(queue, message, message1 -> {
-					message1.setJMSReplyTo(bestillServicemeldingQueue);
+					message1.setJMSReplyTo(testReplyQueue);
 					return message1;
 				});
 			}
 		});
-		return transactionTemplate.execute(transactionStatus -> receive(bestillServicemeldingQueue));
+		return transactionTemplate.execute(transactionStatus -> receive(testReplyQueue));
+	}
+
+	protected JmsReply sendMessageWithVarselbestillingId(Queue queue, JAXBElement<?> message, String varselbestillingId) {
+		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+			@Override
+			protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+				jmsTemplate.convertAndSend(queue, message, message1 -> {
+					message1.setJMSReplyTo(testReplyQueue);
+					message1.setStringProperty(VARSELBESTILLING_ID, varselbestillingId);
+					return message1;
+				});
+			}
+		});
+		return transactionTemplate.execute(transactionStatus -> receive(testReplyQueue));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -143,7 +167,8 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(get(urlEqualTo("/rest/varselinfo/IndividuellSamtale"))
 				.willReturn(aResponse()
 						.withStatus(httpStatus.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+						.withBody("{\"detail\":\"Testfeil fra Dokmet\"}")));
 	}
 
 	public void stubNaisTexasToken() {
@@ -174,6 +199,7 @@ public abstract class AbstractConsumerJmsTest {
 		stubFor(post("/pdl")
 				.willReturn(aResponse()
 						.withStatus(httpStatus.value())
-						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+						.withBody("{\"detail\":\"Testfeil fra PDL\"}")));
 	}
 }

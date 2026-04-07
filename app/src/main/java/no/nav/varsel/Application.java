@@ -5,13 +5,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
-import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.resilience.annotation.EnableResilientMethods;
 
 /**
  * Servlet 3.0 Spring Boot Application Initializer for Varsel
  */
 @Import(AppConfig.class)
-@EnableRetry
+@EnableResilientMethods
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 
