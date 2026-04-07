@@ -14,6 +14,6 @@ public class RetryLoggingInterceptor {
 	@EventListener
 	public void onRetry(MethodRetryEvent event) {
 		Throwable cause = (event.getFailure() instanceof RetryException re) ? re.getCause() : event.getFailure();
-		log.info("Retry trigget for {} med feilmelding={}", event.getMethod().getName(), cause.getMessage());
+		log.info("Retry trigget for {} med feilmelding={}", event.getMethod().getName(), cause.getMessage(), cause);
 	}
 }
