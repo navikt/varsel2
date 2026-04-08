@@ -40,7 +40,7 @@
 		<kafka-avro-serializer.version>7.9.1</kafka-avro-serializer.version>
 		<resilience4j-spring-boot.version>2.4.0</resilience4j-spring-boot.version>
 		<spring-boot.version>4.0.3</spring-boot.version>
-		<wiremock-spring-boot.version>4.0.9</wiremock-spring-boot.version>
+		<wiremock-spring-boot.version>4.2.1</wiremock-spring-boot.version>
 
 		<!-- NAV -->
 		<teamdokumenthandtering-avro-schemas.version>1.1.6</teamdokumenthandtering-avro-schemas.version>
