@@ -34,7 +34,7 @@
 
 		<guava.version>33.6.0-jre</guava.version>
 		<com.ibm.mq.jakarta.client.version>9.4.5.0</com.ibm.mq.jakarta.client.version>
-		<joda.version>2.14.1</joda.version>
+		<joda.version>2.14.2</joda.version>
 
 		<logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
 		<kafka-avro-serializer.version>7.9.1</kafka-avro-serializer.version>
