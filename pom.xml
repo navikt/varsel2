@@ -33,7 +33,7 @@
 		<java.version>25</java.version>
 
 		<guava.version>33.6.0-jre</guava.version>
-		<com.ibm.mq.jakarta.client.version>9.4.5.0</com.ibm.mq.jakarta.client.version>
+		<com.ibm.mq.jakarta.client.version>9.4.5.1</com.ibm.mq.jakarta.client.version>
 		<joda.version>2.14.2</joda.version>
 
 		<logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
