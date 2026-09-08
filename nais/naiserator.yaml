@@ -19,6 +19,7 @@ spec:
               -Djavax.net.ssl.keyStore=$(NAV_TRUSTSTORE_PATH)
               -Djavax.net.ssl.keyStorePassword=$(NAV_TRUSTSTORE_PASSWORD)
               -Djavax.net.ssl.keyStoreType=jks
+              -Dorg.apache.avro.SERIALIZABLE_CLASSES=no.nav.doknotifikasjon.schemas.DoknotifikasjonStatus
               $(JAVA_PROXY_OPTIONS) $(JAVA_TRUSTSTORE_OPTIONS)"
     - name: MQGATEWAY01_HOSTNAME
       value: {{ MQGATEWAY01_HOSTNAME }}

@@ -37,13 +37,16 @@
 		<joda.version>2.14.3</joda.version>
 
 		<logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
-		<kafka-avro-serializer.version>7.9.1</kafka-avro-serializer.version>
+		<kafka-avro-serializer.version>8.3.1</kafka-avro-serializer.version>
+		<!-- Eksplisitt avro.versjon kan fjernes når kafka-avro-serializer bruker Avro 1.12.2 eller nyere. -->
+		<avro.version>1.12.2</avro.version>
+		<avro.serializable.classes>no.nav.doknotifikasjon.schemas.DoknotifikasjonStatus</avro.serializable.classes>
 		<resilience4j-spring-boot.version>2.4.0</resilience4j-spring-boot.version>
 		<spring-boot.version>4.1.1</spring-boot.version>
 		<wiremock-spring-boot.version>4.2.2</wiremock-spring-boot.version>
 
 		<!-- NAV -->
-		<teamdokumenthandtering-avro-schemas.version>1.1.6</teamdokumenthandtering-avro-schemas.version>
+		<teamdokumenthandtering-avro-schemas.version>2.0.0</teamdokumenthandtering-avro-schemas.version>
 		<dok-legacy-tjenestespesifikasjoner.version>33-f7132fc</dok-legacy-tjenestespesifikasjoner.version>
 		<dokmet-api.version>2026.03.10-15.52-dc85b68</dokmet-api.version>
 		<tms-varsel.version>2.1.1</tms-varsel.version>
@@ -93,6 +96,11 @@
 				<groupId>io.confluent</groupId>
 				<artifactId>kafka-avro-serializer</artifactId>
 				<version>${kafka-avro-serializer.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.avro</groupId>
+				<artifactId>avro</artifactId>
+				<version>${avro.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>no.nav.teamdokumenthandtering</groupId>
@@ -193,6 +201,20 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
+				<configuration>
+					<systemPropertyVariables>
+						<org.apache.avro.SERIALIZABLE_CLASSES>${avro.serializable.classes}</org.apache.avro.SERIALIZABLE_CLASSES>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<systemPropertyVariables>
+						<org.apache.avro.SERIALIZABLE_CLASSES>${avro.serializable.classes}</org.apache.avro.SERIALIZABLE_CLASSES>
+					</systemPropertyVariables>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
