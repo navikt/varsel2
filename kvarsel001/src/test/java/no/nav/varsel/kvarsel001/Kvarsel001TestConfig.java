@@ -1,5 +1,7 @@
 package no.nav.varsel.kvarsel001;
 
+import no.nav.varsel.config.AvroSecurityConfig;
+import no.nav.varsel.kafka.CustomKafkaTemplate;
 import no.nav.varsel.repo.config.H2TestDataSourceConfig;
 import no.nav.varsel.repo.config.RepoConfig;
 import org.mockito.Mockito;
@@ -15,7 +17,7 @@ import org.springframework.util.backoff.ExponentialBackOff;
 @Configuration
 @EnableConfigurationProperties(DataSourceProperties.class)
 @EnableAutoConfiguration
-@Import({NotifikasjonStatusConsumer.class, RepoConfig.class, H2TestDataSourceConfig.class})
+@Import({NotifikasjonStatusConsumer.class, RepoConfig.class, H2TestDataSourceConfig.class, AvroSecurityConfig.class})
 public class Kvarsel001TestConfig {
 
 	@Bean
