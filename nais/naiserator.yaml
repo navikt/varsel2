@@ -19,7 +19,6 @@ spec:
               -Djavax.net.ssl.keyStore=$(NAV_TRUSTSTORE_PATH)
               -Djavax.net.ssl.keyStorePassword=$(NAV_TRUSTSTORE_PASSWORD)
               -Djavax.net.ssl.keyStoreType=jks
-              -Dorg.apache.avro.SERIALIZABLE_CLASSES=no.nav.doknotifikasjon.schemas.DoknotifikasjonStatus
               -Dcom.ibm.mq.cfg.TCP.ClntSndBuffSize=32768
               -Dcom.ibm.mq.cfg.TCP.ClntRcvBuffSize=32768
               -Dcom.ibm.msg.client.commonservices.log.outputName=System.out
