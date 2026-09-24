@@ -37,7 +37,7 @@
 		<joda.version>2.14.3</joda.version>
 
 		<logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
-		<kafka-avro-serializer.version>8.3.1</kafka-avro-serializer.version>
+		<kafka-avro-serializer.version>8.3.2</kafka-avro-serializer.version>
 		<!-- Eksplisitt avro.versjon kan fjernes når kafka-avro-serializer bruker Avro 1.12.2 eller nyere. -->
 		<avro.version>1.12.2</avro.version>
 		<resilience4j-spring-boot.version>2.4.0</resilience4j-spring-boot.version>
