@@ -19,23 +19,16 @@ public class ServicemeldingTestUtils {
 
 	public static final String VARSELBESTILLINGS_ID = UUID.randomUUID().toString();
 	public static final String FNR = "12345678910";
-	public static final String NAMESPACE = "teamdokumenthandtering";
-	public static final String APPNAVN = "no/nav/varsel";
-	public static final String BESTILLER_ID = "tms-ekstern-varsling";
 	public static final String SIKKERHETSNIVAA_MINID = "substantial";
 	public static final String VARSEL_URL = "https://www.varsel.com";
 	public static final String UGYLDIG_VARSEL_URL = "httpp://www.invalidurl.com";
 	public static final String VARSELTEKST_EPOST = "Tekst i epost-varsel";
 	public static final String VARSELTEKST_SMS = "Tekst i sms-varsel";
 	public static final String VARSELTEKST_DITT_NAV = "Tekst i Ditt NAV-varsel";
-	public static final String VARSELTYPE_ID = "NySykemelding";
 	public static final String VARSELTITTEL_EPOST = "Epost-tittel";
 	public static final String VARSELTITTEL_SMS = "SMS fra NAV";
 	public static final String VARSELTITTEL_DITT_NAV = "Ditt NAV-tittel";
-	public static final String MOBILNUMMER = "12345678";
-	public static final String EPOSTADRESSE = "epost@post.no";
 	public static final String FOERSTEGANGS_TEKST = "foreste tekst for ";
-	public static final String REVARSLING_TEKST = "revarsling tekst for ";
 	public static final String TITTEL = "tittel";
 
 
@@ -60,11 +53,11 @@ public class ServicemeldingTestUtils {
 	}
 
 	public static Varselmal createDittNavMalUtenFoerstegangstekst() {
-		return new Varselmal(DITT_NAV, null, null, "Revarslingstekst epost");
+		return new Varselmal(DITT_NAV, null, null);
 	}
 
 	public static Varselmal createVarselmal(KanalCode kanalCode) {
-		return new Varselmal(kanalCode, TITTEL, FOERSTEGANGS_TEKST, REVARSLING_TEKST);
+		return new Varselmal(kanalCode, TITTEL, FOERSTEGANGS_TEKST);
 	}
 
 	public static Varselbestilling createFrom(KanalCode... kanalCodes) {

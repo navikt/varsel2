@@ -38,17 +38,13 @@ public class VarselBestillingDomainMapperTest {
 	private static final String KEY = "key";
 	private static final String VALUE = "val";
 	private static final String FOERSTEGANGS_TEKST = "foreste tekst for {key}";
-	private static final String REVARSLING_TEKST = "revarsling tekst for {key}";
 	private static final String TITTEL = "tittel {key}";
 	private static final String MOBILTELEFONNUMMER = "12345678";
 	private static final String EPOSTADRESSE = "epost@epost.no";
 	private static final Set<KanalCode> KANALER = Set.of(EPOST, SMS);
 	private static final String BESTILLING_ID = "b592d5f1-7506-462d-9814-4c2d92bf8946";
 
-	private static final String VARSEL_NAVN = "varselnavn";
 	private static final String VARSEL_URL = "http://nav.no";
-	private static final String VARSEL_FOR_DIST_KANAL = "vardistkanal";
-	private static final String VARSEL_KATEGORI = "varkat";
 	private static final boolean INAKTIV = false;
 	private static final int REVARSLING_INTERVALL = 4;
 	private static final int ANTALL_REVARSLING = 2;
@@ -97,7 +93,7 @@ public class VarselBestillingDomainMapperTest {
 
 	@Test
 	public void shouldThrowWhenFoerstegangVarselMissingFoerstegangstekst() {
-		var varselmalUtenFoerstegangstekst = new Varselmal(EPOST, TITTEL, null, REVARSLING_TEKST);
+		var varselmalUtenFoerstegangstekst = new Varselmal(EPOST, TITTEL, null);
 		var varselinfo = createVarselinfoWithMaler(Set.of(varselmalUtenFoerstegangstekst, createVarselmal(SMS), createVarselmal(DITT_NAV)));
 
 		assertThatExceptionOfType(VarselTekstMissingException.class)
@@ -193,9 +189,6 @@ public class VarselBestillingDomainMapperTest {
 
 	private Varselinfo createVarselinfoWithVarselUrl(String varselUrl) {
 		return Varselinfo.builder()
-				.varselForDistKanal(VARSEL_FOR_DIST_KANAL)
-				.varselNavn(VARSEL_NAVN)
-				.varselKategori(VARSEL_KATEGORI)
 				.inaktiv(INAKTIV)
 				.revarslingIntervall(REVARSLING_INTERVALL)
 				.antallRevarsling(ANTALL_REVARSLING)
@@ -215,9 +208,6 @@ public class VarselBestillingDomainMapperTest {
 
 	private Varselinfo createVarselinfoWithMaler(Set<Varselmal> varselmaler) {
 		return Varselinfo.builder()
-				.varselForDistKanal(VARSEL_FOR_DIST_KANAL)
-				.varselNavn(VARSEL_NAVN)
-				.varselKategori(VARSEL_KATEGORI)
 				.inaktiv(INAKTIV)
 				.revarslingIntervall(REVARSLING_INTERVALL)
 				.antallRevarsling(ANTALL_REVARSLING)
@@ -228,7 +218,7 @@ public class VarselBestillingDomainMapperTest {
 	}
 
 	private Varselmal createVarselmal(KanalCode kanalCode) {
-		return new Varselmal(kanalCode, TITTEL, FOERSTEGANGS_TEKST, REVARSLING_TEKST);
+		return new Varselmal(kanalCode, TITTEL, FOERSTEGANGS_TEKST);
 	}
 
 	private KontaktregisterTo createDigitalKontaktinfoTo(Set<KanalCode> kanaler) {

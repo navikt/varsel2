@@ -14,10 +14,7 @@ public class Varselinfo {
 	@With
 	Set<KanalCode> preferertKanal;
 
-	String varselNavn;
 	String varseltypeId;
-	String varselForDistKanal;
-	String varselKategori;
 	boolean inaktiv;
 	String varselUrl;
 	Integer revarslingIntervall;
