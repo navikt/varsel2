@@ -1,9 +1,5 @@
 {
-  "varseltypeId": "Gruppeaktivitet",
   "inaktiv": false,
-  "revarslingIntervall": 4,
-  "antallRevarslinger": 2,
-  "malVersion": null,
   "varselURL": "http://nav.no",
   "preferertKanal": [
     "EPOST",

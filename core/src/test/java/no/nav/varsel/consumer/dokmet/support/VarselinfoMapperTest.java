@@ -11,8 +11,6 @@ import java.util.Set;
 import static java.util.Collections.singleton;
 import static no.nav.varsel.consumer.dokmet.VarselinfoMapper.mapToVarselinfo;
 import static no.nav.varsel.domain.code.KanalCode.EPOST;
-import static no.nav.varsel.repo.TestdataUtil.ANTALL_REVARSLINGER;
-import static no.nav.varsel.repo.TestdataUtil.VARSELTYPE_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
@@ -21,7 +19,6 @@ public class VarselinfoMapperTest {
 	private static final String VARSEL_TITTEL = "Varsel Tittel";
 	private static final String FOERSTE_GANG_TEKST = "Første gang tekst til {mottaker}";
 	private static final boolean INAKTIV = false;
-	private static final int REVARSLING_INTERVALL = 4;
 	private static final KanalCode PREFERERT_KANAL = EPOST;
 	private static final String VARSEL_URL = "http://nav.no";
 
@@ -29,10 +26,7 @@ public class VarselinfoMapperTest {
 	public void shouldMap() {
 		Varselinfo to = mapToVarselinfo(createVarselInfoTo());
 
-		assertThat(to.getVarseltypeId()).isEqualTo(VARSELTYPE_ID);
 		assertThat(to.isInaktiv()).isEqualTo(INAKTIV);
-		assertThat(to.getRevarslingIntervall()).isEqualTo(REVARSLING_INTERVALL);
-		assertThat(to.getAntallRevarsling()).isEqualTo(ANTALL_REVARSLINGER);
 		assertThat(to.getVarselUrl()).isEqualTo(VARSEL_URL);
 		assertThat(to.getPreferertKanal()).contains(EPOST);
 
@@ -43,26 +37,6 @@ public class VarselinfoMapperTest {
 				);
 	}
 
-	@Test
-	public void shouldHandleNullRevarslingIntervall() {
-		var varselinfo = createVarselInfoTo();
-		varselinfo.setRevarslingIntervall(null);
-
-		Varselinfo to = mapToVarselinfo(varselinfo);
-
-		assertThat(to.getRevarslingIntervall()).isNull();
-	}
-
-	@Test
-	public void shouldHandleNullAntallRevarslinger() {
-		var varselinfo = createVarselInfoTo();
-		varselinfo.setAntallRevarslinger(null);
-
-		Varselinfo to = mapToVarselinfo(varselinfo);
-
-		assertThat(to.getAntallRevarsling()).isNull();
-	}
-
 	public static VarselInfoTo createVarselInfoTo() {
 		var varselMalTo = VarselMalTo.builder()
 				.kanal(PREFERERT_KANAL.toString())
@@ -71,10 +45,7 @@ public class VarselinfoMapperTest {
 				.build();
 
 		return VarselInfoTo.builder()
-				.varseltypeId(VARSELTYPE_ID)
 				.inaktiv(INAKTIV)
-				.revarslingIntervall(REVARSLING_INTERVALL)
-				.antallRevarslinger(ANTALL_REVARSLINGER)
 				.varselURL(VARSEL_URL)
 				.preferertKanal(Set.of(PREFERERT_KANAL.toString()))
 				.varselmals(Set.of(varselMalTo))

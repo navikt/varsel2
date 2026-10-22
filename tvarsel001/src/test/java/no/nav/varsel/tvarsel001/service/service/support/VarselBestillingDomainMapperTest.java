@@ -190,8 +190,6 @@ public class VarselBestillingDomainMapperTest {
 	private Varselinfo createVarselinfoWithVarselUrl(String varselUrl) {
 		return Varselinfo.builder()
 				.inaktiv(INAKTIV)
-				.revarslingIntervall(REVARSLING_INTERVALL)
-				.antallRevarsling(ANTALL_REVARSLING)
 				.varselUrl(varselUrl)
 				.preferertKanal(Set.of(PREFERERT_KANAL))
 				.maler(createVarselmaler())
@@ -209,8 +207,6 @@ public class VarselBestillingDomainMapperTest {
 	private Varselinfo createVarselinfoWithMaler(Set<Varselmal> varselmaler) {
 		return Varselinfo.builder()
 				.inaktiv(INAKTIV)
-				.revarslingIntervall(REVARSLING_INTERVALL)
-				.antallRevarsling(ANTALL_REVARSLING)
 				.varselUrl(VARSEL_URL)
 				.preferertKanal(Set.of(PREFERERT_KANAL))
 				.maler(varselmaler)

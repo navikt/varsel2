@@ -14,15 +14,15 @@ public class Varselinfo {
 	@With
 	Set<KanalCode> preferertKanal;
 
-	String varseltypeId;
 	boolean inaktiv;
 	String varselUrl;
-	Integer revarslingIntervall;
-	Integer antallRevarsling;
 	Set<Varselmal> maler;
 
 	public Varselmal getMal(KanalCode kanalCode) {
-		return maler.stream().filter(m -> m.kanal() == kanalCode).findFirst().get();
+		return maler.stream()
+				.filter(m -> m.kanal() == kanalCode)
+				.findFirst()
+				.get();
 	}
 
 }

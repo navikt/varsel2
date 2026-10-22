@@ -18,10 +18,7 @@ public class VarselinfoMapper {
 		Set<VarselMalTo> varselmaler = varselInfoTo.getVarselmals();
 
 		return Varselinfo.builder()
-				.varseltypeId(varselInfoTo.getVarseltypeId())
 				.inaktiv(varselInfoTo.getInaktiv())
-				.revarslingIntervall(varselInfoTo.getRevarslingIntervall())
-				.antallRevarsling(varselInfoTo.getAntallRevarslinger())
 				.varselUrl(varselInfoTo.getVarselURL())
 				.preferertKanal(mapKanaler(varselInfoTo.getPreferertKanal()))
 				.maler(varselmaler == null ? null : varselmaler.stream().map(VarselinfoMapper::mapMal).collect(toSet()))
