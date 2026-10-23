@@ -204,7 +204,6 @@ public class ServicemeldingServiceTest {
 		var varselinfo = Varselinfo.builder()
 				.preferertKanal(PREFERERT_KANAL)
 				.inaktiv(true)
-				.varseltypeId(VARSELTYPE_ID)
 				.build();
 
 		when(aktoerService.findMissingAktoer(bestilling)).thenReturn(newPersonIdent(FNR));
@@ -224,7 +223,6 @@ public class ServicemeldingServiceTest {
 		var varselinfo = Varselinfo.builder()
 				.preferertKanal(PREFERERT_KANAL)
 				.inaktiv(true)
-				.varseltypeId(VARSELTYPE_ID)
 				.build();
 
 		when(dokmetConsumer.hentVarselinfo(VARSELTYPE_ID)).thenReturn(varselinfo);

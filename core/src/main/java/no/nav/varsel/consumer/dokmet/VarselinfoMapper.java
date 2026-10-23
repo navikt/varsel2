@@ -18,13 +18,7 @@ public class VarselinfoMapper {
 		Set<VarselMalTo> varselmaler = varselInfoTo.getVarselmals();
 
 		return Varselinfo.builder()
-				.varseltypeId(varselInfoTo.getVarseltypeId())
-				.varselNavn(varselInfoTo.getVarselNavn())
-				.varselForDistKanal(varselInfoTo.getVarselForDistribusjonKanal())
-				.varselKategori(varselInfoTo.getVarselKategori())
 				.inaktiv(varselInfoTo.getInaktiv())
-				.revarslingIntervall(varselInfoTo.getRevarslingIntervall())
-				.antallRevarsling(varselInfoTo.getAntallRevarslinger())
 				.varselUrl(varselInfoTo.getVarselURL())
 				.preferertKanal(mapKanaler(varselInfoTo.getPreferertKanal()))
 				.maler(varselmaler == null ? null : varselmaler.stream().map(VarselinfoMapper::mapMal).collect(toSet()))
@@ -35,8 +29,7 @@ public class VarselinfoMapper {
 		return new Varselmal(
 				mapKanal(varselMal.getKanal()),
 				varselMal.getVarselTittel(),
-				varselMal.getFoerstegangsvarselTekst(),
-				varselMal.getRevarslingTekst()
+				varselMal.getFoerstegangsvarselTekst()
 		);
 	}
 
