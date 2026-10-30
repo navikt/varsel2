@@ -41,7 +41,7 @@
 		<!-- Eksplisitt avro.versjon kan fjernes når kafka-avro-serializer bruker Avro 1.12.2 eller nyere. -->
 		<avro.version>1.12.2</avro.version>
 		<resilience4j-spring-boot.version>2.4.0</resilience4j-spring-boot.version>
-		<spring-boot.version>4.1.1</spring-boot.version>
+		<spring-boot.version>4.1.2</spring-boot.version>
 		<wiremock-spring-boot.version>4.4.3</wiremock-spring-boot.version>
 
 		<!-- NAV -->
